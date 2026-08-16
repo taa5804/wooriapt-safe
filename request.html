@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1165d7">
+<title>거래 신청 | 우리아파트 안심거래</title>
+
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%}
+body{
+  background:#f4f6f8;
+  color:#172b3f;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+}
+a{text-decoration:none;color:inherit}
+.wrap{
+  width:100%;
+  max-width:760px;
+  margin:0 auto;
+  padding:18px 14px 50px;
+}
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+.logo{
+  font-size:21px;
+  font-weight:900;
+  color:#173a59;
+}
+.logo strong{color:#1165d7}
+.home{
+  padding:9px 12px;
+  border:1px solid #c8d7e3;
+  border-radius:10px;
+  background:#fff;
+  font-size:14px;
+  font-weight:800;
+  color:#315873;
+}
+.hero{
+  padding:22px 18px;
+  margin-bottom:25px;
+  border:1px solid #d7e9f7;
+  border-radius:18px;
+  background:linear-gradient(135deg,#edf7ff,#f8fbff);
+}
+.hero h1{
+  margin:0 0 7px;
+  font-size:27px;
+  color:#123a63;
+}
+.hero p{
+  margin:0;
+  line-height:1.6;
+  color:#52677d;
+}
+.step{
+  display:inline-block;
+  margin-top:13px;
+  padding:7px 12px;
+  border-radius:20px;
+  background:#fff;
+  color:#1769aa;
+  font-weight:700;
+}
+.section{margin-bottom:24px}
+.label{
+  margin-bottom:9px;
+  font-size:18px;
+  font-weight:800;
+  color:#173b5f;
+}
+.req{color:#e5484d}
+select,input,textarea{
+  width:100%;
+  min-height:53px;
+  padding:0 14px;
+  border:1px solid #cbd8e5;
+  border-radius:12px;
+  background:#fff;
+  font-size:16px;
+  color:#263f55;
+  outline:none;
+}
+textarea{
+  min-height:105px;
+  padding:14px;
+  resize:vertical;
+}
+select:focus,input:focus,textarea:focus{
+  border-color:#2583c5;
+  box-shadow:0 0 0 3px rgba(37,131,197,.10);
+}
+select:disabled,input:disabled{
+  background:#f3f6f8;
+  color:#8796a5;
+}
+.buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.choice{
+  min-height:44px;
+  padding:8px 14px;
+  border:1px solid #bed2e3;
+  border-radius:11px;
+  background:#f9fcff;
+  color:#274b6d;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+.choice.active{
+  background:#1976b9;
+  border-color:#1976b9;
+  color:#fff;
+}
+.price{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.help{
+  margin-top:7px;
+  color:#71869a;
+  font-size:13px;
+  line-height:1.55;
+}
+.phone-verify{
+  padding:16px;
+  border:1px solid #d7e4ee;
+  border-radius:14px;
+  background:#f8fbfd;
+}
+.phone-row,.verify-row{
+  display:grid;
+  grid-template-columns:1fr 120px;
+  gap:8px;
+}
+.verify-row{margin-top:8px}
+.verify-btn{
+  min-height:53px;
+  border:0;
+  border-radius:12px;
+  background:#1769aa;
+  color:#fff;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+}
+.verify-btn.secondary{background:#315873}
+.verify-status{
+  margin-top:9px;
+  font-size:14px;
+  font-weight:800;
+}
+.verify-status.ok{color:#16704a}
+.verify-status.error{color:#b42318}
+.agree{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin:28px 0 17px;
+  padding:15px;
+  border:1px solid #dce8f1;
+  border-radius:12px;
+  background:#f2f7fb;
+  font-size:14px;
+  line-height:1.5;
+}
+.agree input{
+  width:20px;
+  height:20px;
+  min-height:20px;
+  flex:none;
+}
+.submit{
+  width:100%;
+  min-height:59px;
+  border:0;
+  border-radius:14px;
+  background:linear-gradient(135deg,#123a63,#1976b9);
+  color:#fff;
+  font-size:19px;
+  font-weight:800;
+  cursor:pointer;
+}
+.msg{
+  display:none;
+  margin-top:14px;
+  padding:13px;
+  border-radius:11px;
+}
+.msg.error{
+  display:block;
+  background:#fff2f2;
+  color:#b42318;
+}
+.msg.ok{
+  display:block;
+  background:#eefaf4;
+  color:#16704a;
+}
+.hidden{display:none!important}
+
+
+.region-box{
+  padding:16px;
+  border:2px solid #9aafc2;
+  border-radius:14px;
+  background:#fff;
+}
+.region-box .label{
+  margin-bottom:10px;
+}
+.region-box select{
+  border:1px solid #b8c8d6;
+}
+.region-box select:focus{
+  border-color:#1165d7;
+  box-shadow:0 0 0 3px rgba(17,101,215,.12);
+}
+
+
+.condition-box{
+  padding:16px;
+  border:2px solid #9aafc2;
+  border-radius:14px;
+  background:#fff;
+}
+.condition-box .label{
+  margin-bottom:10px;
+}
+
+@media(max-width:560px){
+  .wrap{padding:14px 11px 40px}
+  .hero h1{font-size:24px}
+  .price,.phone-row,.verify-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <a class="logo" href="/">🏠 우리아파트<strong>안심거래</strong></a>
+    <a class="home" href="/">메인으로</a>
+  </div>
+
+  <div class="hero">
+    <h1 id="pageTitle">아파트 매수 요청</h1>
+    <p>원하는 조건을 등록하면 해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다.</p>
+    <div class="step" id="pageStep">거래 신청 · 매수</div>
+  </div>
+
+  <form id="requestForm" novalidate>
+
+    <div class="section phone-verify">
+      <div class="label">휴대전화 본인확인 <span class="req">*</span></div>
+
+      <div class="phone-row">
+        <input id="phone" type="tel" inputmode="numeric" maxlength="11"
+          autocomplete="tel" placeholder="01012345678">
+        <button id="sendCodeBtn" class="verify-btn" type="button">인증번호 받기</button>
+      </div>
+
+      <div class="verify-row">
+        <input id="verifyCode" type="text" inputmode="numeric" maxlength="4"
+          placeholder="인증번호 4자리" disabled>
+        <button id="verifyBtn" class="verify-btn secondary" type="button" disabled>인증 확인</button>
+      </div>
+
+      <div class="help">
+        장난·허위 요청 방지를 위해 휴대전화 인증 후 요청을 등록할 수 있습니다.
+        매물을 선택하기 전에는 고객 전화번호를 공인중개사에게 공개하지 않습니다.
+      </div>
+
+      <div id="verifyStatus" class="verify-status" aria-live="polite"></div>
+    </div>
+
+    <div class="section region-box">
+      <div class="label">시·도 선택 <span class="req">*</span></div>
+      <select id="sido">
+        <option value="">전국 시·도 불러오는 중...</option>
+      </select>
+    </div>
+
+    <div class="section region-box">
+      <div class="label">시·군·구 선택 <span class="req">*</span></div>
+      <select id="sgg" disabled>
+        <option value="">먼저 시·도를 선택하세요</option>
+      </select>
+    </div>
+
+    <div class="section region-box">
+      <div class="label">읍·면·동 선택 <span class="req">*</span></div>
+      <select id="dong" disabled>
+        <option value="">먼저 시·군·구를 선택하세요</option>
+      </select>
+    </div>
+
+    <div class="section condition-box">
+      <div class="label">희망 아파트</div>
+      <input id="apt" type="text" placeholder="선택사항 - 입력하지 않아도 됩니다">
+      <div class="help">입력하지 않으면 선택한 읍·면·동 전체가 대상입니다.</div>
+    </div>
+
+    <div class="section condition-box">
+      <div class="label">희망 평형 <span class="req">*</span></div>
+      <div id="sizeButtons" class="buttons">
+        <button type="button" class="choice" data-v="20평 이하">20평 이하</button>
+        <button type="button" class="choice" data-v="20~25평">20~25평</button>
+        <button type="button" class="choice" data-v="25~30평">25~30평</button>
+        <button type="button" class="choice" data-v="30~35평">30~35평</button>
+        <button type="button" class="choice" data-v="35~40평">35~40평</button>
+        <button type="button" class="choice" data-v="40평 이상">40평 이상</button>
+      </div>
+    </div>
+
+    <div id="salePriceSection" class="section condition-box">
+      <div class="label">희망 매매가격 <span class="req">*</span></div>
+      <div class="price">
+        <input id="saleMin" type="number" inputmode="numeric" placeholder="최저 만원">
+        <input id="saleMax" type="number" inputmode="numeric" placeholder="최고 만원">
+      </div>
+      <div class="help">예: 3억원이면 30000 입력</div>
+    </div>
+
+    <div id="jeonseDepositSection" class="section condition-box hidden">
+      <div class="label">희망 전세보증금 <span class="req">*</span></div>
+      <div class="price">
+        <input id="jeonseMin" type="number" inputmode="numeric" placeholder="최저 만원">
+        <input id="jeonseMax" type="number" inputmode="numeric" placeholder="최고 만원">
+      </div>
+      <div class="help">예: 2억원이면 20000 입력</div>
+    </div>
+
+    <div id="monthlyDepositSection" class="section condition-box hidden">
+      <div class="label">희망 월세보증금 <span class="req">*</span></div>
+      <div class="price">
+        <input id="monthlyDepositMin" type="number" inputmode="numeric" placeholder="최저 만원">
+        <input id="monthlyDepositMax" type="number" inputmode="numeric" placeholder="최고 만원">
+      </div>
+      <div class="help">예: 보증금 3000만원이면 3000 입력</div>
+    </div>
+
+    <div id="monthlyRentSection" class="section condition-box hidden">
+      <div class="label">희망 월세 <span class="req">*</span></div>
+      <input id="monthlyRent" type="number" inputmode="numeric" placeholder="월세 만원">
+      <div class="help">예: 월세 80만원이면 80 입력</div>
+    </div>
+
+    <div class="section condition-box">
+      <div class="label" id="moveLabel">잔금·입주 희망일 <span class="req">*</span></div>
+      <input id="moveDate" type="date">
+
+      <label class="agree" style="margin:10px 0 0;">
+        <input id="moveFlexible" type="checkbox">
+        <span>날짜 협의 가능</span>
+      </label>
+
+      <div class="help">희망일을 달력에서 선택하세요. 날짜 조정이 가능하면 ‘날짜 협의 가능’도 체크해 주세요.</div>
+    </div>
+
+    <div class="section condition-box">
+      <div class="label">기타 희망조건</div>
+      <textarea id="memo" maxlength="300" placeholder="예: 남향, 중층 이상, 주차, 반려동물 등"></textarea>
+    </div>
+
+    <label class="agree">
+      <input id="agree" type="checkbox">
+      <span id="agreeText">
+        등록한 매수 조건을 기준으로 공인중개사에게 매물 제안을 요청하는 데 동의합니다.
+        매물 선택 전에는 개인정보를 공개하지 않습니다.
+      </span>
+    </label>
+
+    <button id="submitBtn" class="submit" type="submit">매수 요청 등록</button>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+
+  </form>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+const SUPABASE_URL="https://dcysjuxyjqtvkihdsjvv.supabase.co";
+const SUPABASE_KEY="sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
+
+const params=new URLSearchParams(location.search);
+const type=(params.get("type")||"sale").toLowerCase();
+
+const config={
+  sale:{
+    title:"아파트 매수 요청",
+    step:"거래 신청 · 매수",
+    button:"매수 요청 등록",
+    agree:"등록한 매수 조건을 기준으로 공인중개사에게 매물 제안을 요청하는 데 동의합니다. 매물 선택 전에는 개인정보를 공개하지 않습니다.",
+    move:"잔금·입주 희망일"
+  },
+  jeonse:{
+    title:"아파트 전세 임차 요청",
+    step:"거래 신청 · 전세",
+    button:"전세 임차 요청 등록",
+    agree:"등록한 전세 임차 조건을 기준으로 공인중개사에게 매물 제안을 요청하는 데 동의합니다. 매물 선택 전에는 개인정보를 공개하지 않습니다.",
+    move:"입주 희망일"
+  },
+  monthly:{
+    title:"아파트 월세 임차 요청",
+    step:"거래 신청 · 월세",
+    button:"월세 임차 요청 등록",
+    agree:"등록한 월세 임차 조건을 기준으로 공인중개사에게 매물 제안을 요청하는 데 동의합니다. 매물 선택 전에는 개인정보를 공개하지 않습니다.",
+    move:"입주 희망일"
+  }
+};
+
+const current=config[type]||config.sale;
+
+const $=s=>document.querySelector(s);
+
+$("#pageTitle").textContent=current.title;
+$("#pageStep").textContent=current.step;
+$("#submitBtn").textContent=current.button;
+$("#agreeText").textContent=current.agree;
+$("#moveLabel").innerHTML=current.move+' <span class="req">*</span>';
+
+if(type==="jeonse"){
+  $("#salePriceSection").classList.add("hidden");
+  $("#jeonseDepositSection").classList.remove("hidden");
+}
+if(type==="monthly"){
+  $("#salePriceSection").classList.add("hidden");
+  $("#monthlyDepositSection").classList.remove("hidden");
+  $("#monthlyRentSection").classList.remove("hidden");
+}
+
+/* -------------------------
+   휴대전화 인증
+------------------------- */
+
+let phoneVerified=false;
+let verifiedPhone="";
+
+function cleanPhone(value){
+  return String(value||"").replace(/\D/g,"").slice(0,11);
+}
+
+function verifyStatus(type,text){
+  const el=$("#verifyStatus");
+  el.className="verify-status"+(type?" "+type:"");
+  el.textContent=text;
+}
+
+$("#phone").addEventListener("input",function(){
+  this.value=cleanPhone(this.value);
+  phoneVerified=false;
+  verifiedPhone="";
+  $("#verifyCode").disabled=true;
+  $("#verifyBtn").disabled=true;
+  verifyStatus("","");
+});
+
+$("#verifyCode").addEventListener("input",function(){
+  this.value=this.value.replace(/\D/g,"").slice(0,4);
+});
+
+$("#sendCodeBtn").addEventListener("click",async function(){
+  const phone=cleanPhone($("#phone").value);
+
+  if(!/^01[016789][0-9]{7,8}$/.test(phone)){
+    return verifyStatus("error","휴대전화번호를 정확히 입력해 주세요.");
+  }
+
+  this.disabled=true;
+  verifyStatus("","인증번호를 요청하고 있습니다.");
+
+  try{
+    const res=await fetch("/api/customer-phone-auth",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        action:"send",
+        phone,
+        purpose:"property_request"
+      })
+    });
+
+    const data=await res.json().catch(()=>({}));
+
+    if(!res.ok || data.ok===false){
+      throw new Error(data.message||"인증번호 발송에 실패했습니다.");
+    }
+
+    $("#verifyCode").disabled=false;
+    $("#verifyBtn").disabled=false;
+    $("#verifyCode").focus();
+    verifyStatus("ok","인증번호를 발송했습니다. 문자로 받은 4자리 번호를 입력해 주세요.");
+  }catch(err){
+    verifyStatus("error",err.message||"인증번호 발송에 실패했습니다.");
+  }finally{
+    this.disabled=false;
+  }
+});
+
+$("#verifyBtn").addEventListener("click",async function(){
+  const phone=cleanPhone($("#phone").value);
+  const code=$("#verifyCode").value.trim();
+
+  if(!/^\d{4}$/.test(code)){
+    return verifyStatus("error","인증번호 4자리를 입력해 주세요.");
+  }
+
+  this.disabled=true;
+  verifyStatus("","인증번호를 확인하고 있습니다.");
+
+  try{
+    const res=await fetch("/api/customer-phone-auth",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        action:"verify",
+        phone,
+        code,
+        purpose:"property_request"
+      })
+    });
+
+    const data=await res.json().catch(()=>({}));
+
+    if(!res.ok || data.ok===false || data.verified!==true){
+      throw new Error(data.message||"인증번호가 올바르지 않습니다.");
+    }
+
+    phoneVerified=true;
+    verifiedPhone=phone;
+    $("#phone").readOnly=true;
+    $("#verifyCode").disabled=true;
+    verifyStatus("ok","휴대전화 인증이 완료되었습니다.");
+  }catch(err){
+    phoneVerified=false;
+    verifiedPhone="";
+    verifyStatus("error",err.message||"휴대전화 인증에 실패했습니다.");
+    this.disabled=false;
+  }
+});
+
+/* -------------------------
+   지역 데이터
+------------------------- */
+
+async function api(table,query){
+  const res=await fetch(
+    SUPABASE_URL+"/rest/v1/"+table+"?"+query,
+    {headers:{apikey:SUPABASE_KEY}}
+  );
+
+  if(!res.ok){
+    throw new Error(await res.text());
+  }
+
+  return await res.json();
+}
+
+function setOptions(select,list,placeholder,field){
+  select.innerHTML="";
+
+  const first=document.createElement("option");
+  first.value="";
+  first.textContent=placeholder;
+  select.appendChild(first);
+
+  list.forEach(row=>{
+    const value=row[field];
+    if(!value)return;
+
+    const option=document.createElement("option");
+    option.value=value;
+    option.textContent=value;
+    select.appendChild(option);
+  });
+}
+
+async function loadSido(){
+  const data=await api(
+    "safe_region_sido",
+    "select=sido&order=sido.asc"
+  );
+
+  setOptions($("#sido"),data,"시·도를 선택하세요","sido");
+}
+
+$("#sido").addEventListener("change",async function(){
+  const sido=this.value;
+
+  $("#sgg").disabled=true;
+  $("#dong").disabled=true;
+
+  setOptions($("#sgg"),[],"불러오는 중...","sigungu");
+  setOptions($("#dong"),[],"먼저 시·군·구를 선택하세요","eupmyeondong");
+
+  if(!sido){
+    setOptions($("#sgg"),[],"먼저 시·도를 선택하세요","sigungu");
+    return;
+  }
+
+  try{
+    const data=await api(
+      "safe_region_sigungu",
+      "select=sigungu&sido=eq."+encodeURIComponent(sido)+"&order=sigungu.asc"
+    );
+
+    setOptions($("#sgg"),data,"시·군·구를 선택하세요","sigungu");
+    $("#sgg").disabled=false;
+  }catch(err){
+    console.error(err);
+    setOptions($("#sgg"),[],"시·군·구를 불러오지 못했습니다.","sigungu");
+  }
+});
+
+$("#sgg").addEventListener("change",async function(){
+  const sido=$("#sido").value;
+  const sigungu=this.value;
+
+  $("#dong").disabled=true;
+  setOptions($("#dong"),[],"불러오는 중...","eupmyeondong");
+
+  if(!sigungu){
+    setOptions($("#dong"),[],"먼저 시·군·구를 선택하세요","eupmyeondong");
+    return;
+  }
+
+  try{
+    const data=await api(
+      "safe_region_dong",
+      "select=eupmyeondong&sido=eq."+encodeURIComponent(sido)+
+      "&sigungu=eq."+encodeURIComponent(sigungu)+
+      "&order=eupmyeondong.asc"
+    );
+
+    setOptions($("#dong"),data,"읍·면·동을 선택하세요","eupmyeondong");
+    $("#dong").disabled=false;
+  }catch(err){
+    console.error(err);
+    setOptions($("#dong"),[],"읍·면·동을 불러오지 못했습니다.","eupmyeondong");
+  }
+});
+
+/* -------------------------
+   평형
+------------------------- */
+
+let selectedSize="";
+
+$("#sizeButtons").querySelectorAll(".choice").forEach(btn=>{
+  btn.addEventListener("click",function(){
+    $("#sizeButtons").querySelectorAll(".choice").forEach(x=>x.classList.remove("active"));
+    this.classList.add("active");
+    selectedSize=this.dataset.v;
+  });
+});
+
+/* -------------------------
+   제출 검증
+------------------------- */
+
+function message(type,text){
+  $("#msg").className="msg "+type;
+  $("#msg").textContent=text;
+}
+
+$("#requestForm").addEventListener("submit",function(e){
+  e.preventDefault();
+
+  const phone=cleanPhone($("#phone").value);
+
+  if(!phoneVerified || verifiedPhone!==phone){
+    return message("error","휴대전화 인증을 완료해 주세요.");
+  }
+
+  if(!$("#sido").value || !$("#sgg").value || !$("#dong").value){
+    return message("error","희망 지역을 모두 선택해 주세요.");
+  }
+
+  if(!selectedSize){
+    return message("error","희망 평형을 선택해 주세요.");
+  }
+
+  if(type==="sale"){
+    const min=Number($("#saleMin").value);
+    const max=Number($("#saleMax").value);
+
+    if(!min || !max){
+      return message("error","희망 매매가격을 입력해 주세요.");
+    }
+    if(min>max){
+      return message("error","최저가격이 최고가격보다 높습니다.");
+    }
+  }
+
+  if(type==="jeonse"){
+    const min=Number($("#jeonseMin").value);
+    const max=Number($("#jeonseMax").value);
+
+    if(!min || !max){
+      return message("error","희망 전세보증금을 입력해 주세요.");
+    }
+    if(min>max){
+      return message("error","최저 보증금이 최고 보증금보다 높습니다.");
+    }
+  }
+
+  if(type==="monthly"){
+    const min=Number($("#monthlyDepositMin").value);
+    const max=Number($("#monthlyDepositMax").value);
+    const rent=Number($("#monthlyRent").value);
+
+    if(!min || !max){
+      return message("error","희망 월세보증금을 입력해 주세요.");
+    }
+    if(min>max){
+      return message("error","최저 보증금이 최고 보증금보다 높습니다.");
+    }
+    if(!rent){
+      return message("error","희망 월세를 입력해 주세요.");
+    }
+  }
+
+  if(!$("#moveDate").value){
+    return message("error",current.move+"을 선택해 주세요.");
+  }
+
+  if(!$("#agree").checked){
+    return message("error","매물 제안 요청에 동의해 주세요.");
+  }
+
+  /*
+    실제 거래요청 저장 API 연결 위치.
+    현재 확인된 요청 저장 API가 없으므로 임의 DB 저장 코드는 넣지 않았습니다.
+    휴대전화 인증 API와 요청 저장 API가 준비되면 여기서 전송합니다.
+  */
+
+  message("ok","입력내용이 확인되었습니다.");
+});
+
+loadSido().catch(err=>{
+  console.error(err);
+  setOptions($("#sido"),[],"전국 시·도를 불러오지 못했습니다.","sido");
+});
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1165d7">
+<title>우리아파트 안심거래</title>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="manifest" href="/manifest.webmanifest">
+
+<style>
+.broker-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.broker-actions .broker-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:112px;
+  min-height:56px;
+  padding:10px 12px;
+  border-radius:12px;
+  text-decoration:none;
+  text-align:center;
+  font-size:13px;
+  line-height:1.35;
+  font-weight:800;
+  white-space:nowrap;
+}
+.broker-actions .guide-btn{
+  border:1px solid #bfd5ea;
+  background:#fff;
+  color:#24577e;
+}
+.broker-actions .signup-btn{
+  border:1px solid #1165d7;
+  background:#1165d7;
+  color:#fff;
+}
+.broker-actions .login-btn{
+  border:1px solid #173f67;
+  background:#173f67;
+  color:#fff;
+}
+
+/* =========================
+   햄버거 메뉴
+   ========================= */
+
+.menu{
+  position:relative;
+  z-index:1002;
+}
+
+.mobile-menu-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  background:rgba(15,23,42,.38);
+}
+
+.mobile-menu-backdrop.open{
+  display:block;
+}
+
+.mobile-menu-panel{
+  position:fixed;
+  top:0;
+  right:-340px;
+  width:min(330px,88vw);
+  height:100vh;
+  z-index:1001;
+  padding:82px 20px 28px;
+  background:#fff;
+  box-shadow:-12px 0 30px rgba(15,23,42,.18);
+  transition:right .25s ease;
+  overflow-y:auto;
+}
+
+.mobile-menu-panel.open{
+  right:0;
+}
+
+.mobile-menu-title{
+  margin:0 0 18px;
+  padding-bottom:14px;
+  border-bottom:1px solid #e5e7eb;
+  color:#111827;
+  font-size:20px;
+  font-weight:900;
+}
+
+.mobile-menu-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.mobile-menu-list a{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:100%;
+  min-height:54px;
+  padding:13px 15px;
+  border:1px solid #e2e8f0;
+  border-radius:12px;
+  background:#fff;
+  color:#172033;
+  text-decoration:none;
+  font-size:16px;
+  font-weight:800;
+}
+
+.mobile-menu-list a.primary{
+  border-color:#1165d7;
+  background:#eef6ff;
+  color:#0b58bd;
+}
+
+.mobile-menu-divider{
+  height:1px;
+  margin:10px 0;
+  background:#e5e7eb;
+}
+
+body.menu-open{
+  overflow:hidden;
+}
+
+@media(max-width:700px){
+  .broker{
+    align-items:flex-start;
+  }
+
+  .broker-actions{
+    width:100%;
+    margin-top:12px;
+    justify-content:stretch;
+  }
+
+  .broker-actions .broker-btn{
+    flex:1 1 30%;
+    min-width:90px;
+    padding:10px 6px;
+    font-size:12px;
+  }
+}
+
+@media(max-width:480px){
+  .broker-actions{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+
+  .broker-actions .broker-btn{
+    width:100%;
+    min-height:48px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<header class="header">
+
+  <a class="logo" href="/">
+    <span class="logo-mark">🏠</span>
+    <span>
+      우리아파트
+      <strong>안심거래</strong>
+    </span>
+  </a>
+
+  <div class="top-actions">
+
+    <div class="install-wrap">
+      <button
+        id="installBtn"
+        class="install-btn"
+        type="button"
+        aria-label="앱 설치"
+      >
+        <span class="phone"></span>
+      </button>
+
+      <span class="install-label">
+        앱설치
+      </span>
+    </div>
+
+    <button
+      id="menuBtn"
+      class="menu"
+      type="button"
+      aria-label="메뉴 열기"
+      aria-expanded="false"
+      aria-controls="mobileMenu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+
+</header>
+
+
+<!-- =========================
+     햄버거 메뉴
+     ========================= -->
+
+<div
+  id="menuBackdrop"
+  class="mobile-menu-backdrop"
+></div>
+
+<nav
+  id="mobileMenu"
+  class="mobile-menu-panel"
+  aria-hidden="true"
+>
+
+  <div class="mobile-menu-title">
+    메뉴
+  </div>
+
+  <div class="mobile-menu-list">
+
+    <a
+      class="primary"
+      href="/request.html?type=sale"
+    >
+      <span>🏠 아파트 매수</span>
+      <span>›</span>
+    </a>
+
+    <a
+      class="primary"
+      href="/request.html?type=jeonse"
+    >
+      <span>🔑 전세 구하기</span>
+      <span>›</span>
+    </a>
+
+    <a
+      class="primary"
+      href="/request.html?type=monthly"
+    >
+      <span>🏢 월세 구하기</span>
+      <span>›</span>
+    </a>
+
+    <div class="mobile-menu-divider"></div>
+
+    <a href="/broker-guide.html">
+      <span>공인중개사 이용안내</span>
+      <span>›</span>
+    </a>
+
+    <a href="/broker-signup.html">
+      <span>공인중개사 회원가입</span>
+      <span>›</span>
+    </a>
+
+    <a href="/broker-login.html">
+      <span>공인중개사 로그인</span>
+      <span>›</span>
+    </a>
+
+  </div>
+
+</nav>
+
+
+<!-- =========================
+     메인 문구
+     ========================= -->
+
+<section class="hero">
+
+  <div class="hero-text">
+
+    <h1>
+      원하는 아파트,<br>
+      직접 찾아다니지 마세요.<br>
+      <em>희망조건만 등록</em>하세요.
+    </h1>
+
+    <p>
+      해당 지역의 공인중개사가<br>
+      조건에 맞는 매물을 제안합니다.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     매수 / 전세 / 월세
+     ========================= -->
+
+<section class="trade">
+
+  <a
+    class="sale"
+    href="/request.html?type=sale"
+  >
+    <span class="ico">🏠</span>
+    <b>아파트 매수</b>
+    <span>매수조건 등록 ›</span>
+  </a>
+
+  <a
+    class="jeonse"
+    href="/request.html?type=jeonse"
+  >
+    <span class="ico">🔑</span>
+    <b>전세 구하기</b>
+    <span>전세조건 등록 ›</span>
+  </a>
+
+  <a
+    class="monthly"
+    href="/request.html?type=monthly"
+  >
+    <span class="ico">🏢</span>
+    <b>월세 구하기</b>
+    <span>월세조건 등록 ›</span>
+  </a>
+
+</section>
+
+
+<!-- =========================
+     진행 절차
+     ========================= -->
+
+<section class="process">
+
+  <h2 class="title">
+    희망조건 등록부터 안전한 계약까지,
+    이렇게 진행됩니다
+  </h2>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="circle">📝</div>
+      <div class="num">1</div>
+
+      <b>희망조건 등록</b>
+
+      <p>
+        원하는 아파트 조건을<br>
+        간단히 등록
+      </p>
+    </div>
+
+    <div class="step">
+      <div class="circle">👤</div>
+      <div class="num">2</div>
+
+      <b>공인중개사 전달</b>
+
+      <p>
+        해당 지역 공인중개사에게<br>
+        요청이 전달됩니다
+      </p>
+    </div>
+
+    <div class="step">
+      <div class="circle">🏠</div>
+      <div class="num">3</div>
+
+      <b>매물 제안</b>
+
+      <p>
+        공인중개사가 조건에 맞는<br>
+        매물을 제안합니다
+      </p>
+    </div>
+
+    <div class="step">
+      <div class="circle">🔎</div>
+      <div class="num">4</div>
+
+      <b>비교·선택</b>
+
+      <p>
+        제안받은 매물을<br>
+        비교하고 선택
+      </p>
+    </div>
+
+    <div class="step">
+      <div class="circle">🤝</div>
+      <div class="num">5</div>
+
+      <b>안전한 계약</b>
+
+      <p>
+        안전한 절차로<br>
+        계약을 완료합니다
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     안심거래 약속
+     ========================= -->
+
+<section class="promise">
+
+  <h2 class="title">
+    우리아파트 안심거래의 약속
+  </h2>
+
+  <div class="promise-grid">
+
+    <a
+      class="card"
+      href="/detail.html?topic=broker"
+    >
+      <div class="ci">🛡️</div>
+
+      <h3>
+        검증된<br>
+        공인중개사
+      </h3>
+
+      <p>
+        가입 심사 및 교육을<br>
+        통과한 공인중개사만<br>
+        활동합니다.
+      </p>
+
+      <span class="more">
+        자세히 보기 ›
+      </span>
+    </a>
+
+
+    <a
+      class="card"
+      href="/detail.html?topic=contract"
+    >
+      <div class="ci">📝</div>
+
+      <h3>
+        전자계약
+      </h3>
+
+      <p>
+        별도 방문 없이<br>
+        전자계약으로<br>
+        간편하고 안전하게<br>
+        진행합니다.
+      </p>
+
+      <span class="more">
+        자세히 보기 ›
+      </span>
+    </a>
+
+
+    <a
+      class="card"
+      href="/detail.html?topic=escrow"
+    >
+      <div class="ci">🔒</div>
+
+      <h3>
+        선택형<br>
+        에스크로
+      </h3>
+
+      <p>
+        거래금을 안전하게 보관,<br>
+        계약 완료 후 지급으로<br>
+        안심 거래가 됩니다.
+      </p>
+
+      <span class="more">
+        자세히 보기 ›
+      </span>
+    </a>
+
+
+    <a
+      class="card"
+      href="/detail.html?topic=registry"
+    >
+      <div class="ci">📋</div>
+
+      <h3>
+        매매<br>
+        셀프등기 지원
+      </h3>
+
+      <p>
+        셀프등기 시스템 제공으로<br>
+        등기 비용과 시간을<br>
+        절약할 수 있습니다.
+      </p>
+
+      <span class="more">
+        자세히 보기 ›
+      </span>
+    </a>
+
+
+    <a
+      class="card"
+      href="/detail.html?topic=fee"
+    >
+      <div class="ci">₩</div>
+
+      <h3>
+        수수료 안내
+      </h3>
+
+      <p>
+        투명하고 합리적인<br>
+        수수료 체계로<br>
+        부담을 낮췄습니다.
+      </p>
+
+      <span class="more">
+        자세히 보기 ›
+      </span>
+    </a>
+
+  </div>
+
+
+  <!-- 공인중개사 -->
+
+  <div class="broker">
+
+    <div class="broker-left">
+
+      <div class="person">
+        👨🏻‍💼
+      </div>
+
+      <div>
+
+        <h2>
+          공인중개사로 활동하시나요?
+        </h2>
+
+        <p>
+          우리아파트 안심거래의 공인중개사가 되어<br>
+          더 많은 고객과 만나는 기회를 잡으세요.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="broker-actions">
+
+      <a
+        class="broker-btn guide-btn"
+        href="/broker-guide.html"
+      >
+        공인중개사<br>
+        이용안내 ›
+      </a>
+
+      <a
+        class="broker-btn signup-btn"
+        href="/broker-signup.html"
+      >
+        공인중개사<br>
+        회원가입 ›
+      </a>
+
+      <a
+        class="broker-btn login-btn"
+        href="/broker-login.html"
+      >
+        공인중개사<br>
+        로그인 ›
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer class="footer">
+
+  <div>
+    이용약관　|　개인정보처리방침　|　고객센터
+  </div>
+
+  <span>
+    © 우리아파트 안심거래.
+    All rights reserved.
+  </span>
+
+</footer>
+
+</div>
+
+
+<script>
+
+let deferredPrompt = null;
+
+
+/* =========================
+   앱 설치
+   ========================= */
+
+window.addEventListener(
+  "beforeinstallprompt",
+  e => {
+
+    e.preventDefault();
+
+    deferredPrompt = e;
+
+  }
+);
+
+
+document
+  .getElementById("installBtn")
+  .addEventListener(
+    "click",
+    async () => {
+
+      if(deferredPrompt){
+
+        deferredPrompt.prompt();
+
+        await deferredPrompt.userChoice;
+
+        deferredPrompt = null;
+
+        return;
+      }
+
+      if(
+        /iphone|ipad|ipod/i.test(
+          navigator.userAgent
+        )
+      ){
+
+        alert(
+          "Safari의 공유 버튼을 누른 뒤 ‘홈 화면에 추가’를 선택해 주세요."
+        );
+
+      }else{
+
+        alert(
+          "브라우저 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택해 주세요."
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   햄버거 메뉴
+   ========================= */
+
+const menuBtn =
+  document.getElementById("menuBtn");
+
+const mobileMenu =
+  document.getElementById("mobileMenu");
+
+const menuBackdrop =
+  document.getElementById("menuBackdrop");
+
+
+function openMenu(){
+
+  mobileMenu.classList.add("open");
+
+  menuBackdrop.classList.add("open");
+
+  document.body.classList.add("menu-open");
+
+  menuBtn.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+
+  mobileMenu.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+}
+
+
+function closeMenu(){
+
+  mobileMenu.classList.remove("open");
+
+  menuBackdrop.classList.remove("open");
+
+  document.body.classList.remove("menu-open");
+
+  menuBtn.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+  mobileMenu.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+}
+
+
+menuBtn.addEventListener(
+  "click",
+  () => {
+
+    if(
+      mobileMenu.classList.contains(
+        "open"
+      )
+    ){
+
+      closeMenu();
+
+    }else{
+
+      openMenu();
+
+    }
+
+  }
+);
+
+
+menuBackdrop.addEventListener(
+  "click",
+  closeMenu
+);
+
+
+document.addEventListener(
+  "keydown",
+  e => {
+
+    if(e.key === "Escape"){
+      closeMenu();
+    }
+
+  }
+);
+
+
+mobileMenu
+  .querySelectorAll("a")
+  .forEach(
+    link => {
+
+      link.addEventListener(
+        "click",
+        closeMenu
+      );
+
+    }
+  );
+
+
+/* =========================
+   서비스워커
+   ========================= */
+
+if(
+  "serviceWorker" in navigator
+){
+
+  window.addEventListener(
+    "load",
+    () => {
+
+      navigator
+        .serviceWorker
+        .register("/sw.js")
+        .catch(()=>{});
+
+    }
+  );
+
+}
+
+</script>
+
+</body>
+</html>
