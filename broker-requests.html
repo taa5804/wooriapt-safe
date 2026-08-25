@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1c9b74">
+<title>매수·임차 요청 | 우리아파트 안심거래</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:#f4f6f8;color:#172b3d;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:720px;margin:auto;padding:18px 14px 50px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.brand{font-size:20px;font-weight:900;color:#173a59}.brand strong{color:#1165d7}
+.back{padding:9px 12px;background:#fff;border:1px solid #d5e0e8;border-radius:10px;font-size:14px;font-weight:800}
+.card{background:#fff;border:1px solid #dbe5ec;border-radius:17px;padding:22px 18px}
+.badge{display:inline-block;background:#e7f7f1;color:#168560;padding:6px 10px;border-radius:999px;font-size:13px;font-weight:900}
+h1{margin:12px 0 6px;font-size:27px;color:#143b61}
+.desc{margin:0 0 20px;color:#687e8e}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:18px}
+.tab{min-height:42px;border:1px solid #ccd9e3;border-radius:10px;background:#fff;font-weight:900}
+.tab.active{background:#1c9b74;color:#fff;border-color:#1c9b74}
+.request{padding:17px;border:1px solid #dbe5ec;border-left:5px solid #1c9b74;border-radius:13px;margin-bottom:11px}
+.request strong{font-size:17px;color:#173e60}
+.request p{margin:7px 0;color:#62798a;font-size:14px;line-height:1.5}
+.btn{display:block;margin-top:12px;padding:11px;text-align:center;background:#1c9b74;color:#fff;border-radius:9px;font-weight:900}
+.empty{text-align:center;padding:35px 10px;color:#7b8d9a}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="header">
+<a class="brand" href="/">🏠 우리아파트 <strong>안심거래</strong></a>
+<a class="back" href="/broker-dashboard.html">업무화면</a>
+</header>
+
+<main class="card">
+<span class="badge">공인중개사 전용</span>
+<h1>매수·임차 요청</h1>
+<p class="desc">등록된 매매·전세·월세 희망조건을 확인합니다.</p>
+
+<div class="tabs">
+<button class="tab active" data-type="all">전체</button>
+<button class="tab" data-type="sale">매매</button>
+<button class="tab" data-type="rent">전세·월세</button>
+</div>
+
+<div id="requestList">
+<div class="empty">등록된 요청을 불러오는 중입니다.</div>
+</div>
+
+</main>
+</div>
+
+<script>
+const tabs=document.querySelectorAll(".tab");
+
+tabs.forEach(function(tab){
+  tab.addEventListener("click",function(){
+    tabs.forEach(t=>t.classList.remove("active"));
+    this.classList.add("active");
+  });
+});
+</script>
+
+</body>
+</html>
