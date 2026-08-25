@@ -1,8 +1,67 @@
+<script>
+(function(){
+
+"use strict";
+
+const form =
+document.getElementById("loginForm");
+
+const phone =
+document.getElementById("phone");
+
+const msg =
+document.getElementById("msg");
+
+phone.addEventListener(
+"input",
+function(){
+
+this.value =
+this.value
+.replace(/\D/g,"")
+.slice(0,8);
+
+}
+);
+
+form.addEventListener(
+"submit",
+function(e){
+
+e.preventDefault();
+
+msg.className = "msg";
+
+if(phone.value.length !== 8){
+
 msg.textContent =
-  "로그인되었습니다.";
+"휴대전화번호 뒤 8자리를 정확히 입력해 주세요.";
+
+msg.classList.add("error");
+
+phone.focus();
+
+return;
+
+}
+
+/* 통합 대시보드 이동 */
+
+msg.textContent =
+"로그인되었습니다.";
 
 msg.classList.add("ok");
 
 setTimeout(function(){
-  location.href = "/broker-dashboard.html";
+
+location.href =
+"/broker-dashboard.html";
+
 },300);
+
+}
+);
+
+})();
+
+</script>
