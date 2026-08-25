@@ -6,6 +6,153 @@
 <meta name="theme-color" content="#1165d7">
 <title>우리아파트 안심거래</title>
 <link rel="stylesheet" href="/assets/style.css">
+<style id="embedded-original-style">
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%}
+body{
+  background:#f4f6f8;
+  color:#172b3d;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 20px 46px}
+
+/* header */
+.header{
+  min-height:78px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.logo{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:800;color:#173f67}
+.logo-mark{font-size:28px}
+.logo strong{display:block;color:#1165d7;font-size:19px}
+.top-actions{display:flex;align-items:center;gap:14px}
+.install-wrap{display:flex;align-items:center;gap:6px}
+.install-btn{
+  width:34px;height:42px;border:0;background:transparent;padding:0;cursor:pointer;position:relative
+}
+.install-btn .phone{
+  display:block;width:21px;height:34px;margin:auto;border:2px solid #1165d7;border-radius:5px;position:relative
+}
+.install-btn .phone:after{
+  content:"";position:absolute;bottom:3px;left:50%;width:4px;height:4px;border-radius:50%;
+  background:#1165d7;transform:translateX(-50%)
+}
+.install-label{font-size:13px;font-weight:800;color:#24577e}
+.menu{
+  width:42px;height:42px;border:1px solid #d8e3ec;border-radius:10px;background:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer
+}
+.menu span{display:block;width:20px;height:2px;background:#173f67;border-radius:2px}
+
+/* hero */
+.hero{
+  border-radius:24px;
+  background:linear-gradient(135deg,#eef6ff 0%,#fff 68%);
+  border:1px solid #dceaf7;
+  padding:50px 48px;
+  box-shadow:0 8px 24px rgba(23,63,103,.06);
+}
+.hero h1{margin:0;font-size:42px;line-height:1.25;letter-spacing:-1.6px;color:#132f4c}
+.hero h1 em{font-style:normal;color:#1165d7}
+.hero p{margin:22px 0 0;font-size:18px;line-height:1.7;color:#526779}
+
+/* trade cards */
+.trade{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.trade a{
+  min-height:142px;border-radius:18px;padding:25px 24px;display:flex;flex-direction:column;
+  justify-content:center;border:1px solid #dce6ee;background:#fff;box-shadow:0 5px 18px rgba(15,23,42,.05)
+}
+.trade .ico{font-size:30px;margin-bottom:9px}
+.trade b{font-size:21px;margin-bottom:7px}
+.trade a>span:last-child{font-size:14px;font-weight:700;color:#64798a}
+.trade .sale{border-top:4px solid #1165d7}
+.trade .jeonse{border-top:4px solid #178a72}
+.trade .monthly{border-top:4px solid #7357b5}
+
+/* section */
+.process,.promise{margin-top:46px}
+.title{margin:0 0 22px;font-size:26px;letter-spacing:-.7px;color:#172b3d}
+.steps{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:12px;background:#fff;border:1px solid #dde7ef;
+  border-radius:20px;padding:25px 18px;box-shadow:0 5px 18px rgba(15,23,42,.04)
+}
+.step{text-align:center;padding:8px 5px}
+.circle{
+  width:54px;height:54px;margin:0 auto 7px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;background:#eef6ff;font-size:25px
+}
+.num{font-size:12px;font-weight:900;color:#1165d7;margin-bottom:5px}
+.step b{font-size:16px}
+.step p{margin:9px 0 0;font-size:13px;line-height:1.55;color:#6a7c8c}
+
+/* promise */
+.promise-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.card{
+  background:#fff;border:1px solid #dce6ee;border-radius:18px;padding:22px 18px;
+  min-height:245px;display:flex;flex-direction:column;box-shadow:0 5px 18px rgba(15,23,42,.04)
+}
+.card:hover{border-color:#a9c9e7;transform:translateY(-1px)}
+.ci{
+  width:45px;height:45px;border-radius:13px;background:#eef6ff;display:flex;align-items:center;
+  justify-content:center;font-size:23px;margin-bottom:14px
+}
+.card h3{margin:0;font-size:19px;line-height:1.35;color:#173f67}
+.card p{margin:11px 0 16px;font-size:13px;line-height:1.6;color:#667b8d}
+.more{margin-top:auto;font-size:13px;font-weight:800;color:#1165d7}
+
+/* broker */
+.broker{
+  margin-top:24px;background:#eaf4ff;border:1px solid #cfe2f4;border-radius:20px;padding:22px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:22px
+}
+.broker-left{display:flex;align-items:center;gap:15px}
+.person{
+  flex:0 0 58px;width:58px;height:58px;border-radius:50%;background:#fff;display:flex;
+  align-items:center;justify-content:center;font-size:30px
+}
+.broker h2{margin:0 0 6px;font-size:20px;color:#173f67}
+.broker p{margin:0;font-size:14px;line-height:1.55;color:#5d7386}
+
+/* footer */
+.footer{
+  margin-top:36px;padding:24px 4px 0;border-top:1px solid #dce5ec;color:#718291;
+  font-size:12px;line-height:1.8;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap
+}
+
+@media(max-width:900px){
+  .hero{padding:40px 30px}
+  .hero h1{font-size:34px}
+  .steps{grid-template-columns:repeat(5,minmax(115px,1fr));overflow-x:auto}
+  .promise-grid{grid-template-columns:repeat(3,1fr)}
+  .broker{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:700px){
+  .wrap{padding:0 14px 34px}
+  .header{min-height:70px}
+  .hero{padding:32px 22px;border-radius:19px}
+  .hero h1{font-size:29px}
+  .hero p{font-size:15px}
+  .trade{grid-template-columns:1fr;gap:10px}
+  .trade a{min-height:108px;padding:19px}
+  .promise-grid{grid-template-columns:repeat(2,1fr)}
+  .title{font-size:22px}
+  .footer{flex-direction:column}
+}
+@media(max-width:480px){
+  .logo{font-size:14px}
+  .logo strong{font-size:16px}
+  .logo-mark{font-size:23px}
+  .install-label{display:none}
+  .hero h1{font-size:26px}
+  .promise-grid{grid-template-columns:1fr}
+  .card{min-height:auto}
+}
+
+</style>
 <link rel="manifest" href="/manifest.webmanifest">
 
 <style>
@@ -294,277 +441,157 @@ body.menu-open{
   .compact-access-line button{flex-basis:44px !important;width:44px !important;height:36px !important;font-size:10px !important}
 }
 
+</style>
 
-
+<style id="responsive-frame-lock">
 /* =========================================================
-   전체 화면 통합 반응형 규칙
-   - 화면이 좁아져도 원래 행/열 구조는 유지
-   - 카드 수를 3→1, 5→3→1처럼 재배치하지 않음
-   - 대신 글자·아이콘·간격·패딩·버튼을 함께 축소
+   RESPONSIVE FRAME LOCK
+   - HTML/JS structure unchanged
+   - Original desktop grid counts stay fixed on small screens
+   - Only size, type, spacing and padding scale down
    ========================================================= */
 
-html,body{
-  width:100%;
-  max-width:100%;
-  overflow-x:hidden;
-}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+body{overflow-x:hidden;}
+.wrap{width:100%;max-width:1180px;margin:0 auto;}
 
-.wrap,
-.header,
-.hero,
-.trade,
-.process,
-.steps,
-.promise,
-.promise-grid,
-.broker,
-.footer{
-  min-width:0;
-}
-
-/* 고정 구조: 화면 폭과 무관하게 열 개수를 유지 */
-.request-types,
-.trade.request-types{
+/* Never change established column counts */
+.trade{
   grid-template-columns:repeat(3,minmax(0,1fr)) !important;
 }
-
 .steps{
   grid-template-columns:repeat(5,minmax(0,1fr)) !important;
   overflow:visible !important;
 }
-
 .promise-grid{
   grid-template-columns:repeat(5,minmax(0,1fr)) !important;
 }
-
+.request-types{
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+}
 .broker{
   flex-direction:row !important;
   align-items:center !important;
 }
-
-.broker-left{
-  min-width:0;
-  flex:1 1 auto;
-}
-
+.broker-left{min-width:0;flex:1 1 auto;}
 .broker-actions{
   display:grid !important;
   grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  flex:0 1 390px;
   width:auto !important;
   margin-top:0 !important;
-  flex:0 1 auto;
-  gap:clamp(3px,.7vw,8px) !important;
-}
-
-.broker-actions .broker-btn{
-  width:auto !important;
-  min-width:0 !important;
-  white-space:normal !important;
-  overflow-wrap:anywhere;
-}
-
-/* 모든 그리드/플렉스 자식이 폭 때문에 부모를 밀어내지 않도록 */
-.request-types > *,
-.steps > *,
-.promise-grid > *,
-.broker > *,
-.broker-actions > *,
-.compact-access-line > *{
-  min-width:0 !important;
-}
-
-/* 데스크톱부터 모바일까지 자연스럽게 줄어드는 공통 치수 */
-.hero{
-  padding:clamp(18px,4vw,50px) clamp(14px,4vw,48px) !important;
-  border-radius:clamp(14px,2vw,24px) !important;
-}
-.hero h1{
-  font-size:clamp(22px,3.5vw,42px) !important;
-  letter-spacing:clamp(-1.6px,-.12vw,-.5px) !important;
-}
-.hero p{
-  margin-top:clamp(10px,1.8vw,22px) !important;
-  font-size:clamp(12px,1.5vw,18px) !important;
-}
-
-.title{
-  margin-bottom:clamp(10px,1.8vw,22px) !important;
-  font-size:clamp(16px,2.2vw,26px) !important;
-}
-.process,.promise{
-  margin-top:clamp(24px,4vw,46px) !important;
-}
-
-.steps{
-  gap:clamp(3px,1vw,12px) !important;
-  padding:clamp(10px,2vw,25px) clamp(5px,1.5vw,18px) !important;
-  border-radius:clamp(12px,1.8vw,20px) !important;
-}
-.step{
-  padding:clamp(3px,.7vw,8px) clamp(1px,.4vw,5px) !important;
-}
-.circle{
-  width:clamp(26px,4.5vw,54px) !important;
-  height:clamp(26px,4.5vw,54px) !important;
-  margin-bottom:clamp(3px,.6vw,7px) !important;
-  font-size:clamp(14px,2.1vw,25px) !important;
-}
-.num{
-  font-size:clamp(8px,1vw,12px) !important;
-}
-.step b{
-  font-size:clamp(9px,1.35vw,16px) !important;
-  line-height:1.25 !important;
-  overflow-wrap:anywhere;
-}
-.step p{
-  margin-top:clamp(4px,.8vw,9px) !important;
-  font-size:clamp(8px,1.1vw,13px) !important;
-  line-height:1.45 !important;
-  overflow-wrap:anywhere;
-}
-
-.promise-grid{
-  gap:clamp(4px,1.1vw,14px) !important;
-}
-.promise-grid .card{
-  min-height:clamp(150px,20vw,245px) !important;
-  padding:clamp(8px,1.5vw,22px) clamp(6px,1.2vw,18px) !important;
-  border-radius:clamp(10px,1.5vw,18px) !important;
-}
-.promise-grid .ci{
-  width:clamp(27px,3.8vw,45px) !important;
-  height:clamp(27px,3.8vw,45px) !important;
-  margin-bottom:clamp(6px,1.1vw,14px) !important;
-  border-radius:clamp(8px,1vw,13px) !important;
-  font-size:clamp(14px,1.9vw,23px) !important;
-}
-.promise-grid .card h3{
-  font-size:clamp(9px,1.55vw,19px) !important;
-  line-height:1.3 !important;
-  overflow-wrap:anywhere;
-}
-.promise-grid .card p{
-  margin:clamp(5px,.9vw,11px) 0 clamp(7px,1.3vw,16px) !important;
-  font-size:clamp(8px,1.05vw,13px) !important;
-  line-height:1.5 !important;
-  overflow-wrap:anywhere;
-}
-.promise-grid .more{
-  font-size:clamp(8px,1.05vw,13px) !important;
-}
-
-.request-types{
-  gap:clamp(4px,.6vw,7px) !important;
-}
-.request-types > a{
-  min-height:clamp(36px,4vw,44px) !important;
-  height:auto !important;
-  padding:clamp(3px,.45vw,5px) clamp(2px,.35vw,4px) !important;
-}
-.request-types > a b{
-  font-size:clamp(11px,1.25vw,15px) !important;
-  white-space:nowrap !important;
-}
-
-.compact-access{
-  margin-top:clamp(7px,1vw,10px) !important;
-  padding:clamp(7px,1vw,12px) !important;
-}
-.compact-access-line{
-  gap:clamp(4px,.8vw,10px) !important;
-}
-.compact-access-line .return-access-desc{
-  font-size:clamp(10px,1.15vw,14px) !important;
-  line-height:1.35 !important;
-}
-.compact-access-line input{
-  width:clamp(78px,19vw,230px) !important;
-  height:clamp(34px,3.2vw,38px) !important;
-  padding:0 clamp(5px,.75vw,9px) !important;
-  font-size:clamp(14px,1.5vw,18px) !important;
-}
-.compact-access-line button{
-  flex:0 0 clamp(40px,4vw,48px) !important;
-  width:clamp(40px,4vw,48px) !important;
-  height:clamp(34px,3.2vw,38px) !important;
-  font-size:clamp(9px,.95vw,11px) !important;
-}
-
-.broker{
-  gap:clamp(6px,1.8vw,22px) !important;
-  padding:clamp(10px,1.8vw,22px) clamp(9px,2vw,24px) !important;
-  border-radius:clamp(12px,1.7vw,20px) !important;
-}
-.broker-left{
-  gap:clamp(6px,1.2vw,15px) !important;
-}
-.person{
-  flex:0 0 clamp(34px,4.8vw,58px) !important;
-  width:clamp(34px,4.8vw,58px) !important;
-  height:clamp(34px,4.8vw,58px) !important;
-  font-size:clamp(18px,2.5vw,30px) !important;
-}
-.broker h2{
-  font-size:clamp(11px,1.65vw,20px) !important;
-  margin-bottom:clamp(3px,.5vw,6px) !important;
-}
-.broker p{
-  font-size:clamp(8px,1.15vw,14px) !important;
-  line-height:1.45 !important;
+  justify-content:initial !important;
 }
 .broker-actions .broker-btn{
-  min-height:clamp(38px,4.7vw,56px) !important;
-  padding:clamp(5px,.8vw,10px) clamp(3px,1vw,12px) !important;
-  border-radius:clamp(8px,1vw,12px) !important;
-  font-size:clamp(8px,1.05vw,13px) !important;
-  line-height:1.25 !important;
+  min-width:0 !important;
+  width:100% !important;
 }
 
-.footer{
-  flex-direction:row !important;
-  font-size:clamp(8px,1vw,12px) !important;
-  gap:clamp(6px,1.2vw,15px) !important;
-}
+/* Elements may shrink inside their cell instead of forcing a reflow */
+.trade > *, .steps > *, .promise-grid > *, .request-types > *,
+.broker > *, .broker-actions > *{min-width:0;}
 
-/* 좁은 휴대폰: 구조는 그대로, 치수만 한 단계 더 축소 */
-@media(max-width:700px){
-  .wrap{padding-left:clamp(7px,2vw,14px) !important;padding-right:clamp(7px,2vw,14px) !important}
-  .header{min-height:clamp(54px,10vw,70px) !important}
-  .logo{font-size:clamp(11px,2.5vw,14px) !important}
-  .logo strong{font-size:clamp(13px,2.8vw,16px) !important}
-  .logo-mark{font-size:clamp(19px,4vw,23px) !important}
-  .install-label{display:inline !important;font-size:clamp(9px,2.2vw,13px) !important}
-  .trade{grid-template-columns:repeat(3,minmax(0,1fr)) !important}
-  .promise-grid{grid-template-columns:repeat(5,minmax(0,1fr)) !important}
-  .steps{grid-template-columns:repeat(5,minmax(0,1fr)) !important;overflow:visible !important}
-  .broker{flex-direction:row !important;align-items:center !important}
-  .broker-actions{grid-template-columns:repeat(3,minmax(0,1fr)) !important;width:auto !important;margin-top:0 !important}
-  .footer{flex-direction:row !important}
+@media(max-width:900px){
+  .wrap{padding-left:14px !important;padding-right:14px !important;}
+  .hero{padding:clamp(24px,6vw,40px) clamp(18px,5vw,30px) !important;}
+  .hero h1{font-size:clamp(25px,5.6vw,34px) !important;}
+  .hero p{font-size:clamp(13px,3vw,16px) !important;}
+
+  .trade{gap:clamp(6px,1.8vw,12px) !important;}
+  .trade a{
+    min-height:clamp(78px,20vw,118px) !important;
+    padding:clamp(10px,3vw,18px) clamp(7px,2.3vw,16px) !important;
+    border-radius:clamp(11px,3vw,18px) !important;
+  }
+  .trade .ico{font-size:clamp(20px,5.5vw,30px) !important;margin-bottom:clamp(4px,1.5vw,9px) !important;}
+  .trade b{font-size:clamp(14px,4vw,21px) !important;margin-bottom:clamp(3px,1vw,7px) !important;}
+  .trade a>span:last-child{font-size:clamp(10px,2.8vw,14px) !important;}
+
+  .process,.promise{margin-top:clamp(26px,7vw,46px) !important;}
+  .title{font-size:clamp(18px,4.6vw,26px) !important;margin-bottom:clamp(14px,4vw,22px) !important;}
+  .steps{
+    gap:clamp(3px,1.2vw,10px) !important;
+    padding:clamp(12px,3.7vw,22px) clamp(6px,2vw,16px) !important;
+    border-radius:clamp(12px,3.5vw,20px) !important;
+  }
+  .step{padding:clamp(3px,1.4vw,8px) 1px !important;}
+  .circle{
+    width:clamp(30px,9vw,54px) !important;
+    height:clamp(30px,9vw,54px) !important;
+    font-size:clamp(15px,4.7vw,25px) !important;
+    margin-bottom:clamp(3px,1.2vw,7px) !important;
+  }
+  .num{font-size:clamp(8px,2.2vw,12px) !important;}
+  .step b{font-size:clamp(9px,2.75vw,16px) !important;line-height:1.25 !important;}
+  .step p{font-size:clamp(7px,2.15vw,13px) !important;line-height:1.4 !important;margin-top:clamp(4px,1.4vw,9px) !important;}
+
+  .promise-grid{gap:clamp(4px,1.4vw,12px) !important;}
+  .card{
+    min-height:clamp(150px,43vw,245px) !important;
+    padding:clamp(10px,3vw,20px) clamp(6px,2vw,16px) !important;
+    border-radius:clamp(11px,3vw,18px) !important;
+  }
+  .ci{
+    width:clamp(27px,8vw,45px) !important;
+    height:clamp(27px,8vw,45px) !important;
+    font-size:clamp(14px,4.4vw,23px) !important;
+    margin-bottom:clamp(7px,2vw,14px) !important;
+  }
+  .card h3{font-size:clamp(9px,2.8vw,19px) !important;line-height:1.3 !important;}
+  .card p{font-size:clamp(7px,2.15vw,13px) !important;line-height:1.45 !important;margin:clamp(6px,1.7vw,11px) 0 clamp(8px,2vw,16px) !important;}
+  .more{font-size:clamp(7px,2.15vw,13px) !important;}
+
+  .broker{
+    gap:clamp(8px,2.5vw,20px) !important;
+    padding:clamp(12px,3.5vw,22px) clamp(10px,3vw,22px) !important;
+    border-radius:clamp(12px,3.4vw,20px) !important;
+  }
+  .broker-left{gap:clamp(7px,2vw,14px) !important;}
+  .person{
+    flex-basis:clamp(34px,9vw,58px) !important;
+    width:clamp(34px,9vw,58px) !important;
+    height:clamp(34px,9vw,58px) !important;
+    font-size:clamp(18px,5vw,30px) !important;
+  }
+  .broker h2{font-size:clamp(11px,3.1vw,20px) !important;margin-bottom:clamp(3px,1vw,6px) !important;}
+  .broker p{font-size:clamp(8px,2.25vw,14px) !important;line-height:1.45 !important;}
+  .broker-actions{gap:clamp(3px,1vw,8px) !important;flex-basis:clamp(150px,42vw,390px) !important;}
+  .broker-actions .broker-btn{
+    min-height:clamp(38px,11vw,56px) !important;
+    padding:clamp(5px,1.8vw,10px) clamp(2px,1.2vw,8px) !important;
+    font-size:clamp(8px,2.2vw,13px) !important;
+    line-height:1.3 !important;
+    white-space:normal !important;
+    border-radius:clamp(7px,2.2vw,12px) !important;
+  }
+
+  .footer{font-size:clamp(9px,2.2vw,12px) !important;gap:8px !important;}
 }
 
 @media(max-width:480px){
-  .hero h1{font-size:clamp(20px,6.4vw,26px) !important}
-  .request-types{grid-template-columns:repeat(3,minmax(0,1fr)) !important}
-  .steps{grid-template-columns:repeat(5,minmax(0,1fr)) !important}
-  .promise-grid{grid-template-columns:repeat(5,minmax(0,1fr)) !important}
-  .broker-actions{display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important}
-  .broker-actions .broker-btn{width:auto !important}
-  .install-label{display:inline !important}
-}
+  .wrap{padding-left:8px !important;padding-right:8px !important;padding-bottom:24px !important;}
+  .header{min-height:clamp(54px,16vw,70px) !important;}
+  .logo{font-size:clamp(11px,3.3vw,14px) !important;}
+  .logo strong{font-size:clamp(12px,3.7vw,16px) !important;}
+  .logo-mark{font-size:clamp(18px,5.4vw,23px) !important;}
+  .hero{padding:22px 14px !important;border-radius:15px !important;}
+  .hero h1{font-size:clamp(22px,6.8vw,26px) !important;}
+  .hero p{font-size:clamp(12px,3.7vw,15px) !important;}
 
-@media(max-width:360px){
-  .wrap{padding-left:6px !important;padding-right:6px !important}
-  .hero{padding-left:12px !important;padding-right:12px !important}
-  .step p br,
-  .promise-grid .card p br,
-  .broker p br{display:none}
-  .compact-access-line .return-access-desc{font-size:9px !important}
-  .compact-access-line input{width:72px !important;font-size:13px !important}
-  .compact-access-line button{width:38px !important;flex-basis:38px !important;font-size:8px !important}
-}
+  /* cancel all mobile column-collapse rules from the old stylesheet */
+  .trade{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
+  .steps{grid-template-columns:repeat(5,minmax(0,1fr)) !important;overflow:visible !important;}
+  .promise-grid{grid-template-columns:repeat(5,minmax(0,1fr)) !important;}
+  .broker{flex-direction:row !important;align-items:center !important;}
+  .broker-actions{grid-template-columns:repeat(3,minmax(0,1fr)) !important;width:auto !important;}
 
+  .compact-access-line input{
+    width:clamp(74px,22vw,125px) !important;
+    min-width:0 !important;
+  }
+}
 </style>
+
 </head>
 
 <body>
