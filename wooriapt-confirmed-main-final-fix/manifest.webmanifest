@@ -1,1 +1,0 @@
-{"id": "/", "name": "우리아파트 안심거래", "short_name": "안심거래", "start_url": "/", "scope": "/", "display": "standalone", "background_color": "#ffffff", "theme_color": "#1165d7", "icons": [{"src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"}, {"src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}]}
