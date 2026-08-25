@@ -133,6 +133,71 @@ body.menu-open{
   overflow:hidden;
 }
 
+/* =========================
+   기존 이용자 입력
+   ========================= */
+.return-access{
+  margin-top:18px;
+  padding:18px;
+  border:1px solid #dbe5ee;
+  border-radius:14px;
+  background:#fff;
+}
+.return-access-title{
+  margin:0 0 6px;
+  color:#173f67;
+  font-size:18px;
+  font-weight:900;
+}
+.return-access-desc{
+  margin:0 0 12px;
+  color:#5d7080;
+  font-size:13px;
+  line-height:1.6;
+}
+.return-access-row{
+  display:flex;
+  gap:8px;
+}
+.return-access-row input{
+  flex:1;
+  min-width:0;
+  height:50px;
+  padding:0 14px;
+  border:1px solid #c9d7e3;
+  border-radius:10px;
+  background:#fff;
+  color:#172033;
+  font-size:16px;
+  outline:none;
+}
+.return-access-row input:focus{
+  border-color:#1165d7;
+  box-shadow:0 0 0 3px rgba(17,101,215,.10);
+}
+.return-access-row button{
+  flex:0 0 78px;
+  height:50px;
+  border:0;
+  border-radius:10px;
+  background:#1165d7;
+  color:#fff;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+}
+.return-access-help{
+  margin:10px 2px 0;
+  color:#6b7c89;
+  font-size:12px;
+  line-height:1.6;
+}
+@media(max-width:480px){
+  .return-access-row button{
+    flex-basis:72px;
+  }
+}
+
 @media(max-width:700px){
   .broker{
     align-items:flex-start;
@@ -163,6 +228,72 @@ body.menu-open{
     min-height:48px;
   }
 }
+
+/* 요청한 부분만 조정 */
+.request-types{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr) !important;
+  gap:7px !important;
+}
+.request-types > a{
+  min-height:44px !important;
+  height:44px !important;
+  padding:5px 4px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+}
+.request-types > a b{
+  margin:0 !important;
+  font-size:15px !important;
+  line-height:1.15 !important;
+  white-space:nowrap !important;
+}
+.compact-access{
+  margin-top:10px !important;
+  padding:10px 12px !important;
+}
+.compact-access-line{
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+}
+.compact-access-line .return-access-desc{
+  flex:1 1 auto !important;
+  margin:0 !important;
+  font-size:14px !important;
+  line-height:1.35 !important;
+}
+.compact-access-line .return-access-row{
+  flex:0 0 auto !important;
+  display:flex !important;
+  gap:5px !important;
+}
+.compact-access-line input{
+  width:230px !important;
+  height:38px !important;
+  padding:0 9px !important;
+  font-size:18px !important;
+}
+.compact-access-line button{
+  flex:0 0 48px !important;
+  width:48px !important;
+  height:38px !important;
+  padding:0 4px !important;
+  font-size:11px !important;
+}
+@media(max-width:480px){
+  .request-types{gap:5px !important}
+  .request-types > a{height:40px !important;min-height:40px !important;padding:3px 2px !important}
+  .request-types > a b{font-size:13px !important}
+  .compact-access{padding:8px !important}
+  .compact-access-line{gap:6px !important}
+  .compact-access-line .return-access-desc{font-size:12px !important}
+  .compact-access-line input{width:80px !important;height:36px !important;font-size:18px !important}
+  .compact-access-line button{flex-basis:44px !important;width:44px !important;height:36px !important;font-size:10px !important}
+}
+
 </style>
 </head>
 
@@ -307,38 +438,31 @@ body.menu-open{
 
 
 <!-- =========================
-     매수 / 전세 / 월세
+     거래유형 요청
      ========================= -->
+<section class="trade request-types">
+  <a class="sale" href="/request.html?type=sale"><b>매매 매수등록</b></a>
+  <a class="jeonse" href="/request.html?type=jeonse"><b>전세 임차등록</b></a>
+  <a class="monthly" href="/request.html?type=monthly"><b>월세 임차등록</b></a>
+</section>
 
-<section class="trade">
-
-  <a
-    class="sale"
-    href="/request.html?type=sale"
-  >
-    <span class="ico">🏠</span>
-    <b>아파트 매수</b>
-    <span>매수조건 등록 ›</span>
-  </a>
-
-  <a
-    class="jeonse"
-    href="/request.html?type=jeonse"
-  >
-    <span class="ico">🔑</span>
-    <b>전세 구하기</b>
-    <span>전세조건 등록 ›</span>
-  </a>
-
-  <a
-    class="monthly"
-    href="/request.html?type=monthly"
-  >
-    <span class="ico">🏢</span>
-    <b>월세 구하기</b>
-    <span>월세조건 등록 ›</span>
-  </a>
-
+<section id="existing-access" class="return-access compact-access">
+  <div class="compact-access-line">
+    <p class="return-access-desc">
+      매수자는 휴대전화번호,<br>비회원 공인중개사는 매수요청번호를 입력하세요.
+    </p>
+    <div class="return-access-row">
+      <input
+        id="accessInput"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="휴대전화번호 또는 매수요청번호"
+        aria-label="휴대전화번호 또는 매수요청번호"
+      >
+      <button id="accessBtn" type="button">확인</button>
+    </div>
+  </div>
 </section>
 
 
@@ -789,6 +913,51 @@ mobileMenu
 
     }
   );
+
+
+/* =========================
+   기존 이용자 입력
+   ========================= */
+
+const accessInput =
+  document.getElementById("accessInput");
+
+const accessBtn =
+  document.getElementById("accessBtn");
+
+function normalizeAccessValue(value){
+  return String(value || "").replace(/[^0-9]/g,"");
+}
+
+accessBtn.addEventListener("click", function(){
+  const value = normalizeAccessValue(accessInput.value);
+
+  if(!value){
+    alert("휴대전화번호 또는 매수요청번호를 입력해 주세요.");
+    accessInput.focus();
+    return;
+  }
+
+  if(/^01[016789][0-9]{7,8}$/.test(value)){
+    alert("매수자 휴대전화번호가 확인되었습니다.");
+    return;
+  }
+
+  if(/^[0-9]{4,10}$/.test(value)){
+    alert("매수요청번호가 확인되었습니다.");
+    return;
+  }
+
+  alert("휴대전화번호 또는 매수요청번호를 정확히 입력해 주세요.");
+  accessInput.focus();
+});
+
+accessInput.addEventListener("keydown", function(e){
+  if(e.key === "Enter"){
+    e.preventDefault();
+    accessBtn.click();
+  }
+});
 
 
 /* =========================
