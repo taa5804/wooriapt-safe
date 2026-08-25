@@ -4,72 +4,44 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#173a59">
-
-<title>본사 관리자 | 우리아파트 안심거래</title>
+<title>본사 관리자 로그인 | 우리아파트 안심거래</title>
 
 <style>
 *{box-sizing:border-box}
-
-html,body{
-  margin:0;
-  width:100%;
-  min-height:100%;
-}
+html,body{margin:0;width:100%;min-height:100%}
 
 body{
-  display:none;
   background:#f4f6f8;
   color:#172b3d;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
 }
 
-a{
-  color:inherit;
-  text-decoration:none;
-}
+a{color:inherit;text-decoration:none}
 
 .wrap{
   width:100%;
-  max-width:720px;
+  max-width:560px;
   margin:0 auto;
-  padding:18px 14px 50px;
+  padding:28px 14px 50px;
 }
 
-.header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:18px;
-}
+.header{margin-bottom:20px}
 
 .brand{
-  font-size:20px;
+  font-size:21px;
   font-weight:900;
   color:#173a59;
 }
 
-.brand strong{
-  color:#1165d7;
-}
-
-.logout{
-  padding:9px 12px;
-  border:1px solid #ccd9e3;
-  border-radius:10px;
-  background:#fff;
-  color:#405e73;
-  font-size:14px;
-  font-weight:900;
-  cursor:pointer;
-}
+.brand strong{color:#1165d7}
 
 .card{
   background:#fff;
   border:1px solid #dbe5ec;
-  border-radius:17px;
-  padding:22px 18px;
-  box-shadow:0 5px 16px rgba(26,61,88,.06);
+  border-top:5px solid #173a59;
+  border-radius:18px;
+  padding:27px 21px;
+  box-shadow:0 6px 18px rgba(26,61,88,.07);
 }
 
 .badge{
@@ -83,61 +55,75 @@ a{
 }
 
 h1{
-  margin:12px 0 7px;
-  font-size:27px;
+  margin:13px 0 7px;
+  font-size:28px;
   color:#143b61;
 }
 
 .desc{
-  margin:0 0 22px;
-  color:#667d8e;
-  font-size:15px;
+  margin:0 0 23px;
+  color:#697e8e;
+  font-size:14px;
 }
 
-.menu{
-  display:grid;
-  gap:11px;
+.field{margin-bottom:15px}
+
+label{
+  display:block;
+  margin-bottom:7px;
+  font-size:14px;
+  font-weight:900;
+  color:#34546d;
 }
 
-.menu a{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  min-height:70px;
-  padding:15px 17px;
-  border:1px solid #d8e3eb;
-  border-radius:13px;
-  background:#fff;
+input{
+  width:100%;
+  height:48px;
+  padding:0 13px;
+  border:1px solid #cbd8e2;
+  border-radius:10px;
+  font-size:16px;
+  outline:none;
 }
 
-.menu a:hover{
-  background:#f7faff;
-}
+input:focus{border-color:#1165d7}
 
-.menu-title{
+.login-btn{
+  width:100%;
+  height:50px;
+  margin-top:5px;
+  border:0;
+  border-radius:10px;
+  background:#173a59;
+  color:#fff;
   font-size:17px;
   font-weight:900;
-  color:#173e60;
+  cursor:pointer;
 }
 
-.menu-desc{
-  display:block;
-  margin-top:4px;
-  font-size:13px;
-  color:#718596;
+.login-btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
 }
 
-.arrow{
-  font-size:23px;
-  color:#1165d7;
-  font-weight:900;
-}
-
-.footer{
-  margin-top:20px;
+.msg{
+  min-height:22px;
+  margin-top:13px;
   text-align:center;
-  color:#81909b;
-  font-size:12px;
+  font-size:14px;
+  font-weight:800;
+}
+
+.error{color:#c33b32}
+.ok{color:#168560}
+
+.home{
+  display:block;
+  margin-top:17px;
+  text-align:center;
+  color:#617889;
+  font-size:14px;
+  font-weight:800;
 }
 </style>
 </head>
@@ -147,141 +133,68 @@ h1{
 <div class="wrap">
 
 <header class="header">
-
 <a class="brand" href="/">
 🏠 우리아파트 <strong>안심거래</strong>
 </a>
-
-<button
-id="logoutBtn"
-class="logout"
-type="button">
-로그아웃
-</button>
-
 </header>
-
 
 <main class="card">
 
-<span class="badge">
-본사 관리자 전용
-</span>
+<span class="badge">본사 전용</span>
 
-<h1>본사 관리자</h1>
+<h1>관리자 로그인</h1>
 
 <p class="desc">
-우리아파트 안심거래 전체 운영현황을 관리합니다.
+등록된 본사 관리자만 이용할 수 있습니다.
 </p>
 
+<form id="adminLoginForm">
 
-<div class="menu">
+<div class="field">
+<label for="adminId">관리자 이메일</label>
 
-<a href="/admin-brokers.html">
-<div>
-<span class="menu-title">
-공인중개사 관리
-</span>
-<span class="menu-desc">
-회원가입·승인·회원상태 관리
-</span>
+<input
+id="adminId"
+type="email"
+autocomplete="username"
+placeholder="관리자 이메일"
+required>
 </div>
-<span class="arrow">›</span>
+
+<div class="field">
+<label for="adminPassword">비밀번호</label>
+
+<input
+id="adminPassword"
+type="password"
+autocomplete="current-password"
+placeholder="비밀번호"
+required>
+</div>
+
+<button
+id="loginBtn"
+class="login-btn"
+type="submit">
+관리자 로그인
+</button>
+
+<div id="msg" class="msg"></div>
+
+</form>
+
+<a class="home" href="/">
+메인으로 돌아가기
 </a>
-
-
-<a href="/admin-requests.html">
-<div>
-<span class="menu-title">
-매수·임차 요청 관리
-</span>
-<span class="menu-desc">
-매매·전세·월세 요청현황 관리
-</span>
-</div>
-<span class="arrow">›</span>
-</a>
-
-
-<a href="/admin-proposals.html">
-<div>
-<span class="menu-title">
-제안 관리
-</span>
-<span class="menu-desc">
-공인중개사 제안 및 진행현황 관리
-</span>
-</div>
-<span class="arrow">›</span>
-</a>
-
-
-<a href="/admin-transactions.html">
-<div>
-<span class="menu-title">
-거래 관리
-</span>
-<span class="menu-desc">
-계약 진행중·거래완료 관리
-</span>
-</div>
-<span class="arrow">›</span>
-</a>
-
-
-<a href="/admin-membership.html">
-<div>
-<span class="menu-title">
-회원비 관리
-</span>
-<span class="menu-desc">
-공인중개사 회원비 및 이용상태 관리
-</span>
-</div>
-<span class="arrow">›</span>
-</a>
-
-
-<a href="/admin-messages.html">
-<div>
-<span class="menu-title">
-문자·ARS 관리
-</span>
-<span class="menu-desc">
-공인중개사 알림 및 발송현황 관리
-</span>
-</div>
-<span class="arrow">›</span>
-</a>
-
-
-<a href="/admin-settings.html">
-<div>
-<span class="menu-title">
-시스템 설정
-</span>
-<span class="menu-desc">
-서비스 운영 기본설정
-</span>
-</div>
-<span class="arrow">›</span>
-</a>
-
-</div>
 
 </main>
-
-<div class="footer">
-© 우리아파트 안심거래
-</div>
-
 </div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-(async function(){
+(function(){
 
 "use strict";
 
@@ -297,90 +210,135 @@ window.supabase.createClient(
   SUPABASE_KEY
 );
 
+const form =
+document.getElementById("adminLoginForm");
 
-async function denyAccess(){
+const email =
+document.getElementById("adminId");
 
-await sb.auth.signOut();
+const password =
+document.getElementById("adminPassword");
 
-location.replace(
-"/admin-login.html"
-);
+const msg =
+document.getElementById("msg");
 
-}
+const loginBtn =
+document.getElementById("loginBtn");
+
+
+form.addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+msg.className = "msg";
+msg.textContent = "";
+
+loginBtn.disabled = true;
+loginBtn.textContent = "확인 중...";
 
 
 try{
 
-const sessionResult =
-await sb.auth.getSession();
+const result =
+await sb.auth.signInWithPassword({
+  email: email.value.trim(),
+  password: password.value
+});
 
 
-if(
-  sessionResult.error ||
-  !sessionResult.data.session
-){
-
-  location.replace(
-  "/admin-login.html"
-  );
-
-  return;
+if(result.error){
+  throw result.error;
 }
 
 
 const user =
-sessionResult.data.session.user;
+result.data.user;
 
 
 const adminResult =
 await sb
 .from("admin_users")
-.select("id,role,is_active")
+.select("id,user_id,admin_name,role,is_active")
 .eq("user_id",user.id)
 .eq("is_active",true)
 .maybeSingle();
 
 
-if(
-  adminResult.error ||
-  !adminResult.data
-){
+if(adminResult.error){
 
-  await denyAccess();
+  await sb.auth.signOut();
+
+  throw adminResult.error;
+}
+
+
+if(!adminResult.data){
+
+  await sb.auth.signOut();
+
+  msg.className = "msg error";
+
+  msg.textContent =
+  "본사 관리자 권한이 없는 계정입니다.";
 
   return;
 }
 
 
-/*
-  관리자 확인 완료 후에만
-  화면을 표시합니다.
-*/
+msg.className = "msg ok";
 
-document.body.style.display =
-"block";
+msg.textContent =
+"관리자 확인이 완료되었습니다.";
+
+
+setTimeout(function(){
+
+location.replace(
+"/admin-dashboard.html"
+);
+
+},300);
 
 
 }catch(err){
 
 console.error(err);
 
-await denyAccess();
+msg.className = "msg error";
+
+if(
+  err.message &&
+  err.message.toLowerCase().includes("email not confirmed")
+){
+
+  msg.textContent =
+  "관리자 이메일 확인이 완료되지 않았습니다.";
+
+}else if(
+  err.message &&
+  err.message.toLowerCase().includes("invalid login")
+){
+
+  msg.textContent =
+  "이메일 또는 비밀번호가 맞지 않습니다.";
+
+}else{
+
+  msg.textContent =
+  "관리자 로그인에 실패했습니다.";
 
 }
 
+}finally{
 
-document
-.getElementById("logoutBtn")
-.addEventListener(
-"click",
-async function(){
+loginBtn.disabled = false;
 
-await sb.auth.signOut();
+loginBtn.textContent =
+"관리자 로그인";
 
-location.replace(
-"/admin-login.html"
-);
+}
 
 }
 );
