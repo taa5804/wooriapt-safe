@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#1165d7">
+
 <title>통합관리 | 우리아파트 안심거래</title>
 
 <style>
@@ -22,87 +23,54 @@ body{
 }
 
 a{
-  text-decoration:none;
   color:inherit;
+  text-decoration:none;
 }
 
 .wrap{
   width:100%;
   max-width:680px;
   margin:0 auto;
-  padding:0 14px 50px;
+  padding:20px 14px 50px;
 }
 
 .header{
-  min-height:76px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
+  margin-bottom:20px;
 }
 
-.logo{
-  display:flex;
-  align-items:center;
-  gap:8px;
+.brand{
   font-size:21px;
   font-weight:900;
   color:#173a59;
 }
 
-.logo-mark{
-  font-size:27px;
-}
-
-.logo strong{
+.brand strong{
   color:#1165d7;
-  margin-left:3px;
-}
-
-.home{
-  padding:10px 13px;
-  border:1px solid #c6d5e1;
-  border-radius:10px;
-  background:#fff;
-  color:#34546d;
-  font-size:14px;
-  font-weight:900;
 }
 
 .card{
   background:#fff;
   border:1px solid #dbe5ec;
   border-radius:18px;
-  padding:26px 20px;
+  padding:25px 20px;
   box-shadow:0 6px 18px rgba(26,61,88,.06);
 }
 
-.badge{
-  display:inline-block;
-  padding:7px 10px;
-  border-radius:999px;
-  background:#eaf4ff;
-  color:#1165d7;
-  font-size:14px;
-  font-weight:900;
-}
-
 h1{
-  margin:14px 0 8px;
-  font-size:29px;
+  margin:0 0 8px;
+  font-size:27px;
   color:#143b61;
 }
 
-.lead{
-  margin:0 0 24px;
-  color:#526b7d;
-  font-size:16px;
-  line-height:1.7;
+.desc{
+  margin:0 0 23px;
+  color:#657b8b;
+  line-height:1.6;
 }
 
 .menu{
   display:grid;
-  gap:13px;
+  gap:12px;
 }
 
 .menu a{
@@ -111,12 +79,9 @@ h1{
   justify-content:space-between;
   min-height:72px;
   padding:16px 18px;
+  background:#fff;
   border:1px solid #d7e3ec;
   border-radius:14px;
-  background:#fff;
-  font-size:18px;
-  font-weight:900;
-  color:#173e60;
 }
 
 .menu a:hover{
@@ -124,38 +89,37 @@ h1{
   background:#f6faff;
 }
 
-.menu .title{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
+.menu-title{
+  font-size:18px;
+  font-weight:900;
+  color:#173e60;
 }
 
-.menu small{
-  color:#718596;
+.menu-desc{
+  display:block;
+  margin-top:4px;
   font-size:13px;
-  font-weight:700;
+  font-weight:600;
+  color:#718596;
 }
 
 .arrow{
+  font-size:24px;
+  font-weight:900;
   color:#1165d7;
-  font-size:22px;
 }
 
-.footer{
-  padding:24px 5px 0;
+.logout{
+  display:block;
+  width:100%;
+  margin-top:20px;
+  padding:13px;
+  border:1px solid #ccd8e1;
+  border-radius:11px;
+  background:#fff;
   text-align:center;
-  color:#768896;
-  font-size:13px;
-}
-
-@media(max-width:520px){
-  .card{
-    padding:22px 16px;
-  }
-
-  h1{
-    font-size:26px;
-  }
+  font-weight:800;
+  color:#526b7d;
 }
 </style>
 </head>
@@ -164,136 +128,87 @@ h1{
 
 <div class="wrap">
 
-<header class="header">
-
-  <a class="logo" href="/">
-    <span class="logo-mark">🏠</span>
-    <span>우리아파트<strong>안심거래</strong></span>
-  </a>
-
-  <a class="home" href="/">메인으로</a>
-
-</header>
+  <header class="header">
+    <a class="brand" href="/">
+      🏠 우리아파트 <strong>안심거래</strong>
+    </a>
+  </header>
 
 
-<main class="card">
+  <main class="card">
 
-  <span class="badge">통합관리</span>
+    <h1>통합관리</h1>
 
-  <h1>공인중개사 통합관리</h1>
-
-  <p class="lead">
-    공인중개사 업무와 제안현황, 본사관리 기능을
-    한 곳에서 이용합니다.
-  </p>
+    <p class="desc">
+      이용할 메뉴를 선택하세요.
+    </p>
 
 
-  <div class="menu">
+    <div class="menu">
 
-    <!-- 공인중개사 -->
-    <a href="/broker-profile.html">
-      <span class="title">
-        공인중개사
-        <small>회원정보 및 공인중개사 업무</small>
-      </span>
+      <!-- 공인중개사 -->
+      <a href="/broker-profile.html">
 
-      <span class="arrow">›</span>
+        <div>
+          <span class="menu-title">
+            공인중개사
+          </span>
+
+          <span class="menu-desc">
+            공인중개사 회원정보 및 업무
+          </span>
+        </div>
+
+        <span class="arrow">›</span>
+
+      </a>
+
+
+      <!-- 나의 제안 -->
+      <a href="/broker-proposals.html">
+
+        <div>
+          <span class="menu-title">
+            나의 제안
+          </span>
+
+          <span class="menu-desc">
+            제안 및 진행현황 확인
+          </span>
+        </div>
+
+        <span class="arrow">›</span>
+
+      </a>
+
+
+      <!-- 본사 관리자 -->
+      <a href="/admin-dashboard.html">
+
+        <div>
+          <span class="menu-title">
+            본사 관리자
+          </span>
+
+          <span class="menu-desc">
+            회원·거래·시스템 관리
+          </span>
+        </div>
+
+        <span class="arrow">›</span>
+
+      </a>
+
+    </div>
+
+
+    <a class="logout" href="/">
+      메인으로
     </a>
 
-
-    <!-- 나의 제안 -->
-    <a href="#" id="proposalMenu">
-      <span class="title">
-        나의 제안
-        <small>매수·전세·월세 제안 및 진행현황</small>
-      </span>
-
-      <span class="arrow">›</span>
-    </a>
-
-
-    <!-- 본사 관리자 -->
-    <a href="#" id="adminMenu">
-      <span class="title">
-        본사 관리자
-        <small>회원·거래·시스템 통합관리</small>
-      </span>
-
-      <span class="arrow">›</span>
-    </a>
-
-  </div>
-
-</main>
-
-
-<footer class="footer">
-  © 우리아파트 안심거래. All rights reserved.
-</footer>
+  </main>
 
 </div>
-
-
-<script>
-(function(){
-
-  /*
-    통합 경로 설정
-    실제 기존 세부화면 파일명을 확인한 뒤
-    아래 두 경로만 연결하면 됩니다.
-  */
-
-  const ROUTES = {
-
-    broker: "/broker-profile.html",
-
-    proposals: "",
-
-    admin: ""
-
-  };
-
-
-  const proposalMenu =
-    document.getElementById("proposalMenu");
-
-  const adminMenu =
-    document.getElementById("adminMenu");
-
-
-  proposalMenu.addEventListener("click",function(e){
-
-    e.preventDefault();
-
-    if(!ROUTES.proposals){
-
-      alert("나의 제안 화면 경로를 연결 중입니다.");
-
-      return;
-    }
-
-    location.href = ROUTES.proposals;
-
-  });
-
-
-  adminMenu.addEventListener("click",function(e){
-
-    e.preventDefault();
-
-    if(!ROUTES.admin){
-
-      alert("본사 관리자 화면 경로를 연결 중입니다.");
-
-      return;
-    }
-
-    location.href = ROUTES.admin;
-
-  });
-
-})();
-</script>
 
 </body>
 </html>
