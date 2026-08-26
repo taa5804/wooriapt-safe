@@ -8,10 +8,7 @@
 <title>전자계약 관리 | 우리아파트 안심거래</title>
 
 <style>
-
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
@@ -22,19 +19,11 @@ html,body{
 body{
   background:#f4f6f8;
   color:#172b3d;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    "Noto Sans KR",
-    Arial,
-    sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,
+  "Segoe UI","Noto Sans KR",Arial,sans-serif;
 }
 
-button,
-input,
-textarea,
-select{
+button,input,textarea{
   font:inherit;
 }
 
@@ -44,8 +33,6 @@ select{
   margin:0 auto;
   padding:16px 14px 60px;
 }
-
-/* HEADER */
 
 .header{
   background:#12394d;
@@ -72,8 +59,6 @@ select{
   line-height:1.6;
 }
 
-/* 거래방 탭 */
-
 .room-tabs{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -92,12 +77,10 @@ select{
 }
 
 .room-tab.active{
-  color:#fff;
   background:#1165d7;
   border-color:#1165d7;
+  color:#fff;
 }
-
-/* CARD */
 
 .card{
   background:#fff;
@@ -105,7 +88,6 @@ select{
   border-radius:16px;
   padding:17px;
   margin-bottom:14px;
-  box-shadow:0 2px 8px rgba(0,0,0,.03);
 }
 
 .card h2{
@@ -124,8 +106,6 @@ select{
   color:#6a7e8a;
 }
 
-/* FORM */
-
 .grid2{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -136,26 +116,20 @@ select{
   margin-bottom:12px;
 }
 
-.field:last-child{
-  margin-bottom:0;
-}
-
 label{
   display:block;
+  margin-bottom:6px;
   font-size:13px;
   font-weight:800;
-  margin-bottom:6px;
 }
 
 input,
-textarea,
-select{
+textarea{
   width:100%;
   min-height:44px;
   border:1px solid #cbd7df;
   border-radius:10px;
   padding:10px 11px;
-  background:#fff;
   outline:none;
 }
 
@@ -163,14 +137,6 @@ textarea{
   min-height:110px;
   resize:vertical;
 }
-
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:#1165d7;
-}
-
-/* DOCUMENT */
 
 .doc-row{
   display:flex;
@@ -194,7 +160,6 @@ select:focus{
   font-size:12px;
   font-weight:900;
   color:#c23c3c;
-  white-space:nowrap;
 }
 
 .doc-state.ok{
@@ -202,7 +167,6 @@ select:focus{
 }
 
 .upload-btn{
-  display:inline-block;
   background:#edf4ff;
   color:#1165d7;
   border-radius:8px;
@@ -215,8 +179,6 @@ select:focus{
 .hidden-file{
   display:none;
 }
-
-/* NOTICE */
 
 .notice{
   margin-top:10px;
@@ -235,8 +197,6 @@ select:focus{
   color:#146a38;
 }
 
-/* BUTTON */
-
 .btn{
   width:100%;
   min-height:48px;
@@ -247,30 +207,32 @@ select:focus{
 }
 
 .btn-primary{
-  color:#fff;
   background:#1165d7;
+  color:#fff;
 }
 
 .btn-dark{
-  color:#fff;
   background:#12394d;
+  color:#fff;
 }
 
 .btn-gray,
 .btn:disabled{
-  color:#fff;
   background:#c7d0d5;
+  color:#fff;
   cursor:not-allowed;
 }
 
 .help{
+  margin-top:8px;
   font-size:12px;
   color:#71848f;
   line-height:1.6;
-  margin-top:8px;
 }
 
-/* CONTRACT */
+.hidden{
+  display:none;
+}
 
 .contract-section{
   display:none;
@@ -283,14 +245,13 @@ select:focus{
 .contract-paper{
   background:#fff;
   border:2px solid #333;
-  padding:22px 18px;
-  margin-bottom:14px;
+  padding:18px 14px;
 }
 
 .contract-paper h3{
   text-align:center;
-  margin:0 0 20px;
-  font-size:23px;
+  margin:0 0 18px;
+  font-size:22px;
 }
 
 .contract-table{
@@ -304,34 +265,18 @@ select:focus{
   border:1px solid #555;
   padding:9px;
   text-align:left;
-  vertical-align:top;
 }
 
 .contract-table th{
-  width:28%;
+  width:30%;
   background:#f5f5f5;
-}
-
-.contract-special{
-  min-height:100px;
-  white-space:pre-wrap;
-}
-
-/* 계약 확인 */
-
-.confirm-box{
-  background:#f7fafc;
-  border:1px solid #dce5eb;
-  border-radius:12px;
-  padding:13px;
-  margin-top:12px;
 }
 
 .check-row{
   display:flex;
   align-items:flex-start;
   gap:8px;
-  margin:9px 0;
+  margin-top:10px;
   font-size:13px;
   line-height:1.5;
 }
@@ -340,10 +285,7 @@ select:focus{
   width:18px;
   height:18px;
   min-height:18px;
-  margin-top:2px;
 }
-
-/* SIGNATURE STATUS */
 
 .signature-section{
   display:none;
@@ -351,27 +293,6 @@ select:focus{
 
 .signature-section.show{
   display:block;
-}
-
-.steps{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-  margin-bottom:14px;
-}
-
-.step{
-  padding:7px 10px;
-  border-radius:20px;
-  background:#eaf0f4;
-  color:#5f7684;
-  font-size:12px;
-  font-weight:800;
-}
-
-.step.active{
-  background:#1165d7;
-  color:#fff;
 }
 
 .sign-grid{
@@ -389,7 +310,6 @@ select:focus{
 
 .sign-box strong{
   display:block;
-  font-size:15px;
   margin-bottom:7px;
 }
 
@@ -399,32 +319,39 @@ select:focus{
   font-size:13px;
 }
 
-.done{
-  color:#14834a;
-  font-weight:900;
-  font-size:13px;
-}
-
-/* 안내 */
-
-.guide-box{
-  background:#eef6ff;
-  border:1px solid #c9dfff;
-  color:#244d76;
-  padding:13px;
+.link-box{
+  background:#f5f8fa;
+  border:1px solid #dce5ea;
   border-radius:12px;
-  font-size:13px;
-  line-height:1.7;
-  margin-bottom:12px;
+  padding:12px;
+  margin-top:10px;
 }
 
-.warning{
-  color:#c43c3c;
+.link-title{
+  font-size:13px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+
+.sign-link{
+  word-break:break-all;
+  font-size:12px;
+  color:#1165d7;
+  line-height:1.5;
+}
+
+.copy-btn{
+  margin-top:8px;
+  border:0;
+  border-radius:8px;
+  padding:8px 11px;
+  background:#edf4ff;
+  color:#1165d7;
   font-weight:800;
+  cursor:pointer;
 }
 
 @media(max-width:600px){
-
   .grid2,
   .sign-grid{
     grid-template-columns:1fr;
@@ -433,25 +360,7 @@ select:focus{
   .header h1{
     font-size:21px;
   }
-
-  .room-tab{
-    font-size:14px;
-  }
-
-  .contract-paper{
-    padding:16px 9px;
-  }
-
-  .contract-table{
-    font-size:12px;
-  }
-
-  .contract-table th,
-  .contract-table td{
-    padding:7px;
-  }
 }
-
 </style>
 </head>
 
@@ -459,10 +368,7 @@ select:focus{
 
 <div class="wrap">
 
-  <!-- HEADER -->
-
   <div class="header">
-
     <div class="brand">
       우리아파트 안심거래 · 공인중개사 관리자
     </div>
@@ -470,56 +376,37 @@ select:focus{
     <h1>전자계약 관리</h1>
 
     <p>
-      필수서류 확인부터 계약서 작성,
-      당사자 전자서명까지 한 화면에서 진행합니다.
+      필수서류 확인 → 계약서 작성 →
+      당사자 전자서명 순서로 진행합니다.
     </p>
-
   </div>
 
 
-  <!-- 거래방 선택 -->
-
   <div class="room-tabs">
-
-    <button
-      class="room-tab active"
-      data-type="sale">
+    <button class="room-tab active" data-type="sale">
       매매방
     </button>
 
-    <button
-      class="room-tab"
-      data-type="jeonse">
+    <button class="room-tab" data-type="jeonse">
       전세방
     </button>
 
-    <button
-      class="room-tab"
-      data-type="monthly">
+    <button class="room-tab" data-type="monthly">
       월세방
     </button>
-
   </div>
 
 
   <div class="card">
-
-    <div
-      class="room-title"
-      id="roomTitle">
+    <div class="room-title" id="roomTitle">
       매매 전자계약방
     </div>
 
-    <div
-      class="room-desc"
-      id="roomDesc">
+    <div class="room-desc" id="roomDesc">
       매수인과 매도인의 매매계약을 진행합니다.
     </div>
-
   </div>
 
-
-  <!-- 거래 기본정보 -->
 
   <div class="card">
 
@@ -545,22 +432,19 @@ select:focus{
         <label>주소</label>
         <input
           id="address"
-          placeholder="아파트 주소">
+          placeholder="주소">
       </div>
 
       <div class="field">
-        <label>동 · 호수</label>
+        <label>동·호수</label>
         <input
           id="unit"
           placeholder="예: 101동 1001호">
       </div>
 
     </div>
-
   </div>
 
-
-  <!-- 계약 당사자 -->
 
   <div class="card">
 
@@ -569,76 +453,43 @@ select:focus{
     <div class="grid2">
 
       <div class="field">
-
-        <label id="buyerNameLabel">
-          매수인 성명
-        </label>
-
-        <input
-          id="buyerName"
-          placeholder="성명">
-
+        <label id="buyerNameLabel">매수인 성명</label>
+        <input id="buyerName">
       </div>
 
       <div class="field">
-
-        <label id="buyerPhoneLabel">
-          매수인 휴대전화
-        </label>
-
+        <label id="buyerPhoneLabel">매수인 휴대전화</label>
         <input
           id="buyerPhone"
           inputmode="numeric"
           placeholder="기존 신청정보 자동입력">
-
       </div>
 
       <div class="field">
-
-        <label id="sellerNameLabel">
-          매도인 성명
-        </label>
-
+        <label id="sellerNameLabel">매도인 성명</label>
         <input
           id="sellerName"
           placeholder="공인중개사가 입력">
-
       </div>
 
       <div class="field">
-
-        <label id="sellerPhoneLabel">
-          매도인 휴대전화
-        </label>
-
+        <label id="sellerPhoneLabel">매도인 휴대전화</label>
         <input
           id="sellerPhone"
           inputmode="numeric"
           placeholder="공인중개사가 입력">
-
       </div>
 
     </div>
 
-    <div class="help" id="partyHelp">
-      매수인 정보는 기존 신청정보에서 불러오고,
-      매도인 정보는 담당 공인중개사가 입력합니다.
-    </div>
+    <div class="help" id="partyHelp"></div>
 
   </div>
 
 
-  <!-- 필수서류 -->
-
   <div class="card">
 
     <h2>3. 필수서류</h2>
-
-    <div class="guide-box">
-      필수서류가 모두 첨부되지 않으면
-      전자계약서를 작성할 수 없습니다.
-      누락된 서류는 아래에서 자동으로 안내됩니다.
-    </div>
 
     <div id="documentList"></div>
 
@@ -651,8 +502,6 @@ select:focus{
   </div>
 
 
-  <!-- 계약 조건 -->
-
   <div class="card">
 
     <h2>4. 계약조건</h2>
@@ -660,113 +509,71 @@ select:focus{
     <div class="grid2">
 
       <div class="field">
-
-        <label id="amountLabel">
-          매매대금
-        </label>
-
+        <label id="amountLabel">매매대금</label>
         <input
           id="totalAmount"
-          inputmode="numeric"
-          placeholder="금액">
-
+          inputmode="numeric">
       </div>
-
 
       <div class="field">
-
         <label>계약금</label>
-
         <input
           id="deposit"
-          inputmode="numeric"
-          placeholder="계약금">
-
+          inputmode="numeric">
       </div>
 
+      <div class="field" id="middleField">
+        <label>중도금</label>
+        <input
+          id="middlePayment"
+          inputmode="numeric">
+      </div>
+
+      <div class="field">
+        <label id="balanceLabel">잔금</label>
+        <input
+          id="balance"
+          inputmode="numeric">
+      </div>
 
       <div
         class="field"
-        id="middleField">
-
-        <label>중도금</label>
-
-        <input
-          id="middlePayment"
-          inputmode="numeric"
-          placeholder="중도금">
-
-      </div>
-
-
-      <div class="field">
-
-        <label id="balanceLabel">
-          잔금
-        </label>
-
-        <input
-          id="balance"
-          inputmode="numeric"
-          placeholder="잔금">
-
-      </div>
-
-
-      <div
-        class="field monthly-only"
+        id="monthlyField"
         style="display:none">
 
         <label>월 차임</label>
-
         <input
           id="monthlyRent"
-          inputmode="numeric"
-          placeholder="월세">
+          inputmode="numeric">
 
       </div>
 
-
       <div class="field">
-
         <label>계약일</label>
-
         <input
           id="contractDate"
           type="date">
-
       </div>
 
-
       <div class="field">
-
-        <label id="balanceDateLabel">
-          잔금일
-        </label>
-
+        <label id="balanceDateLabel">잔금일</label>
         <input
           id="balanceDate"
           type="date">
-
       </div>
 
     </div>
 
-
     <div class="field">
-
       <label>특약사항</label>
 
       <textarea
         id="specialTerms"
         placeholder="특약사항을 입력하세요."></textarea>
-
     </div>
 
   </div>
 
-
-  <!-- 전자계약서 작성 -->
 
   <div class="card">
 
@@ -776,29 +583,23 @@ select:focus{
       id="createContractBtn"
       class="btn btn-gray"
       disabled>
-      필수서류 완료 후 전자계약서 작성
-    </button>
 
-    <div class="help">
-      서류가 전부 첨부되면 버튼이 자동으로 활성화됩니다.
-    </div>
+      필수서류 완료 후 전자계약서 작성
+
+    </button>
 
   </div>
 
 
-  <!-- 계약서 미리보기 -->
-
-  <div
+  <section
     class="contract-section"
     id="contractSection">
 
     <div class="card">
 
-      <h2>6. 전자계약서 확인</h2>
+      <h2>6. 계약서 확인</h2>
 
-      <div
-        class="contract-paper"
-        id="contractPaper">
+      <div class="contract-paper">
 
         <h3 id="contractTitle">
           부동산 매매계약서
@@ -812,23 +613,17 @@ select:focus{
           </tr>
 
           <tr>
-            <th id="previewBuyerTitle">
-              매수인
-            </th>
+            <th id="previewBuyerTitle">매수인</th>
             <td id="previewBuyer"></td>
           </tr>
 
           <tr>
-            <th id="previewSellerTitle">
-              매도인
-            </th>
+            <th id="previewSellerTitle">매도인</th>
             <td id="previewSeller"></td>
           </tr>
 
           <tr>
-            <th id="previewAmountTitle">
-              매매대금
-            </th>
+            <th id="previewAmountTitle">매매대금</th>
             <td id="previewAmount"></td>
           </tr>
 
@@ -843,9 +638,7 @@ select:focus{
           </tr>
 
           <tr>
-            <th id="previewBalanceTitle">
-              잔금
-            </th>
+            <th id="previewBalanceTitle">잔금</th>
             <td id="previewBalance"></td>
           </tr>
 
@@ -860,17 +653,13 @@ select:focus{
           </tr>
 
           <tr>
-            <th id="previewBalanceDateTitle">
-              잔금일
-            </th>
+            <th id="previewBalanceDateTitle">잔금일</th>
             <td id="previewBalanceDate"></td>
           </tr>
 
           <tr>
             <th>특약사항</th>
-            <td
-              class="contract-special"
-              id="previewTerms"></td>
+            <td id="previewTerms"></td>
           </tr>
 
         </table>
@@ -878,52 +667,26 @@ select:focus{
       </div>
 
 
-      <div class="confirm-box">
-
-        <strong>
-          계약내용 확인
-        </strong>
-
-        <div class="check-row">
-
-          <input
-            type="checkbox"
-            id="checkProperty">
-
-          <label for="checkProperty">
-            부동산 주소와 동·호수를 확인했습니다.
-          </label>
-
-        </div>
-
-
-        <div class="check-row">
-
-          <input
-            type="checkbox"
-            id="checkAmount">
-
-          <label for="checkAmount">
-            거래금액과 계약금·중도금·잔금 내용을 확인했습니다.
-          </label>
-
-        </div>
-
-
-        <div class="check-row">
-
-          <input
-            type="checkbox"
-            id="checkTerms">
-
-          <label for="checkTerms">
-            특약사항 및 계약 내용을 확인했습니다.
-          </label>
-
-        </div>
-
+      <div class="check-row">
+        <input type="checkbox" id="check1">
+        <label for="check1">
+          부동산 정보를 확인했습니다.
+        </label>
       </div>
 
+      <div class="check-row">
+        <input type="checkbox" id="check2">
+        <label for="check2">
+          계약금액과 지급일정을 확인했습니다.
+        </label>
+      </div>
+
+      <div class="check-row">
+        <input type="checkbox" id="check3">
+        <label for="check3">
+          특약사항을 확인했습니다.
+        </label>
+      </div>
 
       <br>
 
@@ -936,12 +699,10 @@ select:focus{
 
     </div>
 
-  </div>
+  </section>
 
 
-  <!-- 전자서명 -->
-
-  <div
+  <section
     class="signature-section"
     id="signatureSection">
 
@@ -949,103 +710,96 @@ select:focus{
 
       <h2>7. 전자서명 요청</h2>
 
-      <div class="steps">
-
-        <div class="step active">
-          ① 계약서 작성
-        </div>
-
-        <div class="step">
-          ② 문자발송
-        </div>
-
-        <div class="step">
-          ③ 본인확인
-        </div>
-
-        <div class="step">
-          ④ 전자서명
-        </div>
-
-        <div class="step">
-          ⑤ 계약완료
-        </div>
-
-      </div>
-
-
-      <div class="guide-box" id="signGuide">
-
-        담당 공인중개사가 전자서명 요청을 누르면
-        매수인과 매도인에게 각각 전용 계약 링크가
-        문자로 발송됩니다.
-
-        <br><br>
-
-        당사자는
-        본인확인 → 계약서 확인 → 화면에 직접 사인 →
-        전자서명하기 순서로 진행합니다.
-
-      </div>
-
-
       <div class="sign-grid">
 
         <div class="sign-box">
-
           <strong id="buyerSignTitle">
             매수인
           </strong>
 
-          <span
-            class="wait"
-            id="buyerSignState">
+          <span class="wait">
             전자서명 대기
           </span>
-
         </div>
 
-
         <div class="sign-box">
-
           <strong id="sellerSignTitle">
             매도인
           </strong>
 
-          <span
-            class="wait"
-            id="sellerSignState">
+          <span class="wait">
             전자서명 대기
           </span>
-
         </div>
 
       </div>
 
-
       <br>
-
 
       <button
         id="sendSignBtn"
         class="btn btn-primary">
+
         양쪽에 전자서명 요청
+
       </button>
 
-
       <div class="help">
+        실제 서비스에서는 이 버튼을 누르면
+        두 사람에게 각각 전자서명 문자가 자동 발송됩니다.
+      </div>
 
-        전자서명이 완료되면 사용자가 계약서를
-        다시 보내지 않아도 됩니다.
 
-        서명상태는 이 화면에 자동으로 표시되도록
-        서버와 연결합니다.
+      <div
+        id="generatedLinks"
+        class="hidden">
+
+        <div class="link-box">
+
+          <div
+            class="link-title"
+            id="buyerLinkTitle">
+            매수인 전자서명 링크
+          </div>
+
+          <div
+            class="sign-link"
+            id="buyerLink"></div>
+
+          <button
+            class="copy-btn"
+            data-target="buyerLink">
+            링크 복사
+          </button>
+
+        </div>
+
+
+        <div class="link-box">
+
+          <div
+            class="link-title"
+            id="sellerLinkTitle">
+            매도인 전자서명 링크
+          </div>
+
+          <div
+            class="sign-link"
+            id="sellerLink"></div>
+
+          <button
+            class="copy-btn"
+            data-target="sellerLink">
+            링크 복사
+          </button>
+
+        </div>
 
       </div>
 
     </div>
 
-  </div>
+  </section>
 
 </div>
 
@@ -1056,30 +810,22 @@ select:focus{
 
 "use strict";
 
-
 let currentType = "sale";
+
+const $ = id =>
+  document.getElementById(id);
 
 
 const ROOM = {
 
   sale:{
-
     title:"매매 전자계약방",
-
-    desc:
-    "매수인과 매도인의 매매계약을 진행합니다.",
-
+    desc:"매수인과 매도인의 매매계약을 진행합니다.",
     buyer:"매수인",
-
     seller:"매도인",
-
-    contractTitle:
-    "부동산 매매계약서",
-
+    contractTitle:"부동산 매매계약서",
     amount:"매매대금",
-
     balance:"잔금",
-
     balanceDate:"잔금일",
 
     docs:[
@@ -1089,28 +835,16 @@ const ROOM = {
       "매수인 신분확인 서류",
       "중개대상물 확인·설명서"
     ]
-
   },
 
-
   jeonse:{
-
     title:"전세 전자계약방",
-
-    desc:
-    "임차인과 임대인의 전세계약을 진행합니다.",
-
+    desc:"임차인과 임대인의 전세계약을 진행합니다.",
     buyer:"임차인",
-
     seller:"임대인",
-
-    contractTitle:
-    "부동산 전세계약서",
-
+    contractTitle:"부동산 전세계약서",
     amount:"전세보증금",
-
     balance:"잔금",
-
     balanceDate:"잔금일",
 
     docs:[
@@ -1120,28 +854,16 @@ const ROOM = {
       "임차인 신분확인 서류",
       "중개대상물 확인·설명서"
     ]
-
   },
 
-
   monthly:{
-
     title:"월세 전자계약방",
-
-    desc:
-    "임차인과 임대인의 월세계약을 진행합니다.",
-
+    desc:"임차인과 임대인의 월세계약을 진행합니다.",
     buyer:"임차인",
-
     seller:"임대인",
-
-    contractTitle:
-    "부동산 월세계약서",
-
+    contractTitle:"부동산 월세계약서",
     amount:"보증금",
-
     balance:"잔여 보증금",
-
     balanceDate:"입주·잔금일",
 
     docs:[
@@ -1151,129 +873,91 @@ const ROOM = {
       "임차인 신분확인 서류",
       "중개대상물 확인·설명서"
     ]
-
   }
-
 };
-
-
-
-const $ =
-id => document.getElementById(id);
-
 
 
 function money(value){
 
-  const number =
+  const n =
     String(value || "")
     .replace(/\D/g,"");
 
-  if(!number){
-    return "-";
-  }
+  if(!n) return "-";
 
-  return Number(number)
-    .toLocaleString("ko-KR") +
-    "원";
+  return Number(n)
+    .toLocaleString("ko-KR") + "원";
 
 }
 
 
-
 function renderRoom(){
 
-  const data =
+  const d =
     ROOM[currentType];
 
-
   $("roomTitle").textContent =
-    data.title;
+    d.title;
 
   $("roomDesc").textContent =
-    data.desc;
-
+    d.desc;
 
   $("buyerNameLabel").textContent =
-    data.buyer + " 성명";
+    d.buyer + " 성명";
 
   $("buyerPhoneLabel").textContent =
-    data.buyer + " 휴대전화";
+    d.buyer + " 휴대전화";
 
   $("sellerNameLabel").textContent =
-    data.seller + " 성명";
+    d.seller + " 성명";
 
   $("sellerPhoneLabel").textContent =
-    data.seller + " 휴대전화";
-
+    d.seller + " 휴대전화";
 
   $("buyerSignTitle").textContent =
-    data.buyer;
+    d.buyer;
 
   $("sellerSignTitle").textContent =
-    data.seller;
+    d.seller;
 
+  $("buyerLinkTitle").textContent =
+    d.buyer + " 전자서명 링크";
+
+  $("sellerLinkTitle").textContent =
+    d.seller + " 전자서명 링크";
 
   $("amountLabel").textContent =
-    data.amount;
+    d.amount;
 
   $("balanceLabel").textContent =
-    data.balance;
+    d.balance;
 
   $("balanceDateLabel").textContent =
-    data.balanceDate;
-
+    d.balanceDate;
 
   $("partyHelp").textContent =
-    data.buyer +
-    " 정보는 기존 신청정보에서 불러오고, " +
-    data.seller +
+    d.buyer +
+    " 정보는 기존 신청정보에서 자동으로 불러오고, " +
+    d.seller +
     " 정보는 담당 공인중개사가 입력합니다.";
-
-
-  $("signGuide").innerHTML =
-
-    "담당 공인중개사가 전자서명 요청을 누르면 " +
-
-    data.buyer +
-    "과 " +
-    data.seller +
-
-    "에게 각각 전용 계약 링크가 문자로 발송됩니다." +
-
-    "<br><br>" +
-
-    "당사자는 본인확인 → 계약서 확인 → " +
-    "화면에 직접 사인 → 전자서명하기 순서로 진행합니다.";
-
 
   if(currentType === "monthly"){
 
-    document.querySelector(
-      ".monthly-only"
-    ).style.display = "block";
+    $("monthlyField").style.display =
+      "block";
 
     $("middleField").style.display =
       "none";
 
   }else{
 
-    document.querySelector(
-      ".monthly-only"
-    ).style.display = "block";
-
-    document.querySelector(
-      ".monthly-only"
-    ).style.display = "none";
+    $("monthlyField").style.display =
+      "none";
 
     $("middleField").style.display =
       "block";
 
   }
-
-
-  renderDocuments();
-
 
   $("contractSection")
     .classList.remove("show");
@@ -1281,8 +965,12 @@ function renderRoom(){
   $("signatureSection")
     .classList.remove("show");
 
-}
+  $("generatedLinks")
+    .classList.add("hidden");
 
+  renderDocuments();
+
+}
 
 
 function renderDocuments(){
@@ -1290,10 +978,8 @@ function renderDocuments(){
   const docs =
     ROOM[currentType].docs;
 
-
   $("documentList").innerHTML =
     "";
-
 
   docs.forEach(function(name,index){
 
@@ -1303,7 +989,6 @@ function renderDocuments(){
     row.className =
       "doc-row";
 
-
     row.innerHTML = `
 
       <div class="doc-name">
@@ -1312,41 +997,29 @@ function renderDocuments(){
 
       <div
         class="doc-state"
-        id="docState${index}">
+        id="state${index}">
         미첨부
       </div>
 
       <label
         class="upload-btn"
-        for="docFile${index}">
+        for="file${index}">
         업로드
       </label>
 
       <input
-        type="file"
         class="hidden-file doc-file"
-        id="docFile${index}"
+        id="file${index}"
+        type="file"
         data-name="${name}"
         accept=".pdf,.jpg,.jpeg,.png">
 
     `;
 
-
     $("documentList")
       .appendChild(row);
 
   });
-
-
-  bindDocumentEvents();
-
-  checkDocuments();
-
-}
-
-
-
-function bindDocumentEvents(){
 
   document
   .querySelectorAll(".doc-file")
@@ -1356,16 +1029,11 @@ function bindDocumentEvents(){
       "change",
       function(){
 
-        const index =
-          this.id.replace(
-            "docFile",
-            ""
-          );
-
+        const i =
+          this.id.replace("file","");
 
         const state =
-          $("docState" + index);
-
+          $("state"+i);
 
         if(this.files.length){
 
@@ -1383,7 +1051,6 @@ function bindDocumentEvents(){
 
         }
 
-
         checkDocuments();
 
       }
@@ -1391,8 +1058,9 @@ function bindDocumentEvents(){
 
   });
 
-}
+  checkDocuments();
 
+}
 
 
 function checkDocuments(){
@@ -1404,23 +1072,18 @@ function checkDocuments(){
       )
     );
 
-
   const missing =
-    files.filter(function(file){
+    files.filter(
+      f => !f.files.length
+    );
 
-      return !file.files.length;
-
-    });
-
-
-  if(missing.length === 0){
+  if(!missing.length){
 
     $("documentNotice").className =
       "notice ok";
 
     $("documentNotice").textContent =
       "필수서류가 모두 첨부되었습니다. 전자계약서 작성이 가능합니다.";
-
 
     $("createContractBtn")
       .disabled = false;
@@ -1433,25 +1096,17 @@ function checkDocuments(){
       .textContent =
       "전자계약서 작성";
 
-
   }else{
-
-    const names =
-      missing.map(function(file){
-
-        return file.dataset.name;
-
-      });
-
 
     $("documentNotice").className =
       "notice";
 
     $("documentNotice").textContent =
       "미첨부 서류: " +
-      names.join(", ") +
+      missing.map(
+        f => f.dataset.name
+      ).join(", ") +
       "을(를) 업로드해 주세요.";
-
 
     $("createContractBtn")
       .disabled = true;
@@ -1460,104 +1115,78 @@ function checkDocuments(){
       .className =
       "btn btn-gray";
 
-    $("createContractBtn")
-      .textContent =
-      "필수서류 완료 후 전자계약서 작성";
-
   }
 
 }
 
 
+function makePreview(){
 
-function makeContractPreview(){
-
-  const data =
+  const d =
     ROOM[currentType];
 
-
   $("contractTitle").textContent =
-    data.contractTitle;
-
+    d.contractTitle;
 
   $("previewProperty").textContent =
-
-    ($("aptName").value || "-") +
-    " / " +
-
-    ($("address").value || "-") +
-    " / " +
-
-    ($("unit").value || "-");
-
+    [
+      $("aptName").value,
+      $("address").value,
+      $("unit").value
+    ]
+    .filter(Boolean)
+    .join(" / ") || "-";
 
   $("previewBuyerTitle").textContent =
-    data.buyer;
-
+    d.buyer;
 
   $("previewBuyer").textContent =
-
     ($("buyerName").value || "-") +
     " / " +
-
     ($("buyerPhone").value || "-");
 
-
   $("previewSellerTitle").textContent =
-    data.seller;
-
+    d.seller;
 
   $("previewSeller").textContent =
-
     ($("sellerName").value || "-") +
     " / " +
-
     ($("sellerPhone").value || "-");
 
-
   $("previewAmountTitle").textContent =
-    data.amount;
-
+    d.amount;
 
   $("previewAmount").textContent =
     money(
       $("totalAmount").value
     );
 
-
   $("previewDeposit").textContent =
     money(
       $("deposit").value
     );
 
-
   $("previewBalanceTitle").textContent =
-    data.balance;
-
+    d.balance;
 
   $("previewBalance").textContent =
     money(
       $("balance").value
     );
 
-
   $("previewContractDate").textContent =
     $("contractDate").value || "-";
 
-
   $("previewBalanceDateTitle")
     .textContent =
-    data.balanceDate;
-
+    d.balanceDate;
 
   $("previewBalanceDate").textContent =
     $("balanceDate").value || "-";
 
-
   $("previewTerms").textContent =
     $("specialTerms").value ||
     "특약사항 없음";
-
 
   if(currentType === "monthly"){
 
@@ -1590,27 +1219,159 @@ function makeContractPreview(){
 }
 
 
+function checkConfirm(){
 
-function checkContractConfirmation(){
+  const ok =
+    $("check1").checked &&
+    $("check2").checked &&
+    $("check3").checked;
 
-  const completed =
+  $("completeContractBtn")
+    .disabled =
+    !ok;
 
-    $("checkProperty").checked &&
-    $("checkAmount").checked &&
-    $("checkTerms").checked;
-
-
-  $("completeContractBtn").disabled =
-    !completed;
-
-
-  $("completeContractBtn").className =
-    completed
+  $("completeContractBtn")
+    .className =
+    ok
     ? "btn btn-dark"
     : "btn btn-gray";
 
 }
 
+
+function makeToken(){
+
+  const random =
+    crypto.getRandomValues(
+      new Uint32Array(4)
+    );
+
+  return Array
+    .from(random)
+    .map(
+      n => n.toString(36)
+    )
+    .join("");
+
+}
+
+
+function createSignLinks(){
+
+  const tradeId =
+    $("tradeId").value.trim();
+
+  if(!tradeId){
+
+    alert(
+      "거래번호를 입력해 주세요."
+    );
+
+    $("tradeId").focus();
+
+    return false;
+
+  }
+
+
+  const buyerPhone =
+    $("buyerPhone")
+    .value
+    .replace(/\D/g,"");
+
+  const sellerPhone =
+    $("sellerPhone")
+    .value
+    .replace(/\D/g,"");
+
+
+  if(buyerPhone.length < 10){
+
+    alert(
+      ROOM[currentType].buyer +
+      " 휴대전화번호를 확인해 주세요."
+    );
+
+    return false;
+
+  }
+
+
+  if(sellerPhone.length < 10){
+
+    alert(
+      ROOM[currentType].seller +
+      " 휴대전화번호를 입력해 주세요."
+    );
+
+    return false;
+
+  }
+
+
+  const base =
+    location.origin +
+    "/electronic-sign.html";
+
+
+  const buyerToken =
+    makeToken();
+
+  const sellerToken =
+    makeToken();
+
+
+  const buyerUrl =
+    base +
+    "?trade=" +
+    encodeURIComponent(tradeId) +
+    "&type=" +
+    encodeURIComponent(currentType) +
+    "&role=buyer" +
+    "&token=" +
+    encodeURIComponent(buyerToken);
+
+
+  const sellerUrl =
+    base +
+    "?trade=" +
+    encodeURIComponent(tradeId) +
+    "&type=" +
+    encodeURIComponent(currentType) +
+    "&role=seller" +
+    "&token=" +
+    encodeURIComponent(sellerToken);
+
+
+  $("buyerLink").textContent =
+    buyerUrl;
+
+  $("sellerLink").textContent =
+    sellerUrl;
+
+
+  $("generatedLinks")
+    .classList.remove("hidden");
+
+
+  /*
+    실제 운영에서는 여기서
+
+    1. buyerToken / sellerToken 서버 저장
+    2. 거래번호와 사용자 연결
+    3. 유효기간 설정
+    4. SMS API로 각 사용자에게 링크 발송
+
+    을 수행합니다.
+
+    브라우저에서 만든 토큰만으로
+    실제 인증 보안을 처리하면 안 됩니다.
+  */
+
+
+  return true;
+
+}
 
 
 document
@@ -1623,23 +1384,14 @@ document
 
       document
       .querySelectorAll(".room-tab")
-      .forEach(function(btn){
-
-        btn.classList.remove(
-          "active"
-        );
-
-      });
-
-
-      this.classList.add(
-        "active"
+      .forEach(
+        b => b.classList.remove("active")
       );
 
+      this.classList.add("active");
 
       currentType =
         this.dataset.type;
-
 
       renderRoom();
 
@@ -1649,49 +1401,34 @@ document
 });
 
 
-
 $("createContractBtn")
 .addEventListener(
   "click",
   function(){
 
-    if(this.disabled){
-      return;
-    }
-
-
-    makeContractPreview();
-
+    makePreview();
 
     $("contractSection")
       .classList.add("show");
 
-
     $("contractSection")
       .scrollIntoView({
-        behavior:"smooth",
-        block:"start"
+        behavior:"smooth"
       });
 
   }
 );
 
 
-
-[
-  "checkProperty",
-  "checkAmount",
-  "checkTerms"
-]
+["check1","check2","check3"]
 .forEach(function(id){
 
   $(id).addEventListener(
     "change",
-    checkContractConfirmation
+    checkConfirm
   );
 
 });
-
 
 
 $("completeContractBtn")
@@ -1703,20 +1440,16 @@ $("completeContractBtn")
       return;
     }
 
-
     $("signatureSection")
       .classList.add("show");
 
-
     $("signatureSection")
       .scrollIntoView({
-        behavior:"smooth",
-        block:"start"
+        behavior:"smooth"
       });
 
   }
 );
-
 
 
 $("sendSignBtn")
@@ -1724,64 +1457,55 @@ $("sendSignBtn")
   "click",
   function(){
 
-    const data =
-      ROOM[currentType];
-
-
-    const buyerPhone =
-      $("buyerPhone")
-      .value
-      .replace(/\D/g,"");
-
-
-    const sellerPhone =
-      $("sellerPhone")
-      .value
-      .replace(/\D/g,"");
-
-
-    if(buyerPhone.length < 10){
+    if(
+      createSignLinks()
+    ){
 
       alert(
-        data.buyer +
-        " 휴대전화번호를 확인해 주세요."
+        "양쪽 전자서명 링크가 생성되었습니다.\n\n" +
+        "다음 단계에서 문자 발송 API와 연결합니다."
       );
 
-      $("buyerPhone").focus();
-
-      return;
-
     }
-
-
-    if(sellerPhone.length < 10){
-
-      alert(
-        data.seller +
-        " 휴대전화번호를 입력해 주세요."
-      );
-
-      $("sellerPhone").focus();
-
-      return;
-
-    }
-
-
-    alert(
-
-      data.buyer +
-      "과 " +
-      data.seller +
-      "에게 전자서명 요청을 발송할 준비가 완료되었습니다.\n\n" +
-
-      "다음 단계에서 문자 API와 전자서명 페이지를 연결합니다."
-
-    );
 
   }
 );
 
+
+document
+.querySelectorAll(".copy-btn")
+.forEach(function(btn){
+
+  btn.addEventListener(
+    "click",
+    async function(){
+
+      const text =
+        $(
+          this.dataset.target
+        ).textContent;
+
+      try{
+
+        await navigator.clipboard
+          .writeText(text);
+
+        alert(
+          "전자서명 링크를 복사했습니다."
+        );
+
+      }catch(e){
+
+        alert(
+          "링크 복사에 실패했습니다."
+        );
+
+      }
+
+    }
+  );
+
+});
 
 
 renderRoom();
