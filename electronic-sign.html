@@ -4,28 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#1165d7">
-
 <title>전자서명 | 우리아파트 안심거래</title>
 
 <style>
 *{box-sizing:border-box}
-
-html,body{
-  margin:0;
-  width:100%;
-  min-height:100%;
-}
+html,body{margin:0;width:100%;min-height:100%}
 
 body{
   background:#f4f6f8;
   color:#172b3d;
-  font-family:-apple-system,BlinkMacSystemFont,
-  "Segoe UI","Noto Sans KR",Arial,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
 }
 
-button,input{
-  font:inherit;
-}
+button,input{font:inherit}
 
 .wrap{
   width:100%;
@@ -42,7 +33,7 @@ button,input{
   margin-bottom:14px;
 }
 
-.header .brand{
+.brand{
   font-size:13px;
   opacity:.85;
   margin-bottom:5px;
@@ -59,6 +50,48 @@ button,input{
   line-height:1.6;
 }
 
+.role-box{
+  background:#eaf3ff;
+  border:1px solid #c6dcfb;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:14px;
+}
+
+.role-title{
+  font-size:18px;
+  font-weight:900;
+  color:#1157b7;
+}
+
+.role-desc{
+  margin-top:5px;
+  font-size:13px;
+  color:#516b7b;
+}
+
+.steps{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+  margin-bottom:14px;
+}
+
+.step{
+  text-align:center;
+  background:#e8eef2;
+  color:#607783;
+  padding:9px 4px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.step.active{
+  background:#1165d7;
+  color:#fff;
+}
+
 .card{
   background:#fff;
   border:1px solid #dfe7ec;
@@ -72,28 +105,6 @@ button,input{
   font-size:18px;
 }
 
-.steps{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:6px;
-  margin-bottom:14px;
-}
-
-.step{
-  text-align:center;
-  background:#eaf0f4;
-  color:#647985;
-  border-radius:9px;
-  padding:9px 4px;
-  font-size:11px;
-  font-weight:800;
-}
-
-.step.active{
-  background:#1165d7;
-  color:#fff;
-}
-
 .notice{
   background:#eef6ff;
   border:1px solid #c8ddfb;
@@ -105,21 +116,13 @@ button,input{
   margin-bottom:13px;
 }
 
-.warning{
-  background:#fff4e5;
-  border:1px solid #ffd49c;
-  color:#805000;
-}
-
-.grid{
+.grid2{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
 }
 
-.field{
-  margin-bottom:12px;
-}
+.field{margin-bottom:12px}
 
 label{
   display:block;
@@ -135,10 +138,6 @@ input{
   border-radius:10px;
   padding:10px 11px;
   outline:none;
-}
-
-input:focus{
-  border-color:#1165d7;
 }
 
 .btn{
@@ -172,14 +171,12 @@ input:focus{
   cursor:not-allowed;
 }
 
-.hidden{
-  display:none;
-}
+.hidden{display:none}
 
 .contract-paper{
   border:2px solid #333;
-  background:#fff;
   padding:18px 14px;
+  background:#fff;
 }
 
 .contract-paper h3{
@@ -209,8 +206,8 @@ input:focus{
 
 .confirm-row{
   display:flex;
-  gap:8px;
   align-items:flex-start;
+  gap:8px;
   margin-top:13px;
   font-size:13px;
   line-height:1.6;
@@ -241,18 +238,18 @@ canvas{
 
 .sign-guide{
   text-align:center;
-  font-size:13px;
-  color:#637984;
   padding:9px;
   border-top:1px solid #e6ecef;
+  font-size:13px;
+  color:#637984;
 }
 
 .complete{
   text-align:center;
-  padding:25px 10px;
+  padding:24px 8px;
 }
 
-.complete .icon{
+.complete-icon{
   font-size:52px;
   margin-bottom:10px;
 }
@@ -268,6 +265,17 @@ canvas{
   color:#5c707c;
 }
 
+.result-box{
+  background:#edf9f2;
+  border:1px solid #bce8cd;
+  color:#146a38;
+  padding:12px;
+  border-radius:12px;
+  margin-top:14px;
+  font-size:13px;
+  line-height:1.7;
+}
+
 .help{
   margin-top:8px;
   font-size:12px;
@@ -276,21 +284,9 @@ canvas{
 }
 
 @media(max-width:580px){
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .steps{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .header h1{
-    font-size:21px;
-  }
-
-  canvas{
-    height:190px;
-  }
+  .grid2{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  canvas{height:190px}
 }
 </style>
 </head>
@@ -303,9 +299,16 @@ canvas{
     <div class="brand">우리아파트 안심거래</div>
     <h1>전자계약서 전자서명</h1>
     <p>
-      화면 안내에 따라 본인확인,
-      계약내용 확인, 서명 순서로 진행해 주세요.
+      본인확인 후 계약내용을 확인하고
+      직접 서명해 주세요.
     </p>
+  </div>
+
+  <div class="role-box">
+    <div class="role-title" id="roleTitle">
+      계약 당사자 확인
+    </div>
+    <div class="role-desc" id="roleDesc"></div>
   </div>
 
   <div class="steps">
@@ -315,21 +318,18 @@ canvas{
     <div class="step" id="step4">④ 완료</div>
   </div>
 
-  <!-- 1. 본인확인 -->
+  <!-- 본인확인 -->
   <section id="identitySection" class="card">
 
     <h2>1. 본인확인</h2>
 
-    <div class="notice">
-      전자계약서에 서명할 본인인지 확인합니다.
-      본인 명의 휴대전화번호를 확인한 후 인증을 진행해 주세요.
-    </div>
+    <div class="notice" id="identityNotice"></div>
 
-    <div class="grid">
+    <div class="grid2">
 
       <div class="field">
         <label>성명</label>
-        <input id="personName" placeholder="성명">
+        <input id="personName" placeholder="본인 성명">
       </div>
 
       <div class="field">
@@ -342,126 +342,103 @@ canvas{
 
     </div>
 
-    <button
-      id="verifyBtn"
-      class="btn btn-primary">
+    <button id="verifyBtn" class="btn btn-primary">
       휴대전화 본인확인
     </button>
 
     <div class="help">
-      현재 화면은 기능 연결 전 단계입니다.
-      실제 서비스에서는 휴대전화 본인인증 서비스와 연결합니다.
+      실제 운영 시 휴대전화 본인인증 API와 연결됩니다.
     </div>
 
   </section>
 
 
-  <!-- 2. 계약서 확인 -->
-  <section
-    id="contractSection"
-    class="card hidden">
+  <!-- 계약확인 -->
+  <section id="contractSection" class="card hidden">
 
     <h2>2. 계약내용 확인</h2>
 
     <div class="notice">
-      계약금액, 계약일, 잔금일,
-      특약사항과 부동산 정보를 반드시 확인해 주세요.
+      계약금액, 주소, 계약일, 잔금일과 특약사항을
+      반드시 확인한 후 진행해 주세요.
     </div>
 
     <div class="contract-paper">
 
-      <h3 id="contractTitle">
-        부동산 매매계약서
-      </h3>
+      <h3 id="contractTitle"></h3>
 
       <table class="contract-table">
 
         <tr>
           <th>거래번호</th>
-          <td id="tradeId">T202608270001</td>
+          <td id="tradeInfo"></td>
+        </tr>
+
+        <tr>
+          <th>거래유형</th>
+          <td id="typeInfo"></td>
+        </tr>
+
+        <tr>
+          <th>서명자 역할</th>
+          <td id="roleInfo"></td>
         </tr>
 
         <tr>
           <th>부동산</th>
           <td id="propertyInfo">
-            아파트명 / 주소 / 동·호수
+            계약관리 화면의 부동산 정보 자동표시 예정
           </td>
         </tr>
 
         <tr>
-          <th id="party1Title">
-            매수인
-          </th>
-          <td id="party1Info">
-            -
-          </td>
+          <th id="party1Title"></th>
+          <td id="party1Info">-</td>
         </tr>
 
         <tr>
-          <th id="party2Title">
-            매도인
-          </th>
-          <td id="party2Info">
-            -
-          </td>
+          <th id="party2Title"></th>
+          <td id="party2Info">-</td>
         </tr>
 
         <tr>
-          <th id="amountTitle">
-            매매대금
-          </th>
-          <td id="amountInfo">
-            -
-          </td>
+          <th id="amountTitle"></th>
+          <td id="amountInfo">-</td>
         </tr>
 
         <tr>
           <th>계약금</th>
-          <td id="depositInfo">
-            -
-          </td>
+          <td id="depositInfo">-</td>
         </tr>
 
         <tr id="middleRow">
           <th>중도금</th>
-          <td id="middleInfo">
-            -
-          </td>
+          <td id="middleInfo">-</td>
         </tr>
 
         <tr>
           <th>잔금</th>
-          <td id="balanceInfo">
-            -
-          </td>
+          <td id="balanceInfo">-</td>
         </tr>
 
         <tr id="monthlyRow" class="hidden">
           <th>월 차임</th>
-          <td id="monthlyInfo">
-            -
-          </td>
+          <td id="monthlyInfo">-</td>
         </tr>
 
         <tr>
           <th>계약일</th>
-          <td id="contractDateInfo">
-            -
-          </td>
+          <td id="contractDateInfo">-</td>
         </tr>
 
         <tr>
           <th>잔금일</th>
-          <td id="balanceDateInfo">
-            -
-          </td>
+          <td id="balanceDateInfo">-</td>
         </tr>
 
         <tr>
           <th>특약사항</th>
-          <td id="termsInfo">
-            -
-          </td>
+          <td id="termsInfo">-</td>
         </tr>
 
       </table>
@@ -469,16 +446,12 @@ canvas{
     </div>
 
     <div class="confirm-row">
-
-      <input
-        type="checkbox"
-        id="contractCheck">
+      <input type="checkbox" id="contractCheck">
 
       <label for="contractCheck">
-        위 계약서 전체 내용을 확인했으며,
+        위 계약서 전체 내용을 확인했으며
         계약 내용에 동의합니다.
       </label>
-
     </div>
 
     <br>
@@ -493,10 +466,8 @@ canvas{
   </section>
 
 
-  <!-- 3. 전자서명 -->
-  <section
-    id="signSection"
-    class="card hidden">
+  <!-- 서명 -->
+  <section id="signSection" class="card hidden">
 
     <h2>3. 전자서명</h2>
 
@@ -515,13 +486,9 @@ canvas{
 
     </div>
 
-    <button
-      id="clearBtn"
-      class="btn btn-light">
+    <button id="clearBtn" class="btn btn-light">
       서명 다시 쓰기
     </button>
-
-    <br><br>
 
     <div class="confirm-row">
 
@@ -530,7 +497,7 @@ canvas{
         id="signConsent">
 
       <label for="signConsent">
-        본인은 위 계약내용에 동의하며
+        본인은 위 계약내용을 확인했으며,
         본인의 의사로 전자서명합니다.
       </label>
 
@@ -545,31 +512,24 @@ canvas{
       전자서명하기
     </button>
 
-    <div class="help">
-      전자서명을 완료하면 별도로 계약서를
-      공인중개사에게 보내실 필요가 없습니다.
-    </div>
-
   </section>
 
 
-  <!-- 4. 완료 -->
-  <section
-    id="completeSection"
-    class="card hidden">
+  <!-- 완료 -->
+  <section id="completeSection" class="card hidden">
 
     <div class="complete">
 
-      <div class="icon">✅</div>
+      <div class="complete-icon">✅</div>
 
       <h2>전자서명이 완료되었습니다.</h2>
 
       <p>
-        서명 결과는 우리아파트 안심거래 플랫폼의
-        해당 계약건에 자동으로 반영됩니다.
-        <br>
-        계약서를 별도로 다시 보내실 필요가 없습니다.
+        계약서를 공인중개사에게 다시 보낼 필요가 없습니다.
+        서명 결과는 해당 거래에 자동 반영됩니다.
       </p>
+
+      <div class="result-box" id="resultBox"></div>
 
     </div>
 
@@ -587,72 +547,133 @@ const $ = id =>
   document.getElementById(id);
 
 
-/* =========================
-   거래 유형
-========================= */
+/* ==============================
+   URL 정보
+============================== */
 
 const params =
   new URLSearchParams(location.search);
 
+const tradeId =
+  params.get("trade") || "";
+
 const type =
   params.get("type") || "sale";
 
+const role =
+  params.get("role") || "buyer";
+
+const token =
+  params.get("token") || "";
+
+
+/* ==============================
+   거래 유형
+============================== */
 
 const TYPE = {
 
   sale:{
+    name:"매매",
     title:"부동산 매매계약서",
-    party1:"매수인",
-    party2:"매도인",
+    buyer:"매수인",
+    seller:"매도인",
     amount:"매매대금"
   },
 
   jeonse:{
+    name:"전세",
     title:"부동산 전세계약서",
-    party1:"임차인",
-    party2:"임대인",
+    buyer:"임차인",
+    seller:"임대인",
     amount:"전세보증금"
   },
 
   monthly:{
+    name:"월세",
     title:"부동산 월세계약서",
-    party1:"임차인",
-    party2:"임대인",
+    buyer:"임차인",
+    seller:"임대인",
     amount:"보증금"
   }
 
 };
 
-
 const trade =
   TYPE[type] || TYPE.sale;
 
+const currentRole =
+  role === "seller"
+  ? trade.seller
+  : trade.buyer;
+
+
+/* ==============================
+   초기 화면
+============================== */
 
 $("contractTitle").textContent =
   trade.title;
 
+$("tradeInfo").textContent =
+  tradeId || "거래번호 없음";
+
+$("typeInfo").textContent =
+  trade.name;
+
+$("roleInfo").textContent =
+  currentRole;
+
 $("party1Title").textContent =
-  trade.party1;
+  trade.buyer;
 
 $("party2Title").textContent =
-  trade.party2;
+  trade.seller;
 
 $("amountTitle").textContent =
   trade.amount;
 
+$("roleTitle").textContent =
+  "현재 서명자: " + currentRole;
+
+$("roleDesc").textContent =
+  trade.name +
+  " 계약의 " +
+  currentRole +
+  " 전자서명 화면입니다.";
+
+$("identityNotice").textContent =
+  currentRole +
+  " 본인 명의 휴대전화로 인증해 주세요.";
+
 
 if(type === "monthly"){
 
-  $("middleRow").classList.add("hidden");
+  $("middleRow")
+    .classList.add("hidden");
 
-  $("monthlyRow").classList.remove("hidden");
+  $("monthlyRow")
+    .classList.remove("hidden");
 
 }
 
 
-/* =========================
+/* ==============================
+   잘못된 링크 방지
+============================== */
+
+if(!tradeId || !token){
+
+  alert(
+    "유효하지 않은 전자서명 링크입니다."
+  );
+
+}
+
+
+/* ==============================
    단계 표시
-========================= */
+============================== */
 
 function setStep(number){
 
@@ -669,9 +690,9 @@ function setStep(number){
 }
 
 
-/* =========================
+/* ==============================
    본인확인
-========================= */
+============================== */
 
 $("verifyBtn")
 .addEventListener(
@@ -679,7 +700,9 @@ $("verifyBtn")
   function(){
 
     const name =
-      $("personName").value.trim();
+      $("personName")
+      .value
+      .trim();
 
     const phone =
       $("personPhone")
@@ -714,22 +737,30 @@ $("verifyBtn")
 
 
     /*
-      실제 운영 시 이 부분에
-      휴대전화 본인인증 API를 연결합니다.
+      실제 운영:
+      본인인증 API 성공 시에만
+      다음 단계로 이동
     */
 
 
-    $("party1Info").textContent =
-      name + " / " + phone;
+    if(role === "seller"){
+
+      $("party2Info").textContent =
+        name + " / " + phone;
+
+    }else{
+
+      $("party1Info").textContent =
+        name + " / " + phone;
+
+    }
 
 
     $("identitySection")
       .classList.add("hidden");
 
-
     $("contractSection")
       .classList.remove("hidden");
-
 
     setStep(2);
 
@@ -742,9 +773,9 @@ $("verifyBtn")
 );
 
 
-/* =========================
+/* ==============================
    계약내용 확인
-========================= */
+============================== */
 
 $("contractCheck")
 .addEventListener(
@@ -772,20 +803,15 @@ $("goSignBtn")
       return;
     }
 
-
     $("contractSection")
       .classList.add("hidden");
-
 
     $("signSection")
       .classList.remove("hidden");
 
-
     setStep(3);
 
-
     resizeCanvas();
-
 
     window.scrollTo({
       top:0,
@@ -796,9 +822,9 @@ $("goSignBtn")
 );
 
 
-/* =========================
-   사인 캔버스
-========================= */
+/* ==============================
+   서명 캔버스
+============================== */
 
 const canvas =
   $("signatureCanvas");
@@ -835,28 +861,19 @@ function resizeCanvas(){
 }
 
 
-function point(event){
+function getPoint(event){
 
   const rect =
     canvas.getBoundingClientRect();
 
-  if(event.touches){
-
-    return {
-      x:
-        event.touches[0].clientX
-        - rect.left,
-
-      y:
-        event.touches[0].clientY
-        - rect.top
-    };
-
-  }
+  const source =
+    event.touches
+    ? event.touches[0]
+    : event;
 
   return {
-    x:event.clientX - rect.left,
-    y:event.clientY - rect.top
+    x:source.clientX - rect.left,
+    y:source.clientY - rect.top
   };
 
 }
@@ -869,7 +886,7 @@ function startDraw(event){
   drawing = true;
 
   const p =
-    point(event);
+    getPoint(event);
 
   ctx.beginPath();
 
@@ -890,7 +907,7 @@ function draw(event){
   event.preventDefault();
 
   const p =
-    point(event);
+    getPoint(event);
 
   ctx.lineTo(
     p.x,
@@ -906,7 +923,7 @@ function draw(event){
 }
 
 
-function endDraw(){
+function stopDraw(){
 
   drawing = false;
 
@@ -925,9 +942,8 @@ canvas.addEventListener(
 
 window.addEventListener(
   "mouseup",
-  endDraw
+  stopDraw
 );
-
 
 canvas.addEventListener(
   "touchstart",
@@ -943,19 +959,13 @@ canvas.addEventListener(
 
 canvas.addEventListener(
   "touchend",
-  endDraw
+  stopDraw
 );
 
 
-window.addEventListener(
-  "resize",
-  resizeCanvas
-);
-
-
-/* =========================
-   서명 지우기
-========================= */
+/* ==============================
+   서명 초기화
+============================== */
 
 $("clearBtn")
 .addEventListener(
@@ -977,9 +987,9 @@ $("clearBtn")
 );
 
 
-/* =========================
-   전자서명 동의
-========================= */
+/* ==============================
+   서명 동의
+============================== */
 
 $("signConsent")
 .addEventListener(
@@ -994,14 +1004,10 @@ function updateSignButton(){
     signed &&
     $("signConsent").checked;
 
-
-  $("submitSignBtn")
-    .disabled =
+  $("submitSignBtn").disabled =
     !ready;
 
-
-  $("submitSignBtn")
-    .className =
+  $("submitSignBtn").className =
     ready
     ? "btn btn-primary"
     : "btn btn-gray";
@@ -1009,9 +1015,9 @@ function updateSignButton(){
 }
 
 
-/* =========================
-   전자서명 완료
-========================= */
+/* ==============================
+   서명 완료
+============================== */
 
 $("submitSignBtn")
 .addEventListener(
@@ -1023,45 +1029,72 @@ $("submitSignBtn")
     }
 
 
-    /*
-      실제 운영 시 여기서 저장할 정보
-
-      1. 거래번호
-      2. 서명 대상자 ID
-      3. 본인인증 결과
-      4. 서명 이미지
-      5. 계약서 버전
-      6. 계약서 해시값
-      7. 서명 완료 시각
-      8. 동의 기록
-
-      DB 저장 성공 후
-      계약관리 화면에
-      '전자서명 완료'로 자동 표시
-    */
-
-
     const signatureImage =
       canvas.toDataURL(
         "image/png"
       );
 
 
-    console.log(
-      "signature:",
-      signatureImage
+    const signedAt =
+      new Date()
+      .toISOString();
+
+
+    const result = {
+
+      tradeId:tradeId,
+
+      type:type,
+
+      role:role,
+
+      roleName:currentRole,
+
+      token:token,
+
+      signed:true,
+
+      signedAt:signedAt,
+
+      signature:signatureImage
+
+    };
+
+
+    /*
+      임시 저장
+      다음 단계에서 Supabase 저장으로 교체
+    */
+
+    localStorage.setItem(
+      "electronic-sign-" +
+      tradeId +
+      "-" +
+      role,
+
+      JSON.stringify(result)
     );
 
 
     $("signSection")
       .classList.add("hidden");
 
-
     $("completeSection")
       .classList.remove("hidden");
 
-
     setStep(4);
+
+
+    $("resultBox").innerHTML =
+      "<strong>" +
+      currentRole +
+      " 전자서명 완료</strong><br>" +
+      "거래번호: " +
+      tradeId +
+      "<br>" +
+      "완료시각: " +
+      new Date(signedAt)
+      .toLocaleString("ko-KR");
 
 
     window.scrollTo({
@@ -1071,7 +1104,6 @@ $("submitSignBtn")
 
   }
 );
-
 
 })();
 </script>
