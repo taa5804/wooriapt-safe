@@ -1,0 +1,1080 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1165d7">
+
+<title>전자서명 | 우리아파트 안심거래</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  background:#f4f6f8;
+  color:#172b3d;
+  font-family:-apple-system,BlinkMacSystemFont,
+  "Segoe UI","Noto Sans KR",Arial,sans-serif;
+}
+
+button,input{
+  font:inherit;
+}
+
+.wrap{
+  width:100%;
+  max-width:720px;
+  margin:0 auto;
+  padding:16px 14px 60px;
+}
+
+.header{
+  background:#12394d;
+  color:#fff;
+  border-radius:16px;
+  padding:20px 18px;
+  margin-bottom:14px;
+}
+
+.header .brand{
+  font-size:13px;
+  opacity:.85;
+  margin-bottom:5px;
+}
+
+.header h1{
+  margin:0;
+  font-size:23px;
+}
+
+.header p{
+  margin:8px 0 0;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.card{
+  background:#fff;
+  border:1px solid #dfe7ec;
+  border-radius:16px;
+  padding:17px;
+  margin-bottom:14px;
+}
+
+.card h2{
+  margin:0 0 14px;
+  font-size:18px;
+}
+
+.steps{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+  margin-bottom:14px;
+}
+
+.step{
+  text-align:center;
+  background:#eaf0f4;
+  color:#647985;
+  border-radius:9px;
+  padding:9px 4px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.step.active{
+  background:#1165d7;
+  color:#fff;
+}
+
+.notice{
+  background:#eef6ff;
+  border:1px solid #c8ddfb;
+  color:#274e73;
+  border-radius:12px;
+  padding:13px;
+  font-size:13px;
+  line-height:1.7;
+  margin-bottom:13px;
+}
+
+.warning{
+  background:#fff4e5;
+  border:1px solid #ffd49c;
+  color:#805000;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.field{
+  margin-bottom:12px;
+}
+
+label{
+  display:block;
+  margin-bottom:6px;
+  font-size:13px;
+  font-weight:800;
+}
+
+input{
+  width:100%;
+  min-height:44px;
+  border:1px solid #cbd7df;
+  border-radius:10px;
+  padding:10px 11px;
+  outline:none;
+}
+
+input:focus{
+  border-color:#1165d7;
+}
+
+.btn{
+  width:100%;
+  min-height:48px;
+  border:0;
+  border-radius:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.btn-primary{
+  background:#1165d7;
+  color:#fff;
+}
+
+.btn-dark{
+  background:#12394d;
+  color:#fff;
+}
+
+.btn-light{
+  background:#edf4ff;
+  color:#1165d7;
+}
+
+.btn-gray,
+.btn:disabled{
+  background:#c7d0d5;
+  color:#fff;
+  cursor:not-allowed;
+}
+
+.hidden{
+  display:none;
+}
+
+.contract-paper{
+  border:2px solid #333;
+  background:#fff;
+  padding:18px 14px;
+}
+
+.contract-paper h3{
+  text-align:center;
+  margin:0 0 18px;
+  font-size:21px;
+}
+
+.contract-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+
+.contract-table th,
+.contract-table td{
+  border:1px solid #555;
+  padding:9px;
+  text-align:left;
+  vertical-align:top;
+}
+
+.contract-table th{
+  width:30%;
+  background:#f5f5f5;
+}
+
+.confirm-row{
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+  margin-top:13px;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.confirm-row input{
+  width:18px;
+  height:18px;
+  min-height:18px;
+  margin-top:2px;
+}
+
+.signature-wrap{
+  border:2px dashed #9caeb9;
+  background:#fff;
+  border-radius:12px;
+  overflow:hidden;
+  margin-bottom:10px;
+}
+
+canvas{
+  display:block;
+  width:100%;
+  height:220px;
+  touch-action:none;
+  background:#fff;
+}
+
+.sign-guide{
+  text-align:center;
+  font-size:13px;
+  color:#637984;
+  padding:9px;
+  border-top:1px solid #e6ecef;
+}
+
+.complete{
+  text-align:center;
+  padding:25px 10px;
+}
+
+.complete .icon{
+  font-size:52px;
+  margin-bottom:10px;
+}
+
+.complete h2{
+  font-size:22px;
+  margin:0 0 10px;
+}
+
+.complete p{
+  font-size:14px;
+  line-height:1.7;
+  color:#5c707c;
+}
+
+.help{
+  margin-top:8px;
+  font-size:12px;
+  color:#72858f;
+  line-height:1.6;
+}
+
+@media(max-width:580px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .steps{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .header h1{
+    font-size:21px;
+  }
+
+  canvas{
+    height:190px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="header">
+    <div class="brand">우리아파트 안심거래</div>
+    <h1>전자계약서 전자서명</h1>
+    <p>
+      화면 안내에 따라 본인확인,
+      계약내용 확인, 서명 순서로 진행해 주세요.
+    </p>
+  </div>
+
+  <div class="steps">
+    <div class="step active" id="step1">① 본인확인</div>
+    <div class="step" id="step2">② 계약확인</div>
+    <div class="step" id="step3">③ 서명</div>
+    <div class="step" id="step4">④ 완료</div>
+  </div>
+
+  <!-- 1. 본인확인 -->
+  <section id="identitySection" class="card">
+
+    <h2>1. 본인확인</h2>
+
+    <div class="notice">
+      전자계약서에 서명할 본인인지 확인합니다.
+      본인 명의 휴대전화번호를 확인한 후 인증을 진행해 주세요.
+    </div>
+
+    <div class="grid">
+
+      <div class="field">
+        <label>성명</label>
+        <input id="personName" placeholder="성명">
+      </div>
+
+      <div class="field">
+        <label>휴대전화번호</label>
+        <input
+          id="personPhone"
+          inputmode="numeric"
+          placeholder="01012345678">
+      </div>
+
+    </div>
+
+    <button
+      id="verifyBtn"
+      class="btn btn-primary">
+      휴대전화 본인확인
+    </button>
+
+    <div class="help">
+      현재 화면은 기능 연결 전 단계입니다.
+      실제 서비스에서는 휴대전화 본인인증 서비스와 연결합니다.
+    </div>
+
+  </section>
+
+
+  <!-- 2. 계약서 확인 -->
+  <section
+    id="contractSection"
+    class="card hidden">
+
+    <h2>2. 계약내용 확인</h2>
+
+    <div class="notice">
+      계약금액, 계약일, 잔금일,
+      특약사항과 부동산 정보를 반드시 확인해 주세요.
+    </div>
+
+    <div class="contract-paper">
+
+      <h3 id="contractTitle">
+        부동산 매매계약서
+      </h3>
+
+      <table class="contract-table">
+
+        <tr>
+          <th>거래번호</th>
+          <td id="tradeId">T202608270001</td>
+        </tr>
+
+        <tr>
+          <th>부동산</th>
+          <td id="propertyInfo">
+            아파트명 / 주소 / 동·호수
+          </td>
+        </tr>
+
+        <tr>
+          <th id="party1Title">
+            매수인
+          </th>
+          <td id="party1Info">
+            -
+          </td>
+        </tr>
+
+        <tr>
+          <th id="party2Title">
+            매도인
+          </th>
+          <td id="party2Info">
+            -
+          </td>
+        </tr>
+
+        <tr>
+          <th id="amountTitle">
+            매매대금
+          </th>
+          <td id="amountInfo">
+            -
+          </td>
+        </tr>
+
+        <tr>
+          <th>계약금</th>
+          <td id="depositInfo">
+            -
+          </td>
+        </tr>
+
+        <tr id="middleRow">
+          <th>중도금</th>
+          <td id="middleInfo">
+            -
+          </td>
+        </tr>
+
+        <tr>
+          <th>잔금</th>
+          <td id="balanceInfo">
+            -
+          </td>
+        </tr>
+
+        <tr id="monthlyRow" class="hidden">
+          <th>월 차임</th>
+          <td id="monthlyInfo">
+            -
+          </td>
+        </tr>
+
+        <tr>
+          <th>계약일</th>
+          <td id="contractDateInfo">
+            -
+          </td>
+        </tr>
+
+        <tr>
+          <th>잔금일</th>
+          <td id="balanceDateInfo">
+            -
+          </td>
+        </tr>
+
+        <tr>
+          <th>특약사항</th>
+          <td id="termsInfo">
+            -
+          </td>
+        </tr>
+
+      </table>
+
+    </div>
+
+    <div class="confirm-row">
+
+      <input
+        type="checkbox"
+        id="contractCheck">
+
+      <label for="contractCheck">
+        위 계약서 전체 내용을 확인했으며,
+        계약 내용에 동의합니다.
+      </label>
+
+    </div>
+
+    <br>
+
+    <button
+      id="goSignBtn"
+      class="btn btn-gray"
+      disabled>
+      확인 후 전자서명 진행
+    </button>
+
+  </section>
+
+
+  <!-- 3. 전자서명 -->
+  <section
+    id="signSection"
+    class="card hidden">
+
+    <h2>3. 전자서명</h2>
+
+    <div class="notice">
+      아래 흰색 서명란에 손가락 또는 마우스로
+      평소 사용하는 서명을 직접 작성해 주세요.
+    </div>
+
+    <div class="signature-wrap">
+
+      <canvas id="signatureCanvas"></canvas>
+
+      <div class="sign-guide">
+        이곳에 직접 서명하세요.
+      </div>
+
+    </div>
+
+    <button
+      id="clearBtn"
+      class="btn btn-light">
+      서명 다시 쓰기
+    </button>
+
+    <br><br>
+
+    <div class="confirm-row">
+
+      <input
+        type="checkbox"
+        id="signConsent">
+
+      <label for="signConsent">
+        본인은 위 계약내용에 동의하며
+        본인의 의사로 전자서명합니다.
+      </label>
+
+    </div>
+
+    <br>
+
+    <button
+      id="submitSignBtn"
+      class="btn btn-gray"
+      disabled>
+      전자서명하기
+    </button>
+
+    <div class="help">
+      전자서명을 완료하면 별도로 계약서를
+      공인중개사에게 보내실 필요가 없습니다.
+    </div>
+
+  </section>
+
+
+  <!-- 4. 완료 -->
+  <section
+    id="completeSection"
+    class="card hidden">
+
+    <div class="complete">
+
+      <div class="icon">✅</div>
+
+      <h2>전자서명이 완료되었습니다.</h2>
+
+      <p>
+        서명 결과는 우리아파트 안심거래 플랫폼의
+        해당 계약건에 자동으로 반영됩니다.
+        <br>
+        계약서를 별도로 다시 보내실 필요가 없습니다.
+      </p>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<script>
+(function(){
+
+"use strict";
+
+const $ = id =>
+  document.getElementById(id);
+
+
+/* =========================
+   거래 유형
+========================= */
+
+const params =
+  new URLSearchParams(location.search);
+
+const type =
+  params.get("type") || "sale";
+
+
+const TYPE = {
+
+  sale:{
+    title:"부동산 매매계약서",
+    party1:"매수인",
+    party2:"매도인",
+    amount:"매매대금"
+  },
+
+  jeonse:{
+    title:"부동산 전세계약서",
+    party1:"임차인",
+    party2:"임대인",
+    amount:"전세보증금"
+  },
+
+  monthly:{
+    title:"부동산 월세계약서",
+    party1:"임차인",
+    party2:"임대인",
+    amount:"보증금"
+  }
+
+};
+
+
+const trade =
+  TYPE[type] || TYPE.sale;
+
+
+$("contractTitle").textContent =
+  trade.title;
+
+$("party1Title").textContent =
+  trade.party1;
+
+$("party2Title").textContent =
+  trade.party2;
+
+$("amountTitle").textContent =
+  trade.amount;
+
+
+if(type === "monthly"){
+
+  $("middleRow").classList.add("hidden");
+
+  $("monthlyRow").classList.remove("hidden");
+
+}
+
+
+/* =========================
+   단계 표시
+========================= */
+
+function setStep(number){
+
+  for(let i=1;i<=4;i++){
+
+    $("step"+i)
+      .classList.remove("active");
+
+  }
+
+  $("step"+number)
+    .classList.add("active");
+
+}
+
+
+/* =========================
+   본인확인
+========================= */
+
+$("verifyBtn")
+.addEventListener(
+  "click",
+  function(){
+
+    const name =
+      $("personName").value.trim();
+
+    const phone =
+      $("personPhone")
+      .value
+      .replace(/\D/g,"");
+
+
+    if(!name){
+
+      alert(
+        "성명을 입력해 주세요."
+      );
+
+      $("personName").focus();
+
+      return;
+
+    }
+
+
+    if(phone.length < 10){
+
+      alert(
+        "휴대전화번호를 정확히 입력해 주세요."
+      );
+
+      $("personPhone").focus();
+
+      return;
+
+    }
+
+
+    /*
+      실제 운영 시 이 부분에
+      휴대전화 본인인증 API를 연결합니다.
+    */
+
+
+    $("party1Info").textContent =
+      name + " / " + phone;
+
+
+    $("identitySection")
+      .classList.add("hidden");
+
+
+    $("contractSection")
+      .classList.remove("hidden");
+
+
+    setStep(2);
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  }
+);
+
+
+/* =========================
+   계약내용 확인
+========================= */
+
+$("contractCheck")
+.addEventListener(
+  "change",
+  function(){
+
+    $("goSignBtn").disabled =
+      !this.checked;
+
+    $("goSignBtn").className =
+      this.checked
+      ? "btn btn-dark"
+      : "btn btn-gray";
+
+  }
+);
+
+
+$("goSignBtn")
+.addEventListener(
+  "click",
+  function(){
+
+    if(this.disabled){
+      return;
+    }
+
+
+    $("contractSection")
+      .classList.add("hidden");
+
+
+    $("signSection")
+      .classList.remove("hidden");
+
+
+    setStep(3);
+
+
+    resizeCanvas();
+
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  }
+);
+
+
+/* =========================
+   사인 캔버스
+========================= */
+
+const canvas =
+  $("signatureCanvas");
+
+const ctx =
+  canvas.getContext("2d");
+
+let drawing = false;
+let signed = false;
+
+
+function resizeCanvas(){
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+  const ratio =
+    window.devicePixelRatio || 1;
+
+  canvas.width =
+    rect.width * ratio;
+
+  canvas.height =
+    rect.height * ratio;
+
+  ctx.setTransform(
+    ratio,0,0,ratio,0,0
+  );
+
+  ctx.lineWidth = 2.2;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+
+}
+
+
+function point(event){
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+  if(event.touches){
+
+    return {
+      x:
+        event.touches[0].clientX
+        - rect.left,
+
+      y:
+        event.touches[0].clientY
+        - rect.top
+    };
+
+  }
+
+  return {
+    x:event.clientX - rect.left,
+    y:event.clientY - rect.top
+  };
+
+}
+
+
+function startDraw(event){
+
+  event.preventDefault();
+
+  drawing = true;
+
+  const p =
+    point(event);
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    p.x,
+    p.y
+  );
+
+}
+
+
+function draw(event){
+
+  if(!drawing){
+    return;
+  }
+
+  event.preventDefault();
+
+  const p =
+    point(event);
+
+  ctx.lineTo(
+    p.x,
+    p.y
+  );
+
+  ctx.stroke();
+
+  signed = true;
+
+  updateSignButton();
+
+}
+
+
+function endDraw(){
+
+  drawing = false;
+
+}
+
+
+canvas.addEventListener(
+  "mousedown",
+  startDraw
+);
+
+canvas.addEventListener(
+  "mousemove",
+  draw
+);
+
+window.addEventListener(
+  "mouseup",
+  endDraw
+);
+
+
+canvas.addEventListener(
+  "touchstart",
+  startDraw,
+  {passive:false}
+);
+
+canvas.addEventListener(
+  "touchmove",
+  draw,
+  {passive:false}
+);
+
+canvas.addEventListener(
+  "touchend",
+  endDraw
+);
+
+
+window.addEventListener(
+  "resize",
+  resizeCanvas
+);
+
+
+/* =========================
+   서명 지우기
+========================= */
+
+$("clearBtn")
+.addEventListener(
+  "click",
+  function(){
+
+    ctx.clearRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    signed = false;
+
+    updateSignButton();
+
+  }
+);
+
+
+/* =========================
+   전자서명 동의
+========================= */
+
+$("signConsent")
+.addEventListener(
+  "change",
+  updateSignButton
+);
+
+
+function updateSignButton(){
+
+  const ready =
+    signed &&
+    $("signConsent").checked;
+
+
+  $("submitSignBtn")
+    .disabled =
+    !ready;
+
+
+  $("submitSignBtn")
+    .className =
+    ready
+    ? "btn btn-primary"
+    : "btn btn-gray";
+
+}
+
+
+/* =========================
+   전자서명 완료
+========================= */
+
+$("submitSignBtn")
+.addEventListener(
+  "click",
+  function(){
+
+    if(this.disabled){
+      return;
+    }
+
+
+    /*
+      실제 운영 시 여기서 저장할 정보
+
+      1. 거래번호
+      2. 서명 대상자 ID
+      3. 본인인증 결과
+      4. 서명 이미지
+      5. 계약서 버전
+      6. 계약서 해시값
+      7. 서명 완료 시각
+      8. 동의 기록
+
+      DB 저장 성공 후
+      계약관리 화면에
+      '전자서명 완료'로 자동 표시
+    */
+
+
+    const signatureImage =
+      canvas.toDataURL(
+        "image/png"
+      );
+
+
+    console.log(
+      "signature:",
+      signatureImage
+    );
+
+
+    $("signSection")
+      .classList.add("hidden");
+
+
+    $("completeSection")
+      .classList.remove("hidden");
+
+
+    setStep(4);
+
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  }
+);
+
+
+})();
+</script>
+
+</body>
+</html>
