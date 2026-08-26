@@ -7,14 +7,11 @@
 
 <title>전자계약 관리 | 우리아파트 안심거래</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
-
-html,body{
-  margin:0;
-  width:100%;
-  min-height:100%;
-}
+html,body{margin:0;width:100%;min-height:100%}
 
 body{
   background:#f4f6f8;
@@ -23,13 +20,11 @@ body{
   "Segoe UI","Noto Sans KR",Arial,sans-serif;
 }
 
-button,input,textarea{
-  font:inherit;
-}
+button,input,textarea{font:inherit}
 
 .wrap{
   width:100%;
-  max-width:800px;
+  max-width:820px;
   margin:0 auto;
   padding:16px 14px 60px;
 }
@@ -67,7 +62,7 @@ button,input,textarea{
 }
 
 .room-tab{
-  height:48px;
+  min-height:48px;
   border-radius:12px;
   border:1px solid #cbd7df;
   background:#fff;
@@ -78,8 +73,8 @@ button,input,textarea{
 
 .room-tab.active{
   background:#1165d7;
-  border-color:#1165d7;
   color:#fff;
+  border-color:#1165d7;
 }
 
 .card{
@@ -98,12 +93,12 @@ button,input,textarea{
 .room-title{
   font-size:20px;
   font-weight:900;
-  margin-bottom:5px;
 }
 
 .room-desc{
   font-size:13px;
   color:#6a7e8a;
+  margin-top:5px;
 }
 
 .grid2{
@@ -112,25 +107,23 @@ button,input,textarea{
   gap:10px;
 }
 
-.field{
-  margin-bottom:12px;
-}
+.field{margin-bottom:12px}
 
 label{
   display:block;
-  margin-bottom:6px;
   font-size:13px;
   font-weight:800;
+  margin-bottom:6px;
 }
 
-input,
-textarea{
+input,textarea{
   width:100%;
   min-height:44px;
   border:1px solid #cbd7df;
   border-radius:10px;
   padding:10px 11px;
   outline:none;
+  background:#fff;
 }
 
 textarea{
@@ -146,9 +139,7 @@ textarea{
   padding:12px 0;
 }
 
-.doc-row:first-child{
-  border-top:0;
-}
+.doc-row:first-child{border-top:0}
 
 .doc-name{
   flex:1;
@@ -162,23 +153,19 @@ textarea{
   color:#c23c3c;
 }
 
-.doc-state.ok{
-  color:#14834a;
-}
+.doc-state.ok{color:#14834a}
 
 .upload-btn{
   background:#edf4ff;
   color:#1165d7;
-  border-radius:8px;
   padding:8px 10px;
+  border-radius:8px;
   font-size:12px;
   font-weight:900;
   cursor:pointer;
 }
 
-.hidden-file{
-  display:none;
-}
+.hidden-file{display:none}
 
 .notice{
   margin-top:10px;
@@ -216,6 +203,11 @@ textarea{
   color:#fff;
 }
 
+.btn-light{
+  background:#edf4ff;
+  color:#1165d7;
+}
+
 .btn-gray,
 .btn:disabled{
   background:#c7d0d5;
@@ -230,15 +222,15 @@ textarea{
   line-height:1.6;
 }
 
-.hidden{
+.hidden{display:none!important}
+
+.contract-section,
+.signature-section{
   display:none;
 }
 
-.contract-section{
-  display:none;
-}
-
-.contract-section.show{
+.contract-section.show,
+.signature-section.show{
   display:block;
 }
 
@@ -265,6 +257,7 @@ textarea{
   border:1px solid #555;
   padding:9px;
   text-align:left;
+  vertical-align:top;
 }
 
 .contract-table th{
@@ -287,14 +280,6 @@ textarea{
   min-height:18px;
 }
 
-.signature-section{
-  display:none;
-}
-
-.signature-section.show{
-  display:block;
-}
-
 .sign-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -302,8 +287,8 @@ textarea{
 }
 
 .sign-box{
-  border:1px solid #dce5ea;
   background:#f8fafb;
+  border:1px solid #dce5ea;
   border-radius:12px;
   padding:14px;
 }
@@ -316,7 +301,11 @@ textarea{
 .wait{
   color:#b36a00;
   font-weight:900;
-  font-size:13px;
+}
+
+.done{
+  color:#14834a;
+  font-weight:900;
 }
 
 .link-box{
@@ -327,28 +316,22 @@ textarea{
   margin-top:10px;
 }
 
-.link-title{
-  font-size:13px;
-  font-weight:900;
-  margin-bottom:6px;
-}
-
 .sign-link{
-  word-break:break-all;
   font-size:12px;
-  color:#1165d7;
   line-height:1.5;
+  color:#1165d7;
+  word-break:break-all;
 }
 
-.copy-btn{
-  margin-top:8px;
-  border:0;
-  border-radius:8px;
-  padding:8px 11px;
-  background:#edf4ff;
-  color:#1165d7;
-  font-weight:800;
-  cursor:pointer;
+.status-complete{
+  background:#edf9f2;
+  border:1px solid #bce8cd;
+  color:#146a38;
+  border-radius:12px;
+  padding:14px;
+  margin-top:14px;
+  font-weight:900;
+  text-align:center;
 }
 
 @media(max-width:600px){
@@ -377,12 +360,13 @@ textarea{
 
     <p>
       필수서류 확인 → 계약서 작성 →
-      당사자 전자서명 순서로 진행합니다.
+      당사자 전자서명 → 계약완료
     </p>
   </div>
 
 
   <div class="room-tabs">
+
     <button class="room-tab active" data-type="sale">
       매매방
     </button>
@@ -394,6 +378,7 @@ textarea{
     <button class="room-tab" data-type="monthly">
       월세방
     </button>
+
   </div>
 
 
@@ -402,9 +387,7 @@ textarea{
       매매 전자계약방
     </div>
 
-    <div class="room-desc" id="roomDesc">
-      매수인과 매도인의 매매계약을 진행합니다.
-    </div>
+    <div class="room-desc" id="roomDesc"></div>
   </div>
 
 
@@ -416,33 +399,27 @@ textarea{
 
       <div class="field">
         <label>거래번호</label>
-        <input
-          id="tradeId"
-          placeholder="예: T202608270001">
+        <input id="tradeId"
+        placeholder="예: T202608270001">
       </div>
 
       <div class="field">
         <label>아파트명</label>
-        <input
-          id="aptName"
-          placeholder="아파트명">
+        <input id="aptName">
       </div>
 
       <div class="field">
         <label>주소</label>
-        <input
-          id="address"
-          placeholder="주소">
+        <input id="address">
       </div>
 
       <div class="field">
         <label>동·호수</label>
-        <input
-          id="unit"
-          placeholder="예: 101동 1001호">
+        <input id="unit">
       </div>
 
     </div>
+
   </div>
 
 
@@ -459,25 +436,17 @@ textarea{
 
       <div class="field">
         <label id="buyerPhoneLabel">매수인 휴대전화</label>
-        <input
-          id="buyerPhone"
-          inputmode="numeric"
-          placeholder="기존 신청정보 자동입력">
+        <input id="buyerPhone" inputmode="numeric">
       </div>
 
       <div class="field">
         <label id="sellerNameLabel">매도인 성명</label>
-        <input
-          id="sellerName"
-          placeholder="공인중개사가 입력">
+        <input id="sellerName">
       </div>
 
       <div class="field">
         <label id="sellerPhoneLabel">매도인 휴대전화</label>
-        <input
-          id="sellerPhone"
-          inputmode="numeric"
-          placeholder="공인중개사가 입력">
+        <input id="sellerPhone" inputmode="numeric">
       </div>
 
     </div>
@@ -493,9 +462,7 @@ textarea{
 
     <div id="documentList"></div>
 
-    <div
-      class="notice"
-      id="documentNotice">
+    <div class="notice" id="documentNotice">
       필수서류를 업로드해 주세요.
     </div>
 
@@ -510,66 +477,44 @@ textarea{
 
       <div class="field">
         <label id="amountLabel">매매대금</label>
-        <input
-          id="totalAmount"
-          inputmode="numeric">
+        <input id="totalAmount" inputmode="numeric">
       </div>
 
       <div class="field">
         <label>계약금</label>
-        <input
-          id="deposit"
-          inputmode="numeric">
+        <input id="deposit" inputmode="numeric">
       </div>
 
       <div class="field" id="middleField">
         <label>중도금</label>
-        <input
-          id="middlePayment"
-          inputmode="numeric">
+        <input id="middlePayment" inputmode="numeric">
       </div>
 
       <div class="field">
         <label id="balanceLabel">잔금</label>
-        <input
-          id="balance"
-          inputmode="numeric">
+        <input id="balance" inputmode="numeric">
       </div>
 
-      <div
-        class="field"
-        id="monthlyField"
-        style="display:none">
-
+      <div class="field hidden" id="monthlyField">
         <label>월 차임</label>
-        <input
-          id="monthlyRent"
-          inputmode="numeric">
-
+        <input id="monthlyRent" inputmode="numeric">
       </div>
 
       <div class="field">
         <label>계약일</label>
-        <input
-          id="contractDate"
-          type="date">
+        <input id="contractDate" type="date">
       </div>
 
       <div class="field">
         <label id="balanceDateLabel">잔금일</label>
-        <input
-          id="balanceDate"
-          type="date">
+        <input id="balanceDate" type="date">
       </div>
 
     </div>
 
     <div class="field">
       <label>특약사항</label>
-
-      <textarea
-        id="specialTerms"
-        placeholder="특약사항을 입력하세요."></textarea>
+      <textarea id="specialTerms"></textarea>
     </div>
 
   </div>
@@ -601,9 +546,7 @@ textarea{
 
       <div class="contract-paper">
 
-        <h3 id="contractTitle">
-          부동산 매매계약서
-        </h3>
+        <h3 id="contractTitle"></h3>
 
         <table class="contract-table">
 
@@ -613,17 +556,17 @@ textarea{
           </tr>
 
           <tr>
-            <th id="previewBuyerTitle">매수인</th>
+            <th id="previewBuyerTitle"></th>
             <td id="previewBuyer"></td>
           </tr>
 
           <tr>
-            <th id="previewSellerTitle">매도인</th>
+            <th id="previewSellerTitle"></th>
             <td id="previewSeller"></td>
           </tr>
 
           <tr>
-            <th id="previewAmountTitle">매매대금</th>
+            <th id="previewAmountTitle"></th>
             <td id="previewAmount"></td>
           </tr>
 
@@ -638,11 +581,11 @@ textarea{
           </tr>
 
           <tr>
-            <th id="previewBalanceTitle">잔금</th>
+            <th id="previewBalanceTitle"></th>
             <td id="previewBalance"></td>
           </tr>
 
-          <tr id="previewMonthlyRow" style="display:none">
+          <tr id="previewMonthlyRow" class="hidden">
             <th>월 차임</th>
             <td id="previewMonthly"></td>
           </tr>
@@ -653,7 +596,7 @@ textarea{
           </tr>
 
           <tr>
-            <th id="previewBalanceDateTitle">잔금일</th>
+            <th id="previewBalanceDateTitle"></th>
             <td id="previewBalanceDate"></td>
           </tr>
 
@@ -694,7 +637,9 @@ textarea{
         id="completeContractBtn"
         class="btn btn-gray"
         disabled>
+
         계약서 작성완료
+
       </button>
 
     </div>
@@ -713,21 +658,15 @@ textarea{
       <div class="sign-grid">
 
         <div class="sign-box">
-          <strong id="buyerSignTitle">
-            매수인
-          </strong>
-
-          <span class="wait">
+          <strong id="buyerSignTitle"></strong>
+          <span id="buyerSignState" class="wait">
             전자서명 대기
           </span>
         </div>
 
         <div class="sign-box">
-          <strong id="sellerSignTitle">
-            매도인
-          </strong>
-
-          <span class="wait">
+          <strong id="sellerSignTitle"></strong>
+          <span id="sellerSignState" class="wait">
             전자서명 대기
           </span>
         </div>
@@ -744,56 +683,28 @@ textarea{
 
       </button>
 
-      <div class="help">
-        실제 서비스에서는 이 버튼을 누르면
-        두 사람에게 각각 전자서명 문자가 자동 발송됩니다.
+
+      <div id="generatedLinks" class="hidden">
+
+        <div class="link-box">
+          <strong id="buyerLinkTitle"></strong>
+          <div class="sign-link" id="buyerLink"></div>
+        </div>
+
+        <div class="link-box">
+          <strong id="sellerLinkTitle"></strong>
+          <div class="sign-link" id="sellerLink"></div>
+        </div>
+
       </div>
 
 
       <div
-        id="generatedLinks"
-        class="hidden">
+        id="contractComplete"
+        class="status-complete hidden">
 
-        <div class="link-box">
-
-          <div
-            class="link-title"
-            id="buyerLinkTitle">
-            매수인 전자서명 링크
-          </div>
-
-          <div
-            class="sign-link"
-            id="buyerLink"></div>
-
-          <button
-            class="copy-btn"
-            data-target="buyerLink">
-            링크 복사
-          </button>
-
-        </div>
-
-
-        <div class="link-box">
-
-          <div
-            class="link-title"
-            id="sellerLinkTitle">
-            매도인 전자서명 링크
-          </div>
-
-          <div
-            class="sign-link"
-            id="sellerLink"></div>
-
-          <button
-            class="copy-btn"
-            data-target="sellerLink">
-            링크 복사
-          </button>
-
-        </div>
+        ✅ 양쪽 전자서명이 모두 완료되었습니다.<br>
+        전자계약 체결완료
 
       </div>
 
@@ -810,10 +721,46 @@ textarea{
 
 "use strict";
 
-let currentType = "sale";
+
+/* =====================================================
+   SUPABASE 설정
+
+   다음 단계에서 실제 값을 넣습니다.
+
+   절대로 service_role 키를 넣지 마세요.
+===================================================== */
+
+const SUPABASE_URL =
+  "여기에_SUPABASE_PROJECT_URL";
+
+const SUPABASE_ANON_KEY =
+  "여기에_SUPABASE_ANON_KEY";
+
+
+let db = null;
+
+
+if(
+  SUPABASE_URL.startsWith("https://") &&
+  !SUPABASE_ANON_KEY.startsWith("여기에")
+){
+
+  db =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+}
+
 
 const $ = id =>
   document.getElementById(id);
+
+
+let currentType = "sale";
+
+let statusTimer = null;
 
 
 const ROOM = {
@@ -874,19 +821,49 @@ const ROOM = {
       "중개대상물 확인·설명서"
     ]
   }
+
 };
 
 
-function money(value){
+function numberValue(value){
 
   const n =
     String(value || "")
     .replace(/\D/g,"");
 
-  if(!n) return "-";
+  return n
+    ? Number(n)
+    : null;
 
-  return Number(n)
-    .toLocaleString("ko-KR") + "원";
+}
+
+
+function money(value){
+
+  const n =
+    numberValue(value);
+
+  if(n === null){
+    return "-";
+  }
+
+  return n.toLocaleString("ko-KR") +
+    "원";
+
+}
+
+
+function randomToken(){
+
+  const arr =
+    new Uint32Array(6);
+
+  crypto.getRandomValues(arr);
+
+  return Array
+    .from(arr)
+    .map(n => n.toString(36))
+    .join("");
 
 }
 
@@ -914,6 +891,21 @@ function renderRoom(){
   $("sellerPhoneLabel").textContent =
     d.seller + " 휴대전화";
 
+  $("partyHelp").textContent =
+    d.buyer +
+    " 정보는 기존 신청정보에서 자동으로 불러오고, " +
+    d.seller +
+    " 정보는 담당 공인중개사가 입력합니다.";
+
+  $("amountLabel").textContent =
+    d.amount;
+
+  $("balanceLabel").textContent =
+    d.balance;
+
+  $("balanceDateLabel").textContent =
+    d.balanceDate;
+
   $("buyerSignTitle").textContent =
     d.buyer;
 
@@ -926,36 +918,21 @@ function renderRoom(){
   $("sellerLinkTitle").textContent =
     d.seller + " 전자서명 링크";
 
-  $("amountLabel").textContent =
-    d.amount;
-
-  $("balanceLabel").textContent =
-    d.balance;
-
-  $("balanceDateLabel").textContent =
-    d.balanceDate;
-
-  $("partyHelp").textContent =
-    d.buyer +
-    " 정보는 기존 신청정보에서 자동으로 불러오고, " +
-    d.seller +
-    " 정보는 담당 공인중개사가 입력합니다.";
-
   if(currentType === "monthly"){
 
-    $("monthlyField").style.display =
-      "block";
+    $("middleField")
+      .classList.add("hidden");
 
-    $("middleField").style.display =
-      "none";
+    $("monthlyField")
+      .classList.remove("hidden");
 
   }else{
 
-    $("monthlyField").style.display =
-      "none";
+    $("middleField")
+      .classList.remove("hidden");
 
-    $("middleField").style.display =
-      "block";
+    $("monthlyField")
+      .classList.add("hidden");
 
   }
 
@@ -968,6 +945,11 @@ function renderRoom(){
   $("generatedLinks")
     .classList.add("hidden");
 
+  $("contractComplete")
+    .classList.add("hidden");
+
+  resetStatus();
+
   renderDocuments();
 
 }
@@ -975,13 +957,11 @@ function renderRoom(){
 
 function renderDocuments(){
 
-  const docs =
-    ROOM[currentType].docs;
-
   $("documentList").innerHTML =
     "";
 
-  docs.forEach(function(name,index){
+  ROOM[currentType].docs
+  .forEach(function(name,index){
 
     const row =
       document.createElement("div");
@@ -1008,8 +988,8 @@ function renderDocuments(){
       </label>
 
       <input
-        class="hidden-file doc-file"
         id="file${index}"
+        class="hidden-file doc-file"
         type="file"
         data-name="${name}"
         accept=".pdf,.jpg,.jpeg,.png">
@@ -1021,6 +1001,7 @@ function renderDocuments(){
 
   });
 
+
   document
   .querySelectorAll(".doc-file")
   .forEach(function(file){
@@ -1030,7 +1011,10 @@ function renderDocuments(){
       function(){
 
         const i =
-          this.id.replace("file","");
+          this.id.replace(
+            "file",
+            ""
+          );
 
         const state =
           $("state"+i);
@@ -1072,10 +1056,12 @@ function checkDocuments(){
       )
     );
 
+
   const missing =
     files.filter(
-      f => !f.files.length
+      file => !file.files.length
     );
+
 
   if(!missing.length){
 
@@ -1085,15 +1071,13 @@ function checkDocuments(){
     $("documentNotice").textContent =
       "필수서류가 모두 첨부되었습니다. 전자계약서 작성이 가능합니다.";
 
-    $("createContractBtn")
-      .disabled = false;
+    $("createContractBtn").disabled =
+      false;
 
-    $("createContractBtn")
-      .className =
+    $("createContractBtn").className =
       "btn btn-dark";
 
-    $("createContractBtn")
-      .textContent =
+    $("createContractBtn").textContent =
       "전자계약서 작성";
 
   }else{
@@ -1103,17 +1087,19 @@ function checkDocuments(){
 
     $("documentNotice").textContent =
       "미첨부 서류: " +
-      missing.map(
-        f => f.dataset.name
-      ).join(", ") +
+      missing
+      .map(f => f.dataset.name)
+      .join(", ") +
       "을(를) 업로드해 주세요.";
 
-    $("createContractBtn")
-      .disabled = true;
+    $("createContractBtn").disabled =
+      true;
 
-    $("createContractBtn")
-      .className =
+    $("createContractBtn").className =
       "btn btn-gray";
+
+    $("createContractBtn").textContent =
+      "필수서류 완료 후 전자계약서 작성";
 
   }
 
@@ -1125,8 +1111,10 @@ function makePreview(){
   const d =
     ROOM[currentType];
 
+
   $("contractTitle").textContent =
     d.contractTitle;
+
 
   $("previewProperty").textContent =
     [
@@ -1137,6 +1125,7 @@ function makePreview(){
     .filter(Boolean)
     .join(" / ") || "-";
 
+
   $("previewBuyerTitle").textContent =
     d.buyer;
 
@@ -1144,6 +1133,7 @@ function makePreview(){
     ($("buyerName").value || "-") +
     " / " +
     ($("buyerPhone").value || "-");
+
 
   $("previewSellerTitle").textContent =
     d.seller;
@@ -1153,6 +1143,7 @@ function makePreview(){
     " / " +
     ($("sellerPhone").value || "-");
 
+
   $("previewAmountTitle").textContent =
     d.amount;
 
@@ -1161,10 +1152,12 @@ function makePreview(){
       $("totalAmount").value
     );
 
+
   $("previewDeposit").textContent =
     money(
       $("deposit").value
     );
+
 
   $("previewBalanceTitle").textContent =
     d.balance;
@@ -1174,8 +1167,10 @@ function makePreview(){
       $("balance").value
     );
 
+
   $("previewContractDate").textContent =
     $("contractDate").value || "-";
+
 
   $("previewBalanceDateTitle")
     .textContent =
@@ -1184,17 +1179,19 @@ function makePreview(){
   $("previewBalanceDate").textContent =
     $("balanceDate").value || "-";
 
+
   $("previewTerms").textContent =
     $("specialTerms").value ||
     "특약사항 없음";
 
+
   if(currentType === "monthly"){
 
-    $("previewMiddleRow").style.display =
-      "none";
+    $("previewMiddleRow")
+      .classList.add("hidden");
 
-    $("previewMonthlyRow").style.display =
-      "";
+    $("previewMonthlyRow")
+      .classList.remove("hidden");
 
     $("previewMonthly").textContent =
       money(
@@ -1203,11 +1200,11 @@ function makePreview(){
 
   }else{
 
-    $("previewMiddleRow").style.display =
-      "";
+    $("previewMiddleRow")
+      .classList.remove("hidden");
 
-    $("previewMonthlyRow").style.display =
-      "none";
+    $("previewMonthlyRow")
+      .classList.add("hidden");
 
     $("previewMiddle").textContent =
       money(
@@ -1219,19 +1216,17 @@ function makePreview(){
 }
 
 
-function checkConfirm(){
+function checkConfirmation(){
 
   const ok =
     $("check1").checked &&
     $("check2").checked &&
     $("check3").checked;
 
-  $("completeContractBtn")
-    .disabled =
+  $("completeContractBtn").disabled =
     !ok;
 
-  $("completeContractBtn")
-    .className =
+  $("completeContractBtn").className =
     ok
     ? "btn btn-dark"
     : "btn btn-gray";
@@ -1239,27 +1234,21 @@ function checkConfirm(){
 }
 
 
-function makeToken(){
+async function saveContract(){
 
-  const random =
-    crypto.getRandomValues(
-      new Uint32Array(4)
+  if(!db){
+
+    alert(
+      "Supabase 연결값이 아직 입력되지 않았습니다."
     );
 
-  return Array
-    .from(random)
-    .map(
-      n => n.toString(36)
-    )
-    .join("");
+    return false;
+  }
 
-}
-
-
-function createSignLinks(){
 
   const tradeId =
     $("tradeId").value.trim();
+
 
   if(!tradeId){
 
@@ -1270,14 +1259,137 @@ function createSignLinks(){
     $("tradeId").focus();
 
     return false;
-
   }
+
+
+  const row = {
+
+    trade_id:tradeId,
+
+    trade_type:currentType,
+
+    apartment_name:
+      $("aptName").value.trim(),
+
+    property_address:
+      $("address").value.trim(),
+
+    unit_info:
+      $("unit").value.trim(),
+
+    buyer_name:
+      $("buyerName").value.trim(),
+
+    buyer_phone:
+      $("buyerPhone")
+      .value
+      .replace(/\D/g,""),
+
+    seller_name:
+      $("sellerName").value.trim(),
+
+    seller_phone:
+      $("sellerPhone")
+      .value
+      .replace(/\D/g,""),
+
+    total_amount:
+      numberValue(
+        $("totalAmount").value
+      ),
+
+    deposit_amount:
+      numberValue(
+        $("deposit").value
+      ),
+
+    middle_amount:
+      currentType === "monthly"
+      ? null
+      : numberValue(
+          $("middlePayment").value
+        ),
+
+    balance_amount:
+      numberValue(
+        $("balance").value
+      ),
+
+    monthly_rent:
+      currentType === "monthly"
+      ? numberValue(
+          $("monthlyRent").value
+        )
+      : null,
+
+    contract_date:
+      $("contractDate").value || null,
+
+    balance_date:
+      $("balanceDate").value || null,
+
+    special_terms:
+      $("specialTerms").value.trim(),
+
+    contract_status:
+      "READY",
+
+    updated_at:
+      new Date().toISOString()
+
+  };
+
+
+  const {error} =
+    await db
+    .from("electronic_contracts")
+    .upsert(
+      row,
+      {
+        onConflict:"trade_id"
+      }
+    );
+
+
+  if(error){
+
+    console.error(error);
+
+    alert(
+      "계약서 저장 중 오류가 발생했습니다.\n" +
+      error.message
+    );
+
+    return false;
+  }
+
+
+  return true;
+
+}
+
+
+async function createSignatureRequests(){
+
+  if(!db){
+
+    alert(
+      "Supabase 연결값이 아직 입력되지 않았습니다."
+    );
+
+    return;
+  }
+
+
+  const tradeId =
+    $("tradeId").value.trim();
 
 
   const buyerPhone =
     $("buyerPhone")
     .value
     .replace(/\D/g,"");
+
 
   const sellerPhone =
     $("sellerPhone")
@@ -1292,8 +1404,7 @@ function createSignLinks(){
       " 휴대전화번호를 확인해 주세요."
     );
 
-    return false;
-
+    return;
   }
 
 
@@ -1304,21 +1415,87 @@ function createSignLinks(){
       " 휴대전화번호를 입력해 주세요."
     );
 
-    return false;
-
+    return;
   }
+
+
+  const buyerToken =
+    randomToken();
+
+  const sellerToken =
+    randomToken();
+
+
+  const rows = [
+
+    {
+      trade_id:tradeId,
+      signer_role:"buyer",
+      signer_name:
+        $("buyerName").value.trim(),
+      signer_phone:buyerPhone,
+      sign_token:buyerToken,
+      identity_verified:false,
+      contract_confirmed:false,
+      signed:false
+    },
+
+    {
+      trade_id:tradeId,
+      signer_role:"seller",
+      signer_name:
+        $("sellerName").value.trim(),
+      signer_phone:sellerPhone,
+      sign_token:sellerToken,
+      identity_verified:false,
+      contract_confirmed:false,
+      signed:false
+    }
+
+  ];
+
+
+  const {error} =
+    await db
+    .from("electronic_signatures")
+    .upsert(
+      rows,
+      {
+        onConflict:
+          "trade_id,signer_role"
+      }
+    );
+
+
+  if(error){
+
+    console.error(error);
+
+    alert(
+      "전자서명 요청 생성 중 오류가 발생했습니다.\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  await db
+  .from("electronic_contracts")
+  .update({
+    contract_status:"SIGNING",
+    updated_at:
+      new Date().toISOString()
+  })
+  .eq(
+    "trade_id",
+    tradeId
+  );
 
 
   const base =
     location.origin +
     "/electronic-sign.html";
-
-
-  const buyerToken =
-    makeToken();
-
-  const sellerToken =
-    makeToken();
 
 
   const buyerUrl =
@@ -1354,25 +1531,181 @@ function createSignLinks(){
     .classList.remove("hidden");
 
 
-  /*
-    실제 운영에서는 여기서
-
-    1. buyerToken / sellerToken 서버 저장
-    2. 거래번호와 사용자 연결
-    3. 유효기간 설정
-    4. SMS API로 각 사용자에게 링크 발송
-
-    을 수행합니다.
-
-    브라우저에서 만든 토큰만으로
-    실제 인증 보안을 처리하면 안 됩니다.
-  */
+  alert(
+    "양쪽 전자서명 요청이 생성되었습니다.\n\n" +
+    "다음 문자 연동 단계에서 이 링크가 자동 발송됩니다."
+  );
 
 
-  return true;
+  startStatusWatch();
 
 }
 
+
+function resetStatus(){
+
+  $("buyerSignState").textContent =
+    "전자서명 대기";
+
+  $("buyerSignState").className =
+    "wait";
+
+  $("sellerSignState").textContent =
+    "전자서명 대기";
+
+  $("sellerSignState").className =
+    "wait";
+
+}
+
+
+async function loadSignatureStatus(){
+
+  if(!db){
+    return;
+  }
+
+
+  const tradeId =
+    $("tradeId").value.trim();
+
+
+  if(!tradeId){
+    return;
+  }
+
+
+  const {data,error} =
+    await db
+    .from("electronic_signatures")
+    .select(
+      "signer_role,signed,signed_at"
+    )
+    .eq(
+      "trade_id",
+      tradeId
+    );
+
+
+  if(error){
+
+    console.error(error);
+
+    return;
+  }
+
+
+  let buyerDone = false;
+  let sellerDone = false;
+
+
+  (data || []).forEach(function(row){
+
+    if(
+      row.signer_role === "buyer" &&
+      row.signed
+    ){
+
+      buyerDone = true;
+
+      $("buyerSignState").textContent =
+        "✅ 전자서명 완료" +
+        (
+          row.signed_at
+          ? " · " +
+            new Date(
+              row.signed_at
+            ).toLocaleString("ko-KR")
+          : ""
+        );
+
+      $("buyerSignState").className =
+        "done";
+
+    }
+
+
+    if(
+      row.signer_role === "seller" &&
+      row.signed
+    ){
+
+      sellerDone = true;
+
+      $("sellerSignState").textContent =
+        "✅ 전자서명 완료" +
+        (
+          row.signed_at
+          ? " · " +
+            new Date(
+              row.signed_at
+            ).toLocaleString("ko-KR")
+          : ""
+        );
+
+      $("sellerSignState").className =
+        "done";
+
+    }
+
+  });
+
+
+  if(
+    buyerDone &&
+    sellerDone
+  ){
+
+    $("contractComplete")
+      .classList.remove("hidden");
+
+
+    await db
+    .from("electronic_contracts")
+    .update({
+      contract_status:"COMPLETED",
+      updated_at:
+        new Date().toISOString()
+    })
+    .eq(
+      "trade_id",
+      tradeId
+    );
+
+  }else{
+
+    $("contractComplete")
+      .classList.add("hidden");
+
+  }
+
+}
+
+
+function startStatusWatch(){
+
+  if(statusTimer){
+
+    clearInterval(
+      statusTimer
+    );
+
+  }
+
+
+  loadSignatureStatus();
+
+
+  statusTimer =
+    setInterval(
+      loadSignatureStatus,
+      5000
+    );
+
+}
+
+
+/* 방 선택 */
 
 document
 .querySelectorAll(".room-tab")
@@ -1401,6 +1734,8 @@ document
 });
 
 
+/* 계약서 작성 */
+
 $("createContractBtn")
 .addEventListener(
   "click",
@@ -1413,99 +1748,88 @@ $("createContractBtn")
 
     $("contractSection")
       .scrollIntoView({
-        behavior:"smooth"
+        behavior:"smooth",
+        block:"start"
       });
 
   }
 );
 
 
-["check1","check2","check3"]
+/* 체크박스 */
+
+[
+  "check1",
+  "check2",
+  "check3"
+]
 .forEach(function(id){
 
   $(id).addEventListener(
     "change",
-    checkConfirm
+    checkConfirmation
   );
 
 });
 
 
+/* 계약서 완료 */
+
 $("completeContractBtn")
 .addEventListener(
   "click",
-  function(){
+  async function(){
 
     if(this.disabled){
       return;
     }
 
+
+    const saved =
+      await saveContract();
+
+
+    if(!saved){
+      return;
+    }
+
+
     $("signatureSection")
       .classList.add("show");
 
+
     $("signatureSection")
       .scrollIntoView({
-        behavior:"smooth"
+        behavior:"smooth",
+        block:"start"
       });
 
   }
 );
 
 
+/* 전자서명 요청 */
+
 $("sendSignBtn")
 .addEventListener(
   "click",
-  function(){
-
-    if(
-      createSignLinks()
-    ){
-
-      alert(
-        "양쪽 전자서명 링크가 생성되었습니다.\n\n" +
-        "다음 단계에서 문자 발송 API와 연결합니다."
-      );
-
-    }
-
-  }
+  createSignatureRequests
 );
 
 
-document
-.querySelectorAll(".copy-btn")
-.forEach(function(btn){
+/* 거래번호 변경시 상태 확인 */
 
-  btn.addEventListener(
-    "click",
-    async function(){
+$("tradeId")
+.addEventListener(
+  "change",
+  function(){
 
-      const text =
-        $(
-          this.dataset.target
-        ).textContent;
+    resetStatus();
 
-      try{
+    startStatusWatch();
 
-        await navigator.clipboard
-          .writeText(text);
-
-        alert(
-          "전자서명 링크를 복사했습니다."
-        );
-
-      }catch(e){
-
-        alert(
-          "링크 복사에 실패했습니다."
-        );
-
-      }
-
-    }
-  );
-
-});
+  }
+);
 
 
 renderRoom();
