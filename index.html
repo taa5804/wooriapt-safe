@@ -594,6 +594,78 @@ body{overflow-x:hidden;}
 }
 </style>
 
+
+<style id="mobile-text-readability-fix">
+/* Mobile readability fix: keep existing frame, improve text flow only */
+@media (max-width:480px){
+  /* Promise cards: do not force awkward line breaks inside sentences */
+  .promise-grid .card p br{display:none;}
+  .promise-grid .card p{
+    font-size:10px !important;
+    line-height:1.55 !important;
+    word-break:keep-all !important;
+    overflow-wrap:break-word !important;
+    letter-spacing:-0.35px !important;
+  }
+  .promise-grid .card h3{
+    font-size:13px !important;
+    line-height:1.3 !important;
+    word-break:keep-all !important;
+    letter-spacing:-0.4px !important;
+  }
+  .promise-grid .more{
+    font-size:10px !important;
+    white-space:nowrap !important;
+  }
+
+  /* Process descriptions: let sentences wrap naturally */
+  .steps .step p br{display:none;}
+  .steps .step p{
+    word-break:keep-all !important;
+    overflow-wrap:break-word !important;
+    letter-spacing:-0.3px !important;
+  }
+  .steps .step b{word-break:keep-all !important;}
+
+  /* Broker introduction sentence should also wrap by words, not fixed BR points */
+  .broker-left p br{display:none;}
+  .broker-left p{
+    word-break:keep-all !important;
+    overflow-wrap:break-word !important;
+    letter-spacing:-0.3px !important;
+  }
+
+  /* Access help/description: preserve readable Korean chunks */
+  .return-access-desc,
+  .return-access-help{
+    word-break:keep-all !important;
+    overflow-wrap:break-word !important;
+  }
+}
+</style>
+
+
+<style id="manual-breaks-fix">
+@media (max-width:480px){
+  .steps .step p.manual-breaks br,
+  .promise-grid .card p.manual-breaks br{display:block !important;}
+  .steps .step p.manual-breaks,
+  .promise-grid .card p.manual-breaks{
+    font-size:9px !important;
+    line-height:1.55 !important;
+    letter-spacing:-0.45px !important;
+    word-break:keep-all !important;
+  }
+}
+</style>
+
+<style>
+/* 요청사항: 매매 셀프등기 지원 제목은 모바일에서도 2줄 고정 */
+.registry-title span{white-space:nowrap;}
+@media(max-width:480px){
+  .registry-title span{font-size:.86em;}
+}
+</style>
 </head>
 
 <body>
@@ -796,9 +868,9 @@ body{overflow-x:hidden;}
 
       <b>공인중개사 전달</b>
 
-      <p>
-        해당 지역 공인중개사에게<br>
-        요청이 전달됩니다
+      <p class="manual-breaks">
+        해당 지역 공인중개사<br style="display:block">
+        에게 요청이 전달됩니다
       </p>
     </div>
 
@@ -808,9 +880,10 @@ body{overflow-x:hidden;}
 
       <b>매물 제안</b>
 
-      <p>
-        공인중개사가 조건에 맞는<br>
-        매물을 제안합니다
+      <p class="manual-breaks">
+        공인중개사가 조건에<br style="display:block">
+        맞는<br style="display:block">
+        매물을 제안합니다.
       </p>
     </div>
 
@@ -866,10 +939,10 @@ body{overflow-x:hidden;}
         공인중개사
       </h3>
 
-      <p>
-        가입 심사 및 교육을<br>
-        통과한 공인중개사만<br>
-        활동합니다.
+      <p class="manual-breaks">
+        가입 심사를 통과한<br style="display:block">
+        공인중개사만<br style="display:block">
+        계약이 가능합니다
       </p>
 
       <span class="more">
@@ -912,10 +985,11 @@ body{overflow-x:hidden;}
         에스크로
       </h3>
 
-      <p>
-        거래금을 안전하게 보관,<br>
-        계약 완료 후 지급으로<br>
-        안심 거래가 됩니다.
+      <p class="manual-breaks">
+        거래금을 안전하게<br style="display:block">
+        보관, 선택 지급으<br style="display:block">
+        로 안심거래가<br style="display:block">
+        됩니다.
       </p>
 
       <span class="more">
@@ -930,15 +1004,16 @@ body{overflow-x:hidden;}
     >
       <div class="ci">📋</div>
 
-      <h3>
+      <h3 class="registry-title">
         매매<br>
-        셀프등기 지원
+        <span>셀프등기 지원</span>
       </h3>
 
-      <p>
-        셀프등기 시스템 제공으로<br>
-        등기 비용과 시간을<br>
-        절약할 수 있습니다.
+      <p class="manual-breaks">
+        셀프등기 시스템<br style="display:block">
+        제공으로 등기비용과<br style="display:block">
+        시간을 절약할 수<br style="display:block">
+        있읍니다
       </p>
 
       <span class="more">
