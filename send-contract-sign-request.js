@@ -82,7 +82,7 @@ module.exports = async function handler(req, res) {
       process.env.SUPABASE_URL;
 
     const SUPABASE_SERVICE_ROLE_KEY =
-      process.env.SUPABASE_SERVICE_ROLE_KEY;
+      process.env.SUPABASE_SECRET_KEY;
 
     const NCP_ACCESS_KEY =
       process.env.NCP_ACCESS_KEY;
