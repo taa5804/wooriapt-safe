@@ -8,9 +8,7 @@
 <title>안심거래 진행현황 | 우리아파트 안심거래</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
@@ -24,15 +22,8 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
 }
 
-button,
-input,
-select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
+button,input,select{font:inherit}
+button{cursor:pointer}
 
 .wrap{
   width:100%;
@@ -41,10 +32,7 @@ button{
   padding:16px 14px 70px;
 }
 
-
-/* =========================
-   HEADER
-========================= */
+/* HEADER */
 
 .header{
   background:linear-gradient(135deg,#12394d,#176b86);
@@ -122,10 +110,7 @@ button{
   color:#12394d;
 }
 
-
-/* =========================
-   CARD
-========================= */
+/* CARD */
 
 .card{
   background:#fff;
@@ -192,10 +177,7 @@ button{
   line-height:1.65;
 }
 
-
-/* =========================
-   FORM
-========================= */
+/* FORM */
 
 .grid{
   display:grid;
@@ -232,16 +214,7 @@ select{
   outline:none;
 }
 
-input:focus,
-select:focus{
-  border-color:#176fc4;
-  box-shadow:0 0 0 3px rgba(23,111,196,.08);
-}
-
-
-/* =========================
-   CHECK
-========================= */
+/* CHECK */
 
 .check-box{
   border:1px solid #dce5eb;
@@ -265,10 +238,7 @@ select:focus{
   height:21px;
 }
 
-
-/* =========================
-   AUTO DOCUMENT
-========================= */
+/* AUTO DOC */
 
 .auto-doc-list{
   display:grid;
@@ -294,9 +264,6 @@ select:focus{
   margin-top:4px;
   font-size:12px;
   color:#71818e;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 
 .auto-badge{
@@ -319,10 +286,7 @@ select:focus{
   padding:0 10px;
 }
 
-
-/* =========================
-   DOCUMENTS
-========================= */
+/* DOCUMENT */
 
 .section-label{
   margin:5px 0 10px;
@@ -427,67 +391,62 @@ select:focus{
 }
 
 .optional-note{
-  margin-top:8px;
+  margin:8px 0 10px;
   font-size:12px;
   line-height:1.6;
   color:#687c8b;
 }
 
+/* PLATFORM FEE */
 
-/* =========================
-   FEE STATUS
-========================= */
-
-.fee-status-box{
-  text-align:center;
-  padding:22px 15px;
-  border:1px solid #d7e7dd;
-  border-radius:15px;
-  background:#f5fbf7;
+.fee-box{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  padding:20px 12px;
+  border:1px solid #dce5eb;
+  border-radius:14px;
+  background:#fafcfd;
 }
 
 .fee-status{
-  display:inline-flex;
+  min-width:130px;
+  height:46px;
+  display:flex;
   align-items:center;
   justify-content:center;
-  min-width:170px;
-  min-height:54px;
-  border-radius:13px;
-  background:#eaf8ef;
-  color:#237443;
-  font-size:19px;
+  border-radius:10px;
+  background:#fff3df;
+  color:#956500;
+  font-size:15px;
   font-weight:900;
 }
 
-.fee-status.wait{
-  background:#fff3df;
-  color:#956500;
+.fee-status.ok{
+  background:#eaf8ef;
+  color:#237443;
 }
 
-.fee-description{
-  margin-top:12px;
-  font-size:13px;
-  line-height:1.65;
-  color:#5d7483;
+.fee-sms-btn{
+  min-width:120px;
+  height:46px;
+  border:0;
+  border-radius:10px;
+  background:#1165d7;
+  color:#fff;
+  font-size:14px;
+  font-weight:900;
 }
 
-
-/* =========================
-   CONTRACT
-========================= */
+/* CONTRACT */
 
 .contract-box{
   padding:16px;
   border:2px solid #d7e8f8;
   border-radius:15px;
   background:#f5faff;
-}
-
-.contract-desc{
-  font-size:13px;
-  line-height:1.65;
-  color:#5e7485;
-  margin-bottom:14px;
 }
 
 .contract-btn{
@@ -506,10 +465,7 @@ select:focus{
   cursor:not-allowed;
 }
 
-
-/* =========================
-   SIGN
-========================= */
+/* SIGN */
 
 .sign-grid{
   display:grid;
@@ -570,10 +526,7 @@ select:focus{
   color:#237443;
 }
 
-
-/* =========================
-   BOTTOM
-========================= */
+/* BOTTOM */
 
 .bottom{
   display:grid;
@@ -608,31 +561,19 @@ select:focus{
 .msg.ok{
   display:block;
   background:#edf9f1;
-  border:1px solid #c7e9d2;
   color:#237443;
 }
 
 .msg.error{
   display:block;
   background:#fff0f0;
-  border:1px solid #f0c8c8;
   color:#b03535;
 }
-
-
-/* =========================
-   MOBILE
-========================= */
 
 @media(max-width:650px){
 
   .wrap{
     padding:10px 9px 55px;
-  }
-
-  .header{
-    padding:18px 14px;
-    border-radius:16px;
   }
 
   .header-top{
@@ -666,25 +607,13 @@ select:focus{
   }
 }
 
-
-/* =========================
-   PRINT
-========================= */
-
 @media print{
 
-  body{
-    background:#fff;
-  }
+  body{background:#fff}
 
   .wrap{
     max-width:none;
     padding:0;
-  }
-
-  .header,
-  .card{
-    box-shadow:none;
   }
 
   button,
@@ -704,9 +633,6 @@ select:focus{
 
 <div class="wrap">
 
-
-<!-- HEADER -->
-
 <header class="header">
 
   <div class="brand">
@@ -716,61 +642,28 @@ select:focus{
   <div class="header-top">
 
     <div>
-
-      <h1>
-        안심거래 진행현황
-      </h1>
-
+      <h1>안심거래 진행현황</h1>
       <p>
         거래 진행상황과 전자계약 진행상태를 확인할 수 있습니다.
       </p>
-
     </div>
 
     <div class="code-box">
-
-      <small>
-        안심거래 코드
-      </small>
-
-      <div
-        id="roomCode"
-        class="code-number"
-      >
-        ----
-      </div>
-
+      <small>안심거래 코드</small>
+      <div id="roomCode" class="code-number">----</div>
     </div>
 
   </div>
 
-
   <div class="progress">
-
-    <span class="active">
-      거래 진행중
-    </span>
-
-    <span id="progressDocs">
-      서류등록
-    </span>
-
-    <span id="progressContract">
-      전자계약
-    </span>
-
-    <span id="progressSign">
-      전자서명
-    </span>
-
-    <span id="progressComplete">
-      거래완료
-    </span>
-
+    <span class="active">거래 진행중</span>
+    <span id="progressDocs">서류등록</span>
+    <span id="progressContract">전자계약</span>
+    <span id="progressSign">전자서명</span>
+    <span id="progressComplete">거래완료</span>
   </div>
 
 </header>
-
 
 
 <!-- ① 거래 기본정보 -->
@@ -778,120 +671,50 @@ select:focus{
 <section class="card">
 
   <div class="card-head">
-
-    <div class="card-title">
-      ① 거래 기본정보
-    </div>
-
-    <span
-      id="basicState"
-      class="state wait"
-    >
-      작성중
-    </span>
-
+    <div class="card-title">① 거래 기본정보</div>
+    <span id="basicState" class="state wait">작성중</span>
   </div>
 
   <div class="required-note">
     * 표시는 필수 입력사항입니다.
   </div>
 
-
   <div class="grid">
 
-
     <div class="field">
-
-      <label>
-        거래유형<span class="req">*</span>
-      </label>
+      <label>거래유형<span class="req">*</span></label>
 
       <select id="tradeType">
-
-        <option value="">
-          선택
-        </option>
-
-        <option value="sale">
-          매매
-        </option>
-
-        <option value="jeonse">
-          전세
-        </option>
-
-        <option value="monthly">
-          월세
-        </option>
-
+        <option value="">선택</option>
+        <option value="sale">매매</option>
+        <option value="jeonse">전세</option>
+        <option value="monthly">월세</option>
       </select>
-
     </div>
-
 
     <div class="field">
-
-      <label>
-        아파트명<span class="req">*</span>
-      </label>
-
-      <input
-        id="apartmentName"
-        type="text"
-        placeholder="아파트명"
-      >
-
+      <label>아파트명<span class="req">*</span></label>
+      <input id="apartmentName" type="text" placeholder="아파트명">
     </div>
-
 
     <div class="field full">
-
-      <label>
-        거래 부동산 주소<span class="req">*</span>
-      </label>
-
-      <input
-        id="address"
-        type="text"
-        placeholder="주소 입력"
-      >
-
+      <label>거래 부동산 주소<span class="req">*</span></label>
+      <input id="address" type="text" placeholder="주소 입력">
     </div>
 
-
     <div class="field">
-
-      <label>
-        동<span class="req">*</span>
-      </label>
-
-      <input
-        id="dong"
-        type="text"
-        placeholder="101동"
-      >
-
+      <label>동<span class="req">*</span></label>
+      <input id="dong" type="text" placeholder="101동">
     </div>
 
-
     <div class="field">
-
-      <label>
-        호<span class="req">*</span>
-      </label>
-
-      <input
-        id="ho"
-        type="text"
-        placeholder="1201호"
-      >
-
+      <label>호<span class="req">*</span></label>
+      <input id="ho" type="text" placeholder="1201호">
     </div>
 
   </div>
 
 </section>
-
 
 
 <!-- ② 거래 당사자 확인 -->
@@ -899,60 +722,31 @@ select:focus{
 <section class="card">
 
   <div class="card-head">
-
-    <div class="card-title">
-      ② 거래 당사자 확인
-    </div>
-
-    <span
-      id="partyState"
-      class="state wait"
-    >
-      확인대기
-    </span>
-
+    <div class="card-title">② 거래 당사자 확인</div>
+    <span id="partyState" class="state wait">확인대기</span>
   </div>
 
   <div class="notice">
     공인중개사가 거래 당사자의 신분을 직접 확인한 후 체크합니다.
   </div>
 
-
   <div class="check-box">
-
     <label class="check-label">
-
-      <input
-        id="buyerIdentity"
-        type="checkbox"
-      >
-
+      <input id="buyerIdentity" type="checkbox">
       매수자 · 임차인 본인확인 완료
       <span class="req">*</span>
-
     </label>
-
   </div>
 
-
   <div class="check-box">
-
     <label class="check-label">
-
-      <input
-        id="sellerIdentity"
-        type="checkbox"
-      >
-
+      <input id="sellerIdentity" type="checkbox">
       매도자 · 임대인 본인확인 완료
       <span class="req">*</span>
-
     </label>
-
   </div>
 
 </section>
-
 
 
 <!-- ③ 공인중개사 등록자료 -->
@@ -960,87 +754,51 @@ select:focus{
 <section class="card">
 
   <div class="card-head">
-
-    <div class="card-title">
-      ③ 공인중개사 등록자료
-    </div>
-
-    <span
-      id="brokerDocState"
-      class="state wait"
-    >
-      확인중
-    </span>
-
+    <div class="card-title">③ 공인중개사 등록자료</div>
+    <span id="brokerDocState" class="state wait">확인중</span>
   </div>
 
   <div class="notice">
-    1단계에서 등록한 중개사무소 등록증과
-    보증보험 · 공제증서를 자동으로 불러옵니다.
+    1단계에서 등록한 중개사무소 등록증과 보증보험 · 공제증서를 자동으로 불러옵니다.
   </div>
 
-
   <div class="auto-doc-list">
-
 
     <div class="auto-doc">
 
       <div>
-
-        <div class="auto-doc-title">
-          중개사무소 등록증
-        </div>
-
-        <div
-          id="registrationFileName"
-          class="auto-doc-name"
-        >
+        <div class="auto-doc-title">중개사무소 등록증</div>
+        <div id="registrationFileName" class="auto-doc-name">
           불러오는 중
         </div>
-
       </div>
 
-      <span class="auto-badge">
-        자동입력 완료
-      </span>
+      <span class="auto-badge">자동입력 완료</span>
 
       <button
         type="button"
         class="view-btn"
-        onclick="viewBrokerDocument('registration')"
-      >
+        onclick="viewBrokerDocument('registration')">
         보기
       </button>
 
     </div>
 
-
     <div class="auto-doc">
 
       <div>
-
-        <div class="auto-doc-title">
-          보증보험 · 공제증서
-        </div>
-
-        <div
-          id="guaranteeFileName"
-          class="auto-doc-name"
-        >
+        <div class="auto-doc-title">보증보험 · 공제증서</div>
+        <div id="guaranteeFileName" class="auto-doc-name">
           불러오는 중
         </div>
-
       </div>
 
-      <span class="auto-badge">
-        자동입력 완료
-      </span>
+      <span class="auto-badge">자동입력 완료</span>
 
       <button
         type="button"
         class="view-btn"
-        onclick="viewBrokerDocument('guarantee')"
-      >
+        onclick="viewBrokerDocument('guarantee')">
         보기
       </button>
 
@@ -1051,53 +809,30 @@ select:focus{
 </section>
 
 
-
 <!-- ④ 거래서류 등록 -->
 
 <section class="card">
 
   <div class="card-head">
-
-    <div class="card-title">
-      ④ 거래서류 등록
-    </div>
-
-    <span
-      id="documentState"
-      class="state wait"
-    >
-      등록대기
-    </span>
-
+    <div class="card-title">④ 거래서류 등록</div>
+    <span id="documentState" class="state wait">등록대기</span>
   </div>
 
-
-  <div class="section-label">
-    필수서류
-  </div>
-
+  <div class="section-label">필수서류</div>
 
   <div class="doc-list">
-
-
-    <!-- 등기부등본 -->
 
     <div class="doc-row">
 
       <div class="doc-head">
-
         <div class="doc-title">
           등기사항증명서(등기부등본)
           <span class="req">*</span>
         </div>
 
-        <span
-          id="docStatus0"
-          class="doc-status"
-        >
+        <span id="docStatus0" class="doc-status">
           미등록
         </span>
-
       </div>
 
       <div class="doc-warning">
@@ -1106,25 +841,18 @@ select:focus{
 
       <div class="file-area">
 
-        <div
-          id="docName0"
-          class="file-name"
-        >
+        <div id="docName0" class="file-name">
           선택된 파일 없음
         </div>
 
         <label class="file-label">
-
           파일 선택
 
           <input
             type="file"
             class="doc-input"
             data-index="0"
-            data-required="true"
-            accept=".jpg,.jpeg,.png,.pdf"
-          >
-
+            accept=".jpg,.jpeg,.png,.pdf">
         </label>
 
         <button
@@ -1132,8 +860,7 @@ select:focus{
           id="viewDoc0"
           class="view-btn"
           onclick="viewDocument(0)"
-          disabled
-        >
+          disabled>
           보기
         </button>
 
@@ -1142,47 +869,33 @@ select:focus{
     </div>
 
 
-    <!-- 확인설명서 -->
-
     <div class="doc-row">
 
       <div class="doc-head">
-
         <div class="doc-title">
           중개대상물 확인 · 설명서
           <span class="req">*</span>
         </div>
 
-        <span
-          id="docStatus1"
-          class="doc-status"
-        >
+        <span id="docStatus1" class="doc-status">
           미등록
         </span>
-
       </div>
 
       <div class="file-area">
 
-        <div
-          id="docName1"
-          class="file-name"
-        >
+        <div id="docName1" class="file-name">
           선택된 파일 없음
         </div>
 
         <label class="file-label">
-
           파일 선택
 
           <input
             type="file"
             class="doc-input"
             data-index="1"
-            data-required="true"
-            accept=".jpg,.jpeg,.png,.pdf"
-          >
-
+            accept=".jpg,.jpeg,.png,.pdf">
         </label>
 
         <button
@@ -1190,8 +903,7 @@ select:focus{
           id="viewDoc1"
           class="view-btn"
           onclick="viewDocument(1)"
-          disabled
-        >
+          disabled>
           보기
         </button>
 
@@ -1202,55 +914,32 @@ select:focus{
   </div>
 
 
-
   <div class="section-label optional-label">
     선택서류
   </div>
 
-
   <div class="doc-list">
-
-
-    <!-- 토지대장 -->
 
     <div class="doc-row">
 
       <div class="doc-head">
-
-        <div class="doc-title">
-          토지대장
-        </div>
-
-        <span
-          id="docStatus2"
-          class="doc-status"
-        >
-          선택
-        </span>
-
+        <div class="doc-title">토지대장</div>
+        <span id="docStatus2" class="doc-status">선택</span>
       </div>
 
       <div class="file-area">
 
-        <div
-          id="docName2"
-          class="file-name"
-        >
+        <div id="docName2" class="file-name">
           선택된 파일 없음
         </div>
 
         <label class="file-label">
-
           파일 선택
-
           <input
             type="file"
             class="doc-input"
             data-index="2"
-            data-required="false"
-            accept=".jpg,.jpeg,.png,.pdf"
-          >
-
+            accept=".jpg,.jpeg,.png,.pdf">
         </label>
 
         <button
@@ -1258,8 +947,7 @@ select:focus{
           id="viewDoc2"
           class="view-btn"
           onclick="viewDocument(2)"
-          disabled
-        >
+          disabled>
           보기
         </button>
 
@@ -1268,46 +956,26 @@ select:focus{
     </div>
 
 
-    <!-- 건축물대장 -->
-
     <div class="doc-row">
 
       <div class="doc-head">
-
-        <div class="doc-title">
-          건축물대장
-        </div>
-
-        <span
-          id="docStatus3"
-          class="doc-status"
-        >
-          선택
-        </span>
-
+        <div class="doc-title">건축물대장</div>
+        <span id="docStatus3" class="doc-status">선택</span>
       </div>
 
       <div class="file-area">
 
-        <div
-          id="docName3"
-          class="file-name"
-        >
+        <div id="docName3" class="file-name">
           선택된 파일 없음
         </div>
 
         <label class="file-label">
-
           파일 선택
-
           <input
             type="file"
             class="doc-input"
             data-index="3"
-            data-required="false"
-            accept=".jpg,.jpeg,.png,.pdf"
-          >
-
+            accept=".jpg,.jpeg,.png,.pdf">
         </label>
 
         <button
@@ -1315,8 +983,7 @@ select:focus{
           id="viewDoc3"
           class="view-btn"
           onclick="viewDocument(3)"
-          disabled
-        >
+          disabled>
           보기
         </button>
 
@@ -1325,7 +992,6 @@ select:focus{
     </div>
 
   </div>
-
 
 
   <div class="section-label optional-label">
@@ -1333,182 +999,80 @@ select:focus{
   </div>
 
   <div class="optional-note">
-    토지이용계획확인서, 지적도 등 필요한 거래 관련 자료를
-    최대 3개까지 등록할 수 있습니다.
+    토지이용계획확인서, 지적도 등 필요한 거래 관련 자료를 최대 3개까지 등록할 수 있습니다.
   </div>
 
-
-  <div class="doc-list" style="margin-top:10px;">
-
+  <div class="doc-list">
 
     <div class="doc-row">
-
       <div class="doc-head">
-
-        <div class="doc-title">
-          기타서류 1
-        </div>
-
-        <span
-          id="docStatus4"
-          class="doc-status"
-        >
-          선택
-        </span>
-
+        <div class="doc-title">기타서류 1</div>
+        <span id="docStatus4" class="doc-status">선택</span>
       </div>
 
       <div class="file-area">
-
-        <div
-          id="docName4"
-          class="file-name"
-        >
-          선택된 파일 없음
-        </div>
+        <div id="docName4" class="file-name">선택된 파일 없음</div>
 
         <label class="file-label">
-
           파일 선택
-
-          <input
-            type="file"
-            class="doc-input"
-            data-index="4"
-            data-required="false"
-            accept=".jpg,.jpeg,.png,.pdf"
-          >
-
+          <input type="file" class="doc-input" data-index="4"
+            accept=".jpg,.jpeg,.png,.pdf">
         </label>
 
-        <button
-          type="button"
-          id="viewDoc4"
-          class="view-btn"
-          onclick="viewDocument(4)"
-          disabled
-        >
+        <button type="button" id="viewDoc4"
+          class="view-btn" onclick="viewDocument(4)" disabled>
           보기
         </button>
-
       </div>
-
     </div>
 
-
     <div class="doc-row">
-
       <div class="doc-head">
-
-        <div class="doc-title">
-          기타서류 2
-        </div>
-
-        <span
-          id="docStatus5"
-          class="doc-status"
-        >
-          선택
-        </span>
-
+        <div class="doc-title">기타서류 2</div>
+        <span id="docStatus5" class="doc-status">선택</span>
       </div>
 
       <div class="file-area">
-
-        <div
-          id="docName5"
-          class="file-name"
-        >
-          선택된 파일 없음
-        </div>
+        <div id="docName5" class="file-name">선택된 파일 없음</div>
 
         <label class="file-label">
-
           파일 선택
-
-          <input
-            type="file"
-            class="doc-input"
-            data-index="5"
-            data-required="false"
-            accept=".jpg,.jpeg,.png,.pdf"
-          >
-
+          <input type="file" class="doc-input" data-index="5"
+            accept=".jpg,.jpeg,.png,.pdf">
         </label>
 
-        <button
-          type="button"
-          id="viewDoc5"
-          class="view-btn"
-          onclick="viewDocument(5)"
-          disabled
-        >
+        <button type="button" id="viewDoc5"
+          class="view-btn" onclick="viewDocument(5)" disabled>
           보기
         </button>
-
       </div>
-
     </div>
 
-
     <div class="doc-row">
-
       <div class="doc-head">
-
-        <div class="doc-title">
-          기타서류 3
-        </div>
-
-        <span
-          id="docStatus6"
-          class="doc-status"
-        >
-          선택
-        </span>
-
+        <div class="doc-title">기타서류 3</div>
+        <span id="docStatus6" class="doc-status">선택</span>
       </div>
 
       <div class="file-area">
-
-        <div
-          id="docName6"
-          class="file-name"
-        >
-          선택된 파일 없음
-        </div>
+        <div id="docName6" class="file-name">선택된 파일 없음</div>
 
         <label class="file-label">
-
           파일 선택
-
-          <input
-            type="file"
-            class="doc-input"
-            data-index="6"
-            data-required="false"
-            accept=".jpg,.jpeg,.png,.pdf"
-          >
-
+          <input type="file" class="doc-input" data-index="6"
+            accept=".jpg,.jpeg,.png,.pdf">
         </label>
 
-        <button
-          type="button"
-          id="viewDoc6"
-          class="view-btn"
-          onclick="viewDocument(6)"
-          disabled
-        >
+        <button type="button" id="viewDoc6"
+          class="view-btn" onclick="viewDocument(6)" disabled>
           보기
         </button>
-
       </div>
-
     </div>
 
   </div>
 
 </section>
-
 
 
 <!-- ⑤ 플랫폼 서비스 이용료 -->
@@ -1516,39 +1080,26 @@ select:focus{
 <section class="card">
 
   <div class="card-head">
-
-    <div class="card-title">
-      ⑤ 플랫폼 서비스 이용료
-    </div>
-
-    <span
-      id="feeStateTop"
-      class="state wait"
-    >
-      확인대기
-    </span>
-
+    <div class="card-title">⑤ 플랫폼 서비스 이용료</div>
   </div>
 
+  <div class="fee-box">
 
-  <div class="fee-status-box">
-
-    <div
-      id="feeStatus"
-      class="fee-status wait"
-    >
-      입금 확인 대기
+    <div id="feeStatus" class="fee-status">
+      입금 대기
     </div>
 
-    <div class="fee-description">
-      플랫폼 서비스 이용료 입금이 완료되어야
-      전자서명이 활성화됩니다.
-    </div>
+    <button
+      id="feeSmsButton"
+      type="button"
+      class="fee-sms-btn"
+      onclick="sendFeeSms()">
+      문자 발송
+    </button>
 
   </div>
 
 </section>
-
 
 
 <!-- ⑥ 전자계약 -->
@@ -1556,37 +1107,17 @@ select:focus{
 <section class="card">
 
   <div class="card-head">
-
-    <div class="card-title">
-      ⑥ 전자계약서
-    </div>
-
-    <span
-      id="contractState"
-      class="state wait"
-    >
-      작성대기
-    </span>
-
+    <div class="card-title">⑥ 전자계약서</div>
+    <span id="contractState" class="state wait">작성대기</span>
   </div>
 
-
   <div class="contract-box">
-
-    <div
-      id="contractDescription"
-      class="contract-desc"
-    >
-      거래 당사자 확인과 필수서류 등록이 완료되면
-      전자계약서 작성이 가능합니다.
-    </div>
 
     <button
       id="contractButton"
       type="button"
       class="contract-btn"
-      disabled
-    >
+      disabled>
       전자계약서 작성
     </button>
 
@@ -1595,35 +1126,16 @@ select:focus{
 </section>
 
 
-
 <!-- ⑦ 전자서명 -->
 
 <section class="card">
 
   <div class="card-head">
-
-    <div class="card-title">
-      ⑦ 전자서명 현황
-    </div>
-
-    <span
-      id="allSignState"
-      class="state wait"
-    >
-      비활성
-    </span>
-
+    <div class="card-title">⑦ 전자서명 현황</div>
+    <span id="allSignState" class="state wait">비활성</span>
   </div>
-
-
-  <div class="notice">
-    전자계약서 작성 완료와 플랫폼 서비스 이용료 입금 완료 후
-    전자서명이 활성화됩니다.
-  </div>
-
 
   <div class="sign-grid">
-
 
     <div class="sign-card">
 
@@ -1636,23 +1148,18 @@ select:focus{
         type="tel"
         inputmode="numeric"
         maxlength="11"
-        placeholder="휴대전화번호"
-      >
+        placeholder="휴대전화번호">
 
       <button
         id="buyerSignButton"
         type="button"
         class="sign-btn"
         onclick="sendSignSms('buyer')"
-        disabled
-      >
+        disabled>
         문자 발송
       </button>
 
-      <span
-        id="buyerSignState"
-        class="sign-state"
-      >
+      <span id="buyerSignState" class="sign-state">
         서명대기
       </span>
 
@@ -1670,23 +1177,18 @@ select:focus{
         type="tel"
         inputmode="numeric"
         maxlength="11"
-        placeholder="휴대전화번호"
-      >
+        placeholder="휴대전화번호">
 
       <button
         id="sellerSignButton"
         type="button"
         class="sign-btn"
         onclick="sendSignSms('seller')"
-        disabled
-      >
+        disabled>
         문자 발송
       </button>
 
-      <span
-        id="sellerSignState"
-        class="sign-state"
-      >
+      <span id="sellerSignState" class="sign-state">
         서명대기
       </span>
 
@@ -1704,23 +1206,18 @@ select:focus{
         type="tel"
         inputmode="numeric"
         maxlength="11"
-        placeholder="휴대전화번호"
-      >
+        placeholder="휴대전화번호">
 
       <button
         id="brokerSignButton"
         type="button"
         class="sign-btn"
         onclick="sendSignSms('broker')"
-        disabled
-      >
+        disabled>
         문자 발송
       </button>
 
-      <span
-        id="brokerSignState"
-        class="sign-state"
-      >
+      <span id="brokerSignState" class="sign-state">
         서명대기
       </span>
 
@@ -1731,37 +1228,21 @@ select:focus{
 </section>
 
 
-
-<!-- BOTTOM -->
-
 <div class="bottom">
 
-  <button
-    type="button"
-    onclick="saveProgress(true)"
-  >
+  <button type="button" onclick="saveProgress(true)">
     진행내용 저장
   </button>
 
-  <button
-    type="button"
-    class="print"
-    onclick="window.print()"
-  >
+  <button type="button" class="print" onclick="window.print()">
     진행현황 출력
   </button>
 
 </div>
 
-
-<div
-  id="message"
-  class="msg"
-></div>
-
+<div id="message" class="msg"></div>
 
 </div>
-
 
 
 <script>
@@ -1769,194 +1250,101 @@ select:focus{
 
 "use strict";
 
-const $ =
-  id => document.getElementById(id);
+const $ = id => document.getElementById(id);
 
+const params = new URLSearchParams(location.search);
 
-/* =========================
-   URL
-========================= */
-
-const params =
-  new URLSearchParams(
-    location.search
-  );
-
-let roomCode =
-  params.get("code") || "";
-
-
-/* =========================
-   STEP 1 DATA
-========================= */
+let roomCode = params.get("code") || "";
 
 let step1Data = null;
 
 try{
-
   step1Data =
     JSON.parse(
-      localStorage.getItem(
-        "woori_guest_broker_step1"
-      )
+      localStorage.getItem("woori_guest_broker_step1")
     );
-
 }catch(e){
-
   step1Data = null;
-
 }
 
-
-if(
-  !roomCode &&
-  step1Data &&
-  step1Data.roomCode
-){
-
-  roomCode =
-    step1Data.roomCode;
-
+if(!roomCode && step1Data && step1Data.roomCode){
+  roomCode = step1Data.roomCode;
 }
 
-
-$("roomCode").textContent =
-  roomCode || "----";
+$("roomCode").textContent = roomCode || "----";
 
 
-/* =========================
-   FILE STATE
-========================= */
+/* FILES */
 
-const documents =
-[
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null
+const documents = [
+  null,null,null,null,null,null,null
 ];
 
 
-/* =========================
-   BROKER DATA
-========================= */
+/* BROKER */
 
 function loadBrokerData(){
 
   if(!step1Data){
 
-    $("registrationFileName").textContent =
-      "등록자료 없음";
+    $("registrationFileName").textContent = "등록자료 없음";
+    $("guaranteeFileName").textContent = "등록자료 없음";
 
-    $("guaranteeFileName").textContent =
-      "등록자료 없음";
-
-    $("brokerDocState").textContent =
-      "자료없음";
-
+    $("brokerDocState").textContent = "자료없음";
     return;
-
   }
-
 
   $("registrationFileName").textContent =
     step1Data.registrationFileName ||
     step1Data.registrationFile ||
     "중개사무소 등록증";
 
-
   $("guaranteeFileName").textContent =
     step1Data.guaranteeFileName ||
     step1Data.guaranteeFile ||
     "보증보험 · 공제증서";
 
-
-  $("brokerDocState").textContent =
-    "자동입력 완료";
-
-  $("brokerDocState").className =
-    "state ok";
-
+  $("brokerDocState").textContent = "자동입력 완료";
+  $("brokerDocState").className = "state ok";
 
   if(step1Data.mobile){
-
-    $("brokerSignPhone").value =
-      step1Data.mobile;
-
+    $("brokerSignPhone").value = step1Data.mobile;
   }
-
 }
 
 
-/* =========================
-   BROKER DOCUMENT VIEW
-========================= */
+window.viewBrokerDocument = function(type){
 
-window.viewBrokerDocument =
-function(type){
+  if(!step1Data){
+    showError("등록자료가 없습니다.");
+    return;
+  }
 
   let url = "";
 
-
-  if(!step1Data){
-
-    showError(
-      "등록자료가 없습니다."
-    );
-
-    return;
-
-  }
-
-
   if(type === "registration"){
-
     url =
       step1Data.registrationFileUrl ||
       step1Data.registrationUrl ||
       "";
-
   }
 
-
   if(type === "guarantee"){
-
     url =
       step1Data.guaranteeFileUrl ||
       step1Data.guaranteeUrl ||
       "";
-
   }
-
 
   if(url){
-
-    window.open(
-      url,
-      "_blank"
-    );
-
-    return;
-
+    window.open(url,"_blank");
   }
-
-
-  showOk(
-    "등록된 파일 정보가 자동입력되어 있습니다."
-  );
-
 };
 
 
-/* =========================
-   BASIC INFO
-========================= */
+/* BASIC */
 
-const basicIds =
-[
+const basicIds = [
   "tradeType",
   "apartmentName",
   "address",
@@ -1964,77 +1352,40 @@ const basicIds =
   "ho"
 ];
 
+basicIds.forEach(function(id){
 
-basicIds.forEach(
-  function(id){
+  $(id).addEventListener("input",function(){
+    updateStatus();
+    saveProgress(false);
+  });
 
-    $(id).addEventListener(
-      "input",
-      function(){
+  $(id).addEventListener("change",function(){
+    updateStatus();
+    saveProgress(false);
+  });
 
-        updateStatus();
-        saveProgress(false);
-
-      }
-    );
-
-
-    $(id).addEventListener(
-      "change",
-      function(){
-
-        updateStatus();
-        saveProgress(false);
-
-      }
-    );
-
-  }
-);
-
+});
 
 function basicComplete(){
 
-  return basicIds.every(
-    function(id){
-
-      return String(
-        $(id).value || ""
-      ).trim() !== "";
-
-    }
-  );
+  return basicIds.every(function(id){
+    return String($(id).value || "").trim() !== "";
+  });
 
 }
 
 
-/* =========================
-   PARTY CHECK
-========================= */
+/* PARTY */
 
-$("buyerIdentity")
-.addEventListener(
-  "change",
-  function(){
+$("buyerIdentity").addEventListener("change",function(){
+  updateStatus();
+  saveProgress(false);
+});
 
-    updateStatus();
-    saveProgress(false);
-
-  }
-);
-
-
-$("sellerIdentity")
-.addEventListener(
-  "change",
-  function(){
-
-    updateStatus();
-    saveProgress(false);
-
-  }
-);
-
+$("sellerIdentity").addEventListener("change",function(){
+  updateStatus();
+  saveProgress(false);
+});
 
 function partyComplete(){
 
@@ -2046,171 +1397,87 @@ function partyComplete(){
 }
 
 
-/* =========================
-   DOCUMENT UPLOAD
-========================= */
+/* DOCUMENT */
 
-const docInputs =
-  document.querySelectorAll(
-    ".doc-input"
-  );
+document
+.querySelectorAll(".doc-input")
+.forEach(function(input){
 
+  input.addEventListener("change",function(){
 
-docInputs.forEach(
-  function(input){
+    const index = Number(this.dataset.index);
 
-    input.addEventListener(
-      "change",
-      function(){
+    if(!this.files || !this.files.length){
+      return;
+    }
 
-        const index =
-          Number(
-            this.dataset.index
-          );
+    const file = this.files[0];
 
+    const allowed = [
+      "image/jpeg",
+      "image/png",
+      "application/pdf"
+    ];
 
-        if(
-          !this.files ||
-          !this.files.length
-        ){
+    if(!allowed.includes(file.type)){
 
-          return;
+      showError(
+        "JPG, JPEG, PNG, PDF 파일만 등록할 수 있습니다."
+      );
 
-        }
+      this.value = "";
+      return;
+    }
 
+    documents[index] = {
+      name:file.name,
+      type:file.type,
+      url:URL.createObjectURL(file)
+    };
 
-        const file =
-          this.files[0];
+    $("docName" + index).textContent = file.name;
 
+    $("docStatus" + index).textContent = "등록완료";
+    $("docStatus" + index).className = "doc-status ok";
 
-        const allowed =
-        [
-          "image/jpeg",
-          "image/png",
-          "application/pdf"
-        ];
+    $("viewDoc" + index).disabled = false;
 
+    updateStatus();
+    saveProgress(false);
 
-        if(
-          !allowed.includes(
-            file.type
-          )
-        ){
+  });
 
-          showError(
-            "JPG, JPEG, PNG, PDF 파일만 등록할 수 있습니다."
-          );
-
-          this.value = "";
-
-          return;
-
-        }
+});
 
 
-        documents[index] =
-        {
-          name:file.name,
-          type:file.type,
-          url:URL.createObjectURL(file)
-        };
+window.viewDocument = function(index){
 
+  const item = documents[index];
 
-        $("docName" + index).textContent =
-          file.name;
-
-
-        $("docStatus" + index).textContent =
-          "등록완료";
-
-
-        $("docStatus" + index).className =
-          "doc-status ok";
-
-
-        $("viewDoc" + index).disabled =
-          false;
-
-
-        updateStatus();
-
-        saveProgress(false);
-
-      }
-    );
-
-  }
-);
-
-
-/* =========================
-   DOCUMENT VIEW
-========================= */
-
-window.viewDocument =
-function(index){
-
-  const item =
-    documents[index];
-
-
-  if(
-    !item ||
-    !item.url
-  ){
-
-    showError(
-      "등록된 파일을 확인할 수 없습니다."
-    );
-
+  if(!item || !item.url){
+    showError("등록된 파일을 확인할 수 없습니다.");
     return;
-
   }
 
-
-  window.open(
-    item.url,
-    "_blank"
-  );
+  window.open(item.url,"_blank");
 
 };
 
 
-/* =========================
-   REQUIRED DOCUMENT CHECK
-========================= */
-
 function requiredDocumentsComplete(){
 
-  return (
-    !!documents[0] &&
-    !!documents[1]
-  );
+  return !!documents[0] && !!documents[1];
 
 }
 
 
-/* =========================
-   FEE STATUS
-========================= */
-
-/*
-백엔드에서 실제 입금이 확인되면
-woori_fee_paid_거래코드 값을 true로 저장하면 됨.
-
-예:
-localStorage.setItem(
-  "woori_fee_paid_" + roomCode,
-  "true"
-);
-*/
+/* PLATFORM FEE */
 
 function feePaid(){
 
   return (
     localStorage.getItem(
-      "woori_fee_paid_" +
-      roomCode
+      "woori_fee_paid_" + roomCode
     ) === "true"
   );
 
@@ -2221,42 +1488,52 @@ function updateFeeStatus(){
 
   if(feePaid()){
 
-    $("feeStatus").textContent =
-      "입금 완료";
+    $("feeStatus").textContent = "입금 완료";
+    $("feeStatus").className = "fee-status ok";
 
-    $("feeStatus").className =
-      "fee-status";
-
-
-    $("feeStateTop").textContent =
-      "입금 완료";
-
-    $("feeStateTop").className =
-      "state ok";
+    $("feeSmsButton").style.display = "none";
 
   }else{
 
-    $("feeStatus").textContent =
-      "입금 확인 대기";
+    $("feeStatus").textContent = "입금 대기";
+    $("feeStatus").className = "fee-status";
 
-    $("feeStatus").className =
-      "fee-status wait";
-
-
-    $("feeStateTop").textContent =
-      "확인대기";
-
-    $("feeStateTop").className =
-      "state wait";
+    $("feeSmsButton").style.display = "";
 
   }
 
 }
 
 
-/* =========================
-   CONTRACT
-========================= */
+/* 매수자·임차인 이용료 안내 문자 */
+
+window.sendFeeSms = function(){
+
+  const phone =
+    $("buyerSignPhone").value.trim();
+
+  if(!validPhone(phone)){
+
+    showError(
+      "매수자 · 임차인 휴대전화번호를 입력해 주세요."
+    );
+
+    $("buyerSignPhone").focus();
+    return;
+  }
+
+  /*
+    실제 문자 발송 API 연결 위치
+  */
+
+  showOk(
+    "매수자 · 임차인에게 이용료 안내 문자를 발송했습니다."
+  );
+
+};
+
+
+/* CONTRACT */
 
 function contractReady(){
 
@@ -2273,23 +1550,18 @@ function contractCompleted(){
 
   let data = null;
 
-
   try{
 
     data =
       JSON.parse(
         localStorage.getItem(
-          "woori_contract_" +
-          roomCode
+          "woori_contract_" + roomCode
         )
       );
 
   }catch(e){
-
     data = null;
-
   }
-
 
   return !!(
     data &&
@@ -2299,38 +1571,22 @@ function contractCompleted(){
 }
 
 
-$("contractButton")
-.addEventListener(
-  "click",
-  function(){
+$("contractButton").addEventListener("click",function(){
 
-    if(!contractReady()){
-
-      showError(
-        "거래 당사자 확인과 필수서류 등록을 완료해 주세요."
-      );
-
-      return;
-
-    }
-
-
-    saveProgress(false);
-
-
-    location.href =
-      "/electronic-contract.html?code=" +
-      encodeURIComponent(
-        roomCode
-      );
-
+  if(!contractReady()){
+    return;
   }
-);
+
+  saveProgress(false);
+
+  location.href =
+    "/electronic-contract.html?code=" +
+    encodeURIComponent(roomCode);
+
+});
 
 
-/* =========================
-   SIGN ACTIVE
-========================= */
+/* SIGNATURE */
 
 function signatureAvailable(){
 
@@ -2344,127 +1600,76 @@ function signatureAvailable(){
 
 function updateSignatureButtons(){
 
-  const enabled =
-    signatureAvailable();
+  const enabled = signatureAvailable();
 
-
-  $("buyerSignButton").disabled =
-    !enabled;
-
-  $("sellerSignButton").disabled =
-    !enabled;
-
-  $("brokerSignButton").disabled =
-    !enabled;
-
+  $("buyerSignButton").disabled = !enabled;
+  $("sellerSignButton").disabled = !enabled;
+  $("brokerSignButton").disabled = !enabled;
 
   if(enabled){
 
-    $("allSignState").textContent =
-      "서명가능";
+    $("allSignState").textContent = "서명가능";
+    $("allSignState").className = "state ok";
 
-    $("allSignState").className =
-      "state ok";
-
-    $("progressSign")
-      .classList
-      .add("active");
+    $("progressSign").classList.add("active");
 
   }else{
 
-    $("allSignState").textContent =
-      "비활성";
-
-    $("allSignState").className =
-      "state wait";
+    $("allSignState").textContent = "비활성";
+    $("allSignState").className = "state wait";
 
   }
 
 }
 
-
-/* =========================
-   SIGN SMS
-========================= */
 
 [
   "buyerSignPhone",
   "sellerSignPhone",
   "brokerSignPhone"
 ]
-.forEach(
-  function(id){
+.forEach(function(id){
 
-    $(id).addEventListener(
-      "input",
-      function(){
+  $(id).addEventListener("input",function(){
 
-        this.value =
-          this.value
-          .replace(/\D/g,"")
-          .slice(0,11);
+    this.value =
+      this.value
+      .replace(/\D/g,"")
+      .slice(0,11);
 
-      }
-    );
+    saveProgress(false);
 
-  }
-);
+  });
+
+});
 
 
 function validPhone(phone){
 
-  return /^01[016789]\d{7,8}$/
-    .test(phone);
+  return /^01[016789]\d{7,8}$/.test(phone);
 
 }
 
 
-window.sendSignSms =
-function(type){
+window.sendSignSms = function(type){
 
   if(!signatureAvailable()){
-
-    showError(
-      "전자계약서 작성 완료와 플랫폼 서비스 이용료 입금 완료 후 전자서명이 활성화됩니다."
-    );
-
     return;
-
   }
-
 
   let phone = "";
 
-
   if(type === "buyer"){
-
-    phone =
-      $("buyerSignPhone")
-      .value
-      .trim();
-
+    phone = $("buyerSignPhone").value.trim();
   }
-
 
   if(type === "seller"){
-
-    phone =
-      $("sellerSignPhone")
-      .value
-      .trim();
-
+    phone = $("sellerSignPhone").value.trim();
   }
-
 
   if(type === "broker"){
-
-    phone =
-      $("brokerSignPhone")
-      .value
-      .trim();
-
+    phone = $("brokerSignPhone").value.trim();
   }
-
 
   if(!validPhone(phone)){
 
@@ -2473,81 +1678,50 @@ function(type){
     );
 
     return;
-
   }
 
+  /*
+    실제 전자서명 문자 API 연결 위치
+  */
 
   showOk(
-    "전자서명 요청 문자 발송이 완료되었습니다."
+    "전자서명 요청 문자를 발송했습니다."
   );
 
 };
 
 
-/* =========================
-   SIGN STATUS
-========================= */
+/* SIGN STATUS */
 
 function loadSignStatus(){
 
   let data = null;
-
 
   try{
 
     data =
       JSON.parse(
         localStorage.getItem(
-          "woori_contract_" +
-          roomCode
+          "woori_contract_" + roomCode
         )
       );
 
   }catch(e){
-
     data = null;
-
   }
 
-
   const buyerSigned =
-    !!(
-      data &&
-      data.buyerSigned
-    );
-
+    !!(data && data.buyerSigned);
 
   const sellerSigned =
-    !!(
-      data &&
-      data.sellerSigned
-    );
-
+    !!(data && data.sellerSigned);
 
   const brokerSigned =
-    !!(
-      data &&
-      data.brokerSigned
-    );
+    !!(data && data.brokerSigned);
 
-
-  setSign(
-    "buyerSignState",
-    buyerSigned
-  );
-
-
-  setSign(
-    "sellerSignState",
-    sellerSigned
-  );
-
-
-  setSign(
-    "brokerSignState",
-    brokerSigned
-  );
-
+  setSign("buyerSignState",buyerSigned);
+  setSign("sellerSignState",sellerSigned);
+  setSign("brokerSignState",brokerSigned);
 
   if(
     buyerSigned &&
@@ -2555,207 +1729,125 @@ function loadSignStatus(){
     brokerSigned
   ){
 
-    $("allSignState").textContent =
-      "서명완료";
+    $("allSignState").textContent = "서명완료";
+    $("allSignState").className = "state ok";
 
-    $("allSignState").className =
-      "state ok";
-
-
-    $("progressComplete")
-      .classList
-      .add("active");
+    $("progressComplete").classList.add("active");
 
   }
 
 }
 
 
-function setSign(
-  id,
-  complete
-){
+function setSign(id,complete){
 
   if(complete){
 
-    $(id).textContent =
-      "서명완료";
-
-    $(id).className =
-      "sign-state ok";
+    $(id).textContent = "서명완료";
+    $(id).className = "sign-state ok";
 
   }else{
 
-    $(id).textContent =
-      "서명대기";
-
-    $(id).className =
-      "sign-state";
+    $(id).textContent = "서명대기";
+    $(id).className = "sign-state";
 
   }
 
 }
 
 
-/* =========================
-   UPDATE ALL STATUS
-========================= */
+/* UPDATE */
 
 function updateStatus(){
 
-  const basicOk =
-    basicComplete();
+  if(basicComplete()){
 
-  const partyOk =
-    partyComplete();
-
-  const docsOk =
-    requiredDocumentsComplete();
-
-
-  if(basicOk){
-
-    $("basicState").textContent =
-      "작성완료";
-
-    $("basicState").className =
-      "state ok";
+    $("basicState").textContent = "작성완료";
+    $("basicState").className = "state ok";
 
   }else{
 
-    $("basicState").textContent =
-      "작성중";
-
-    $("basicState").className =
-      "state wait";
+    $("basicState").textContent = "작성중";
+    $("basicState").className = "state wait";
 
   }
 
 
-  if(partyOk){
+  if(partyComplete()){
 
-    $("partyState").textContent =
-      "확인완료";
-
-    $("partyState").className =
-      "state ok";
+    $("partyState").textContent = "확인완료";
+    $("partyState").className = "state ok";
 
   }else{
 
-    $("partyState").textContent =
-      "확인대기";
-
-    $("partyState").className =
-      "state wait";
+    $("partyState").textContent = "확인대기";
+    $("partyState").className = "state wait";
 
   }
 
 
-  if(docsOk){
+  if(requiredDocumentsComplete()){
 
-    $("documentState").textContent =
-      "필수서류 완료";
+    $("documentState").textContent = "필수서류 완료";
+    $("documentState").className = "state ok";
 
-    $("documentState").className =
-      "state ok";
-
-
-    $("progressDocs")
-      .classList
-      .add("active");
+    $("progressDocs").classList.add("active");
 
   }else{
 
-    $("documentState").textContent =
-      "등록대기";
-
-    $("documentState").className =
-      "state wait";
+    $("documentState").textContent = "등록대기";
+    $("documentState").className = "state wait";
 
   }
 
 
   if(contractCompleted()){
 
-    $("contractState").textContent =
-      "작성완료";
+    $("contractState").textContent = "작성완료";
+    $("contractState").className = "state ok";
 
-    $("contractState").className =
-      "state ok";
+    $("contractButton").disabled = false;
+    $("contractButton").textContent = "전자계약서 보기";
 
-
-    $("contractButton").disabled =
-      false;
-
-
-    $("contractButton").textContent =
-      "전자계약서 보기";
-
-
-    $("progressContract")
-      .classList
-      .add("active");
+    $("progressContract").classList.add("active");
 
   }else if(contractReady()){
 
-    $("contractState").textContent =
-      "작성가능";
+    $("contractState").textContent = "작성가능";
+    $("contractState").className = "state ok";
 
-    $("contractState").className =
-      "state ok";
-
-
-    $("contractButton").disabled =
-      false;
-
-
-    $("contractButton").textContent =
-      "전자계약서 작성";
+    $("contractButton").disabled = false;
+    $("contractButton").textContent = "전자계약서 작성";
 
   }else{
 
-    $("contractState").textContent =
-      "작성대기";
+    $("contractState").textContent = "작성대기";
+    $("contractState").className = "state wait";
 
-    $("contractState").className =
-      "state wait";
-
-
-    $("contractButton").disabled =
-      true;
+    $("contractButton").disabled = true;
 
   }
 
-
   updateFeeStatus();
-
   updateSignatureButtons();
-
   loadSignStatus();
 
 }
 
 
-/* =========================
-   SAVE
-========================= */
+/* SAVE */
 
-window.saveProgress =
-function(showMessage){
+window.saveProgress = function(showMessage){
 
   if(!roomCode){
     return;
   }
 
+  const data = {
 
-  const data =
-  {
+    roomCode:roomCode,
 
-    roomCode:
-      roomCode,
-
-    tradeType:
-      $("tradeType").value,
+    tradeType:$("tradeType").value,
 
     apartmentName:
       $("apartmentName").value.trim(),
@@ -2785,75 +1877,57 @@ function(showMessage){
       $("brokerSignPhone").value.trim(),
 
     documents:
-      documents.map(
-        function(item){
+      documents.map(function(item){
 
-          if(!item){
-            return null;
-          }
-
-          return {
-            name:item.name,
-            type:item.type
-          };
-
+        if(!item){
+          return null;
         }
-      ),
 
-    savedAt:
-      new Date().toISOString()
+        return {
+          name:item.name,
+          type:item.type
+        };
+
+      }),
+
+    savedAt:new Date().toISOString()
 
   };
 
-
   localStorage.setItem(
-    "woori_trade_room_" +
-    roomCode,
+    "woori_trade_room_" + roomCode,
     JSON.stringify(data)
   );
 
-
   if(showMessage){
-
-    showOk(
-      "진행내용이 저장되었습니다."
-    );
-
+    showOk("진행내용이 저장되었습니다.");
   }
 
 };
 
 
-/* =========================
-   LOAD
-========================= */
+/* LOAD */
 
 function loadProgress(){
 
   let data = null;
-
 
   try{
 
     data =
       JSON.parse(
         localStorage.getItem(
-          "woori_trade_room_" +
-          roomCode
+          "woori_trade_room_" + roomCode
         )
       );
 
   }catch(e){
-
     data = null;
-
   }
-
 
   if(!data){
     return;
   }
-
 
   $("tradeType").value =
     data.tradeType || "";
@@ -2876,13 +1950,11 @@ function loadProgress(){
   $("sellerIdentity").checked =
     !!data.sellerIdentity;
 
-
   $("buyerSignPhone").value =
     data.buyerSignPhone || "";
 
   $("sellerSignPhone").value =
     data.sellerSignPhone || "";
-
 
   $("brokerSignPhone").value =
     data.brokerSignPhone ||
@@ -2892,117 +1964,76 @@ function loadProgress(){
       : ""
     );
 
+  if(Array.isArray(data.documents)){
 
-  if(
-    Array.isArray(
-      data.documents
-    )
-  ){
+    data.documents.forEach(function(item,index){
 
-    data.documents.forEach(
-      function(item,index){
-
-        if(!item){
-          return;
-        }
-
-
-        documents[index] =
-        {
-          name:item.name,
-          type:item.type,
-          url:""
-        };
-
-
-        $("docName" + index).textContent =
-          item.name;
-
-
-        $("docStatus" + index).textContent =
-          "등록완료";
-
-
-        $("docStatus" + index).className =
-          "doc-status ok";
-
+      if(!item){
+        return;
       }
-    );
+
+      documents[index] = {
+        name:item.name,
+        type:item.type,
+        url:""
+      };
+
+      $("docName" + index).textContent =
+        item.name;
+
+      $("docStatus" + index).textContent =
+        "등록완료";
+
+      $("docStatus" + index).className =
+        "doc-status ok";
+
+    });
 
   }
 
 }
 
 
-/* =========================
-   MESSAGE
-========================= */
+/* MESSAGE */
 
 function showOk(text){
 
-  $("message").className =
-    "msg ok";
-
-  $("message").textContent =
-    text;
+  $("message").className = "msg ok";
+  $("message").textContent = text;
 
 }
 
 
 function showError(text){
 
-  $("message").className =
-    "msg error";
-
-  $("message").textContent =
-    text;
+  $("message").className = "msg error";
+  $("message").textContent = text;
 
 }
 
 
-/* =========================
-   AUTO REFRESH
-========================= */
+/* REFRESH */
 
-window.addEventListener(
-  "focus",
-  function(){
+window.addEventListener("focus",function(){
+  updateStatus();
+});
 
+window.addEventListener("storage",function(event){
+
+  if(
+    event.key === "woori_contract_" + roomCode ||
+    event.key === "woori_fee_paid_" + roomCode
+  ){
     updateStatus();
-
   }
-);
+
+});
 
 
-window.addEventListener(
-  "storage",
-  function(event){
-
-    if(
-      event.key ===
-      "woori_contract_" +
-      roomCode ||
-      event.key ===
-      "woori_fee_paid_" +
-      roomCode
-    ){
-
-      updateStatus();
-
-    }
-
-  }
-);
-
-
-/* =========================
-   START
-========================= */
+/* START */
 
 loadBrokerData();
-
 loadProgress();
-
 updateStatus();
 
 })();
