@@ -1,52 +1,70 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <!doctype html>
-<html lang="ko">
-<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#1165d7">
+
 <title>우리아파트 안심거래</title>
 
 <link rel="stylesheet" href="/assets/style.css">
-
-<!-- Vercel Web Analytics -->
-<script>
-  window.va = window.va || function () {
-    (window.vaq = window.vaq || []).push(arguments);
-  };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
+<link rel="manifest" href="/manifest.webmanifest">
 
 <style>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#1165d7">
-<title>우리아파트 안심거래</title>
-<link rel="stylesheet" href="/assets/style.css">
 
-<style>
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;min-height:100%}
+/* =========================================
+   공통
+========================================= */
+
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  width:100%;
+  min-width:0;
+  min-height:100%;
+  overflow-x:hidden;
+}
 
 body{
   background:#f4f6f8;
   color:#172b3d;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Noto Sans KR",
+    Arial,
+    sans-serif;
 }
 
-a{color:inherit;text-decoration:none}
-button,input{font:inherit}
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input{
+  font:inherit;
+}
 
 .wrap{
   width:100%;
   max-width:1180px;
+  min-width:0;
   margin:0 auto;
   padding:0 20px 46px;
 }
 
-/* HEADER */
+
+/* =========================================
+   HEADER
+========================================= */
 
 .header{
   min-height:78px;
@@ -65,7 +83,9 @@ button,input{font:inherit}
   color:#173f67;
 }
 
-.logo-mark{font-size:28px}
+.logo-mark{
+  font-size:28px;
+}
 
 .logo strong{
   display:block;
@@ -105,7 +125,7 @@ button,input{font:inherit}
   position:relative;
 }
 
-.install-btn .phone:after{
+.install-btn .phone::after{
   content:"";
   position:absolute;
   bottom:3px;
@@ -123,7 +143,14 @@ button,input{font:inherit}
   color:#24577e;
 }
 
+
+/* =========================================
+   메뉴 버튼
+========================================= */
+
 .menu{
+  position:relative;
+  z-index:1002;
   width:42px;
   height:42px;
   border:1px solid #d8e3ec;
@@ -135,321 +162,19 @@ button,input{font:inherit}
   justify-content:center;
   gap:5px;
   cursor:pointer;
-  position:relative;
-  z-index:1002;
 }
 
 .menu span{
-  display:block;
   width:20px;
   height:2px;
-  background:#173f67;
   border-radius:2px;
-}
-
-/* HERO */
-
-.hero{
-  border-radius:24px;
-  background:linear-gradient(135deg,#eef6ff 0%,#fff 68%);
-  border:1px solid #dceaf7;
-  padding:50px 48px;
-  box-shadow:0 8px 24px rgba(23,63,103,.06);
-}
-
-.hero h1{
-  margin:0;
-  font-size:42px;
-  line-height:1.25;
-  letter-spacing:-1.6px;
-  color:#132f4c;
-}
-
-.hero h1 em{
-  font-style:normal;
-  color:#1165d7;
-}
-
-.hero p{
-  margin:22px 0 0;
-  font-size:18px;
-  line-height:1.7;
-  color:#526779;
-}
-
-/* 거래 */
-
-.trade{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-  margin-top:20px;
-}
-
-.trade a{
-  min-height:142px;
-  border-radius:18px;
-  padding:25px 24px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  border:1px solid #dce6ee;
-  background:#fff;
-  box-shadow:0 5px 18px rgba(15,23,42,.05);
-}
-
-.trade b{
-  font-size:21px;
-}
-
-.trade .sale{border-top:4px solid #1165d7}
-.trade .jeonse{border-top:4px solid #178a72}
-.trade .monthly{border-top:4px solid #7357b5}
-
-/* 기존 이용자 */
-
-.return-access{
-  margin-top:18px;
-  padding:18px;
-  border:1px solid #dbe5ee;
-  border-radius:14px;
-  background:#fff;
-}
-
-.compact-access{
-  margin-top:10px;
-  padding:10px 12px;
-}
-
-.compact-access-line{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.return-access-desc{
-  flex:1;
-  margin:0;
-  color:#5d7080;
-  font-size:14px;
-  line-height:1.35;
-}
-
-.return-access-row{
-  display:flex;
-  gap:5px;
-}
-
-.return-access-row input{
-  width:230px;
-  height:38px;
-  padding:0 9px;
-  border:1px solid #c9d7e3;
-  border-radius:10px;
-  font-size:18px;
-}
-
-.return-access-row button{
-  width:48px;
-  height:38px;
-  border:0;
-  border-radius:10px;
-  background:#1165d7;
-  color:#fff;
-  font-size:11px;
-  font-weight:900;
-  cursor:pointer;
-}
-
-/* PROCESS */
-
-.process,.promise{
-  margin-top:46px;
-}
-
-.title{
-  margin:0 0 22px;
-  font-size:26px;
-  color:#172b3d;
-}
-
-.steps{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:12px;
-  background:#fff;
-  border:1px solid #dde7ef;
-  border-radius:20px;
-  padding:25px 18px;
-}
-
-.step{
-  text-align:center;
-  padding:8px 5px;
-}
-
-.circle{
-  width:54px;
-  height:54px;
-  margin:0 auto 7px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#eef6ff;
-  font-size:25px;
-}
-
-.num{
-  font-size:12px;
-  font-weight:900;
-  color:#1165d7;
-  margin-bottom:5px;
-}
-
-.step b{font-size:16px}
-
-.step p{
-  margin:9px 0 0;
-  font-size:13px;
-  line-height:1.55;
-  color:#6a7c8c;
-}
-
-/* 약속 */
-
-.promise-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:14px;
-}
-
-.card{
-  background:#fff;
-  border:1px solid #dce6ee;
-  border-radius:18px;
-  padding:22px 18px;
-  min-height:245px;
-  display:flex;
-  flex-direction:column;
-}
-
-.ci{
-  width:45px;
-  height:45px;
-  border-radius:13px;
-  background:#eef6ff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:23px;
-  margin-bottom:14px;
-}
-
-.card h3{
-  margin:0;
-  font-size:19px;
-  line-height:1.35;
-  color:#173f67;
-}
-
-.card p{
-  margin:11px 0 16px;
-  font-size:13px;
-  line-height:1.6;
-  color:#667b8d;
-}
-
-.more{
-  margin-top:auto;
-  font-size:13px;
-  font-weight:800;
-  color:#1165d7;
-}
-
-/* 공인중개사 */
-
-.broker{
-  margin-top:24px;
-  background:#eaf4ff;
-  border:1px solid #cfe2f4;
-  border-radius:20px;
-  padding:22px 24px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:22px;
-}
-
-.broker-left{
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
-.person{
-  width:58px;
-  height:58px;
-  border-radius:50%;
-  background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-}
-
-.broker h2{
-  margin:0 0 6px;
-  font-size:20px;
-  color:#173f67;
-}
-
-.broker p{
-  margin:0;
-  font-size:14px;
-  line-height:1.55;
-  color:#5d7386;
-}
-
-.broker-actions{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-}
-
-.broker-btn{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-width:112px;
-  min-height:56px;
-  padding:10px 12px;
-  border-radius:12px;
-  text-align:center;
-  font-size:13px;
-  line-height:1.35;
-  font-weight:800;
-}
-
-.guide-btn{
-  border:1px solid #bfd5ea;
-  background:#fff;
-  color:#24577e;
-}
-
-.signup-btn{
-  border:1px solid #1165d7;
-  background:#1165d7;
-  color:#fff;
-}
-
-.login-btn{
-  border:1px solid #173f67;
   background:#173f67;
-  color:#fff;
 }
 
-/* MENU */
+
+/* =========================================
+   햄버거 메뉴
+========================================= */
 
 .mobile-menu-backdrop{
   display:none;
@@ -485,6 +210,7 @@ button,input{font:inherit}
   margin:0 0 18px;
   padding-bottom:14px;
   border-bottom:1px solid #e5e7eb;
+  color:#111827;
   font-size:20px;
   font-weight:900;
 }
@@ -499,11 +225,13 @@ button,input{font:inherit}
   display:flex;
   align-items:center;
   justify-content:space-between;
+  width:100%;
   min-height:54px;
   padding:13px 15px;
   border:1px solid #e2e8f0;
   border-radius:12px;
   background:#fff;
+  color:#172033;
   font-size:16px;
   font-weight:800;
 }
@@ -524,857 +252,1564 @@ body.menu-open{
   overflow:hidden;
 }
 
+
+/* =========================================
+   메인 문구
+========================================= */
+
+.hero{
+  width:100%;
+  min-width:0;
+  padding:52px 38px;
+  border-radius:20px;
+  background:
+    linear-gradient(
+      135deg,
+      #f5faff 0%,
+      #eef6ff 100%
+    );
+  border:1px solid #dce9f5;
+}
+
+.hero-text h1{
+  margin:0;
+  color:#172b3d;
+  font-size:42px;
+  line-height:1.3;
+  font-weight:900;
+  letter-spacing:-1.5px;
+}
+
+.hero-text h1 em{
+  color:#1165d7;
+  font-style:normal;
+}
+
+.hero-text p{
+  margin:18px 0 0;
+  color:#607485;
+  font-size:18px;
+  line-height:1.6;
+  font-weight:600;
+}
+
+
+/* =========================================
+   매매 / 전세 / 월세
+   원상복구
+========================================= */
+
+.trade{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin-top:20px;
+}
+
+.trade a{
+  min-width:0;
+  min-height:150px;
+  padding:22px 20px;
+  border:1px solid #dce6ef;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 5px 16px rgba(31,65,92,.06);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  transition:.18s ease;
+}
+
+.trade a:hover{
+  transform:translateY(-2px);
+  box-shadow:0 9px 22px rgba(31,65,92,.10);
+}
+
+.trade .ico{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:46px;
+  height:46px;
+  margin-bottom:13px;
+  border-radius:13px;
+  background:#eef6ff;
+  font-size:23px;
+}
+
+.trade b{
+  display:block;
+  margin-bottom:7px;
+  color:#173f67;
+  font-size:19px;
+  line-height:1.35;
+  font-weight:900;
+}
+
+.trade a > span:last-child{
+  display:block;
+  color:#718391;
+  font-size:13px;
+  line-height:1.5;
+  font-weight:600;
+}
+
+.trade .sale{
+  border-top:4px solid #1165d7;
+}
+
+.trade .jeonse{
+  border-top:4px solid #3978c5;
+}
+
+.trade .monthly{
+  border-top:4px solid #6594ce;
+}
+
+
+/* =========================================
+   나의 제안 / 거래 진행
+   글씨만 확실하게 축소
+========================================= */
+
+.return-access{
+  width:100%;
+  margin-top:18px;
+  padding:18px;
+  border:1px solid #dbe5ee;
+  border-radius:14px;
+  background:#fff;
+}
+
+.access-panels{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.access-panel{
+  min-width:0;
+  padding:4px 8px;
+}
+
+.transaction-panel{
+  border-left:1px solid #e1e8ee;
+  padding-left:20px;
+}
+
+.return-access-title{
+  margin:0 0 4px;
+  color:#173f67;
+
+  /* 축소 */
+  font-size:15px;
+
+  line-height:1.25;
+  font-weight:900;
+}
+
+.transaction-panel .return-access-title{
+  color:#287a5a;
+}
+
+.return-access-desc{
+  margin:0 0 8px;
+  color:#5d7080;
+
+  /* 축소 */
+  font-size:10px;
+
+  line-height:1.35;
+}
+
+.return-access-row{
+  display:flex;
+  gap:6px;
+  width:100%;
+}
+
+.return-access-row input{
+  flex:1 1 auto;
+  min-width:0;
+  width:0;
+
+  /* 높이도 약간 축소 */
+  height:42px;
+
+  padding:0 10px;
+  border:1px solid #c9d7e3;
+  border-radius:9px;
+  background:#fff;
+  color:#172033;
+
+  /* 확실하게 축소 */
+  font-size:11px;
+
+  line-height:1.2;
+  font-weight:700;
+  outline:none;
+}
+
+.return-access-row input::placeholder{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:-0.4px;
+}
+
+.return-access-row input:focus{
+  border-color:#1165d7;
+  box-shadow:0 0 0 3px rgba(17,101,215,.10);
+}
+
+.return-access-row button{
+  flex:0 0 62px;
+
+  /* 높이 축소 */
+  height:42px;
+
+  border:0;
+  border-radius:9px;
+  background:#1165d7;
+  color:#fff;
+
+  /* 축소 */
+  font-size:11px;
+
+  line-height:1;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.transaction-panel .return-access-row input:focus{
+  border-color:#2f8c68;
+  box-shadow:0 0 0 3px rgba(47,140,104,.10);
+}
+
+.transaction-panel .return-access-row button{
+  background:#2f8c68;
+}
+
+.return-access-help{
+  margin:8px 2px 0;
+  color:#6b7c89;
+
+  /* 크게 축소 */
+  font-size:9px;
+
+  line-height:1.45;
+  word-break:keep-all;
+  overflow-wrap:anywhere;
+}
+
+
+/* =========================================
+   공통 섹션 제목
+========================================= */
+
+.title{
+  margin:38px 0 18px;
+  color:#173f67;
+  font-size:25px;
+  line-height:1.4;
+  font-weight:900;
+  text-align:center;
+}
+
+
+/* =========================================
+   진행 절차
+========================================= */
+
+.process{
+  width:100%;
+  min-width:0;
+}
+
+.steps{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:14px;
+}
+
+.step{
+  min-width:0;
+  min-height:190px;
+  padding:20px 16px;
+  border:1px solid #dce6ef;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 5px 16px rgba(31,65,92,.06);
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+}
+
+.step .circle{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:50px;
+  height:50px;
+  margin-bottom:8px;
+  border-radius:14px;
+  background:#eef6ff;
+  font-size:24px;
+}
+
+.step .num{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:23px;
+  height:23px;
+  margin-bottom:8px;
+  border-radius:50%;
+  background:#1165d7;
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+}
+
+.step b{
+  display:block;
+  color:#173f67;
+  font-size:16px;
+  line-height:1.4;
+  font-weight:900;
+}
+
+.step p{
+  margin:9px 0 0;
+  color:#718391;
+  font-size:13px;
+  line-height:1.55;
+  font-weight:600;
+}
+
+
+/* =========================================
+   우리아파트 안심거래 약속
+========================================= */
+
+.promise{
+  width:100%;
+  min-width:0;
+}
+
+.promise-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:14px;
+}
+
+.promise-grid .card{
+  min-width:0;
+  min-height:190px;
+  padding:20px 16px;
+  border:1px solid #dce6ef;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 5px 16px rgba(31,65,92,.06);
+  text-align:center;
+}
+
+.promise-grid .ci{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:50px;
+  height:50px;
+  margin:0 auto 12px;
+  border-radius:14px;
+  background:#eef6ff;
+  font-size:24px;
+}
+
+.promise-grid h3{
+  margin:0;
+  color:#173f67;
+  font-size:16px;
+  line-height:1.4;
+  font-weight:900;
+}
+
+.promise-grid p{
+  margin:9px 0 0;
+  color:#718391;
+  font-size:13px;
+  line-height:1.55;
+  font-weight:600;
+}
+
+.promise-grid .more{
+  display:block;
+  margin-top:12px;
+  color:#1165d7;
+  font-size:12px;
+  font-weight:800;
+}
+
+
+/* =========================================
+   공인중개사
+========================================= */
+
+.broker{
+  width:100%;
+  min-width:0;
+  margin-top:28px;
+  padding:18px;
+  border:1px solid #dce6ef;
+  border-radius:16px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.broker-left{
+  min-width:0;
+  flex:1 1 auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.person{
+  flex:0 0 auto;
+  font-size:32px;
+}
+
+.broker h2{
+  margin:0;
+  color:#173f67;
+  font-size:16px;
+  line-height:1.3;
+  font-weight:900;
+  word-break:keep-all;
+}
+
+.broker p{
+  margin:5px 0 0;
+  color:#718391;
+  font-size:11px;
+  line-height:1.45;
+  word-break:keep-all;
+}
+
+.broker-actions{
+  flex:0 1 420px;
+  min-width:0;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:6px;
+}
+
+.broker-actions .broker-btn{
+  min-width:0;
+  min-height:50px;
+  padding:7px 5px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:11px;
+  line-height:1.25;
+  font-weight:800;
+  white-space:normal;
+}
+
+.guide-btn{
+  border:1px solid #bfd5ea;
+  background:#fff;
+  color:#24577e;
+}
+
+.signup-btn{
+  border:1px solid #1165d7;
+  background:#1165d7;
+  color:#fff;
+}
+
+.login-btn{
+  border:1px solid #173f67;
+  background:#173f67;
+  color:#fff;
+}
+
+
+/* =========================================
+   하단
+========================================= */
+
 .footer{
   margin-top:36px;
-  padding:24px 4px 0;
-  border-top:1px solid #dce5ec;
-  color:#718291;
+  padding:22px 0;
+  border-top:1px solid #dce5ed;
+  text-align:center;
+  color:#80909c;
   font-size:12px;
   line-height:1.8;
-  display:flex;
-  justify-content:space-between;
-  flex-wrap:wrap;
 }
 
-.registry-title span{
-  white-space:nowrap;
-}
 
-/* 반응형 */
+/* =========================================
+   태블릿
+========================================= */
 
-@media(max-width:900px){
-
-  .wrap{
-    padding-left:14px;
-    padding-right:14px;
-  }
-
-  .hero{
-    padding:32px 22px;
-  }
-
-  .hero h1{
-    font-size:29px;
-  }
-
-  .trade{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:7px;
-  }
-
-  .trade a{
-    min-height:70px;
-    padding:10px 5px;
-    text-align:center;
-  }
-
-  .trade b{
-    font-size:14px;
-  }
+@media(max-width:1000px){
 
   .steps{
-    grid-template-columns:repeat(5,minmax(0,1fr));
-    gap:5px;
-    padding:15px 6px;
+    grid-template-columns:repeat(3,minmax(0,1fr));
   }
 
   .promise-grid{
-    grid-template-columns:repeat(5,minmax(0,1fr));
-    gap:5px;
+    grid-template-columns:repeat(3,minmax(0,1fr));
   }
 
-  .card{
-    min-height:180px;
-    padding:12px 7px;
+}
+
+@media(max-width:850px){
+
+  .broker{
+    padding:15px 12px;
+    gap:10px;
   }
 
-  .card h3{
-    font-size:13px;
+  .person{
+    font-size:28px;
   }
 
-  .card p{
+  .broker h2{
+    font-size:14px;
+  }
+
+  .broker p{
     font-size:10px;
   }
 
-  .broker{
-    flex-direction:row;
+  .broker-actions{
+    flex-basis:350px;
+    gap:5px;
   }
+
+  .broker-actions .broker-btn{
+    min-height:46px;
+    padding:6px 3px;
+    font-size:10px;
+  }
+
 }
 
-@media(max-width:480px){
+
+/* =========================================
+   모바일
+========================================= */
+
+@media(max-width:700px){
 
   .wrap{
-    padding-left:8px;
-    padding-right:8px;
-  }
-
-  .logo{
-    font-size:11px;
-  }
-
-  .logo strong{
-    font-size:13px;
+    padding-left:12px;
+    padding-right:12px;
   }
 
   .hero{
-    padding:22px 14px;
+    padding:35px 20px;
   }
 
-  .hero h1{
-    font-size:24px;
+  .hero-text h1{
+    font-size:32px;
   }
 
-  .hero p{
-    font-size:13px;
+  .hero-text p{
+    font-size:15px;
   }
 
-  .compact-access-line{
-    gap:6px;
+  /* 원래 크기 유지 */
+  .trade{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+  }
+
+  .trade a{
+    min-height:135px;
+    padding:16px 10px;
+  }
+
+  .trade .ico{
+    width:40px;
+    height:40px;
+    font-size:20px;
+  }
+
+  .trade b{
+    font-size:15px;
+  }
+
+  .trade a > span:last-child{
+    font-size:11px;
+  }
+
+}
+
+
+@media(max-width:600px){
+
+  .access-panels{
+    grid-template-columns:1fr;
+  }
+
+  .transaction-panel{
+    border-left:0;
+    border-top:1px solid #e1e8ee;
+    padding-left:8px;
+    padding-top:18px;
+    margin-top:5px;
+  }
+
+  /* 나의 제안 / 거래 진행은 모바일에서도 작게 */
+  .return-access-title{
+    font-size:14px;
   }
 
   .return-access-desc{
-    font-size:12px;
+    font-size:9px;
   }
 
   .return-access-row input{
-    width:150px;
-    min-width:150px;
-    height:36px;
-    font-size:12px;
+    height:40px;
+    font-size:10px;
+    padding:0 8px;
+  }
+
+  .return-access-row input::placeholder{
+    font-size:10px;
   }
 
   .return-access-row button{
-    width:44px;
-    height:36px;
+    flex-basis:58px;
+    height:40px;
+    font-size:10px;
   }
 
-  .promise-grid .card p br{
-    display:none;
+  .return-access-help{
+    font-size:8px;
+    line-height:1.4;
   }
 
-  .manual-breaks br{
-    display:block !important;
+
+  .steps{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
   }
 
-  .registry-title span{
-    font-size:.86em;
+  .promise-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
   }
+
+  .step,
+  .promise-grid .card{
+    min-height:175px;
+    padding:16px 12px;
+  }
+
+  .broker{
+    padding:12px 8px;
+    gap:7px;
+  }
+
+  .broker-left{
+    gap:6px;
+  }
+
+  .person{
+    font-size:23px;
+  }
+
+  .broker h2{
+    font-size:11px;
+    line-height:1.25;
+  }
+
+  .broker p{
+    margin-top:3px;
+    font-size:8px;
+    line-height:1.35;
+  }
+
+  .broker-actions{
+    flex:0 1 57%;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:3px;
+  }
+
+  .broker-actions .broker-btn{
+    min-height:42px;
+    padding:4px 2px;
+    border-radius:7px;
+    font-size:8px;
+    line-height:1.15;
+  }
+
 }
-</style>
 
-<link rel="manifest" href="/manifest.webmanifest">
+
+@media(max-width:480px){
+
+  .hero-text h1{
+    font-size:28px;
+  }
+
+  /* 매매 / 전세 / 월세 기존 설정 */
+  .trade{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;
+  }
+
+  .trade a{
+    min-height:128px;
+    padding:13px 7px;
+  }
+
+  .trade .ico{
+    width:36px;
+    height:36px;
+    margin-bottom:10px;
+    font-size:18px;
+  }
+
+  .trade b{
+    font-size:13px;
+  }
+
+  .trade a > span:last-child{
+    font-size:10px;
+    line-height:1.4;
+  }
+
+}
+
+
+@media(max-width:380px){
+
+  .steps{
+    grid-template-columns:1fr;
+  }
+
+  .promise-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
 </head>
+
 
 <body>
 
 <div class="wrap">
 
+
 <header class="header">
 
-<a class="logo" href="/">
-<span class="logo-mark">🏠</span>
-<span>
-우리아파트
-<strong>안심거래</strong>
-</span>
-</a>
+  <a class="logo" href="/">
 
-<div class="top-actions">
+    <span class="logo-mark">🏠</span>
 
-<div class="install-wrap">
-<button
-id="installBtn"
-class="install-btn"
-type="button"
-aria-label="앱 설치">
-<span class="phone"></span>
-</button>
+    <span>
+      우리아파트
+      <strong>안심거래</strong>
+    </span>
 
-<span class="install-label">앱설치</span>
-</div>
+  </a>
 
-<button
-id="menuBtn"
-class="menu"
-type="button"
-aria-label="메뉴 열기"
-aria-expanded="false"
-aria-controls="mobileMenu">
-<span></span>
-<span></span>
-<span></span>
-</button>
 
-</div>
+  <div class="top-actions">
+
+    <div class="install-wrap">
+
+      <button
+        id="installBtn"
+        class="install-btn"
+        type="button"
+        aria-label="앱 설치"
+      >
+        <span class="phone"></span>
+      </button>
+
+      <span class="install-label">
+        앱설치
+      </span>
+
+    </div>
+
+
+    <button
+      id="menuBtn"
+      class="menu"
+      type="button"
+      aria-label="메뉴 열기"
+      aria-expanded="false"
+      aria-controls="mobileMenu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+
 </header>
 
 
 <div
-id="menuBackdrop"
-class="mobile-menu-backdrop">
-</div>
+  id="menuBackdrop"
+  class="mobile-menu-backdrop"
+></div>
+
 
 <nav
-id="mobileMenu"
-class="mobile-menu-panel"
-aria-hidden="true">
+  id="mobileMenu"
+  class="mobile-menu-panel"
+  aria-hidden="true"
+>
 
-<div class="mobile-menu-title">
-메뉴
-</div>
+  <div class="mobile-menu-title">
+    메뉴
+  </div>
 
-<div class="mobile-menu-list">
+  <div class="mobile-menu-list">
 
-<a class="primary" href="/request.html?type=sale">
-<span>🏠 아파트 매수</span>
-<span>›</span>
-</a>
+    <a class="primary" href="/request.html?type=sale">
+      <span>🏠 아파트 매수</span>
+      <span>›</span>
+    </a>
 
-<a class="primary" href="/request.html?type=jeonse">
-<span>🔑 전세 구하기</span>
-<span>›</span>
-</a>
+    <a class="primary" href="/request.html?type=jeonse">
+      <span>🔑 전세 구하기</span>
+      <span>›</span>
+    </a>
 
-<a class="primary" href="/request.html?type=monthly">
-<span>🏢 월세 구하기</span>
-<span>›</span>
-</a>
+    <a class="primary" href="/request.html?type=monthly">
+      <span>🏢 월세 구하기</span>
+      <span>›</span>
+    </a>
 
-<div class="mobile-menu-divider"></div>
+    <div class="mobile-menu-divider"></div>
 
-<!-- 새 연결 -->
-<a href="/received-offers.html">
-<span>받은 제안</span>
-<span>›</span>
-</a>
+    <a href="/broker-guide.html">
+      <span>공인중개사 이용안내</span>
+      <span>›</span>
+    </a>
 
-<a href="/service-fee.html">
-<span>플랫폼 서비스 이용료</span>
-<span>›</span>
-</a>
+    <a href="/broker-signup.html">
+      <span>공인중개사 회원가입</span>
+      <span>›</span>
+    </a>
 
-<div class="mobile-menu-divider"></div>
+    <a href="/broker-login.html">
+      <span>공인중개사 로그인</span>
+      <span>›</span>
+    </a>
 
-<a href="/broker-guide.html">
-<span>공인중개사 이용안내</span>
-<span>›</span>
-</a>
+  </div>
 
-<a href="/broker-signup.html">
-<span>공인중개사 회원가입</span>
-<span>›</span>
-</a>
-
-<a href="/broker-login.html">
-<span>공인중개사 로그인</span>
-<span>›</span>
-</a>
-
-</div>
 </nav>
 
 
 <section class="hero">
 
-<div class="hero-text">
+  <div class="hero-text">
 
-<h1>
-원하는 아파트,<br>
-직접 찾아다니지 마세요.<br>
-<em>희망조건만 등록</em>하세요.
-</h1>
+    <h1>
+      원하는 아파트,<br>
+      직접 찾아다니지 마세요.<br>
+      <em>희망조건만 등록</em>하세요.
+    </h1>
 
-<p>
-해당 지역의 공인중개사가<br>
-조건에 맞는 매물을 제안합니다.
-</p>
+    <p>
+      해당 지역의 공인중개사가<br>
+      조건에 맞는 매물을 제안합니다.
+    </p>
 
-</div>
+  </div>
+
 </section>
 
 
-<section class="trade request-types">
+<section class="trade">
 
-<a class="sale" href="/request.html?type=sale">
-<b>매매 매수등록</b>
-</a>
+  <a class="sale" href="/request.html?type=sale">
 
-<a class="jeonse" href="/request.html?type=jeonse">
-<b>전세 임차등록</b>
-</a>
+    <span class="ico">🏠</span>
 
-<a class="monthly" href="/request.html?type=monthly">
-<b>월세 임차등록</b>
-</a>
+    <b>아파트 매수</b>
+
+    <span>매수조건 등록 ›</span>
+
+  </a>
+
+
+  <a class="jeonse" href="/request.html?type=jeonse">
+
+    <span class="ico">🔑</span>
+
+    <b>전세 구하기</b>
+
+    <span>전세조건 등록 ›</span>
+
+  </a>
+
+
+  <a class="monthly" href="/request.html?type=monthly">
+
+    <span class="ico">🏢</span>
+
+    <b>월세 구하기</b>
+
+    <span>월세조건 등록 ›</span>
+
+  </a>
 
 </section>
 
 
 <section
-id="existing-access"
-class="return-access compact-access">
+  id="my-proposals-access"
+  class="return-access access-panels"
+>
 
-<div class="compact-access-line">
+  <div class="access-panel proposal-panel">
 
-<p class="return-access-desc">
-매수자는 휴대전화번호,<br>
-비회원 공인중개사는 매수요청번호를 입력하세요.
-</p>
+    <h2 class="return-access-title">
+      나의 제안
+    </h2>
 
-<div class="return-access-row">
+    <p class="return-access-desc">
+      제안받은 매물을 확인하세요.
+    </p>
 
-<input
-id="accessInput"
-type="text"
-inputmode="numeric"
-autocomplete="off"
-placeholder="휴대전화번호 또는 매수요청번호"
-aria-label="휴대전화번호 또는 매수요청번호">
+    <div class="return-access-row">
 
-<button
-id="accessBtn"
-type="button">
-확인
-</button>
+      <input
+        id="accessInput"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="휴대전화번호 또는 매수요청번호"
+        aria-label="휴대전화번호 또는 매수요청번호"
+      >
 
-</div>
-</div>
+      <button
+        id="accessBtn"
+        type="button"
+      >
+        확인
+      </button>
+
+    </div>
+
+    <p class="return-access-help">
+      매수자는 휴대전화번호,
+      비회원 공인중개사는 매수요청번호를 입력하세요.
+      <br>
+      제안받은 매물은 나의 제안에서 확인할 수 있습니다.
+    </p>
+
+  </div>
+
+
+  <div class="access-panel transaction-panel">
+
+    <h2 class="return-access-title">
+      거래 진행
+    </h2>
+
+    <p class="return-access-desc">
+      진행 중인 거래를 확인하세요.
+    </p>
+
+    <div class="return-access-row">
+
+      <input
+        id="transactionCode"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        maxlength="4"
+        placeholder="4자리 거래방 코드"
+        aria-label="4자리 거래방 코드"
+      >
+
+      <button
+        id="transactionBtn"
+        type="button"
+      >
+        확인
+      </button>
+
+    </div>
+
+    <p class="return-access-help">
+      거래 당사자에게 발급된
+      4자리 거래방 코드를 입력하세요.
+      <br>
+      전자계약, 등록서류, 서명 및 계약완료 내용은
+      거래방에서 확인할 수 있습니다.
+    </p>
+
+  </div>
+
 </section>
 
 
 <section class="process">
 
-<h2 class="title">
-희망조건 등록부터 안전한 계약까지,
-이렇게 진행됩니다
-</h2>
+  <h2 class="title">
+    희망조건 등록부터 안전한 계약까지,
+    이렇게 진행됩니다
+  </h2>
 
-<div class="steps">
+  <div class="steps">
 
-<div class="step">
-<div class="circle">📝</div>
-<div class="num">1</div>
-<b>희망조건 등록</b>
-<p>원하는 아파트 조건을<br>간단히 등록</p>
-</div>
+    <div class="step">
+      <div class="circle">📝</div>
+      <div class="num">1</div>
+      <b>희망조건 등록</b>
+      <p>
+        원하는 아파트 조건을<br>
+        간단히 등록
+      </p>
+    </div>
 
-<div class="step">
-<div class="circle">👤</div>
-<div class="num">2</div>
-<b>공인중개사 전달</b>
-<p class="manual-breaks">
-해당 지역 공인중개사<br>
-에게 요청이 전달됩니다
-</p>
-</div>
+    <div class="step">
+      <div class="circle">👤</div>
+      <div class="num">2</div>
+      <b>공인중개사 전달</b>
+      <p>
+        해당 지역 공인중개사에게<br>
+        요청이 전달됩니다
+      </p>
+    </div>
 
-<div class="step">
-<div class="circle">🏠</div>
-<div class="num">3</div>
-<b>매물 제안</b>
-<p class="manual-breaks">
-공인중개사가 조건에<br>
-맞는<br>
-매물을 제안합니다.
-</p>
-</div>
+    <div class="step">
+      <div class="circle">🏠</div>
+      <div class="num">3</div>
+      <b>매물 제안</b>
+      <p>
+        공인중개사가 조건에 맞는<br>
+        매물을 제안합니다
+      </p>
+    </div>
 
-<div class="step">
-<div class="circle">🔎</div>
-<div class="num">4</div>
-<b>비교·선택</b>
-<p>
-제안받은 매물을<br>
-비교하고 선택
-</p>
-</div>
+    <div class="step">
+      <div class="circle">🔎</div>
+      <div class="num">4</div>
+      <b>비교·선택</b>
+      <p>
+        제안받은 매물을<br>
+        비교하고 선택
+      </p>
+    </div>
 
-<div class="step">
-<div class="circle">🤝</div>
-<div class="num">5</div>
-<b>안전한 계약</b>
-<p>
-안전한 절차로<br>
-계약을 완료합니다
-</p>
-</div>
+    <div class="step">
+      <div class="circle">🤝</div>
+      <div class="num">5</div>
+      <b>안전한 계약</b>
+      <p>
+        안전한 절차로<br>
+        계약을 완료합니다
+      </p>
+    </div>
 
-</div>
+  </div>
+
 </section>
 
 
 <section class="promise">
 
-<h2 class="title">
-우리아파트 안심거래의 약속
-</h2>
+  <h2 class="title">
+    우리아파트 안심거래의 약속
+  </h2>
 
-<div class="promise-grid">
+  <div class="promise-grid">
 
-<a class="card" href="/detail.html?topic=broker">
+    <a class="card" href="/detail.html?topic=broker">
+      <div class="ci">🛡️</div>
+      <h3>검증된<br>공인중개사</h3>
+      <p>
+        가입 심사 및 교육을<br>
+        통과한 공인중개사만<br>
+        활동합니다.
+      </p>
+      <span class="more">자세히 보기 ›</span>
+    </a>
 
-<div class="ci">🛡️</div>
+    <a class="card" href="/detail.html?topic=contract">
+      <div class="ci">📝</div>
+      <h3>전자계약</h3>
+      <p>
+        별도 방문 없이<br>
+        전자계약으로<br>
+        간편하고 안전하게<br>
+        진행합니다.
+      </p>
+      <span class="more">자세히 보기 ›</span>
+    </a>
 
-<h3>
-검증된<br>
-공인중개사
-</h3>
+    <a class="card" href="/detail.html?topic=escrow">
+      <div class="ci">🔒</div>
+      <h3>선택형<br>에스크로</h3>
+      <p>
+        거래금을 안전하게 보관,<br>
+        계약 완료 후 지급으로<br>
+        안심 거래가 됩니다.
+      </p>
+      <span class="more">자세히 보기 ›</span>
+    </a>
 
-<p class="manual-breaks">
-가입 심사를 통과한<br>
-공인중개사만<br>
-계약이 가능합니다
-</p>
+    <a class="card" href="/detail.html?topic=registry">
+      <div class="ci">📋</div>
+      <h3>매매<br>셀프등기 지원</h3>
+      <p>
+        셀프등기 시스템 제공으로<br>
+        등기 비용과 시간을<br>
+        절약할 수 있습니다.
+      </p>
+      <span class="more">자세히 보기 ›</span>
+    </a>
 
-<span class="more">
-자세히 보기 ›
-</span>
+    <a class="card" href="/detail.html?topic=fee">
+      <div class="ci">₩</div>
+      <h3>수수료 안내</h3>
+      <p>
+        투명하고 합리적인<br>
+        수수료 체계로<br>
+        부담을 낮췄습니다.
+      </p>
+      <span class="more">자세히 보기 ›</span>
+    </a>
 
-</a>
-
-
-<a class="card" href="/detail.html?topic=contract">
-
-<div class="ci">📝</div>
-
-<h3>전자계약</h3>
-
-<p>
-별도 방문 없이<br>
-전자계약으로<br>
-간편하고 안전하게<br>
-진행합니다.
-</p>
-
-<span class="more">
-자세히 보기 ›
-</span>
-
-</a>
-
-
-<a class="card" href="/detail.html?topic=escrow">
-
-<div class="ci">🔒</div>
-
-<h3>
-선택형<br>
-에스크로
-</h3>
-
-<p class="manual-breaks">
-거래금을 안전하게<br>
-보관, 선택 지급으로<br>
-안심거래가<br>
-됩니다.
-</p>
-
-<span class="more">
-자세히 보기 ›
-</span>
-
-</a>
+  </div>
 
 
-<a class="card" href="/detail.html?topic=registry">
+  <div class="broker">
 
-<div class="ci">📋</div>
+    <div class="broker-left">
 
-<h3 class="registry-title">
-매매<br>
-<span>셀프등기 지원</span>
-</h3>
+      <div class="person">
+        👨🏻‍💼
+      </div>
 
-<p class="manual-breaks">
-셀프등기 시스템<br>
-제공으로 등기비용과<br>
-시간을 절약할 수<br>
-있습니다
-</p>
+      <div>
 
-<span class="more">
-자세히 보기 ›
-</span>
+        <h2>
+          공인중개사로 활동하시나요?
+        </h2>
 
-</a>
+        <p>
+          우리아파트 안심거래의 공인중개사가 되어
+          더 많은 고객과 만나세요.
+        </p>
 
+      </div>
 
-<a
-class="card"
-href="/service-fee.html">
-
-<div class="ci">₩</div>
-
-<h3>
-플랫폼 서비스<br>
-이용료
-</h3>
-
-<p>
-매매·전세·월세<br>
-서비스 이용료를<br>
-미리 확인하세요.
-</p>
-
-<span class="more">
-자세히 보기 ›
-</span>
-
-</a>
-
-</div>
+    </div>
 
 
-<div class="broker">
+    <div class="broker-actions">
 
-<div class="broker-left">
+      <a
+        class="broker-btn guide-btn"
+        href="/broker-guide.html"
+      >
+        공인중개사<br>
+        이용안내 ›
+      </a>
 
-<div class="person">
-👨🏻‍💼
-</div>
+      <a
+        class="broker-btn signup-btn"
+        href="/broker-signup.html"
+      >
+        공인중개사<br>
+        회원가입 ›
+      </a>
 
-<div>
+      <a
+        class="broker-btn login-btn"
+        href="/broker-login.html"
+      >
+        공인중개사<br>
+        로그인 ›
+      </a>
 
-<h2>
-공인중개사로 활동하시나요?
-</h2>
+    </div>
 
-<p>
-우리아파트 안심거래의 공인중개사가 되어<br>
-더 많은 고객과 만나는 기회를 잡으세요.
-</p>
-
-</div>
-</div>
-
-
-<div class="broker-actions">
-
-<a
-class="broker-btn guide-btn"
-href="/broker-guide.html">
-공인중개사<br>
-이용안내 ›
-</a>
-
-<a
-class="broker-btn signup-btn"
-href="/broker-signup.html">
-공인중개사<br>
-회원가입 ›
-</a>
-
-<a
-class="broker-btn login-btn"
-href="/broker-login.html">
-공인중개사<br>
-로그인 ›
-</a>
-
-</div>
-</div>
+  </div>
 
 </section>
 
 
 <footer class="footer">
 
-<div>
-이용약관　|　개인정보처리방침　|　고객센터
-</div>
+  <div>
+    이용약관　|　개인정보처리방침　|　고객센터
+  </div>
 
-<span>
-© 우리아파트 안심거래.
-All rights reserved.
-</span>
+  <span>
+    © 우리아파트 안심거래.
+    All rights reserved.
+  </span>
 
 </footer>
+
 
 </div>
 
 
 <script>
 
-let deferredPrompt=null;
+let deferredPrompt = null;
 
 
 /* 앱 설치 */
 
 window.addEventListener(
-"beforeinstallprompt",
-e=>{
+  "beforeinstallprompt",
+  e => {
 
-e.preventDefault();
-deferredPrompt=e;
+    e.preventDefault();
+    deferredPrompt = e;
 
-}
+  }
 );
 
 
 document
 .getElementById("installBtn")
 .addEventListener(
-"click",
-async()=>{
+  "click",
+  async () => {
 
-if(deferredPrompt){
+    if(deferredPrompt){
 
-deferredPrompt.prompt();
+      deferredPrompt.prompt();
 
-await deferredPrompt.userChoice;
+      await deferredPrompt.userChoice;
 
-deferredPrompt=null;
+      deferredPrompt = null;
 
-return;
+      return;
+    }
 
-}
+    if(
+      /iphone|ipad|ipod/i.test(
+        navigator.userAgent
+      )
+    ){
 
-if(
-/iphone|ipad|ipod/i.test(
-navigator.userAgent
-)
-){
+      alert(
+        "Safari의 공유 버튼을 누른 뒤 ‘홈 화면에 추가’를 선택해 주세요."
+      );
 
-alert(
-"Safari의 공유 버튼을 누른 뒤 ‘홈 화면에 추가’를 선택해 주세요."
-);
+    }else{
 
-}else{
+      alert(
+        "브라우저 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택해 주세요."
+      );
 
-alert(
-"브라우저 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택해 주세요."
-);
+    }
 
-}
-
-}
+  }
 );
 
 
 /* 햄버거 메뉴 */
 
-const menuBtn=
+const menuBtn =
 document.getElementById("menuBtn");
 
-const mobileMenu=
+const mobileMenu =
 document.getElementById("mobileMenu");
 
-const menuBackdrop=
+const menuBackdrop =
 document.getElementById("menuBackdrop");
 
 
 function openMenu(){
 
-mobileMenu.classList.add("open");
+  mobileMenu.classList.add("open");
+  menuBackdrop.classList.add("open");
+  document.body.classList.add("menu-open");
 
-menuBackdrop.classList.add("open");
+  menuBtn.setAttribute(
+    "aria-expanded",
+    "true"
+  );
 
-document.body.classList.add("menu-open");
-
-menuBtn.setAttribute(
-"aria-expanded",
-"true"
-);
-
-mobileMenu.setAttribute(
-"aria-hidden",
-"false"
-);
+  mobileMenu.setAttribute(
+    "aria-hidden",
+    "false"
+  );
 
 }
 
 
 function closeMenu(){
 
-mobileMenu.classList.remove("open");
+  mobileMenu.classList.remove("open");
+  menuBackdrop.classList.remove("open");
+  document.body.classList.remove("menu-open");
 
-menuBackdrop.classList.remove("open");
+  menuBtn.setAttribute(
+    "aria-expanded",
+    "false"
+  );
 
-document.body.classList.remove("menu-open");
-
-menuBtn.setAttribute(
-"aria-expanded",
-"false"
-);
-
-mobileMenu.setAttribute(
-"aria-hidden",
-"true"
-);
+  mobileMenu.setAttribute(
+    "aria-hidden",
+    "true"
+  );
 
 }
 
 
 menuBtn.addEventListener(
-"click",
-()=>{
+  "click",
+  () => {
 
-if(
-mobileMenu.classList.contains("open")
-){
+    if(
+      mobileMenu.classList.contains(
+        "open"
+      )
+    ){
 
-closeMenu();
+      closeMenu();
 
-}else{
+    }else{
 
-openMenu();
+      openMenu();
 
-}
+    }
 
-}
+  }
 );
 
 
 menuBackdrop.addEventListener(
-"click",
-closeMenu
+  "click",
+  closeMenu
 );
 
 
 document.addEventListener(
-"keydown",
-e=>{
+  "keydown",
+  e => {
 
-if(e.key==="Escape"){
-closeMenu();
-}
+    if(e.key === "Escape"){
+      closeMenu();
+    }
 
-}
+  }
 );
 
 
 mobileMenu
 .querySelectorAll("a")
 .forEach(
-link=>{
+  link => {
 
-link.addEventListener(
-"click",
-closeMenu
+    link.addEventListener(
+      "click",
+      closeMenu
+    );
+
+  }
 );
 
-}
-);
 
-
-/* 기존 이용자 입력 */
-
-const accessInput=
-document.getElementById("accessInput");
-
-const accessBtn=
-document.getElementById("accessBtn");
-
+/* 숫자 정리 */
 
 function normalizeAccessValue(value){
 
-return String(value||"")
-.replace(/[^0-9]/g,"");
+  return String(value || "")
+    .replace(/[^0-9]/g,"");
 
 }
+
+
+/* 나의 제안 */
+
+const accessInput =
+document.getElementById("accessInput");
+
+const accessBtn =
+document.getElementById("accessBtn");
+
+
+accessInput.addEventListener(
+  "input",
+  function(){
+
+    this.value =
+      normalizeAccessValue(
+        this.value
+      )
+      .slice(0,14);
+
+  }
+);
 
 
 accessBtn.addEventListener(
-"click",
-function(){
+  "click",
+  function(){
 
-const value=
-normalizeAccessValue(
-accessInput.value
-);
+    const value =
+      normalizeAccessValue(
+        accessInput.value
+      );
 
-if(!value){
+    if(!value){
 
-alert(
-"휴대전화번호 또는 매수요청번호를 입력해 주세요."
-);
+      alert(
+        "휴대전화번호 또는 매수요청번호를 입력해 주세요."
+      );
 
-accessInput.focus();
+      accessInput.focus();
 
-return;
+      return;
+    }
 
-}
+    localStorage.setItem(
+      "wooriapt_request_number",
+      value
+    );
 
+    location.href =
+      "/my-proposals.html?request=" +
+      encodeURIComponent(value);
 
-/* 매수자 휴대전화번호 */
-
-if(
-/^01[016789][0-9]{7,8}$/.test(value)
-){
-
-localStorage.setItem(
-"wooriapt_buyer_phone",
-value
-);
-
-/* 받은 제안으로 이동 */
-
-location.href=
-"/received-offers.html";
-
-return;
-
-}
-
-
-/* 비회원 공인중개사 매수요청번호 */
-
-if(
-/^[0-9]{4,10}$/.test(value)
-){
-
-alert(
-"매수요청번호가 확인되었습니다."
-);
-
-return;
-
-}
-
-
-alert(
-"휴대전화번호 또는 매수요청번호를 정확히 입력해 주세요."
-);
-
-accessInput.focus();
-
-}
+  }
 );
 
 
 accessInput.addEventListener(
-"keydown",
-function(e){
+  "keydown",
+  function(e){
 
-if(e.key==="Enter"){
+    if(e.key === "Enter"){
 
-e.preventDefault();
+      e.preventDefault();
+      accessBtn.click();
 
-accessBtn.click();
+    }
 
-}
+  }
+);
 
-}
+
+/* 거래 진행 */
+
+const transactionCode =
+document.getElementById(
+  "transactionCode"
+);
+
+const transactionBtn =
+document.getElementById(
+  "transactionBtn"
+);
+
+
+transactionCode.addEventListener(
+  "input",
+  function(){
+
+    this.value =
+      normalizeAccessValue(
+        this.value
+      )
+      .slice(0,4);
+
+  }
+);
+
+
+transactionBtn.addEventListener(
+  "click",
+  function(){
+
+    const code =
+      normalizeAccessValue(
+        transactionCode.value
+      );
+
+    if(code.length !== 4){
+
+      alert(
+        "4자리 거래방 코드를 입력해 주세요."
+      );
+
+      transactionCode.focus();
+
+      return;
+    }
+
+    localStorage.setItem(
+      "wooriapt_trade_room_code",
+      code
+    );
+
+    location.href =
+      "/transaction-room.html?code=" +
+      encodeURIComponent(code);
+
+  }
+);
+
+
+transactionCode.addEventListener(
+  "keydown",
+  function(e){
+
+    if(e.key === "Enter"){
+
+      e.preventDefault();
+      transactionBtn.click();
+
+    }
+
+  }
 );
 
 
 /* 서비스워커 */
 
 if(
-"serviceWorker" in navigator
+  "serviceWorker" in navigator
 ){
 
-window.addEventListener(
-"load",
-()=>{
+  window.addEventListener(
+    "load",
+    () => {
 
-navigator
-.serviceWorker
-.register("/sw.js")
-.catch(()=>{});
+      navigator
+      .serviceWorker
+      .register("/sw.js")
+      .catch(()=>{});
 
-}
-);
+    }
+  );
 
 }
 
