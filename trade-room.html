@@ -429,16 +429,6 @@ select{
   color:#237443;
 }
 
-.fee-sms-btn{
-  min-width:120px;
-  height:46px;
-  border:0;
-  border-radius:10px;
-  background:#1165d7;
-  color:#fff;
-  font-size:14px;
-  font-weight:900;
-}
 
 /* CONTRACT */
 
@@ -1089,14 +1079,6 @@ select{
       입금 대기
     </div>
 
-    <button
-      id="feeSmsButton"
-      type="button"
-      class="fee-sms-btn"
-      onclick="sendFeeSms()">
-      문자 발송
-    </button>
-
   </div>
 
 </section>
@@ -1491,46 +1473,14 @@ function updateFeeStatus(){
     $("feeStatus").textContent = "입금 완료";
     $("feeStatus").className = "fee-status ok";
 
-    $("feeSmsButton").style.display = "none";
-
   }else{
 
     $("feeStatus").textContent = "입금 대기";
     $("feeStatus").className = "fee-status";
 
-    $("feeSmsButton").style.display = "";
-
   }
 
 }
-
-
-/* 매수자·임차인 이용료 안내 문자 */
-
-window.sendFeeSms = function(){
-
-  const phone =
-    $("buyerSignPhone").value.trim();
-
-  if(!validPhone(phone)){
-
-    showError(
-      "매수자 · 임차인 휴대전화번호를 입력해 주세요."
-    );
-
-    $("buyerSignPhone").focus();
-    return;
-  }
-
-  /*
-    실제 문자 발송 API 연결 위치
-  */
-
-  showOk(
-    "매수자 · 임차인에게 이용료 안내 문자를 발송했습니다."
-  );
-
-};
 
 
 /* CONTRACT */
