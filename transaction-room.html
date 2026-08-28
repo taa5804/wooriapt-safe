@@ -1,0 +1,868 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1165d7">
+
+<title>거래 진행방 | 우리아파트 안심거래</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  overflow-x:hidden;
+}
+
+body{
+  background:#f4f6f8;
+  color:#172b3d;
+  font-family:-apple-system,BlinkMacSystemFont,
+  "Segoe UI","Noto Sans KR",Arial,sans-serif;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.wrap{
+  width:100%;
+  max-width:760px;
+  margin:0 auto;
+  padding:14px 12px 50px;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:16px;
+}
+
+.logo{
+  color:#173f67;
+  font-size:19px;
+  font-weight:900;
+}
+
+.logo strong{
+  color:#1165d7;
+}
+
+.back{
+  padding:8px 11px;
+  border:1px solid #d4dfe7;
+  border-radius:10px;
+  background:#fff;
+  color:#476377;
+  font-size:13px;
+  font-weight:800;
+}
+
+.card{
+  margin-bottom:14px;
+  padding:18px 15px;
+  border:1px solid #dce5ec;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 6px 18px rgba(26,61,88,.05);
+}
+
+.badge{
+  display:inline-block;
+  margin-bottom:8px;
+  padding:5px 10px;
+  border-radius:999px;
+  background:#eaf4ff;
+  color:#1165d7;
+  font-size:12px;
+  font-weight:900;
+}
+
+h1{
+  margin:0 0 7px;
+  color:#143b61;
+  font-size:27px;
+}
+
+.desc{
+  margin:0;
+  color:#697e8e;
+  font-size:14px;
+  line-height:1.65;
+}
+
+.transaction-number{
+  margin-top:14px;
+  padding:12px;
+  border-radius:10px;
+  background:#f5f8fa;
+}
+
+.transaction-number span{
+  display:block;
+  margin-bottom:4px;
+  color:#718391;
+  font-size:11px;
+}
+
+.transaction-number strong{
+  color:#1165d7;
+  font-size:18px;
+  letter-spacing:.4px;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:15px;
+}
+
+.info-item{
+  padding:12px;
+  border-radius:10px;
+  background:#f7f9fb;
+}
+
+.info-label{
+  margin-bottom:5px;
+  color:#718391;
+  font-size:11px;
+}
+
+.info-value{
+  color:#294c65;
+  font-size:14px;
+  font-weight:800;
+  word-break:keep-all;
+}
+
+.section-title{
+  margin:0 0 13px;
+  color:#173e60;
+  font-size:18px;
+  font-weight:900;
+}
+
+.status{
+  padding:14px;
+  border-radius:11px;
+  background:#eef6ff;
+  color:#1165d7;
+  font-size:15px;
+  font-weight:900;
+}
+
+.step{
+  position:relative;
+  padding:16px 14px 16px 55px;
+  border:1px solid #dce5ec;
+  border-radius:13px;
+  background:#fff;
+}
+
+.step + .step{
+  margin-top:10px;
+}
+
+.step-number{
+  position:absolute;
+  top:15px;
+  left:14px;
+  width:29px;
+  height:29px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#eaf4ff;
+  color:#1165d7;
+  font-size:12px;
+  font-weight:900;
+}
+
+.step.active{
+  border-color:#1165d7;
+}
+
+.step.active .step-number{
+  background:#1165d7;
+  color:#fff;
+}
+
+.step-title{
+  color:#173e60;
+  font-size:15px;
+  font-weight:900;
+}
+
+.step-desc{
+  margin-top:6px;
+  color:#718391;
+  font-size:12px;
+  line-height:1.65;
+}
+
+.step-action{
+  margin-top:12px;
+}
+
+.action-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:40px;
+  padding:8px 13px;
+  border:1px solid #1165d7;
+  border-radius:9px;
+  background:#1165d7;
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+}
+
+.action-btn.secondary{
+  border-color:#ccd9e2;
+  background:#fff;
+  color:#476377;
+}
+
+.contract-box{
+  margin-top:10px;
+  padding:13px;
+  border:1px solid #e0e7ed;
+  border-radius:10px;
+  background:#f8fafb;
+}
+
+.contract-box p{
+  margin:0;
+  color:#64798a;
+  font-size:12px;
+  line-height:1.65;
+}
+
+.contract-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:11px;
+}
+
+.complete-box{
+  padding:18px;
+  border-radius:13px;
+  background:#edf8f1;
+  color:#26733e;
+  text-align:center;
+}
+
+.complete-box strong{
+  display:block;
+  margin-bottom:7px;
+  font-size:18px;
+}
+
+.complete-box span{
+  font-size:12px;
+  line-height:1.6;
+}
+
+.notice{
+  padding:13px;
+  border-radius:10px;
+  background:#f5f8fa;
+  color:#718391;
+  font-size:12px;
+  line-height:1.7;
+}
+
+.footer{
+  margin-top:20px;
+  text-align:center;
+  color:#83939e;
+  font-size:11px;
+}
+
+@media(max-width:500px){
+
+  .wrap{
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  .card{
+    padding:16px 13px;
+  }
+
+  h1{
+    font-size:24px;
+  }
+
+  .info-grid{
+    grid-template-columns:1fr;
+  }
+
+  .contract-buttons{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+
+  .action-btn{
+    width:100%;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<header class="header">
+
+  <a class="logo" href="/">
+    우리아파트 <strong>안심거래</strong>
+  </a>
+
+  <a class="back" href="/">
+    메인으로
+  </a>
+
+</header>
+
+
+<!-- 거래 기본정보 -->
+
+<section class="card">
+
+  <span class="badge">
+    거래 진행방
+  </span>
+
+  <h1>
+    안전한 거래를 진행하세요
+  </h1>
+
+  <p class="desc">
+    최종 선택한 매물과 연결된 거래입니다.
+    아래 순서에 따라 거래를 진행하세요.
+  </p>
+
+  <div class="transaction-number">
+    <span>거래번호</span>
+    <strong id="transactionNumber">
+      확인 중
+    </strong>
+  </div>
+
+  <div class="info-grid">
+
+    <div class="info-item">
+      <div class="info-label">매수자</div>
+      <div class="info-value" id="buyer">
+        -
+      </div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">중개사무소</div>
+      <div class="info-value" id="brokerOffice">
+        -
+      </div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">아파트</div>
+      <div class="info-value" id="apartment">
+        -
+      </div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-label">거래금액</div>
+      <div class="info-value" id="amount">
+        -
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- 현재 상태 -->
+
+<section class="card">
+
+  <h2 class="section-title">
+    현재 거래상태
+  </h2>
+
+  <div
+    id="status"
+    class="status">
+    거래 결정
+  </div>
+
+</section>
+
+
+<!-- 거래 단계 -->
+
+<section class="card">
+
+  <h2 class="section-title">
+    거래 진행 절차
+  </h2>
+
+
+  <!-- 1 -->
+
+  <div class="step active">
+
+    <div class="step-number">
+      1
+    </div>
+
+    <div class="step-title">
+      거래 결정
+    </div>
+
+    <div class="step-desc">
+      매수자가 선택한 매물의 거래가 생성되었습니다.
+      거래번호를 기준으로 매수자와 중개사가 연결됩니다.
+    </div>
+
+  </div>
+
+
+  <!-- 2 -->
+
+  <div class="step active">
+
+    <div class="step-number">
+      2
+    </div>
+
+    <div class="step-title">
+      전자계약
+    </div>
+
+    <div class="step-desc">
+      거래에 필요한 계약서를 작성하고 내용을 확인합니다.
+      당사자가 계약 내용을 확인한 후 서명합니다.
+    </div>
+
+    <div class="contract-box">
+
+      <p>
+        계약서 작성이 완료되면 계약서를 확인하고
+        필요한 경우 출력하거나 PDF로 저장할 수 있습니다.
+      </p>
+
+      <div class="contract-buttons">
+
+        <a
+          class="action-btn"
+          href="/electronic-contract.html">
+          전자계약서
+        </a>
+
+        <button
+          class="action-btn secondary"
+          type="button"
+          id="printBtn">
+          계약서 출력
+        </button>
+
+        <button
+          class="action-btn secondary"
+          type="button"
+          id="pdfBtn">
+          PDF 저장
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- 3 -->
+
+  <div class="step">
+
+    <div class="step-number">
+      3
+    </div>
+
+    <div class="step-title">
+      선택형 에스크로
+    </div>
+
+    <div class="step-desc">
+      필요한 경우 거래금액의 안전한 보관을 위해
+      에스크로 서비스를 선택하여 이용할 수 있습니다.
+      에스크로를 이용하지 않는 경우 직접 송금 방식으로 진행합니다.
+    </div>
+
+    <div class="step-action">
+
+      <button
+        id="escrowBtn"
+        class="action-btn secondary"
+        type="button">
+        에스크로 선택
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- 4 -->
+
+  <div class="step">
+
+    <div class="step-number">
+      4
+    </div>
+
+    <div class="step-title">
+      잔금 및 등기
+    </div>
+
+    <div class="step-desc">
+      매매 거래의 경우 잔금 지급 후 등기 절차를 진행합니다.
+      직접 등기를 원하는 경우 셀프등기 안내를 이용할 수 있습니다.
+    </div>
+
+    <div class="step-action">
+
+      <a
+        class="action-btn secondary"
+        href="/self-registration.html">
+        셀프등기 안내
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- 5 -->
+
+  <div class="step">
+
+    <div class="step-number">
+      5
+    </div>
+
+    <div class="step-title">
+      거래완료
+    </div>
+
+    <div class="step-desc">
+      계약과 잔금 및 필요한 후속 절차가 완료되면
+      거래완료로 처리합니다.
+    </div>
+
+    <div class="step-action">
+
+      <button
+        id="completeBtn"
+        class="action-btn"
+        type="button">
+        거래완료 처리
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- 완료 -->
+
+<section
+  id="completeBox"
+  class="card"
+  style="display:none">
+
+  <div class="complete-box">
+
+    <strong>
+      거래가 완료되었습니다.
+    </strong>
+
+    <span>
+      거래번호를 기준으로 거래 기록이 보관됩니다.
+    </span>
+
+  </div>
+
+</section>
+
+
+<section class="card">
+
+  <div class="notice">
+
+    <b>안내</b><br>
+    거래 진행방은 최종 선택된 거래 1건을 기준으로 운영됩니다.<br>
+    전자계약서는 계약 당사자가 내용을 확인한 후 진행합니다.<br>
+    에스크로는 필요한 경우 선택하여 이용합니다.<br>
+    매매 거래는 셀프등기 안내를 이용할 수 있습니다.<br>
+    모든 절차가 완료되면 거래완료로 처리합니다.
+
+  </div>
+
+</section>
+
+
+<footer class="footer">
+  © 우리아파트 안심거래
+</footer>
+
+</div>
+
+
+<script>
+
+"use strict";
+
+
+const transactionNumber =
+  document.getElementById(
+    "transactionNumber"
+  );
+
+const buyer =
+  document.getElementById(
+    "buyer"
+  );
+
+const brokerOffice =
+  document.getElementById(
+    "brokerOffice"
+  );
+
+const apartment =
+  document.getElementById(
+    "apartment"
+  );
+
+const amount =
+  document.getElementById(
+    "amount"
+  );
+
+const status =
+  document.getElementById(
+    "status"
+  );
+
+const completeBox =
+  document.getElementById(
+    "completeBox"
+  );
+
+
+/* 거래정보 불러오기 */
+
+(function(){
+
+  try{
+
+    const data =
+      JSON.parse(
+        localStorage.getItem(
+          "wooriapt_selected_transaction"
+        ) || "null"
+      );
+
+
+    if(!data){
+
+      transactionNumber.textContent =
+        "거래정보 없음";
+
+      return;
+
+    }
+
+
+    transactionNumber.textContent =
+      data.transactionNumber || "-";
+
+    buyer.textContent =
+      data.buyer || "매수자";
+
+    brokerOffice.textContent =
+      data.brokerOffice || "-";
+
+    apartment.textContent =
+      data.apartment || "-";
+
+    amount.textContent =
+      data.amount || "-";
+
+
+    if(data.status === "COMPLETED"){
+
+      status.textContent =
+        "거래완료";
+
+      completeBox.style.display =
+        "block";
+
+    }else{
+
+      status.textContent =
+        "거래 진행중";
+
+    }
+
+
+  }catch(e){
+
+    console.log(
+      "거래정보 오류",
+      e
+    );
+
+  }
+
+})();
+
+
+/* 계약서 출력 */
+
+document
+  .getElementById("printBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      window.print();
+
+    }
+  );
+
+
+/* PDF 저장 */
+
+document
+  .getElementById("pdfBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      alert(
+        "인쇄 화면에서 프린터를 'PDF로 저장'으로 선택하면 PDF 파일로 저장할 수 있습니다."
+      );
+
+      window.print();
+
+    }
+  );
+
+
+/* 에스크로 */
+
+document
+  .getElementById("escrowBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      alert(
+        "에스크로 이용 여부를 선택하는 단계입니다."
+      );
+
+    }
+  );
+
+
+/* 거래완료 */
+
+document
+  .getElementById("completeBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      const saved =
+        localStorage.getItem(
+          "wooriapt_selected_transaction"
+        );
+
+
+      if(!saved){
+
+        alert(
+          "거래정보를 찾을 수 없습니다."
+        );
+
+        return;
+
+      }
+
+
+      try{
+
+        const data =
+          JSON.parse(saved);
+
+        data.status =
+          "COMPLETED";
+
+        data.completedAt =
+          new Date().toISOString();
+
+
+        localStorage.setItem(
+          "wooriapt_selected_transaction",
+          JSON.stringify(data)
+        );
+
+
+        status.textContent =
+          "거래완료";
+
+        completeBox.style.display =
+          "block";
+
+
+        document
+          .getElementById(
+            "completeBtn"
+          )
+          .disabled=true;
+
+
+      }catch(e){
+
+        alert(
+          "거래완료 처리 중 오류가 발생했습니다."
+        );
+
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
