@@ -1601,7 +1601,7 @@ function validPhone(phone){
 }
 
 
-window.sendSignSms = function(type){
+window.sendSignSms = async function(type){
 
   if(!signatureAvailable()){
     return;
@@ -1622,21 +1622,78 @@ window.sendSignSms = function(type){
   }
 
   if(!validPhone(phone)){
-
     showError(
       "휴대전화번호를 정확히 입력해 주세요."
     );
-
     return;
   }
 
-  /*
-    실제 전자서명 문자 API 연결 위치
-  */
+  const tradeType = $("tradeType").value;
 
-  showOk(
-    "전자서명 요청 문자를 발송했습니다."
-  );
+  if(!tradeType){
+    showError("거래유형을 확인해 주세요.");
+    return;
+  }
+
+  const button = $(type + "SignButton");
+  const originalText = button.textContent;
+
+  button.disabled = true;
+  button.textContent = "발송 중...";
+
+  try{
+
+    const response = await fetch(
+      "/api/send-contract-sign-request",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          code:roomCode,
+          trade_id:roomCode,
+          type:tradeType,
+          role:type,
+          phone:phone
+        })
+      }
+    );
+
+    let result = {};
+
+    try{
+      result = await response.json();
+    }catch(e){
+      result = {};
+    }
+
+    if(!response.ok || result.ok === false){
+      throw new Error(
+        result.message ||
+        "전자서명 요청 문자 발송에 실패했습니다."
+      );
+    }
+
+    showOk(
+      "전자서명 요청 문자를 발송했습니다."
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showError(
+      error.message ||
+      "전자서명 요청 문자 발송 중 오류가 발생했습니다."
+    );
+
+  }finally{
+
+    button.disabled = !signatureAvailable();
+    button.textContent = originalText;
+
+  }
 
 };
 
