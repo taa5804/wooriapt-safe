@@ -3,11 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#1165d7">
-<title>거래진행실 | 우리아파트 안심거래</title>
+<meta name="theme-color" content="#12394d">
+
+<title>안심거래 진행현황 | 우리아파트 안심거래</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html,body{
   margin:0;
@@ -16,13 +19,14 @@ html,body{
 }
 
 body{
-  background:#f4f7fa;
+  background:#f3f7fa;
   color:#172b3d;
-  font-family:-apple-system,BlinkMacSystemFont,
-  "Segoe UI","Noto Sans KR",Arial,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
 }
 
-button,input{
+button,
+input,
+select{
   font:inherit;
 }
 
@@ -34,425 +38,638 @@ button{
   width:100%;
   max-width:920px;
   margin:0 auto;
-  padding:0 16px 55px;
+  padding:16px 14px 70px;
 }
 
-/* HEADER */
+
+/* =========================
+   HEADER
+========================= */
 
 .header{
-  height:76px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.logo{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  color:#173f67;
-  font-size:15px;
-  font-weight:800;
-  text-decoration:none;
-}
-
-.logo-mark{
-  font-size:27px;
-}
-
-.logo strong{
-  display:block;
-  color:#1165d7;
-  font-size:18px;
-}
-
-.print-top{
-  height:38px;
-  padding:0 13px;
-  border:1px solid #cbd9e4;
-  border-radius:9px;
-  background:#fff;
-  color:#315875;
-  font-size:13px;
-  font-weight:800;
-}
-
-/* TITLE */
-
-.page-head{
-  margin:20px 0 17px;
-}
-
-.page-head h1{
-  margin:0;
-  font-size:30px;
-  letter-spacing:-1px;
-}
-
-.page-head p{
-  margin:8px 0 0;
-  color:#6d7f8d;
-  font-size:14px;
-  line-height:1.55;
-}
-
-/* TRADE HEADER */
-
-.trade-head{
-  padding:19px;
-  background:#173f67;
+  background:linear-gradient(135deg,#12394d,#176b86);
   color:#fff;
-  border-radius:18px;
+  border-radius:20px;
+  padding:22px 20px;
+  margin-bottom:15px;
+  box-shadow:0 10px 30px rgba(25,56,76,.16);
 }
 
-.trade-number{
-  margin:0 0 8px;
-  font-size:12px;
-  opacity:.8;
+.brand{
+  font-size:14px;
+  font-weight:900;
+  margin-bottom:8px;
 }
 
-.trade-property{
+.header-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+}
+
+.header h1{
   margin:0;
-  font-size:21px;
+  font-size:25px;
+}
+
+.header p{
+  margin:8px 0 0;
+  font-size:13px;
+  line-height:1.65;
+  opacity:.93;
+}
+
+.code-box{
+  min-width:125px;
+  padding:11px 13px;
+  border-radius:14px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.25);
+  text-align:center;
+}
+
+.code-box small{
+  display:block;
+  font-size:11px;
+  margin-bottom:4px;
+}
+
+.code-number{
+  font-size:26px;
+  font-weight:900;
+  letter-spacing:4px;
+}
+
+.progress{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:18px;
+}
+
+.progress span{
+  padding:7px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:850;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.18);
+}
+
+.progress span.active{
+  background:#fff;
+  color:#12394d;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.card{
+  background:#fff;
+  border:1px solid #dde6ec;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:0 6px 20px rgba(31,62,82,.055);
+}
+
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:15px;
+}
+
+.card-title{
+  font-size:18px;
   font-weight:900;
 }
 
-.trade-status{
-  display:inline-flex;
-  margin-top:12px;
-  padding:7px 11px;
+.state{
+  display:inline-block;
+  padding:6px 9px;
   border-radius:999px;
-  background:rgba(255,255,255,.15);
+  background:#edf2f5;
+  color:#6c7b87;
   font-size:12px;
-  font-weight:800;
+  font-weight:900;
 }
 
-/* GUIDE */
+.state.wait{
+  background:#fff5dc;
+  color:#946300;
+}
 
-.guide{
-  margin-top:14px;
-  padding:15px 17px;
-  border:1px solid #d8e7f3;
-  border-radius:15px;
-  background:#eef6ff;
-  color:#315875;
+.state.ok{
+  background:#eaf8ef;
+  color:#237443;
+}
+
+.req{
+  color:#df3434;
+  margin-left:3px;
+}
+
+.required-note{
+  color:#d33939;
+  font-size:12px;
+  font-weight:850;
+  margin-bottom:12px;
+}
+
+.notice{
+  margin-bottom:14px;
+  padding:12px 13px;
+  border-radius:12px;
+  background:#edf6ff;
+  border:1px solid #cee3f7;
+  color:#215b86;
   font-size:13px;
   line-height:1.65;
 }
 
-/* SECTION */
 
-.section{
-  margin-top:17px;
-  padding:19px;
-  background:#fff;
-  border:1px solid #dce5ec;
-  border-radius:18px;
-  box-shadow:0 4px 16px rgba(23,63,103,.04);
+/* =========================
+   FORM
+========================= */
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
 
-.section-title{
-  margin:0 0 5px;
-  font-size:18px;
-  color:#173f67;
-}
-
-.section-desc{
-  margin:0 0 15px;
-  color:#718291;
-  font-size:13px;
-  line-height:1.55;
-}
-
-/* PROGRESS */
-
-.progress{
+.field{
   display:flex;
   flex-direction:column;
-  gap:0;
+  gap:6px;
 }
 
-.step{
-  position:relative;
-  display:flex;
-  gap:13px;
-  padding:0 0 19px;
+.field.full{
+  grid-column:1/-1;
 }
 
-.step:last-child{
-  padding-bottom:0;
+.field label{
+  font-size:13px;
+  font-weight:850;
+  color:#334d5f;
 }
 
-.step::after{
-  content:"";
-  position:absolute;
-  left:14px;
-  top:30px;
-  bottom:0;
-  width:2px;
-  background:#e1e8ee;
+input[type="text"],
+input[type="tel"],
+select{
+  width:100%;
+  height:44px;
+  border:1px solid #cbd7df;
+  border-radius:10px;
+  padding:0 11px;
+  background:#fff;
+  color:#172b3d;
+  outline:none;
 }
 
-.step:last-child::after{
-  display:none;
+input:focus,
+select:focus{
+  border-color:#176fc4;
+  box-shadow:0 0 0 3px rgba(23,111,196,.08);
 }
 
-.step-dot{
-  position:relative;
-  z-index:2;
-  flex:none;
-  width:30px;
-  height:30px;
+
+/* =========================
+   CHECK
+========================= */
+
+.check-box{
+  border:1px solid #dce5eb;
+  border-radius:13px;
+  padding:14px;
+  margin-bottom:10px;
+  background:#fafcfd;
+}
+
+.check-label{
   display:flex;
   align-items:center;
-  justify-content:center;
-  border-radius:50%;
-  background:#e8edf2;
-  color:#758694;
+  gap:10px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:900;
+}
+
+.check-label input{
+  width:21px;
+  height:21px;
+}
+
+
+/* =========================
+   AUTO DOCUMENT
+========================= */
+
+.auto-doc-list{
+  display:grid;
+  gap:10px;
+}
+
+.auto-doc{
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  gap:9px;
+  align-items:center;
+  padding:13px;
+  border:1px solid #dce5eb;
+  border-radius:13px;
+}
+
+.auto-doc-title{
+  font-size:13px;
+  font-weight:900;
+}
+
+.auto-doc-name{
+  margin-top:4px;
+  font-size:12px;
+  color:#71818e;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.auto-badge{
+  padding:6px 9px;
+  border-radius:999px;
+  background:#eaf8ef;
+  color:#237443;
+  font-size:11px;
+  font-weight:900;
+}
+
+.view-btn{
+  min-height:34px;
+  border:1px solid #cddae3;
+  border-radius:8px;
+  background:#fff;
+  color:#24485f;
+  font-size:12px;
+  font-weight:900;
+  padding:0 10px;
+}
+
+
+/* =========================
+   DOCUMENTS
+========================= */
+
+.section-label{
+  margin:5px 0 10px;
+  font-size:14px;
+  font-weight:900;
+  color:#12394d;
+}
+
+.optional-label{
+  margin-top:18px;
+}
+
+.doc-list{
+  display:grid;
+  gap:10px;
+}
+
+.doc-row{
+  border:1px solid #dce5eb;
+  border-radius:13px;
+  padding:13px;
+}
+
+.doc-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:9px;
+}
+
+.doc-title{
+  font-size:13px;
+  font-weight:900;
+}
+
+.doc-status{
+  font-size:11px;
+  font-weight:900;
+  color:#986500;
+}
+
+.doc-status.ok{
+  color:#237443;
+}
+
+.doc-warning{
+  margin:0 0 9px;
+  padding:8px 10px;
+  border-radius:8px;
+  background:#fff3f3;
+  color:#b23636;
   font-size:12px;
   font-weight:900;
 }
 
-.step.done .step-dot{
+.file-area{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.file-name{
+  flex:1;
+  min-width:0;
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  padding:8px 10px;
+  border-radius:9px;
+  background:#f5f8fa;
+  color:#6b7d8b;
+  font-size:12px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.file-label{
+  position:relative;
+  flex:none;
+  min-height:40px;
+  padding:0 13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:9px;
+  background:#e9f3ff;
+  color:#155f9f;
+  font-size:12px;
+  font-weight:900;
+  overflow:hidden;
+}
+
+.file-label input{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  cursor:pointer;
+}
+
+.optional-note{
+  margin-top:8px;
+  font-size:12px;
+  line-height:1.6;
+  color:#687c8b;
+}
+
+
+/* =========================
+   FEE STATUS
+========================= */
+
+.fee-status-box{
+  text-align:center;
+  padding:22px 15px;
+  border:1px solid #d7e7dd;
+  border-radius:15px;
+  background:#f5fbf7;
+}
+
+.fee-status{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:170px;
+  min-height:54px;
+  border-radius:13px;
+  background:#eaf8ef;
+  color:#237443;
+  font-size:19px;
+  font-weight:900;
+}
+
+.fee-status.wait{
+  background:#fff3df;
+  color:#956500;
+}
+
+.fee-description{
+  margin-top:12px;
+  font-size:13px;
+  line-height:1.65;
+  color:#5d7483;
+}
+
+
+/* =========================
+   CONTRACT
+========================= */
+
+.contract-box{
+  padding:16px;
+  border:2px solid #d7e8f8;
+  border-radius:15px;
+  background:#f5faff;
+}
+
+.contract-desc{
+  font-size:13px;
+  line-height:1.65;
+  color:#5e7485;
+  margin-bottom:14px;
+}
+
+.contract-btn{
+  width:100%;
+  min-height:52px;
+  border:0;
+  border-radius:12px;
   background:#1165d7;
   color:#fff;
+  font-size:16px;
+  font-weight:900;
 }
 
-.step.current .step-dot{
-  background:#173f67;
-  color:#fff;
+.contract-btn:disabled{
+  background:#b8c4cc;
+  cursor:not-allowed;
 }
 
-.step-text{
-  padding-top:4px;
-}
 
-.step-text b{
-  display:block;
-  color:#263e50;
-  font-size:14px;
-}
+/* =========================
+   SIGN
+========================= */
 
-.step-text span{
-  display:block;
-  margin-top:3px;
-  color:#7a8995;
-  font-size:12px;
-}
-
-/* MEMBERS */
-
-.members{
+.sign-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:10px;
 }
 
-.member{
-  padding:14px;
-  border-radius:12px;
-  background:#f7f9fb;
-}
-
-.member-role{
-  margin:0 0 6px;
-  color:#7a8995;
-  font-size:12px;
-}
-
-.member-status{
-  margin:0;
-  color:#263e50;
-  font-size:14px;
-  font-weight:900;
-}
-
-/* DOCUMENT */
-
-.document{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:14px 0;
-  border-bottom:1px solid #edf1f4;
-}
-
-.document:last-child{
-  border-bottom:0;
-  padding-bottom:0;
-}
-
-.document:first-child{
-  padding-top:0;
-}
-
-.document-name{
-  min-width:0;
-}
-
-.document-name b{
-  display:block;
-  font-size:14px;
-  color:#263e50;
-}
-
-.document-name span{
-  display:block;
-  margin-top:3px;
-  color:#7a8995;
-  font-size:11px;
-}
-
-.document-status{
-  flex:none;
-  padding:6px 9px;
-  border-radius:999px;
-  background:#eef6ff;
-  color:#1165d7;
-  font-size:11px;
-  font-weight:900;
-}
-
-/* FEE */
-
-.fee{
-  border:1px solid #d8e7f3;
+.sign-card{
+  border:1px solid #dce5eb;
   border-radius:14px;
-  overflow:hidden;
+  padding:13px;
 }
 
-.fee-head{
-  padding:14px 15px;
-  background:#eef6ff;
-  color:#315875;
-  font-size:13px;
-  font-weight:900;
-}
-
-.fee-body{
-  padding:17px 15px;
-}
-
-.fee-row{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding:8px 0;
+.sign-role{
   font-size:14px;
+  font-weight:900;
+  margin-bottom:10px;
 }
 
-.fee-row span:first-child{
-  color:#718291;
-}
-
-.fee-row strong{
-  color:#173f67;
-}
-
-.fee-account{
-  margin-top:10px;
-  padding:12px;
-  border-radius:10px;
-  background:#f7f9fb;
-  color:#516a7b;
-  font-size:12px;
-  line-height:1.55;
-}
-
-.fee-btn{
+.sign-card input{
   width:100%;
-  height:45px;
-  margin-top:12px;
+  height:42px;
+  border:1px solid #cbd7df;
+  border-radius:9px;
+  padding:0 9px;
+}
+
+.sign-btn{
+  width:100%;
+  min-height:39px;
+  margin-top:7px;
   border:0;
-  border-radius:11px;
-  background:#1165d7;
+  border-radius:9px;
+  background:#12394d;
   color:#fff;
+  font-size:12px;
   font-weight:900;
 }
 
-/* HIDDEN FEE */
+.sign-btn:disabled{
+  background:#b8c4cc;
+  cursor:not-allowed;
+}
 
-.fee-hidden{
-  padding:15px;
+.sign-state{
+  display:inline-block;
+  margin-top:9px;
+  padding:5px 8px;
+  border-radius:999px;
+  background:#fff3dd;
+  color:#926000;
+  font-size:11px;
+  font-weight:900;
+}
+
+.sign-state.ok{
+  background:#e9f8ef;
+  color:#237443;
+}
+
+
+/* =========================
+   BOTTOM
+========================= */
+
+.bottom{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.bottom button{
+  min-height:49px;
   border-radius:12px;
-  background:#f7f9fb;
-  color:#718291;
-  font-size:13px;
-  line-height:1.55;
-}
-
-/* CONTRACT */
-
-.contract-box{
-  padding:16px;
-  border:1px solid #dce5ec;
-  border-radius:13px;
-  background:#f9fbfc;
-}
-
-.contract-title{
-  margin:0 0 7px;
-  color:#173f67;
-  font-size:16px;
-  font-weight:900;
-}
-
-.contract-text{
-  margin:0;
-  color:#667b8a;
-  font-size:13px;
-  line-height:1.65;
-}
-
-.contract-actions{
-  display:flex;
-  gap:8px;
-  margin-top:13px;
-}
-
-.action{
-  flex:1;
-  height:44px;
-  border-radius:10px;
-  font-size:13px;
-  font-weight:900;
-}
-
-.action-light{
-  border:1px solid #cbd9e4;
+  border:1px solid #ccd8df;
   background:#fff;
-  color:#315875;
+  color:#234358;
+  font-weight:900;
 }
 
-.action-primary{
-  border:0;
-  background:#1165d7;
+.bottom .print{
+  background:#12394d;
+  border-color:#12394d;
   color:#fff;
 }
 
-/* NOTE */
-
-.note{
-  padding:14px 15px;
-  border-radius:12px;
-  background:#f7f9fb;
-  color:#687b8a;
-  font-size:12px;
-  line-height:1.65;
+.msg{
+  display:none;
+  margin-top:11px;
+  padding:11px 12px;
+  border-radius:11px;
+  font-size:13px;
+  font-weight:850;
 }
 
-/* FOOTER */
-
-.footer{
-  margin-top:35px;
-  padding-top:20px;
-  border-top:1px solid #dce5ec;
-  color:#7a8995;
-  font-size:12px;
+.msg.ok{
+  display:block;
+  background:#edf9f1;
+  border:1px solid #c7e9d2;
+  color:#237443;
 }
 
-/* PRINT */
+.msg.error{
+  display:block;
+  background:#fff0f0;
+  border:1px solid #f0c8c8;
+  color:#b03535;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:650px){
+
+  .wrap{
+    padding:10px 9px 55px;
+  }
+
+  .header{
+    padding:18px 14px;
+    border-radius:16px;
+  }
+
+  .header-top{
+    flex-direction:column;
+  }
+
+  .code-box{
+    width:100%;
+  }
+
+  .grid,
+  .sign-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .auto-doc{
+    grid-template-columns:1fr;
+  }
+
+  .file-area{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .bottom{
+    grid-template-columns:1fr;
+  }
+}
+
+
+/* =========================
+   PRINT
+========================= */
 
 @media print{
 
@@ -466,55 +683,19 @@ button{
   }
 
   .header,
-  .print-top,
-  .guide,
-  .fee-btn,
-  .contract-actions,
-  .footer{
-    display:none!important;
-  }
-
-  .page-head{
-    margin-top:0;
-  }
-
-  .section,
-  .trade-head{
+  .card{
     box-shadow:none;
+  }
+
+  button,
+  .file-label,
+  .bottom{
+    display:none !important;
+  }
+
+  .card{
     break-inside:avoid;
   }
-
-}
-
-/* MOBILE */
-
-@media(max-width:650px){
-
-  .wrap{
-    padding-left:10px;
-    padding-right:10px;
-  }
-
-  .page-head h1{
-    font-size:25px;
-  }
-
-  .trade-property{
-    font-size:19px;
-  }
-
-  .members{
-    grid-template-columns:1fr;
-  }
-
-  .section{
-    padding:16px;
-  }
-
-  .contract-actions{
-    flex-direction:column;
-  }
-
 }
 </style>
 </head>
@@ -523,142 +704,187 @@ button{
 
 <div class="wrap">
 
+
+<!-- HEADER -->
+
 <header class="header">
 
-  <a class="logo" href="/">
-    <span class="logo-mark">🏠</span>
+  <div class="brand">
+    🏠 우리아파트 안심거래
+  </div>
 
-    <span>
-      우리아파트
-      <strong>안심거래</strong>
-    </span>
-  </a>
+  <div class="header-top">
 
-  <button
-    class="print-top"
-    type="button"
-    onclick="printRoom()">
-    🖨 인쇄
-  </button>
+    <div>
 
-</header>
+      <h1>
+        안심거래 진행현황
+      </h1>
 
+      <p>
+        거래 진행상황과 전자계약 진행상태를 확인할 수 있습니다.
+      </p>
 
-<section class="page-head">
+    </div>
 
-  <h1>거래진행실</h1>
+    <div class="code-box">
 
-  <p>
-    거래 진행사항은 거래진행실에서 확인할 수 있습니다.
-  </p>
+      <small>
+        안심거래 코드
+      </small>
 
-</section>
+      <div
+        id="roomCode"
+        class="code-number"
+      >
+        ----
+      </div>
 
+    </div>
 
-<!-- 거래 기본정보 -->
-
-<section class="trade-head">
-
-  <p class="trade-number">
-    거래번호 <span id="tradeNumber">-</span>
-  </p>
-
-  <h2
-    class="trade-property"
-    id="propertyName">
-    거래 정보를 불러오는 중입니다.
-  </h2>
-
-  <span
-    class="trade-status"
-    id="tradeStatus">
-    거래 진행 중
-  </span>
-
-</section>
-
-
-<div class="guide">
-
-  <b>이용 안내</b><br>
-  매수자·매도자·공인중개사는 같은 거래진행실에서
-  진행상황을 확인할 수 있습니다.
-  화면에 표시되는 순서대로 진행해 주세요.
-
-</div>
-
-
-<!-- 진행상황 -->
-
-<section class="section">
-
-  <h2 class="section-title">
-    거래 진행상황
-  </h2>
-
-  <p class="section-desc">
-    현재 어디까지 진행되었는지 확인할 수 있습니다.
-  </p>
+  </div>
 
 
   <div class="progress">
 
-    <div class="step done">
+    <span class="active">
+      거래 진행중
+    </span>
 
-      <div class="step-dot">✓</div>
+    <span id="progressDocs">
+      서류등록
+    </span>
 
-      <div class="step-text">
-        <b>매물 선택</b>
-        <span>매수자가 거래할 매물을 결정했습니다.</span>
-      </div>
+    <span id="progressContract">
+      전자계약
+    </span>
+
+    <span id="progressSign">
+      전자서명
+    </span>
+
+    <span id="progressComplete">
+      거래완료
+    </span>
+
+  </div>
+
+</header>
+
+
+
+<!-- ① 거래 기본정보 -->
+
+<section class="card">
+
+  <div class="card-head">
+
+    <div class="card-title">
+      ① 거래 기본정보
+    </div>
+
+    <span
+      id="basicState"
+      class="state wait"
+    >
+      작성중
+    </span>
+
+  </div>
+
+  <div class="required-note">
+    * 표시는 필수 입력사항입니다.
+  </div>
+
+
+  <div class="grid">
+
+
+    <div class="field">
+
+      <label>
+        거래유형<span class="req">*</span>
+      </label>
+
+      <select id="tradeType">
+
+        <option value="">
+          선택
+        </option>
+
+        <option value="sale">
+          매매
+        </option>
+
+        <option value="jeonse">
+          전세
+        </option>
+
+        <option value="monthly">
+          월세
+        </option>
+
+      </select>
 
     </div>
 
 
-    <div class="step current">
+    <div class="field">
 
-      <div class="step-dot">2</div>
+      <label>
+        아파트명<span class="req">*</span>
+      </label>
 
-      <div class="step-text">
-        <b>거래진행실</b>
-        <span>매수자·매도자·중개사가 거래를 진행합니다.</span>
-      </div>
-
-    </div>
-
-
-    <div class="step">
-
-      <div class="step-dot">3</div>
-
-      <div class="step-text">
-        <b>서류 확인</b>
-        <span>필요한 서류를 확인합니다.</span>
-      </div>
+      <input
+        id="apartmentName"
+        type="text"
+        placeholder="아파트명"
+      >
 
     </div>
 
 
-    <div class="step">
+    <div class="field full">
 
-      <div class="step-dot">4</div>
+      <label>
+        거래 부동산 주소<span class="req">*</span>
+      </label>
 
-      <div class="step-text">
-        <b>전자계약</b>
-        <span>전자계약서를 확인하고 서명을 진행합니다.</span>
-      </div>
+      <input
+        id="address"
+        type="text"
+        placeholder="주소 입력"
+      >
 
     </div>
 
 
-    <div class="step">
+    <div class="field">
 
-      <div class="step-dot">5</div>
+      <label>
+        동<span class="req">*</span>
+      </label>
 
-      <div class="step-text">
-        <b>계약 완료</b>
-        <span>계약이 완료되면 계약서를 인쇄할 수 있습니다.</span>
-      </div>
+      <input
+        id="dong"
+        type="text"
+        placeholder="101동"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        호<span class="req">*</span>
+      </label>
+
+      <input
+        id="ho"
+        type="text"
+        placeholder="1201호"
+      >
 
     </div>
 
@@ -667,224 +893,836 @@ button{
 </section>
 
 
-<!-- 참여자 -->
 
-<section class="section">
+<!-- ② 거래 당사자 확인 -->
 
-  <h2 class="section-title">
-    거래 참여자
-  </h2>
+<section class="card">
 
-  <p class="section-desc">
-    세 사람 모두 같은 거래진행실을 확인합니다.
-  </p>
+  <div class="card-head">
 
-
-  <div class="members">
-
-    <div class="member">
-      <p class="member-role">매수자</p>
-      <p class="member-status" id="buyerStatus">
-        확인 대기
-      </p>
+    <div class="card-title">
+      ② 거래 당사자 확인
     </div>
 
-    <div class="member">
-      <p class="member-role">매도자</p>
-      <p class="member-status" id="sellerStatus">
-        확인 대기
-      </p>
-    </div>
+    <span
+      id="partyState"
+      class="state wait"
+    >
+      확인대기
+    </span>
 
-    <div class="member">
-      <p class="member-role">공인중개사</p>
-      <p class="member-status" id="brokerStatus">
-        진행 중
-      </p>
-    </div>
+  </div>
+
+  <div class="notice">
+    공인중개사가 거래 당사자의 신분을 직접 확인한 후 체크합니다.
+  </div>
+
+
+  <div class="check-box">
+
+    <label class="check-label">
+
+      <input
+        id="buyerIdentity"
+        type="checkbox"
+      >
+
+      매수자 · 임차인 본인확인 완료
+      <span class="req">*</span>
+
+    </label>
+
+  </div>
+
+
+  <div class="check-box">
+
+    <label class="check-label">
+
+      <input
+        id="sellerIdentity"
+        type="checkbox"
+      >
+
+      매도자 · 임대인 본인확인 완료
+      <span class="req">*</span>
+
+    </label>
 
   </div>
 
 </section>
 
 
-<!-- 서류 -->
 
-<section class="section">
+<!-- ③ 공인중개사 등록자료 -->
 
-  <h2 class="section-title">
-    서류 확인
-  </h2>
+<section class="card">
 
-  <p class="section-desc">
-    거래가 진행되면 필요한 서류가 이곳에 표시됩니다.
-  </p>
+  <div class="card-head">
 
-
-  <div>
-
-    <div class="document">
-
-      <div class="document-name">
-        <b>매매계약 관련 서류</b>
-        <span>거래 진행 후 확인</span>
-      </div>
-
-      <span class="document-status">
-        대기
-      </span>
-
+    <div class="card-title">
+      ③ 공인중개사 등록자료
     </div>
 
-
-    <div class="document">
-
-      <div class="document-name">
-        <b>등기 관련 서류</b>
-        <span>거래 진행 후 확인</span>
-      </div>
-
-      <span class="document-status">
-        대기
-      </span>
-
-    </div>
-
-
-    <div class="document">
-
-      <div class="document-name">
-        <b>기타 거래서류</b>
-        <span>필요한 경우 표시됩니다.</span>
-      </div>
-
-      <span class="document-status">
-        대기
-      </span>
-
-    </div>
+    <span
+      id="brokerDocState"
+      class="state wait"
+    >
+      확인중
+    </span>
 
   </div>
 
-</section>
+  <div class="notice">
+    1단계에서 등록한 중개사무소 등록증과
+    보증보험 · 공제증서를 자동으로 불러옵니다.
+  </div>
 
 
-<!-- 이용료 : 매수자에게만 표시 -->
-
-<section
-  class="section"
-  id="feeSection">
-
-  <h2 class="section-title">
-    플랫폼 이용료
-  </h2>
+  <div class="auto-doc-list">
 
 
-  <!-- 매수자 화면 -->
+    <div class="auto-doc">
 
-  <div
-    class="fee"
-    id="buyerFee">
+      <div>
 
-    <div class="fee-head">
-      매수자 이용료
-    </div>
+        <div class="auto-doc-title">
+          중개사무소 등록증
+        </div>
 
-    <div class="fee-body">
-
-      <div class="fee-row">
-        <span>이용료</span>
-        <strong id="feeAmount">
-          150,000원
-        </strong>
-      </div>
-
-      <div class="fee-row">
-        <span>입금 상태</span>
-        <strong id="paymentStatus">
-          입금 전
-        </strong>
-      </div>
-
-      <div class="fee-account">
-
-        아래 계좌로 입금해 주세요.<br>
-
-        <b>
-          우리은행 000-000000-00-000
-        </b><br>
-
-        예금주: 우리아파트 안심거래
+        <div
+          id="registrationFileName"
+          class="auto-doc-name"
+        >
+          불러오는 중
+        </div>
 
       </div>
+
+      <span class="auto-badge">
+        자동입력 완료
+      </span>
 
       <button
-        class="fee-btn"
         type="button"
-        onclick="paymentCheck()">
-        입금 확인 요청
+        class="view-btn"
+        onclick="viewBrokerDocument('registration')"
+      >
+        보기
+      </button>
+
+    </div>
+
+
+    <div class="auto-doc">
+
+      <div>
+
+        <div class="auto-doc-title">
+          보증보험 · 공제증서
+        </div>
+
+        <div
+          id="guaranteeFileName"
+          class="auto-doc-name"
+        >
+          불러오는 중
+        </div>
+
+      </div>
+
+      <span class="auto-badge">
+        자동입력 완료
+      </span>
+
+      <button
+        type="button"
+        class="view-btn"
+        onclick="viewBrokerDocument('guarantee')"
+      >
+        보기
       </button>
 
     </div>
 
   </div>
 
+</section>
 
-  <!-- 매수자 외 -->
 
-  <div
-    class="fee-hidden"
-    id="hiddenFee"
-    style="display:none">
 
-    플랫폼 이용료는 매수자 화면에서만 확인할 수 있습니다.
-    현재 이용료 납부 상태는 거래 진행상황에 표시됩니다.
+<!-- ④ 거래서류 등록 -->
+
+<section class="card">
+
+  <div class="card-head">
+
+    <div class="card-title">
+      ④ 거래서류 등록
+    </div>
+
+    <span
+      id="documentState"
+      class="state wait"
+    >
+      등록대기
+    </span>
+
+  </div>
+
+
+  <div class="section-label">
+    필수서류
+  </div>
+
+
+  <div class="doc-list">
+
+
+    <!-- 등기부등본 -->
+
+    <div class="doc-row">
+
+      <div class="doc-head">
+
+        <div class="doc-title">
+          등기사항증명서(등기부등본)
+          <span class="req">*</span>
+        </div>
+
+        <span
+          id="docStatus0"
+          class="doc-status"
+        >
+          미등록
+        </span>
+
+      </div>
+
+      <div class="doc-warning">
+        ※ 계약 진행 당일 발급본만 유효합니다.
+      </div>
+
+      <div class="file-area">
+
+        <div
+          id="docName0"
+          class="file-name"
+        >
+          선택된 파일 없음
+        </div>
+
+        <label class="file-label">
+
+          파일 선택
+
+          <input
+            type="file"
+            class="doc-input"
+            data-index="0"
+            data-required="true"
+            accept=".jpg,.jpeg,.png,.pdf"
+          >
+
+        </label>
+
+        <button
+          type="button"
+          id="viewDoc0"
+          class="view-btn"
+          onclick="viewDocument(0)"
+          disabled
+        >
+          보기
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- 확인설명서 -->
+
+    <div class="doc-row">
+
+      <div class="doc-head">
+
+        <div class="doc-title">
+          중개대상물 확인 · 설명서
+          <span class="req">*</span>
+        </div>
+
+        <span
+          id="docStatus1"
+          class="doc-status"
+        >
+          미등록
+        </span>
+
+      </div>
+
+      <div class="file-area">
+
+        <div
+          id="docName1"
+          class="file-name"
+        >
+          선택된 파일 없음
+        </div>
+
+        <label class="file-label">
+
+          파일 선택
+
+          <input
+            type="file"
+            class="doc-input"
+            data-index="1"
+            data-required="true"
+            accept=".jpg,.jpeg,.png,.pdf"
+          >
+
+        </label>
+
+        <button
+          type="button"
+          id="viewDoc1"
+          class="view-btn"
+          onclick="viewDocument(1)"
+          disabled
+        >
+          보기
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="section-label optional-label">
+    선택서류
+  </div>
+
+
+  <div class="doc-list">
+
+
+    <!-- 토지대장 -->
+
+    <div class="doc-row">
+
+      <div class="doc-head">
+
+        <div class="doc-title">
+          토지대장
+        </div>
+
+        <span
+          id="docStatus2"
+          class="doc-status"
+        >
+          선택
+        </span>
+
+      </div>
+
+      <div class="file-area">
+
+        <div
+          id="docName2"
+          class="file-name"
+        >
+          선택된 파일 없음
+        </div>
+
+        <label class="file-label">
+
+          파일 선택
+
+          <input
+            type="file"
+            class="doc-input"
+            data-index="2"
+            data-required="false"
+            accept=".jpg,.jpeg,.png,.pdf"
+          >
+
+        </label>
+
+        <button
+          type="button"
+          id="viewDoc2"
+          class="view-btn"
+          onclick="viewDocument(2)"
+          disabled
+        >
+          보기
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- 건축물대장 -->
+
+    <div class="doc-row">
+
+      <div class="doc-head">
+
+        <div class="doc-title">
+          건축물대장
+        </div>
+
+        <span
+          id="docStatus3"
+          class="doc-status"
+        >
+          선택
+        </span>
+
+      </div>
+
+      <div class="file-area">
+
+        <div
+          id="docName3"
+          class="file-name"
+        >
+          선택된 파일 없음
+        </div>
+
+        <label class="file-label">
+
+          파일 선택
+
+          <input
+            type="file"
+            class="doc-input"
+            data-index="3"
+            data-required="false"
+            accept=".jpg,.jpeg,.png,.pdf"
+          >
+
+        </label>
+
+        <button
+          type="button"
+          id="viewDoc3"
+          class="view-btn"
+          onclick="viewDocument(3)"
+          disabled
+        >
+          보기
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="section-label optional-label">
+    기타 거래 관련 서류
+  </div>
+
+  <div class="optional-note">
+    토지이용계획확인서, 지적도 등 필요한 거래 관련 자료를
+    최대 3개까지 등록할 수 있습니다.
+  </div>
+
+
+  <div class="doc-list" style="margin-top:10px;">
+
+
+    <div class="doc-row">
+
+      <div class="doc-head">
+
+        <div class="doc-title">
+          기타서류 1
+        </div>
+
+        <span
+          id="docStatus4"
+          class="doc-status"
+        >
+          선택
+        </span>
+
+      </div>
+
+      <div class="file-area">
+
+        <div
+          id="docName4"
+          class="file-name"
+        >
+          선택된 파일 없음
+        </div>
+
+        <label class="file-label">
+
+          파일 선택
+
+          <input
+            type="file"
+            class="doc-input"
+            data-index="4"
+            data-required="false"
+            accept=".jpg,.jpeg,.png,.pdf"
+          >
+
+        </label>
+
+        <button
+          type="button"
+          id="viewDoc4"
+          class="view-btn"
+          onclick="viewDocument(4)"
+          disabled
+        >
+          보기
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="doc-row">
+
+      <div class="doc-head">
+
+        <div class="doc-title">
+          기타서류 2
+        </div>
+
+        <span
+          id="docStatus5"
+          class="doc-status"
+        >
+          선택
+        </span>
+
+      </div>
+
+      <div class="file-area">
+
+        <div
+          id="docName5"
+          class="file-name"
+        >
+          선택된 파일 없음
+        </div>
+
+        <label class="file-label">
+
+          파일 선택
+
+          <input
+            type="file"
+            class="doc-input"
+            data-index="5"
+            data-required="false"
+            accept=".jpg,.jpeg,.png,.pdf"
+          >
+
+        </label>
+
+        <button
+          type="button"
+          id="viewDoc5"
+          class="view-btn"
+          onclick="viewDocument(5)"
+          disabled
+        >
+          보기
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="doc-row">
+
+      <div class="doc-head">
+
+        <div class="doc-title">
+          기타서류 3
+        </div>
+
+        <span
+          id="docStatus6"
+          class="doc-status"
+        >
+          선택
+        </span>
+
+      </div>
+
+      <div class="file-area">
+
+        <div
+          id="docName6"
+          class="file-name"
+        >
+          선택된 파일 없음
+        </div>
+
+        <label class="file-label">
+
+          파일 선택
+
+          <input
+            type="file"
+            class="doc-input"
+            data-index="6"
+            data-required="false"
+            accept=".jpg,.jpeg,.png,.pdf"
+          >
+
+        </label>
+
+        <button
+          type="button"
+          id="viewDoc6"
+          class="view-btn"
+          onclick="viewDocument(6)"
+          disabled
+        >
+          보기
+        </button>
+
+      </div>
+
+    </div>
 
   </div>
 
 </section>
 
 
-<!-- 전자계약 -->
 
-<section class="section">
+<!-- ⑤ 플랫폼 서비스 이용료 -->
 
-  <h2 class="section-title">
-    전자계약
-  </h2>
+<section class="card">
 
-  <p class="section-desc">
-    이용료 입금 확인 후 전자계약 단계가 진행됩니다.
-  </p>
+  <div class="card-head">
+
+    <div class="card-title">
+      ⑤ 플랫폼 서비스 이용료
+    </div>
+
+    <span
+      id="feeStateTop"
+      class="state wait"
+    >
+      확인대기
+    </span>
+
+  </div>
+
+
+  <div class="fee-status-box">
+
+    <div
+      id="feeStatus"
+      class="fee-status wait"
+    >
+      입금 확인 대기
+    </div>
+
+    <div class="fee-description">
+      플랫폼 서비스 이용료 입금이 완료되어야
+      전자서명이 활성화됩니다.
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- ⑥ 전자계약 -->
+
+<section class="card">
+
+  <div class="card-head">
+
+    <div class="card-title">
+      ⑥ 전자계약서
+    </div>
+
+    <span
+      id="contractState"
+      class="state wait"
+    >
+      작성대기
+    </span>
+
+  </div>
 
 
   <div class="contract-box">
 
-    <p class="contract-title">
-      전자계약서 확인
-    </p>
+    <div
+      id="contractDescription"
+      class="contract-desc"
+    >
+      거래 당사자 확인과 필수서류 등록이 완료되면
+      전자계약서 작성이 가능합니다.
+    </div>
 
-    <p class="contract-text">
-      계약서가 준비되면 이곳에서 계약서 내용을 확인하고
-      문자로 받은 서명 요청에 따라 서명을 진행합니다.
-    </p>
+    <button
+      id="contractButton"
+      type="button"
+      class="contract-btn"
+      disabled
+    >
+      전자계약서 작성
+    </button>
+
+  </div>
+
+</section>
 
 
-    <div class="contract-actions">
+
+<!-- ⑦ 전자서명 -->
+
+<section class="card">
+
+  <div class="card-head">
+
+    <div class="card-title">
+      ⑦ 전자서명 현황
+    </div>
+
+    <span
+      id="allSignState"
+      class="state wait"
+    >
+      비활성
+    </span>
+
+  </div>
+
+
+  <div class="notice">
+    전자계약서 작성 완료와 플랫폼 서비스 이용료 입금 완료 후
+    전자서명이 활성화됩니다.
+  </div>
+
+
+  <div class="sign-grid">
+
+
+    <div class="sign-card">
+
+      <div class="sign-role">
+        매수자 · 임차인
+      </div>
+
+      <input
+        id="buyerSignPhone"
+        type="tel"
+        inputmode="numeric"
+        maxlength="11"
+        placeholder="휴대전화번호"
+      >
 
       <button
-        class="action action-light"
+        id="buyerSignButton"
         type="button"
-        onclick="printContract()">
-        계약서 인쇄
+        class="sign-btn"
+        onclick="sendSignSms('buyer')"
+        disabled
+      >
+        문자 발송
       </button>
 
+      <span
+        id="buyerSignState"
+        class="sign-state"
+      >
+        서명대기
+      </span>
+
+    </div>
+
+
+    <div class="sign-card">
+
+      <div class="sign-role">
+        매도자 · 임대인
+      </div>
+
+      <input
+        id="sellerSignPhone"
+        type="tel"
+        inputmode="numeric"
+        maxlength="11"
+        placeholder="휴대전화번호"
+      >
+
       <button
-        class="action action-primary"
+        id="sellerSignButton"
         type="button"
-        onclick="contractNotice()">
-        전자계약 확인
+        class="sign-btn"
+        onclick="sendSignSms('seller')"
+        disabled
+      >
+        문자 발송
       </button>
+
+      <span
+        id="sellerSignState"
+        class="sign-state"
+      >
+        서명대기
+      </span>
+
+    </div>
+
+
+    <div class="sign-card">
+
+      <div class="sign-role">
+        공인중개사
+      </div>
+
+      <input
+        id="brokerSignPhone"
+        type="tel"
+        inputmode="numeric"
+        maxlength="11"
+        placeholder="휴대전화번호"
+      >
+
+      <button
+        id="brokerSignButton"
+        type="button"
+        class="sign-btn"
+        onclick="sendSignSms('broker')"
+        disabled
+      >
+        문자 발송
+      </button>
+
+      <span
+        id="brokerSignState"
+        class="sign-state"
+      >
+        서명대기
+      </span>
 
     </div>
 
@@ -893,243 +1731,1281 @@ button{
 </section>
 
 
-<!-- 안내 -->
 
-<section class="section">
+<!-- BOTTOM -->
 
-  <h2 class="section-title">
-    확인해 주세요
-  </h2>
+<div class="bottom">
 
-  <div class="note">
+  <button
+    type="button"
+    onclick="saveProgress(true)"
+  >
+    진행내용 저장
+  </button>
 
-    거래진행실의 진행상황은 매수자·매도자·공인중개사가
-    함께 확인할 수 있습니다.<br><br>
-
-    매수자에게만 표시되는 이용료 금액과 입금정보는
-    다른 참여자에게 표시되지 않습니다.<br><br>
-
-    전자계약 서명 요청은 문자로 전달되며,
-    서명 완료 후 플랫폼에서 진행상황을 확인할 수 있습니다.
-
-  </div>
-
-</section>
-
-
-<footer class="footer">
-  © 우리아파트 안심거래. All rights reserved.
-</footer>
+  <button
+    type="button"
+    class="print"
+    onclick="window.print()"
+  >
+    진행현황 출력
+  </button>
 
 </div>
 
 
+<div
+  id="message"
+  class="msg"
+></div>
+
+
+</div>
+
+
+
 <script>
+(function(){
 
 "use strict";
 
+const $ =
+  id => document.getElementById(id);
 
-/*
-====================================================
-거래 데이터
 
-실제 운영에서는 Supabase와 연결합니다.
+/* =========================
+   URL
+========================= */
 
-현재는 테스트용 기본값입니다.
-====================================================
-*/
+const params =
+  new URLSearchParams(
+    location.search
+  );
 
-const defaultTrade={
+let roomCode =
+  params.get("code") || "";
 
-  tradeNumber:"582641",
 
-  propertyName:
-    "광주 양산동 ○○아파트",
+/* =========================
+   STEP 1 DATA
+========================= */
 
-  status:
-    "거래 진행 중",
+let step1Data = null;
 
-  buyerCode:
-    "4827",
+try{
 
-  sellerCode:
-    "6153",
+  step1Data =
+    JSON.parse(
+      localStorage.getItem(
+        "woori_guest_broker_step1"
+      )
+    );
 
-  buyerConfirmed:false,
+}catch(e){
 
-  sellerConfirmed:false,
+  step1Data = null;
 
-  brokerConfirmed:true,
+}
 
-  paymentStatus:
-    "입금 전"
+
+if(
+  !roomCode &&
+  step1Data &&
+  step1Data.roomCode
+){
+
+  roomCode =
+    step1Data.roomCode;
+
+}
+
+
+$("roomCode").textContent =
+  roomCode || "----";
+
+
+/* =========================
+   FILE STATE
+========================= */
+
+const documents =
+[
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null
+];
+
+
+/* =========================
+   BROKER DATA
+========================= */
+
+function loadBrokerData(){
+
+  if(!step1Data){
+
+    $("registrationFileName").textContent =
+      "등록자료 없음";
+
+    $("guaranteeFileName").textContent =
+      "등록자료 없음";
+
+    $("brokerDocState").textContent =
+      "자료없음";
+
+    return;
+
+  }
+
+
+  $("registrationFileName").textContent =
+    step1Data.registrationFileName ||
+    step1Data.registrationFile ||
+    "중개사무소 등록증";
+
+
+  $("guaranteeFileName").textContent =
+    step1Data.guaranteeFileName ||
+    step1Data.guaranteeFile ||
+    "보증보험 · 공제증서";
+
+
+  $("brokerDocState").textContent =
+    "자동입력 완료";
+
+  $("brokerDocState").className =
+    "state ok";
+
+
+  if(step1Data.mobile){
+
+    $("brokerSignPhone").value =
+      step1Data.mobile;
+
+  }
+
+}
+
+
+/* =========================
+   BROKER DOCUMENT VIEW
+========================= */
+
+window.viewBrokerDocument =
+function(type){
+
+  let url = "";
+
+
+  if(!step1Data){
+
+    showError(
+      "등록자료가 없습니다."
+    );
+
+    return;
+
+  }
+
+
+  if(type === "registration"){
+
+    url =
+      step1Data.registrationFileUrl ||
+      step1Data.registrationUrl ||
+      "";
+
+  }
+
+
+  if(type === "guarantee"){
+
+    url =
+      step1Data.guaranteeFileUrl ||
+      step1Data.guaranteeUrl ||
+      "";
+
+  }
+
+
+  if(url){
+
+    window.open(
+      url,
+      "_blank"
+    );
+
+    return;
+
+  }
+
+
+  showOk(
+    "등록된 파일 정보가 자동입력되어 있습니다."
+  );
 
 };
 
 
-let tradeData;
+/* =========================
+   BASIC INFO
+========================= */
+
+const basicIds =
+[
+  "tradeType",
+  "apartmentName",
+  "address",
+  "dong",
+  "ho"
+];
 
 
-try{
+basicIds.forEach(
+  function(id){
 
-  const saved=
-    localStorage.getItem(
-      "wooriapt_trade"
+    $(id).addEventListener(
+      "input",
+      function(){
+
+        updateStatus();
+        saveProgress(false);
+
+      }
     );
 
-  tradeData=
-    saved
-    ? JSON.parse(saved)
-    : defaultTrade;
 
-}catch(e){
+    $(id).addEventListener(
+      "change",
+      function(){
 
-  tradeData=
-    defaultTrade;
+        updateStatus();
+        saveProgress(false);
 
-}
+      }
+    );
 
-
-/* 기본 표시 */
-
-document.getElementById(
-  "tradeNumber"
-).textContent=
-  tradeData.tradeNumber || "-";
+  }
+);
 
 
-document.getElementById(
-  "propertyName"
-).textContent=
-  tradeData.propertyName ||
-  "거래 매물";
+function basicComplete(){
 
+  return basicIds.every(
+    function(id){
 
-document.getElementById(
-  "tradeStatus"
-).textContent=
-  tradeData.status ||
-  "거래 진행 중";
+      return String(
+        $(id).value || ""
+      ).trim() !== "";
 
-
-/* 참여자 상태 */
-
-document.getElementById(
-  "buyerStatus"
-).textContent=
-  tradeData.buyerConfirmed
-  ? "확인 완료"
-  : "확인 대기";
-
-
-document.getElementById(
-  "sellerStatus"
-).textContent=
-  tradeData.sellerConfirmed
-  ? "확인 완료"
-  : "확인 대기";
-
-
-document.getElementById(
-  "brokerStatus"
-).textContent=
-  tradeData.brokerConfirmed
-  ? "진행 중"
-  : "확인 대기";
-
-
-/* =========================================
-   화면 역할
-
-   실제 운영에서는 로그인/코드 확인 후
-   서버에서 role을 받아 처리합니다.
-
-   buyer
-   seller
-   broker
-========================================= */
-
-const role=
-  new URLSearchParams(
-    location.search
-  ).get("role") || "buyer";
-
-
-if(role==="buyer"){
-
-  document.getElementById(
-    "buyerFee"
-  ).style.display="block";
-
-  document.getElementById(
-    "hiddenFee"
-  ).style.display="none";
-
-}else{
-
-  document.getElementById(
-    "buyerFee"
-  ).style.display="none";
-
-  document.getElementById(
-    "hiddenFee"
-  ).style.display="block";
-
-}
-
-
-/* =========================================
-   입금 확인 요청
-========================================= */
-
-function paymentCheck(){
-
-  alert(
-    "입금 확인 요청이 등록되었습니다.\n\n"+
-    "실제 운영에서는 금융기관 입금 확인 후 "+
-    "자동으로 상태가 변경됩니다."
+    }
   );
 
 }
 
 
-/* =========================================
-   거래진행실 인쇄
-========================================= */
+/* =========================
+   PARTY CHECK
+========================= */
 
-function printRoom(){
+$("buyerIdentity")
+.addEventListener(
+  "change",
+  function(){
 
-  window.print();
+    updateStatus();
+    saveProgress(false);
 
-}
+  }
+);
 
 
-/* =========================================
-   계약서 인쇄
-========================================= */
+$("sellerIdentity")
+.addEventListener(
+  "change",
+  function(){
 
-function printContract(){
+    updateStatus();
+    saveProgress(false);
 
-  alert(
-    "전자계약서가 준비되면 계약서 인쇄 화면으로 연결됩니다."
+  }
+);
+
+
+function partyComplete(){
+
+  return (
+    $("buyerIdentity").checked &&
+    $("sellerIdentity").checked
   );
 
 }
 
 
-/* =========================================
-   전자계약
-========================================= */
+/* =========================
+   DOCUMENT UPLOAD
+========================= */
 
-function contractNotice(){
+const docInputs =
+  document.querySelectorAll(
+    ".doc-input"
+  );
 
-  alert(
-    "전자계약 단계입니다.\n\n"+
-    "문자로 받은 서명 요청을 확인해 주세요."
+
+docInputs.forEach(
+  function(input){
+
+    input.addEventListener(
+      "change",
+      function(){
+
+        const index =
+          Number(
+            this.dataset.index
+          );
+
+
+        if(
+          !this.files ||
+          !this.files.length
+        ){
+
+          return;
+
+        }
+
+
+        const file =
+          this.files[0];
+
+
+        const allowed =
+        [
+          "image/jpeg",
+          "image/png",
+          "application/pdf"
+        ];
+
+
+        if(
+          !allowed.includes(
+            file.type
+          )
+        ){
+
+          showError(
+            "JPG, JPEG, PNG, PDF 파일만 등록할 수 있습니다."
+          );
+
+          this.value = "";
+
+          return;
+
+        }
+
+
+        documents[index] =
+        {
+          name:file.name,
+          type:file.type,
+          url:URL.createObjectURL(file)
+        };
+
+
+        $("docName" + index).textContent =
+          file.name;
+
+
+        $("docStatus" + index).textContent =
+          "등록완료";
+
+
+        $("docStatus" + index).className =
+          "doc-status ok";
+
+
+        $("viewDoc" + index).disabled =
+          false;
+
+
+        updateStatus();
+
+        saveProgress(false);
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================
+   DOCUMENT VIEW
+========================= */
+
+window.viewDocument =
+function(index){
+
+  const item =
+    documents[index];
+
+
+  if(
+    !item ||
+    !item.url
+  ){
+
+    showError(
+      "등록된 파일을 확인할 수 없습니다."
+    );
+
+    return;
+
+  }
+
+
+  window.open(
+    item.url,
+    "_blank"
+  );
+
+};
+
+
+/* =========================
+   REQUIRED DOCUMENT CHECK
+========================= */
+
+function requiredDocumentsComplete(){
+
+  return (
+    !!documents[0] &&
+    !!documents[1]
   );
 
 }
 
+
+/* =========================
+   FEE STATUS
+========================= */
+
+/*
+백엔드에서 실제 입금이 확인되면
+woori_fee_paid_거래코드 값을 true로 저장하면 됨.
+
+예:
+localStorage.setItem(
+  "woori_fee_paid_" + roomCode,
+  "true"
+);
+*/
+
+function feePaid(){
+
+  return (
+    localStorage.getItem(
+      "woori_fee_paid_" +
+      roomCode
+    ) === "true"
+  );
+
+}
+
+
+function updateFeeStatus(){
+
+  if(feePaid()){
+
+    $("feeStatus").textContent =
+      "입금 완료";
+
+    $("feeStatus").className =
+      "fee-status";
+
+
+    $("feeStateTop").textContent =
+      "입금 완료";
+
+    $("feeStateTop").className =
+      "state ok";
+
+  }else{
+
+    $("feeStatus").textContent =
+      "입금 확인 대기";
+
+    $("feeStatus").className =
+      "fee-status wait";
+
+
+    $("feeStateTop").textContent =
+      "확인대기";
+
+    $("feeStateTop").className =
+      "state wait";
+
+  }
+
+}
+
+
+/* =========================
+   CONTRACT
+========================= */
+
+function contractReady(){
+
+  return (
+    basicComplete() &&
+    partyComplete() &&
+    requiredDocumentsComplete()
+  );
+
+}
+
+
+function contractCompleted(){
+
+  let data = null;
+
+
+  try{
+
+    data =
+      JSON.parse(
+        localStorage.getItem(
+          "woori_contract_" +
+          roomCode
+        )
+      );
+
+  }catch(e){
+
+    data = null;
+
+  }
+
+
+  return !!(
+    data &&
+    data.contractCompleted
+  );
+
+}
+
+
+$("contractButton")
+.addEventListener(
+  "click",
+  function(){
+
+    if(!contractReady()){
+
+      showError(
+        "거래 당사자 확인과 필수서류 등록을 완료해 주세요."
+      );
+
+      return;
+
+    }
+
+
+    saveProgress(false);
+
+
+    location.href =
+      "/electronic-contract.html?code=" +
+      encodeURIComponent(
+        roomCode
+      );
+
+  }
+);
+
+
+/* =========================
+   SIGN ACTIVE
+========================= */
+
+function signatureAvailable(){
+
+  return (
+    contractCompleted() &&
+    feePaid()
+  );
+
+}
+
+
+function updateSignatureButtons(){
+
+  const enabled =
+    signatureAvailable();
+
+
+  $("buyerSignButton").disabled =
+    !enabled;
+
+  $("sellerSignButton").disabled =
+    !enabled;
+
+  $("brokerSignButton").disabled =
+    !enabled;
+
+
+  if(enabled){
+
+    $("allSignState").textContent =
+      "서명가능";
+
+    $("allSignState").className =
+      "state ok";
+
+    $("progressSign")
+      .classList
+      .add("active");
+
+  }else{
+
+    $("allSignState").textContent =
+      "비활성";
+
+    $("allSignState").className =
+      "state wait";
+
+  }
+
+}
+
+
+/* =========================
+   SIGN SMS
+========================= */
+
+[
+  "buyerSignPhone",
+  "sellerSignPhone",
+  "brokerSignPhone"
+]
+.forEach(
+  function(id){
+
+    $(id).addEventListener(
+      "input",
+      function(){
+
+        this.value =
+          this.value
+          .replace(/\D/g,"")
+          .slice(0,11);
+
+      }
+    );
+
+  }
+);
+
+
+function validPhone(phone){
+
+  return /^01[016789]\d{7,8}$/
+    .test(phone);
+
+}
+
+
+window.sendSignSms =
+function(type){
+
+  if(!signatureAvailable()){
+
+    showError(
+      "전자계약서 작성 완료와 플랫폼 서비스 이용료 입금 완료 후 전자서명이 활성화됩니다."
+    );
+
+    return;
+
+  }
+
+
+  let phone = "";
+
+
+  if(type === "buyer"){
+
+    phone =
+      $("buyerSignPhone")
+      .value
+      .trim();
+
+  }
+
+
+  if(type === "seller"){
+
+    phone =
+      $("sellerSignPhone")
+      .value
+      .trim();
+
+  }
+
+
+  if(type === "broker"){
+
+    phone =
+      $("brokerSignPhone")
+      .value
+      .trim();
+
+  }
+
+
+  if(!validPhone(phone)){
+
+    showError(
+      "휴대전화번호를 정확히 입력해 주세요."
+    );
+
+    return;
+
+  }
+
+
+  showOk(
+    "전자서명 요청 문자 발송이 완료되었습니다."
+  );
+
+};
+
+
+/* =========================
+   SIGN STATUS
+========================= */
+
+function loadSignStatus(){
+
+  let data = null;
+
+
+  try{
+
+    data =
+      JSON.parse(
+        localStorage.getItem(
+          "woori_contract_" +
+          roomCode
+        )
+      );
+
+  }catch(e){
+
+    data = null;
+
+  }
+
+
+  const buyerSigned =
+    !!(
+      data &&
+      data.buyerSigned
+    );
+
+
+  const sellerSigned =
+    !!(
+      data &&
+      data.sellerSigned
+    );
+
+
+  const brokerSigned =
+    !!(
+      data &&
+      data.brokerSigned
+    );
+
+
+  setSign(
+    "buyerSignState",
+    buyerSigned
+  );
+
+
+  setSign(
+    "sellerSignState",
+    sellerSigned
+  );
+
+
+  setSign(
+    "brokerSignState",
+    brokerSigned
+  );
+
+
+  if(
+    buyerSigned &&
+    sellerSigned &&
+    brokerSigned
+  ){
+
+    $("allSignState").textContent =
+      "서명완료";
+
+    $("allSignState").className =
+      "state ok";
+
+
+    $("progressComplete")
+      .classList
+      .add("active");
+
+  }
+
+}
+
+
+function setSign(
+  id,
+  complete
+){
+
+  if(complete){
+
+    $(id).textContent =
+      "서명완료";
+
+    $(id).className =
+      "sign-state ok";
+
+  }else{
+
+    $(id).textContent =
+      "서명대기";
+
+    $(id).className =
+      "sign-state";
+
+  }
+
+}
+
+
+/* =========================
+   UPDATE ALL STATUS
+========================= */
+
+function updateStatus(){
+
+  const basicOk =
+    basicComplete();
+
+  const partyOk =
+    partyComplete();
+
+  const docsOk =
+    requiredDocumentsComplete();
+
+
+  if(basicOk){
+
+    $("basicState").textContent =
+      "작성완료";
+
+    $("basicState").className =
+      "state ok";
+
+  }else{
+
+    $("basicState").textContent =
+      "작성중";
+
+    $("basicState").className =
+      "state wait";
+
+  }
+
+
+  if(partyOk){
+
+    $("partyState").textContent =
+      "확인완료";
+
+    $("partyState").className =
+      "state ok";
+
+  }else{
+
+    $("partyState").textContent =
+      "확인대기";
+
+    $("partyState").className =
+      "state wait";
+
+  }
+
+
+  if(docsOk){
+
+    $("documentState").textContent =
+      "필수서류 완료";
+
+    $("documentState").className =
+      "state ok";
+
+
+    $("progressDocs")
+      .classList
+      .add("active");
+
+  }else{
+
+    $("documentState").textContent =
+      "등록대기";
+
+    $("documentState").className =
+      "state wait";
+
+  }
+
+
+  if(contractCompleted()){
+
+    $("contractState").textContent =
+      "작성완료";
+
+    $("contractState").className =
+      "state ok";
+
+
+    $("contractButton").disabled =
+      false;
+
+
+    $("contractButton").textContent =
+      "전자계약서 보기";
+
+
+    $("progressContract")
+      .classList
+      .add("active");
+
+  }else if(contractReady()){
+
+    $("contractState").textContent =
+      "작성가능";
+
+    $("contractState").className =
+      "state ok";
+
+
+    $("contractButton").disabled =
+      false;
+
+
+    $("contractButton").textContent =
+      "전자계약서 작성";
+
+  }else{
+
+    $("contractState").textContent =
+      "작성대기";
+
+    $("contractState").className =
+      "state wait";
+
+
+    $("contractButton").disabled =
+      true;
+
+  }
+
+
+  updateFeeStatus();
+
+  updateSignatureButtons();
+
+  loadSignStatus();
+
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+window.saveProgress =
+function(showMessage){
+
+  if(!roomCode){
+    return;
+  }
+
+
+  const data =
+  {
+
+    roomCode:
+      roomCode,
+
+    tradeType:
+      $("tradeType").value,
+
+    apartmentName:
+      $("apartmentName").value.trim(),
+
+    address:
+      $("address").value.trim(),
+
+    dong:
+      $("dong").value.trim(),
+
+    ho:
+      $("ho").value.trim(),
+
+    buyerIdentity:
+      $("buyerIdentity").checked,
+
+    sellerIdentity:
+      $("sellerIdentity").checked,
+
+    buyerSignPhone:
+      $("buyerSignPhone").value.trim(),
+
+    sellerSignPhone:
+      $("sellerSignPhone").value.trim(),
+
+    brokerSignPhone:
+      $("brokerSignPhone").value.trim(),
+
+    documents:
+      documents.map(
+        function(item){
+
+          if(!item){
+            return null;
+          }
+
+          return {
+            name:item.name,
+            type:item.type
+          };
+
+        }
+      ),
+
+    savedAt:
+      new Date().toISOString()
+
+  };
+
+
+  localStorage.setItem(
+    "woori_trade_room_" +
+    roomCode,
+    JSON.stringify(data)
+  );
+
+
+  if(showMessage){
+
+    showOk(
+      "진행내용이 저장되었습니다."
+    );
+
+  }
+
+};
+
+
+/* =========================
+   LOAD
+========================= */
+
+function loadProgress(){
+
+  let data = null;
+
+
+  try{
+
+    data =
+      JSON.parse(
+        localStorage.getItem(
+          "woori_trade_room_" +
+          roomCode
+        )
+      );
+
+  }catch(e){
+
+    data = null;
+
+  }
+
+
+  if(!data){
+    return;
+  }
+
+
+  $("tradeType").value =
+    data.tradeType || "";
+
+  $("apartmentName").value =
+    data.apartmentName || "";
+
+  $("address").value =
+    data.address || "";
+
+  $("dong").value =
+    data.dong || "";
+
+  $("ho").value =
+    data.ho || "";
+
+  $("buyerIdentity").checked =
+    !!data.buyerIdentity;
+
+  $("sellerIdentity").checked =
+    !!data.sellerIdentity;
+
+
+  $("buyerSignPhone").value =
+    data.buyerSignPhone || "";
+
+  $("sellerSignPhone").value =
+    data.sellerSignPhone || "";
+
+
+  $("brokerSignPhone").value =
+    data.brokerSignPhone ||
+    (
+      step1Data
+      ? step1Data.mobile || ""
+      : ""
+    );
+
+
+  if(
+    Array.isArray(
+      data.documents
+    )
+  ){
+
+    data.documents.forEach(
+      function(item,index){
+
+        if(!item){
+          return;
+        }
+
+
+        documents[index] =
+        {
+          name:item.name,
+          type:item.type,
+          url:""
+        };
+
+
+        $("docName" + index).textContent =
+          item.name;
+
+
+        $("docStatus" + index).textContent =
+          "등록완료";
+
+
+        $("docStatus" + index).className =
+          "doc-status ok";
+
+      }
+    );
+
+  }
+
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+function showOk(text){
+
+  $("message").className =
+    "msg ok";
+
+  $("message").textContent =
+    text;
+
+}
+
+
+function showError(text){
+
+  $("message").className =
+    "msg error";
+
+  $("message").textContent =
+    text;
+
+}
+
+
+/* =========================
+   AUTO REFRESH
+========================= */
+
+window.addEventListener(
+  "focus",
+  function(){
+
+    updateStatus();
+
+  }
+);
+
+
+window.addEventListener(
+  "storage",
+  function(event){
+
+    if(
+      event.key ===
+      "woori_contract_" +
+      roomCode ||
+      event.key ===
+      "woori_fee_paid_" +
+      roomCode
+    ){
+
+      updateStatus();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   START
+========================= */
+
+loadBrokerData();
+
+loadProgress();
+
+updateStatus();
+
+})();
 </script>
 
 </body>
