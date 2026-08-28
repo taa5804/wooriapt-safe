@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#1165d7">
 
-<title>공인중개사 관리자 | 우리아파트 안심거래</title>
+<title>거래완료 내역 | 우리아파트 안심거래</title>
 
 <style>
 *{box-sizing:border-box}
@@ -30,186 +30,254 @@ a{
 
 .wrap{
   width:100%;
-  max-width:720px;
+  max-width:760px;
   margin:0 auto;
-  padding:clamp(12px,2.5vw,18px)
-           clamp(10px,2vw,14px)
-           50px;
+  padding:14px 12px 50px;
 }
 
 .header{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   gap:10px;
-  margin-bottom:clamp(12px,2.5vw,18px);
+  margin-bottom:16px;
 }
 
 .brand{
-  font-size:clamp(16px,3.8vw,21px);
-  font-weight:900;
   color:#173a59;
-  white-space:nowrap;
+  font-size:19px;
+  font-weight:900;
 }
 
 .brand strong{
   color:#1165d7;
 }
 
-.home{
-  padding:clamp(7px,1.8vw,9px)
-          clamp(9px,2.2vw,12px);
+.back{
+  padding:8px 11px;
   border:1px solid #d4dfe7;
   border-radius:10px;
   background:#fff;
-  font-size:clamp(11px,2.7vw,14px);
-  font-weight:800;
   color:#476377;
-  white-space:nowrap;
+  font-size:13px;
+  font-weight:800;
 }
 
-.main-card{
+.card{
   background:#fff;
   border:1px solid #dce5ec;
   border-radius:18px;
-  padding:clamp(15px,3vw,22px)
-           clamp(12px,2.5vw,18px);
+  padding:20px 16px;
   box-shadow:0 6px 18px rgba(26,61,88,.06);
 }
 
 .badge{
   display:inline-block;
-  padding:clamp(4px,1.3vw,6px)
-           clamp(8px,2vw,10px);
-  margin-bottom:10px;
+  margin-bottom:9px;
+  padding:5px 10px;
   border-radius:999px;
   background:#eaf4ff;
   color:#1165d7;
-  font-size:clamp(10px,2.5vw,13px);
+  font-size:12px;
   font-weight:900;
 }
 
 h1{
   margin:0 0 7px;
-  font-size:clamp(22px,5vw,28px);
   color:#143b61;
+  font-size:27px;
 }
 
 .desc{
-  margin:0 0 clamp(16px,3vw,22px);
+  margin:0 0 18px;
   color:#697e8e;
-  font-size:clamp(12px,3vw,15px);
+  font-size:14px;
   line-height:1.6;
 }
 
-.menu{
-  display:grid;
-  gap:clamp(8px,2vw,12px);
+.manager-box{
+  margin-bottom:18px;
+  padding:14px;
+  border:1px solid #d7e5ef;
+  border-radius:12px;
+  background:#f6faff;
 }
 
-.menu-card{
+.manager-title{
+  margin-bottom:6px;
+  color:#173e60;
+  font-size:13px;
+  font-weight:900;
+}
+
+.manager-number{
+  color:#1165d7;
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.summary-card{
+  padding:14px;
+  border:1px solid #dce5ec;
+  border-radius:12px;
+  background:#fff;
+}
+
+.summary-label{
+  color:#728694;
+  font-size:12px;
+  font-weight:700;
+}
+
+.summary-value{
+  margin-top:5px;
+  color:#173e60;
+  font-size:22px;
+  font-weight:900;
+}
+
+.empty{
+  padding:35px 15px;
+  border:1px dashed #cbd8e1;
+  border-radius:13px;
+  text-align:center;
+  color:#718596;
+  font-size:14px;
+  line-height:1.7;
+}
+
+.transaction{
+  margin-top:12px;
+  padding:16px;
+  border:1px solid #dce5ec;
+  border-radius:14px;
+  background:#fff;
+}
+
+.transaction-head{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:clamp(8px,2vw,12px);
-  min-height:clamp(68px,13vw,82px);
-  padding:clamp(11px,2.5vw,15px)
-           clamp(12px,2.8vw,17px);
-  border-radius:14px;
-  background:#fff;
-  border:1px solid #dde6ec;
-  transition:.15s ease;
+  gap:8px;
+  margin-bottom:13px;
 }
 
-.menu-card:hover{
-  transform:translateY(-1px);
-  box-shadow:0 5px 15px rgba(26,61,88,.08);
+.status{
+  padding:5px 9px;
+  border-radius:999px;
+  background:#eaf7ef;
+  color:#26733e;
+  font-size:11px;
+  font-weight:900;
+  white-space:nowrap;
 }
 
-.left{
-  display:flex;
-  align-items:center;
-  gap:clamp(9px,2.2vw,13px);
+.transaction-number{
+  color:#6d8190;
+  font-size:11px;
+}
+
+.info{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.item{
   min-width:0;
 }
 
-.icon{
-  width:clamp(38px,9vw,46px);
-  height:clamp(38px,9vw,46px);
-  flex:0 0 clamp(38px,9vw,46px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:13px;
-  font-size:clamp(18px,4.5vw,22px);
+.item-label{
+  margin-bottom:3px;
+  color:#7a8c99;
+  font-size:11px;
 }
 
-.text{
-  min-width:0;
-}
-
-.text strong{
-  display:block;
-  margin-bottom:4px;
-  font-size:clamp(15px,3.7vw,18px);
+.item-value{
   color:#173e60;
-}
-
-.text span{
-  display:block;
-  font-size:clamp(11px,2.7vw,13px);
-  color:#728694;
-  line-height:1.4;
+  font-size:14px;
+  font-weight:800;
   word-break:keep-all;
 }
 
-.arrow{
-  font-size:clamp(20px,5vw,25px);
+.item.full{
+  grid-column:1 / -1;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:15px;
+}
+
+.btn{
+  min-height:43px;
+  border:1px solid #cbd9e3;
+  border-radius:10px;
+  background:#fff;
+  color:#315875;
+  font-size:13px;
   font-weight:900;
-  flex:0 0 auto;
 }
 
-.blue{
-  border-left:5px solid #1165d7;
+.btn.primary{
+  border-color:#1165d7;
+  background:#1165d7;
+  color:#fff;
 }
 
-.blue .icon{
-  background:#e8f2ff;
-}
-
-.blue .arrow{
-  color:#1165d7;
-}
-
-.navy{
-  border-left:5px solid #476779;
-}
-
-.navy .icon{
-  background:#edf2f5;
-}
-
-.navy .arrow{
-  color:#476779;
+.notice{
+  margin-top:16px;
+  padding:13px;
+  border-radius:10px;
+  background:#f5f8fa;
+  color:#718391;
+  font-size:12px;
+  line-height:1.65;
 }
 
 .footer{
   margin-top:20px;
   text-align:center;
-  font-size:clamp(10px,2.5vw,12px);
   color:#83939e;
+  font-size:11px;
 }
 
 @media(max-width:430px){
 
-  .text strong{
-    font-size:16px;
+  .wrap{
+    padding-left:10px;
+    padding-right:10px;
   }
 
-  .text span{
-    font-size:11px;
+  .card{
+    padding:18px 13px;
   }
 
+  h1{
+    font-size:24px;
+  }
+
+  .info{
+    grid-template-columns:1fr;
+  }
+
+  .item.full{
+    grid-column:auto;
+  }
+
+  .actions{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -224,107 +292,338 @@ h1{
     🏠 우리아파트 <strong>안심거래</strong>
   </a>
 
-  <a class="home" href="/">
-    메인으로
+  <a class="back" href="/broker-dashboard.html">
+    공인중개사 업무
   </a>
 
 </header>
 
 
-<main class="main-card">
+<main class="card">
 
   <span class="badge">
     공인중개사 전용
   </span>
 
   <h1>
-    공인중개사 관리자
+    거래완료 내역
   </h1>
 
   <p class="desc">
-    완료된 거래를 확인하고 회원정보를 관리합니다.
+    최종적으로 완료된 거래만 확인할 수 있습니다.
   </p>
 
 
-  <div class="menu">
+  <!-- 중개사 관리번호 -->
+
+  <div class="manager-box">
+
+    <div class="manager-title">
+      중개사 관리번호
+    </div>
+
+    <div
+      id="managerNumber"
+      class="manager-number">
+      거래완료 후 자동 부여
+    </div>
+
+  </div>
 
 
-    <!-- 거래완료 내역 -->
+  <!-- 요약 -->
 
-    <a
-      class="menu-card blue"
-      href="/broker-completed.html">
+  <div class="summary">
 
-      <div class="left">
+    <div class="summary-card">
 
-        <div class="icon">
-          ✓
-        </div>
-
-        <div class="text">
-
-          <strong>
-            거래완료 내역
-          </strong>
-
-          <span>
-            내가 완료한 거래를 확인하고 계약서를 볼 수 있습니다.
-          </span>
-
-        </div>
-
+      <div class="summary-label">
+        거래완료 건수
       </div>
 
-      <span class="arrow">
-        ›
-      </span>
-
-    </a>
-
-
-    <!-- 회원정보 변경 -->
-
-    <a
-      class="menu-card navy"
-      href="/broker-profile.html">
-
-      <div class="left">
-
-        <div class="icon">
-          👤
-        </div>
-
-        <div class="text">
-
-          <strong>
-            회원정보 변경
-          </strong>
-
-          <span>
-            대표자·중개사무소·연락처 등의 정보를 수정합니다.
-          </span>
-
-        </div>
-
+      <div
+        id="completedCount"
+        class="summary-value">
+        0건
       </div>
 
-      <span class="arrow">
-        ›
-      </span>
+    </div>
 
-    </a>
+  </div>
 
+
+  <!-- 거래목록 -->
+
+  <div id="transactionList"></div>
+
+
+  <div class="notice">
+
+    거래완료는 단순히 계약서를 작성한 상태가 아니라
+    최종 거래완료 조건이 확인된 경우에만 표시됩니다.
+    전자계약서는 보기·PDF 저장·인쇄가 가능합니다.
 
   </div>
 
 </main>
 
 
-<div class="footer">
+<footer class="footer">
   © 우리아파트 안심거래
-</div>
+</footer>
 
 </div>
+
+
+<script>
+
+"use strict";
+
+
+/*
+  실제 운영에서는 Supabase의 거래완료 데이터로
+  교체합니다.
+
+  현재는 화면 확인을 위한 구조입니다.
+*/
+
+
+const sampleTransactions = [];
+
+
+/* 중개사 관리번호 */
+
+const managerNumber =
+  localStorage.getItem(
+    "wooriapt_broker_manager_number"
+  );
+
+if(managerNumber){
+
+  document.getElementById(
+    "managerNumber"
+  ).textContent =
+    managerNumber;
+
+}
+
+
+/* 거래완료 목록 */
+
+const list =
+  document.getElementById(
+    "transactionList"
+  );
+
+const count =
+  document.getElementById(
+    "completedCount"
+  );
+
+
+count.textContent =
+  sampleTransactions.length + "건";
+
+
+if(sampleTransactions.length === 0){
+
+  list.innerHTML = `
+    <div class="empty">
+      아직 거래완료된 내역이 없습니다.<br>
+      거래가 최종 완료되면 이곳에 표시됩니다.
+    </div>
+  `;
+
+}else{
+
+  sampleTransactions.forEach(
+    function(transaction){
+
+      const box =
+        document.createElement("div");
+
+      box.className =
+        "transaction";
+
+      box.innerHTML = `
+
+        <div class="transaction-head">
+
+          <div class="transaction-number">
+            거래번호 ${escapeHtml(
+              transaction.transactionNumber
+            )}
+          </div>
+
+          <span class="status">
+            거래완료
+          </span>
+
+        </div>
+
+
+        <div class="info">
+
+          <div class="item full">
+            <div class="item-label">
+              아파트명
+            </div>
+
+            <div class="item-value">
+              ${escapeHtml(transaction.apartment)}
+            </div>
+          </div>
+
+
+          <div class="item">
+
+            <div class="item-label">
+              거래구분
+            </div>
+
+            <div class="item-value">
+              ${escapeHtml(transaction.type)}
+            </div>
+
+          </div>
+
+
+          <div class="item">
+
+            <div class="item-label">
+              거래금액
+            </div>
+
+            <div class="item-value">
+              ${escapeHtml(transaction.amount)}
+            </div>
+
+          </div>
+
+
+          <div class="item">
+
+            <div class="item-label">
+              거래완료일
+            </div>
+
+            <div class="item-value">
+              ${escapeHtml(transaction.completedAt)}
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="actions">
+
+          <button
+            class="btn primary"
+            type="button"
+            onclick="openContract('${escapeAttr(
+              transaction.contractUrl || ''
+            )}')">
+            계약서 보기
+          </button>
+
+          <button
+            class="btn"
+            type="button"
+            onclick="printContract('${escapeAttr(
+              transaction.contractUrl || ''
+            )}')">
+            계약서 인쇄/PDF
+          </button>
+
+        </div>
+
+      `;
+
+      list.appendChild(box);
+
+    }
+  );
+
+}
+
+
+/* 계약서 보기 */
+
+function openContract(url){
+
+  if(!url){
+
+    alert(
+      "계약서가 연결되면 이곳에서 확인할 수 있습니다."
+    );
+
+    return;
+  }
+
+  window.location.href=url;
+
+}
+
+
+/* 계약서 인쇄 */
+
+function printContract(url){
+
+  if(url){
+
+    const win =
+      window.open(
+        url,
+        "_blank"
+      );
+
+    if(win){
+
+      win.addEventListener(
+        "load",
+        function(){
+
+          win.print();
+
+        }
+      );
+
+    }
+
+    return;
+  }
+
+
+  alert(
+    "계약서가 연결되면 인쇄 또는 PDF 저장을 사용할 수 있습니다."
+  );
+
+}
+
+
+/* HTML 안전처리 */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttr(value){
+
+  return String(value ?? "")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
+}
+
+</script>
 
 </body>
 </html>
