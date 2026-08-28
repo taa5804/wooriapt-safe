@@ -4,12 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#1165d7">
+
 <title>거래 신청 | 우리아파트 안심거래</title>
 
 <style>
-*{box-sizing:border-box}
 
-html,body{
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
   margin:0;
   width:100%;
   min-height:100%;
@@ -18,7 +23,13 @@ html,body{
 body{
   background:#f4f6f8;
   color:#172b3f;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+  font-family:
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  "Noto Sans KR",
+  Arial,
+  sans-serif;
 }
 
 a{
@@ -32,6 +43,11 @@ a{
   margin:0 auto;
   padding:18px 14px 50px;
 }
+
+
+/* ==============================
+   상단
+============================== */
 
 .top{
   display:flex;
@@ -61,12 +77,22 @@ a{
   color:#315873;
 }
 
+
+/* ==============================
+   상단 안내
+============================== */
+
 .hero{
   padding:22px 18px;
   margin-bottom:18px;
   border:1px solid #d7e9f7;
   border-radius:18px;
-  background:linear-gradient(135deg,#edf7ff,#f8fbff);
+  background:
+  linear-gradient(
+    135deg,
+    #edf7ff,
+    #f8fbff
+  );
 }
 
 .hero h1{
@@ -92,81 +118,86 @@ a{
 }
 
 
-/* =========================================
-   거래 진행절차 안내
-========================================= */
+/* ==============================
+   거래 진행 절차
+============================== */
 
 .flow-guide{
-  margin-bottom:26px;
-  border:1px solid #cfdde8;
+  margin-bottom:25px;
+  border:1px solid #d3e1eb;
   border-radius:18px;
   background:#fff;
   overflow:hidden;
-  box-shadow:0 5px 16px rgba(31,65,92,.05);
+  box-shadow:
+  0 5px 16px
+  rgba(32,63,90,.05);
 }
 
 .flow-head{
-  padding:18px 18px 15px;
-  background:#f5f9fc;
-  border-bottom:1px solid #dde7ef;
+  padding:18px 17px 15px;
+  border-bottom:1px solid #e0e9f0;
+  background:#f6f9fc;
 }
 
 .flow-head h2{
   margin:0;
   color:#173b5f;
   font-size:20px;
-  line-height:1.35;
   font-weight:900;
+  line-height:1.4;
 }
 
 .flow-head p{
-  margin:6px 0 0;
-  color:#687d90;
+  margin:7px 0 0;
+  color:#667b8e;
   font-size:13px;
   line-height:1.55;
 }
 
 .flow-list{
-  padding:14px;
+  padding:13px;
   display:grid;
   grid-template-columns:1fr;
-  gap:9px;
+  gap:8px;
 }
 
 .flow-item{
   display:grid;
-  grid-template-columns:38px 1fr;
-  gap:10px;
+  grid-template-columns:36px 1fr;
   align-items:flex-start;
-  padding:13px;
+  gap:9px;
+
+  padding:12px;
+
   border:1px solid #dde7ef;
-  border-radius:13px;
+  border-radius:12px;
+
   background:#fff;
 }
 
 .flow-num{
-  width:32px;
-  height:32px;
+  width:31px;
+  height:31px;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   border-radius:50%;
+
   background:#1165d7;
   color:#fff;
+
   font-size:13px;
   font-weight:900;
-}
-
-.flow-text{
-  min-width:0;
 }
 
 .flow-title{
   margin:0 0 4px;
   color:#173b5f;
   font-size:15px;
-  line-height:1.35;
   font-weight:900;
+  line-height:1.4;
 }
 
 .flow-desc{
@@ -177,51 +208,63 @@ a{
   word-break:keep-all;
 }
 
+.flow-item.identity{
+  border-color:#bfd7ea;
+  background:#f4f9fd;
+}
+
+.flow-item.identity .flow-num{
+  background:#317eaf;
+}
+
 .flow-item.optional{
-  border-color:#bdd9ca;
-  background:#f5fbf7;
+  border-color:#bcdac9;
+  background:#f4fbf7;
 }
 
 .flow-item.optional .flow-num{
-  background:#2f8c68;
+  background:#348363;
 }
 
 .flow-item.optional .flow-title{
-  color:#246d52;
+  color:#26684f;
 }
 
 .flow-item.fee{
-  border-color:#e7cf9a;
+  border-color:#ead49f;
   background:#fffaf0;
 }
 
 .flow-item.fee .flow-num{
-  background:#bd7b10;
+  background:#bd7d13;
 }
 
 .flow-item.fee .flow-title{
-  color:#8c5d0b;
+  color:#8a5b0d;
 }
 
 .flow-item.complete{
-  border-color:#b9d3ef;
+  border-color:#bdd5ef;
   background:#f4f9ff;
 }
 
 .flow-note{
-  margin:0 14px 15px;
-  padding:12px 13px;
+  margin:0 13px 14px;
+  padding:12px;
+
   border-radius:11px;
+
   background:#eef5fb;
   color:#50697e;
+
   font-size:12px;
-  line-height:1.6;
+  line-height:1.65;
 }
 
 
-/* =========================================
-   기존 입력 화면
-========================================= */
+/* ==============================
+   입력 영역
+============================== */
 
 .section{
   margin-bottom:24px;
@@ -244,11 +287,15 @@ textarea{
   width:100%;
   min-height:53px;
   padding:0 14px;
+
   border:1px solid #cbd8e5;
   border-radius:12px;
+
   background:#fff;
+
   font-size:16px;
   color:#263f55;
+
   outline:none;
 }
 
@@ -262,7 +309,9 @@ select:focus,
 input:focus,
 textarea:focus{
   border-color:#2583c5;
-  box-shadow:0 0 0 3px rgba(37,131,197,.10);
+  box-shadow:
+  0 0 0 3px
+  rgba(37,131,197,.10);
 }
 
 select:disabled,
@@ -270,6 +319,11 @@ input:disabled{
   background:#f3f6f8;
   color:#8796a5;
 }
+
+
+/* ==============================
+   평형 버튼
+============================== */
 
 .buttons{
   display:flex;
@@ -280,12 +334,16 @@ input:disabled{
 .choice{
   min-height:44px;
   padding:8px 14px;
+
   border:1px solid #bed2e3;
   border-radius:11px;
+
   background:#f9fcff;
   color:#274b6d;
+
   font-size:15px;
   font-weight:700;
+
   cursor:pointer;
 }
 
@@ -294,6 +352,11 @@ input:disabled{
   border-color:#1976b9;
   color:#fff;
 }
+
+
+/* ==============================
+   금액
+============================== */
 
 .price{
   display:grid;
@@ -308,10 +371,17 @@ input:disabled{
   line-height:1.55;
 }
 
+
+/* ==============================
+   휴대전화 인증
+============================== */
+
 .phone-verify{
   padding:16px;
+
   border:1px solid #d7e4ee;
   border-radius:14px;
+
   background:#f8fbfd;
 }
 
@@ -328,12 +398,16 @@ input:disabled{
 
 .verify-btn{
   min-height:53px;
+
   border:0;
   border-radius:12px;
+
   background:#1769aa;
   color:#fff;
+
   font-size:15px;
   font-weight:800;
+
   cursor:pointer;
 }
 
@@ -355,15 +429,24 @@ input:disabled{
   color:#b42318;
 }
 
+
+/* ==============================
+   동의
+============================== */
+
 .agree{
   display:flex;
   gap:10px;
   align-items:flex-start;
+
   margin:28px 0 17px;
   padding:15px;
+
   border:1px solid #dce8f1;
   border-radius:12px;
+
   background:#f2f7fb;
+
   font-size:14px;
   line-height:1.5;
 }
@@ -375,17 +458,37 @@ input:disabled{
   flex:none;
 }
 
+
+/* ==============================
+   등록 버튼
+============================== */
+
 .submit{
   width:100%;
   min-height:59px;
+
   border:0;
   border-radius:14px;
-  background:linear-gradient(135deg,#123a63,#1976b9);
+
+  background:
+  linear-gradient(
+    135deg,
+    #123a63,
+    #1976b9
+  );
+
   color:#fff;
+
   font-size:19px;
   font-weight:800;
+
   cursor:pointer;
 }
+
+
+/* ==============================
+   메시지
+============================== */
 
 .msg{
   display:none;
@@ -410,10 +513,17 @@ input:disabled{
   display:none!important;
 }
 
+
+/* ==============================
+   지역
+============================== */
+
 .region-box{
   padding:16px;
+
   border:2px solid #9aafc2;
   border-radius:14px;
+
   background:#fff;
 }
 
@@ -427,13 +537,23 @@ input:disabled{
 
 .region-box select:focus{
   border-color:#1165d7;
-  box-shadow:0 0 0 3px rgba(17,101,215,.12);
+
+  box-shadow:
+  0 0 0 3px
+  rgba(17,101,215,.12);
 }
+
+
+/* ==============================
+   조건
+============================== */
 
 .condition-box{
   padding:16px;
+
   border:2px solid #9aafc2;
   border-radius:14px;
+
   background:#fff;
 }
 
@@ -442,14 +562,15 @@ input:disabled{
 }
 
 
-/* =========================================
+/* ==============================
    모바일
-========================================= */
+============================== */
 
 @media(max-width:560px){
 
   .wrap{
-    padding:14px 11px 40px;
+    padding:
+    14px 11px 40px;
   }
 
   .hero h1{
@@ -463,7 +584,8 @@ input:disabled{
   }
 
   .flow-head{
-    padding:15px 14px 13px;
+    padding:
+    15px 13px 13px;
   }
 
   .flow-head h2{
@@ -476,14 +598,16 @@ input:disabled{
   }
 
   .flow-item{
-    grid-template-columns:34px 1fr;
-    padding:11px 10px;
+    grid-template-columns:
+    33px 1fr;
+
+    padding:10px;
     gap:8px;
   }
 
   .flow-num{
-    width:29px;
-    height:29px;
+    width:28px;
+    height:28px;
     font-size:12px;
   }
 
@@ -493,11 +617,12 @@ input:disabled{
 
   .flow-desc{
     font-size:12px;
-    line-height:1.55;
   }
 
   .flow-note{
-    margin:0 10px 12px;
+    margin:
+    0 10px 12px;
+
     font-size:11px;
   }
 
@@ -506,27 +631,38 @@ input:disabled{
 </style>
 </head>
 
+
 <body>
 
 <div class="wrap">
 
 
-  <!-- 상단 -->
+  <!-- ==============================
+       상단
+  =============================== -->
 
   <div class="top">
 
-    <a class="logo" href="/">
+    <a
+      class="logo"
+      href="/"
+    >
       🏠 우리아파트<strong>안심거래</strong>
     </a>
 
-    <a class="home" href="/">
+    <a
+      class="home"
+      href="/"
+    >
       메인으로
     </a>
 
   </div>
 
 
-  <!-- 상단 안내 -->
+  <!-- ==============================
+       상단 설명
+  =============================== -->
 
   <div class="hero">
 
@@ -534,31 +670,38 @@ input:disabled{
       아파트 매수 요청
     </h1>
 
-    <p id="pageDescription">
-      원하는 조건을 등록하면 해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다.
+    <p>
+      원하는 조건을 등록하면
+      해당 지역 공인중개사가
+      조건에 맞는 매물을 제안합니다.
     </p>
 
-    <div class="step" id="pageStep">
+    <div
+      class="step"
+      id="pageStep"
+    >
       거래 신청 · 매수
     </div>
 
   </div>
 
 
-  <!-- =========================================
-       유형별 상세 진행절차
-  ========================================== -->
+  <!-- ==============================
+       매매 / 전세 / 월세 진행절차
+  =============================== -->
 
   <section class="flow-guide">
 
     <div class="flow-head">
 
       <h2 id="flowHeading">
-        매수자 진행절차 상세안내
+        아파트 매매 · 매수자 진행절차
       </h2>
 
       <p id="flowIntro">
-        처음 이용하시는 분도 쉽게 이해할 수 있도록 거래 진행 순서를 안내합니다.
+        희망조건 등록부터
+        전자계약까지의 진행순서를
+        확인할 수 있습니다.
       </p>
 
     </div>
@@ -576,9 +719,9 @@ input:disabled{
   </section>
 
 
-  <!-- =========================================
-       거래 신청 FORM
-  ========================================== -->
+  <!-- ==============================
+       거래 신청
+  =============================== -->
 
   <form
     id="requestForm"
@@ -586,7 +729,7 @@ input:disabled{
   >
 
 
-    <!-- 휴대전화 인증 -->
+    <!-- 휴대전화 본인확인 -->
 
     <div class="section phone-verify">
 
@@ -643,13 +786,14 @@ input:disabled{
       <div class="help">
 
         장난·허위 요청 방지를 위해
-        휴대전화 인증 후 요청을 등록할 수 있습니다.
+        휴대전화 인증 후
+        요청을 등록할 수 있습니다.
 
         매물을 선택하기 전에는
-        고객 전화번호를 공인중개사에게 공개하지 않습니다.
+        고객 전화번호를
+        공인중개사에게 공개하지 않습니다.
 
       </div>
-
 
       <div
         id="verifyStatus"
@@ -741,13 +885,14 @@ input:disabled{
       >
 
       <div class="help">
-        입력하지 않으면 선택한 읍·면·동 전체가 대상입니다.
+        입력하지 않으면
+        선택한 읍·면·동 전체가 대상입니다.
       </div>
 
     </div>
 
 
-    <!-- 평형 -->
+    <!-- 희망 평형 -->
 
     <div class="section condition-box">
 
@@ -814,7 +959,7 @@ input:disabled{
     </div>
 
 
-    <!-- 매매가격 -->
+    <!-- 매매 가격 -->
 
     <div
       id="salePriceSection"
@@ -851,7 +996,7 @@ input:disabled{
     </div>
 
 
-    <!-- 전세보증금 -->
+    <!-- 전세 보증금 -->
 
     <div
       id="jeonseDepositSection"
@@ -888,7 +1033,7 @@ input:disabled{
     </div>
 
 
-    <!-- 월세보증금 -->
+    <!-- 월세 보증금 -->
 
     <div
       id="monthlyDepositSection"
@@ -968,7 +1113,6 @@ input:disabled{
         type="date"
       >
 
-
       <label
         class="agree"
         style="margin:10px 0 0;"
@@ -985,17 +1129,20 @@ input:disabled{
 
       </label>
 
-
       <div class="help">
+
         희망일을 달력에서 선택하세요.
+
         날짜 조정이 가능하면
-        ‘날짜 협의 가능’도 체크해 주세요.
+        ‘날짜 협의 가능’도
+        체크해 주세요.
+
       </div>
 
     </div>
 
 
-    <!-- 기타 -->
+    <!-- 기타조건 -->
 
     <div class="section condition-box">
 
@@ -1022,13 +1169,20 @@ input:disabled{
       >
 
       <span id="agreeText">
+
         등록한 매수 조건을 기준으로
-        공인중개사에게 매물 제안을 요청하는 데 동의합니다.
-        매물 선택 전에는 개인정보를 공개하지 않습니다.
+        공인중개사에게
+        매물 제안을 요청하는 데 동의합니다.
+
+        매물 선택 전에는
+        개인정보를 공개하지 않습니다.
+
       </span>
 
     </label>
 
+
+    <!-- 등록 -->
 
     <button
       id="submitBtn"
@@ -1037,7 +1191,6 @@ input:disabled{
     >
       매수 요청 등록
     </button>
-
 
     <div
       id="msg"
@@ -1059,7 +1212,7 @@ input:disabled{
 
 
 /* =========================================
-   기본 설정
+   Supabase
 ========================================= */
 
 const SUPABASE_URL =
@@ -1069,95 +1222,170 @@ const SUPABASE_KEY =
 "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
 
 
+/* =========================================
+   거래 유형
+========================================= */
+
 const params =
-new URLSearchParams(location.search);
+new URLSearchParams(
+  location.search
+);
 
 const type =
-(params.get("type") || "sale").toLowerCase();
+(
+  params.get("type") ||
+  "sale"
+).toLowerCase();
 
+
+/* =========================================
+   매매 / 전세 / 월세 설정
+========================================= */
 
 const config={
 
+
+  /* ==============================
+     매매
+  ============================== */
+
   sale:{
 
-    title:"아파트 매수 요청",
+    title:
+    "아파트 매수 요청",
 
-    step:"거래 신청 · 매수",
+    step:
+    "거래 신청 · 매수",
 
-    button:"매수 요청 등록",
+    button:
+    "매수 요청 등록",
 
     agree:
     "등록한 매수 조건을 기준으로 공인중개사에게 매물 제안을 요청하는 데 동의합니다. 매물 선택 전에는 개인정보를 공개하지 않습니다.",
 
-    move:"잔금·입주 희망일",
+    move:
+    "잔금·입주 희망일",
 
-    flowHeading:"아파트 매매 · 매수자 진행절차",
+    flowHeading:
+    "아파트 매매 · 매수자 진행절차",
 
     flowIntro:
-    "희망조건 등록부터 전자계약, 셀프등기 서비스까지 진행순서를 안내합니다.",
+    "희망조건 등록부터 전자계약과 셀프등기 서비스까지 진행순서를 안내합니다.",
 
     flowNote:
-    "※ 선택형 에스크로는 계약금·중도금 등 안전한 지급이 필요한 경우 선택하여 이용할 수 있습니다. 셀프등기는 전자계약 완료 후 원하는 매수자가 이용할 수 있습니다.",
+    "※ 계약 당사자의 본인확인은 담당 공인중개사가 진행합니다. 우리아파트 안심거래는 신분증 사본을 수집·보관하지 않습니다. 에스크로는 전자계약 체결 전부터 계약금·중도금 지급 시 선택하여 이용할 수 있으며, 셀프등기는 전자계약 완료 후 계속 이용할 수 있습니다.",
 
     flow:[
 
       {
-        title:"희망조건 등록",
-        desc:"구입을 원하는 지역, 아파트, 평형, 희망가격과 잔금·입주 희망일 등을 등록합니다."
+        title:
+        "희망조건 등록",
+
+        desc:
+        "구입을 원하는 지역, 아파트, 평형, 희망 매매가격과 잔금·입주 희망일 등을 등록합니다."
       },
 
       {
-        title:"공인중개사에게 요청 전달",
-        desc:"등록한 매수조건이 해당 지역의 공인중개사에게 전달됩니다."
+        title:
+        "공인중개사에게 요청 전달",
+
+        desc:
+        "등록한 매수조건이 해당 지역의 공인중개사에게 전달됩니다."
       },
 
       {
-        title:"매물 제안 및 선택",
-        desc:"공인중개사가 조건에 맞는 매물을 제안합니다. 메인화면의 「나의 제안」에서 가격과 조건을 비교한 후 원하는 매물을 선택합니다."
+        title:
+        "매물 제안 및 선택",
+
+        desc:
+        "공인중개사가 조건에 맞는 매물을 제안합니다. 「나의 제안」에서 매물과 조건을 비교하고 원하는 매물을 선택합니다."
       },
 
       {
-        title:"매물 확인 및 계약조건 협의",
-        desc:"담당 공인중개사와 매매가격, 계약금·중도금·잔금, 지급일정 및 특약사항 등을 확인하고 협의합니다."
+        title:
+        "매물 확인 및 계약조건 협의",
+
+        desc:
+        "담당 공인중개사와 매매가격, 계약금·중도금·잔금, 지급일정 및 특약사항 등을 확인하고 협의합니다."
       },
 
       {
-        title:"거래 진행 시작",
-        desc:"계약을 진행하기로 결정하면 4자리 거래 진행 코드가 발급됩니다. 이후 계약 진행상황은 「거래 진행」에서 확인할 수 있습니다."
+        title:
+        "거래 진행 시작",
+
+        desc:
+        "계약 진행이 결정되면 4자리 거래 진행 코드가 발급됩니다. 이후 계약 진행상황은 「거래 진행」에서 확인할 수 있습니다."
       },
 
       {
-        title:"계약내용 및 서류 확인",
-        desc:"공인중개사가 등록한 계약 관련 서류와 권리관계, 매매가격, 지급일정 및 특약사항 등을 확인합니다."
+        title:
+        "공인중개사 본인확인",
+
+        desc:
+        "담당 공인중개사가 매수자와 매도자의 본인 여부를 확인합니다. 확인 완료 여부는 공인중개사 관리자 화면에서 처리됩니다.",
+
+        className:
+        "identity"
       },
 
       {
-        title:"선택형 에스크로 안내",
-        desc:"전자계약 체결 전 계약금·중도금 등의 안전한 지급이 필요한 경우 에스크로를 선택하여 이용할 수 있습니다.",
-        className:"optional"
+        title:
+        "계약내용 및 서류 확인",
+
+        desc:
+        "공인중개사가 등록한 계약 관련 서류와 권리관계, 매매가격, 지급일정 및 특약사항 등을 확인합니다."
       },
 
       {
-        title:"전자계약 내용 최종 확인",
-        desc:"작성된 전자계약서의 매매가격, 지급일정, 계약조건 및 특약사항 등을 최종 확인합니다."
+        title:
+        "선택형 에스크로 안내",
+
+        desc:
+        "전자계약 체결 전부터 계약금·중도금 등의 안전한 지급이 필요한 경우 에스크로 서비스를 선택하여 이용할 수 있습니다.",
+
+        className:
+        "optional"
       },
 
       {
-        title:"플랫폼 서비스 이용료 납부",
-        desc:"전자계약 내용을 확인한 후 플랫폼 서비스 이용료를 납부합니다. 플랫폼 서비스 이용료가 납부되지 않으면 전자계약이 체결되지 않습니다.",
-        className:"fee"
+        title:
+        "전자계약 내용 최종 확인",
+
+        desc:
+        "작성된 전자계약서의 매매가격, 지급일정, 계약조건 및 특약사항 등을 최종 확인합니다."
       },
 
       {
-        title:"3자 전자서명 및 계약완료",
-        desc:"매수자·매도자·공인중개사가 전자서명합니다. 필요한 서명이 모두 완료되면 전자계약이 완료되며 계약내용은 「거래 진행」에서 확인하고 출력할 수 있습니다.",
-        className:"complete"
+        title:
+        "플랫폼 서비스 이용료 납부",
+
+        desc:
+        "전자계약 내용을 확인한 후 플랫폼 서비스 이용료를 납부합니다. 플랫폼 서비스 이용료가 납부되지 않으면 전자계약이 체결되지 않습니다.",
+
+        className:
+        "fee"
       },
 
       {
-        title:"셀프등기 서비스",
-        desc:"전자계약 완료 후 직접 소유권이전등기를 원하는 매수자는 「거래 진행」에서 셀프등기 서비스를 계속 이용할 수 있습니다.",
-        className:"optional"
+        title:
+        "3자 전자서명 및 계약완료",
+
+        desc:
+        "매수자·매도자·공인중개사가 전자서명합니다. 필요한 서명이 모두 완료되면 전자계약이 완료되며 계약내용은 「거래 진행」에서 확인하고 출력할 수 있습니다.",
+
+        className:
+        "complete"
+      },
+
+      {
+        title:
+        "셀프등기 서비스",
+
+        desc:
+        "전자계약 완료 후 직접 소유권이전등기를 원하는 매수자는 「거래 진행」에서 셀프등기 서비스를 계속 이용할 수 있습니다.",
+
+        className:
+        "optional"
       }
 
     ]
@@ -1165,74 +1393,125 @@ const config={
   },
 
 
+  /* ==============================
+     전세
+  ============================== */
+
   jeonse:{
 
-    title:"아파트 전세 임차 요청",
+    title:
+    "아파트 전세 임차 요청",
 
-    step:"거래 신청 · 전세",
+    step:
+    "거래 신청 · 전세",
 
-    button:"전세 임차 요청 등록",
+    button:
+    "전세 임차 요청 등록",
 
     agree:
     "등록한 전세 임차 조건을 기준으로 공인중개사에게 매물 제안을 요청하는 데 동의합니다. 매물 선택 전에는 개인정보를 공개하지 않습니다.",
 
-    move:"입주 희망일",
+    move:
+    "입주 희망일",
 
-    flowHeading:"전세 구하기 · 임차인 진행절차",
+    flowHeading:
+    "전세 구하기 · 임차인 진행절차",
 
     flowIntro:
     "전세 희망조건 등록부터 전자계약 완료까지 진행순서를 안내합니다.",
 
     flowNote:
-    "※ 계약 당사자 본인확인은 담당 공인중개사가 진행하며, 우리아파트 안심거래는 신분증 사본을 수집·보관하지 않습니다.",
+    "※ 계약 당사자의 본인확인은 담당 공인중개사가 진행합니다. 우리아파트 안심거래는 신분증 사본을 수집·보관하지 않습니다.",
 
     flow:[
 
       {
-        title:"희망조건 등록",
-        desc:"원하는 지역, 아파트, 평형, 전세보증금 및 입주 희망일 등의 조건을 등록합니다."
+        title:
+        "희망조건 등록",
+
+        desc:
+        "원하는 지역, 아파트, 평형, 전세보증금 및 입주 희망일 등의 조건을 등록합니다."
       },
 
       {
-        title:"공인중개사에게 요청 전달",
-        desc:"등록한 전세 임차조건이 해당 지역의 공인중개사에게 전달됩니다."
+        title:
+        "공인중개사에게 요청 전달",
+
+        desc:
+        "등록한 전세 임차조건이 해당 지역의 공인중개사에게 전달됩니다."
       },
 
       {
-        title:"전세 매물 제안 및 선택",
-        desc:"공인중개사가 조건에 맞는 전세 매물을 제안합니다. 「나의 제안」에서 보증금과 조건을 비교하고 원하는 매물을 선택합니다."
+        title:
+        "전세 매물 제안 및 선택",
+
+        desc:
+        "공인중개사가 조건에 맞는 전세 매물을 제안합니다. 「나의 제안」에서 보증금과 조건을 비교한 후 원하는 매물을 선택합니다."
       },
 
       {
-        title:"매물 및 계약조건 확인",
-        desc:"담당 공인중개사와 전세보증금, 계약금, 계약기간, 입주일 및 특약사항 등을 확인하고 협의합니다."
+        title:
+        "매물 및 계약조건 확인",
+
+        desc:
+        "담당 공인중개사와 전세보증금, 계약금, 계약기간, 입주일 및 특약사항 등을 확인하고 협의합니다."
       },
 
       {
-        title:"거래 진행 시작",
-        desc:"계약을 진행하기로 결정하면 4자리 거래 진행 코드가 발급됩니다. 이후 진행상황은 「거래 진행」에서 확인할 수 있습니다."
+        title:
+        "거래 진행 시작",
+
+        desc:
+        "계약 진행이 결정되면 4자리 거래 진행 코드가 발급됩니다. 이후 계약 진행상황은 「거래 진행」에서 확인할 수 있습니다."
       },
 
       {
-        title:"계약내용 및 권리관계 확인",
-        desc:"공인중개사가 등록한 등기부등본 등 권리관계와 전세보증금, 계약기간, 입주일 및 특약사항 등을 확인합니다."
+        title:
+        "공인중개사 본인확인",
+
+        desc:
+        "담당 공인중개사가 임차인과 임대인의 본인 여부를 확인합니다. 확인 완료 여부는 공인중개사 관리자 화면에서 처리됩니다.",
+
+        className:
+        "identity"
       },
 
       {
-        title:"전자계약 내용 최종 확인",
-        desc:"작성된 전자계약서의 전세보증금, 계약기간, 계약조건 및 특약사항 등을 최종 확인합니다."
+        title:
+        "계약내용 및 권리관계 확인",
+
+        desc:
+        "공인중개사가 등록한 등기부등본 등 권리관계와 전세보증금, 계약기간, 입주일 및 특약사항 등을 확인합니다."
       },
 
       {
-        title:"플랫폼 서비스 이용료 납부",
-        desc:"전자계약 내용을 확인한 후 플랫폼 서비스 이용료를 납부합니다. 플랫폼 서비스 이용료가 납부되지 않으면 전자계약이 체결되지 않습니다.",
-        className:"fee"
+        title:
+        "전자계약 내용 최종 확인",
+
+        desc:
+        "작성된 전자계약서의 전세보증금, 계약기간, 계약조건 및 특약사항 등을 최종 확인합니다."
       },
 
       {
-        title:"3자 전자서명 및 계약완료",
-        desc:"임차인·임대인·공인중개사가 전자서명합니다. 필요한 서명이 모두 완료되면 전자계약이 완료되며 계약내용은 「거래 진행」에서 확인하고 출력할 수 있습니다.",
-        className:"complete"
+        title:
+        "플랫폼 서비스 이용료 납부",
+
+        desc:
+        "전자계약 내용을 확인한 후 플랫폼 서비스 이용료를 납부합니다. 플랫폼 서비스 이용료가 납부되지 않으면 전자계약이 체결되지 않습니다.",
+
+        className:
+        "fee"
+      },
+
+      {
+        title:
+        "3자 전자서명 및 계약완료",
+
+        desc:
+        "임차인·임대인·공인중개사가 전자서명합니다. 필요한 서명이 모두 완료되면 전자계약이 완료되며 계약내용은 「거래 진행」에서 확인하고 출력할 수 있습니다.",
+
+        className:
+        "complete"
       }
 
     ]
@@ -1240,74 +1519,125 @@ const config={
   },
 
 
+  /* ==============================
+     월세
+  ============================== */
+
   monthly:{
 
-    title:"아파트 월세 임차 요청",
+    title:
+    "아파트 월세 임차 요청",
 
-    step:"거래 신청 · 월세",
+    step:
+    "거래 신청 · 월세",
 
-    button:"월세 임차 요청 등록",
+    button:
+    "월세 임차 요청 등록",
 
     agree:
     "등록한 월세 임차 조건을 기준으로 공인중개사에게 매물 제안을 요청하는 데 동의합니다. 매물 선택 전에는 개인정보를 공개하지 않습니다.",
 
-    move:"입주 희망일",
+    move:
+    "입주 희망일",
 
-    flowHeading:"월세 구하기 · 임차인 진행절차",
+    flowHeading:
+    "월세 구하기 · 임차인 진행절차",
 
     flowIntro:
     "월세 희망조건 등록부터 전자계약 완료까지 진행순서를 안내합니다.",
 
     flowNote:
-    "※ 계약 당사자 본인확인은 담당 공인중개사가 진행하며, 우리아파트 안심거래는 신분증 사본을 수집·보관하지 않습니다.",
+    "※ 계약 당사자의 본인확인은 담당 공인중개사가 진행합니다. 우리아파트 안심거래는 신분증 사본을 수집·보관하지 않습니다.",
 
     flow:[
 
       {
-        title:"희망조건 등록",
-        desc:"원하는 지역, 아파트, 평형, 보증금, 월세 및 입주 희망일 등의 조건을 등록합니다."
+        title:
+        "희망조건 등록",
+
+        desc:
+        "원하는 지역, 아파트, 평형, 보증금, 월세 및 입주 희망일 등의 조건을 등록합니다."
       },
 
       {
-        title:"공인중개사에게 요청 전달",
-        desc:"등록한 월세 임차조건이 해당 지역의 공인중개사에게 전달됩니다."
+        title:
+        "공인중개사에게 요청 전달",
+
+        desc:
+        "등록한 월세 임차조건이 해당 지역의 공인중개사에게 전달됩니다."
       },
 
       {
-        title:"월세 매물 제안 및 선택",
-        desc:"공인중개사가 조건에 맞는 월세 매물을 제안합니다. 「나의 제안」에서 보증금, 월세와 조건을 비교하고 원하는 매물을 선택합니다."
+        title:
+        "월세 매물 제안 및 선택",
+
+        desc:
+        "공인중개사가 조건에 맞는 월세 매물을 제안합니다. 「나의 제안」에서 보증금, 월세와 조건을 비교한 후 원하는 매물을 선택합니다."
       },
 
       {
-        title:"월세계약 조건 확인",
-        desc:"담당 공인중개사와 보증금, 월세, 계약기간, 입주일, 월세 납부조건 및 특약사항 등을 확인하고 협의합니다."
+        title:
+        "월세계약 조건 확인",
+
+        desc:
+        "담당 공인중개사와 보증금, 월세, 계약기간, 입주일, 월세 납부조건 및 특약사항 등을 확인하고 협의합니다."
       },
 
       {
-        title:"거래 진행 시작",
-        desc:"계약을 진행하기로 결정하면 4자리 거래 진행 코드가 발급됩니다. 이후 진행상황은 「거래 진행」에서 확인할 수 있습니다."
+        title:
+        "거래 진행 시작",
+
+        desc:
+        "계약 진행이 결정되면 4자리 거래 진행 코드가 발급됩니다. 이후 계약 진행상황은 「거래 진행」에서 확인할 수 있습니다."
       },
 
       {
-        title:"계약내용 및 권리관계 확인",
-        desc:"공인중개사가 등록한 권리관계와 보증금, 월세, 계약기간, 납부조건 및 특약사항 등을 확인합니다."
+        title:
+        "공인중개사 본인확인",
+
+        desc:
+        "담당 공인중개사가 임차인과 임대인의 본인 여부를 확인합니다. 확인 완료 여부는 공인중개사 관리자 화면에서 처리됩니다.",
+
+        className:
+        "identity"
       },
 
       {
-        title:"전자계약 내용 최종 확인",
-        desc:"작성된 전자계약서의 보증금, 월세, 계약기간, 납부조건 및 특약사항 등을 최종 확인합니다."
+        title:
+        "계약내용 및 권리관계 확인",
+
+        desc:
+        "공인중개사가 등록한 권리관계와 보증금, 월세, 계약기간, 납부조건 및 특약사항 등을 확인합니다."
       },
 
       {
-        title:"플랫폼 서비스 이용료 납부",
-        desc:"전자계약 내용을 확인한 후 플랫폼 서비스 이용료를 납부합니다. 플랫폼 서비스 이용료가 납부되지 않으면 전자계약이 체결되지 않습니다.",
-        className:"fee"
+        title:
+        "전자계약 내용 최종 확인",
+
+        desc:
+        "작성된 전자계약서의 보증금, 월세, 계약기간, 납부조건 및 특약사항 등을 최종 확인합니다."
       },
 
       {
-        title:"3자 전자서명 및 계약완료",
-        desc:"임차인·임대인·공인중개사가 전자서명합니다. 필요한 서명이 모두 완료되면 전자계약이 완료되며 계약내용은 「거래 진행」에서 확인하고 출력할 수 있습니다.",
-        className:"complete"
+        title:
+        "플랫폼 서비스 이용료 납부",
+
+        desc:
+        "전자계약 내용을 확인한 후 플랫폼 서비스 이용료를 납부합니다. 플랫폼 서비스 이용료가 납부되지 않으면 전자계약이 체결되지 않습니다.",
+
+        className:
+        "fee"
+      },
+
+      {
+        title:
+        "3자 전자서명 및 계약완료",
+
+        desc:
+        "임차인·임대인·공인중개사가 전자서명합니다. 필요한 서명이 모두 완료되면 전자계약이 완료되며 계약내용은 「거래 진행」에서 확인하고 출력할 수 있습니다.",
+
+        className:
+        "complete"
       }
 
     ]
@@ -1317,16 +1647,20 @@ const config={
 };
 
 
-const current =
-config[type] || config.sale;
+/* =========================================
+   현재 거래유형
+========================================= */
 
+const current =
+config[type] ||
+config.sale;
 
 const $ =
 s => document.querySelector(s);
 
 
 /* =========================================
-   유형별 화면 표시
+   화면 문구 변경
 ========================================= */
 
 $("#pageTitle").textContent =
@@ -1345,7 +1679,6 @@ $("#moveLabel").innerHTML =
 current.move +
 ' <span class="req">*</span>';
 
-
 $("#flowHeading").textContent =
 current.flowHeading;
 
@@ -1357,7 +1690,7 @@ current.flowNote;
 
 
 /* =========================================
-   진행절차 생성
+   진행 절차 출력
 ========================================= */
 
 function renderFlow(){
@@ -1369,20 +1702,26 @@ function renderFlow(){
 
 
   current.flow.forEach(
-    (item,index)=>{
+    function(item,index){
 
       const box =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
       box.className =
       "flow-item" +
-      (item.className
+      (
+        item.className
         ? " " + item.className
-        : "");
+        : ""
+      );
 
 
       const num =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
       num.className =
       "flow-num";
@@ -1392,14 +1731,15 @@ function renderFlow(){
 
 
       const text =
-      document.createElement("div");
-
-      text.className =
-      "flow-text";
+      document.createElement(
+        "div"
+      );
 
 
       const title =
-      document.createElement("h3");
+      document.createElement(
+        "h3"
+      );
 
       title.className =
       "flow-title";
@@ -1409,7 +1749,9 @@ function renderFlow(){
 
 
       const desc =
-      document.createElement("p");
+      document.createElement(
+        "p"
+      );
 
       desc.className =
       "flow-desc";
@@ -1418,34 +1760,49 @@ function renderFlow(){
       item.desc;
 
 
-      text.appendChild(title);
-      text.appendChild(desc);
+      text.appendChild(
+        title
+      );
 
-      box.appendChild(num);
-      box.appendChild(text);
+      text.appendChild(
+        desc
+      );
 
-      list.appendChild(box);
+
+      box.appendChild(
+        num
+      );
+
+      box.appendChild(
+        text
+      );
+
+
+      list.appendChild(
+        box
+      );
 
     }
   );
 
 }
 
-
 renderFlow();
 
 
 /* =========================================
-   유형별 금액 입력란
+   거래유형별 금액 입력
 ========================================= */
 
 if(type==="jeonse"){
 
   $("#salePriceSection")
-  .classList.add("hidden");
+  .classList
+  .add("hidden");
 
   $("#jeonseDepositSection")
-  .classList.remove("hidden");
+  .classList
+  .remove("hidden");
 
 }
 
@@ -1453,13 +1810,16 @@ if(type==="jeonse"){
 if(type==="monthly"){
 
   $("#salePriceSection")
-  .classList.add("hidden");
+  .classList
+  .add("hidden");
 
   $("#monthlyDepositSection")
-  .classList.remove("hidden");
+  .classList
+  .remove("hidden");
 
   $("#monthlyRentSection")
-  .classList.remove("hidden");
+  .classList
+  .remove("hidden");
 
 }
 
@@ -1474,21 +1834,30 @@ let verifiedPhone="";
 
 function cleanPhone(value){
 
-  return String(value || "")
+  return String(
+    value || ""
+  )
   .replace(/\D/g,"")
   .slice(0,11);
 
 }
 
 
-function verifyStatus(type,text){
+function verifyStatus(
+  type,
+  text
+){
 
   const el =
   $("#verifyStatus");
 
   el.className =
   "verify-status" +
-  (type ? " " + type : "");
+  (
+    type
+    ? " " + type
+    : ""
+  );
 
   el.textContent =
   text;
@@ -1502,15 +1871,23 @@ $("#phone")
   function(){
 
     this.value =
-    cleanPhone(this.value);
+    cleanPhone(
+      this.value
+    );
 
     phoneVerified=false;
     verifiedPhone="";
 
-    $("#verifyCode").disabled=true;
-    $("#verifyBtn").disabled=true;
+    $("#verifyCode")
+    .disabled=true;
 
-    verifyStatus("","");
+    $("#verifyBtn")
+    .disabled=true;
+
+    verifyStatus(
+      "",
+      ""
+    );
 
   }
 );
@@ -1542,7 +1919,8 @@ $("#sendCodeBtn")
 
 
     if(
-      !/^01[016789][0-9]{7,8}$/.test(phone)
+      !/^01[016789][0-9]{7,8}$/
+      .test(phone)
     ){
 
       return verifyStatus(
@@ -1554,6 +1932,7 @@ $("#sendCodeBtn")
 
 
     this.disabled=true;
+
 
     verifyStatus(
       "",
@@ -1567,18 +1946,29 @@ $("#sendCodeBtn")
       await fetch(
         "/api/customer-phone-auth",
         {
-          method:"POST",
+
+          method:
+          "POST",
 
           headers:{
             "Content-Type":
             "application/json"
           },
 
-          body:JSON.stringify({
-            action:"send",
+          body:
+          JSON.stringify({
+
+            action:
+            "send",
+
+            phone:
             phone,
-            purpose:"property_request"
+
+            purpose:
+            "property_request"
+
           })
+
         }
       );
 
@@ -1586,7 +1976,9 @@ $("#sendCodeBtn")
       const data =
       await res
       .json()
-      .catch(()=>({}));
+      .catch(
+        ()=>({})
+      );
 
 
       if(
@@ -1602,10 +1994,14 @@ $("#sendCodeBtn")
       }
 
 
-      $("#verifyCode").disabled=false;
-      $("#verifyBtn").disabled=false;
+      $("#verifyCode")
+      .disabled=false;
 
-      $("#verifyCode").focus();
+      $("#verifyBtn")
+      .disabled=false;
+
+      $("#verifyCode")
+      .focus();
 
 
       verifyStatus(
@@ -1650,7 +2046,8 @@ $("#verifyBtn")
 
 
     if(
-      !/^\d{4}$/.test(code)
+      !/^\d{4}$/
+      .test(code)
     ){
 
       return verifyStatus(
@@ -1662,6 +2059,7 @@ $("#verifyBtn")
 
 
     this.disabled=true;
+
 
     verifyStatus(
       "",
@@ -1675,19 +2073,32 @@ $("#verifyBtn")
       await fetch(
         "/api/customer-phone-auth",
         {
-          method:"POST",
+
+          method:
+          "POST",
 
           headers:{
             "Content-Type":
             "application/json"
           },
 
-          body:JSON.stringify({
-            action:"verify",
+          body:
+          JSON.stringify({
+
+            action:
+            "verify",
+
+            phone:
             phone,
+
+            code:
             code,
-            purpose:"property_request"
+
+            purpose:
+            "property_request"
+
           })
+
         }
       );
 
@@ -1695,7 +2106,9 @@ $("#verifyBtn")
       const data =
       await res
       .json()
-      .catch(()=>({}));
+      .catch(
+        ()=>({})
+      );
 
 
       if(
@@ -1715,8 +2128,12 @@ $("#verifyBtn")
       phoneVerified=true;
       verifiedPhone=phone;
 
-      $("#phone").readOnly=true;
-      $("#verifyCode").disabled=true;
+
+      $("#phone")
+      .readOnly=true;
+
+      $("#verifyCode")
+      .disabled=true;
 
 
       verifyStatus(
@@ -1730,11 +2147,13 @@ $("#verifyBtn")
       phoneVerified=false;
       verifiedPhone="";
 
+
       verifyStatus(
         "error",
         err.message ||
         "휴대전화 인증에 실패했습니다."
       );
+
 
       this.disabled=false;
 
@@ -1763,10 +2182,12 @@ async function api(
     query,
 
     {
+
       headers:{
         apikey:
         SUPABASE_KEY
       }
+
     }
 
   );
@@ -1785,6 +2206,10 @@ async function api(
 
 }
 
+
+/* =========================================
+   SELECT 옵션 생성
+========================================= */
 
 function setOptions(
   select,
@@ -1806,11 +2231,13 @@ function setOptions(
   first.textContent =
   placeholder;
 
-  select.appendChild(first);
+  select.appendChild(
+    first
+  );
 
 
   list.forEach(
-    row=>{
+    function(row){
 
       const value =
       row[field];
@@ -1831,7 +2258,9 @@ function setOptions(
       option.textContent =
       value;
 
-      select.appendChild(option);
+      select.appendChild(
+        option
+      );
 
     }
   );
@@ -1839,24 +2268,40 @@ function setOptions(
 }
 
 
+/* =========================================
+   시도 불러오기
+========================================= */
+
 async function loadSido(){
 
   const data =
   await api(
+
     "safe_region_sido",
+
     "select=sido&order=sido.asc"
+
   );
 
 
   setOptions(
+
     $("#sido"),
+
     data,
+
     "시·도를 선택하세요",
+
     "sido"
+
   );
 
 }
 
+
+/* =========================================
+   시군구
+========================================= */
 
 $("#sido")
 .addEventListener(
@@ -1867,8 +2312,11 @@ $("#sido")
     this.value;
 
 
-    $("#sgg").disabled=true;
-    $("#dong").disabled=true;
+    $("#sgg")
+    .disabled=true;
+
+    $("#dong")
+    .disabled=true;
 
 
     setOptions(
@@ -1923,7 +2371,8 @@ $("#sido")
       );
 
 
-      $("#sgg").disabled=false;
+      $("#sgg")
+      .disabled=false;
 
 
     }catch(err){
@@ -1944,6 +2393,10 @@ $("#sido")
 );
 
 
+/* =========================================
+   읍면동
+========================================= */
+
 $("#sgg")
 .addEventListener(
   "change",
@@ -1956,7 +2409,8 @@ $("#sgg")
     this.value;
 
 
-    $("#dong").disabled=true;
+    $("#dong")
+    .disabled=true;
 
 
     setOptions(
@@ -2007,7 +2461,8 @@ $("#sgg")
       );
 
 
-      $("#dong").disabled=false;
+      $("#dong")
+      .disabled=false;
 
 
     }catch(err){
@@ -2036,25 +2491,39 @@ let selectedSize="";
 
 
 $("#sizeButtons")
-.querySelectorAll(".choice")
+.querySelectorAll(
+  ".choice"
+)
 .forEach(
-  btn=>{
+  function(btn){
 
     btn.addEventListener(
       "click",
       function(){
 
         $("#sizeButtons")
-        .querySelectorAll(".choice")
+        .querySelectorAll(
+          ".choice"
+        )
         .forEach(
-          x=>
-          x.classList.remove("active")
+          function(x){
+
+            x.classList
+            .remove(
+              "active"
+            );
+
+          }
         );
 
 
-        this.classList.add("active");
+        this.classList
+        .add(
+          "active"
+        );
 
-        selectedSize=
+
+        selectedSize =
         this.dataset.v;
 
       }
@@ -2065,7 +2534,7 @@ $("#sizeButtons")
 
 
 /* =========================================
-   제출 검증
+   결과 메시지
 ========================================= */
 
 function message(
@@ -2074,13 +2543,18 @@ function message(
 ){
 
   $("#msg").className =
-  "msg " + type;
+  "msg " +
+  type;
 
   $("#msg").textContent =
   text;
 
 }
 
+
+/* =========================================
+   제출 검증
+========================================= */
 
 $("#requestForm")
 .addEventListener(
@@ -2133,6 +2607,8 @@ $("#requestForm")
     }
 
 
+    /* 매매 */
+
     if(type==="sale"){
 
       const min =
@@ -2171,6 +2647,8 @@ $("#requestForm")
     }
 
 
+    /* 전세 */
+
     if(type==="jeonse"){
 
       const min =
@@ -2208,6 +2686,8 @@ $("#requestForm")
 
     }
 
+
+    /* 월세 */
 
     if(type==="monthly"){
 
@@ -2262,6 +2742,8 @@ $("#requestForm")
     }
 
 
+    /* 날짜 */
+
     if(
       !$("#moveDate").value
     ){
@@ -2274,6 +2756,8 @@ $("#requestForm")
 
     }
 
+
+    /* 동의 */
 
     if(
       !$("#agree").checked
@@ -2288,14 +2772,11 @@ $("#requestForm")
 
 
     /*
-      실제 거래요청 저장 API 연결 위치.
+      실제 거래 요청 저장 API 연결 위치
 
-      현재 확인된 요청 저장 API가 없으므로
-      임의 DB 저장 코드는 넣지 않았습니다.
-
-      휴대전화 인증 API와
-      요청 저장 API가 준비되면
-      여기서 전송합니다.
+      기존 코드와 동일하게
+      임의 데이터베이스 저장은
+      추가하지 않았습니다.
     */
 
 
@@ -2309,12 +2790,12 @@ $("#requestForm")
 
 
 /* =========================================
-   최초 지역 로딩
+   최초 시도 로딩
 ========================================= */
 
 loadSido()
 .catch(
-  err=>{
+  function(err){
 
     console.error(err);
 
