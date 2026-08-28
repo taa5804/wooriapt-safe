@@ -576,6 +576,23 @@ button{
 }
 
 
+
+/* ELECTRONIC CONTRACT */
+.ec-box{margin-top:16px;padding:16px;border:1px solid #dce6ed;border-radius:13px;background:#f8fafc}
+.ec-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.ec-btn{min-height:42px;padding:0 14px;border:0;border-radius:9px;background:#1165d7;color:#fff;font-size:12px;font-weight:900}
+.ec-btn.dark{background:#173e60}.ec-btn:disabled{opacity:.4}
+.ec-lock{padding:11px;border-radius:9px;background:#fff4e5;color:#955900;font-size:11px;font-weight:800;line-height:1.6}
+.ec-lock.open{background:#eaf8ef;color:#16784a}
+.ec-row{display:grid;grid-template-columns:82px 1fr 68px 75px;gap:7px;align-items:center;padding:9px 0;border-bottom:1px solid #edf2f5}
+.ec-row:last-child{border-bottom:0}.ec-role{font-size:12px;font-weight:900}.ec-phone{width:100%;height:40px;padding:0 9px;border:1px solid #cfdce5;border-radius:8px}
+.ec-state{font-size:10px;font-weight:900;text-align:center;color:#788995}.ec-state.done{color:#16804a}
+.ec-modal{display:none;position:fixed;inset:0;z-index:10000;padding:12px;background:rgba(8,20,31,.86);align-items:center;justify-content:center}.ec-modal.show{display:flex}
+.ec-sheet{width:min(100%,900px);max-height:94vh;overflow:auto;padding:20px;border-radius:14px;background:#fff}.ec-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
+.ec-title{font-size:20px;font-weight:900;color:#173e60}.ec-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ec-field{display:grid;gap:6px}.ec-field.full{grid-column:1/-1}
+.ec-field label{font-size:11px;font-weight:900;color:#506879}.ec-field input,.ec-field textarea{width:100%;padding:10px;border:1px solid #cfdce5;border-radius:8px;font:inherit}.ec-field textarea{min-height:110px}
+.ec-preview table{width:100%;border-collapse:collapse}.ec-preview th,.ec-preview td{padding:9px;border:1px solid #cfd9e0;font-size:12px;text-align:left}.ec-preview th{width:24%;background:#f5f8fa}
+@media(max-width:600px){.ec-row{grid-template-columns:68px 1fr 60px}.ec-state{grid-column:2/-1;text-align:left}.ec-grid{grid-template-columns:1fr}}
 /* FEE */
 
 .fee{
@@ -1049,6 +1066,50 @@ button{
 
 </div>
 
+
+
+<!-- 전자계약 -->
+<section class="section" id="electronicContractSection">
+  <h2 class="section-title">전자계약</h2>
+  <p class="section-desc">공인중개사가 전자계약서를 작성하고 계약내용 확인 후 전자서명을 요청합니다.</p>
+  <div class="ec-box">
+    <div class="status-line"><span>전자계약서</span><span class="status-badge wait" id="ecStatus">작성 대기</span></div>
+    <div class="ec-actions">
+      <button type="button" class="ec-btn" id="ecWrite">전자계약서 작성</button>
+      <button type="button" class="ec-btn dark" id="ecView" disabled>전자계약서 확인</button>
+    </div>
+    <div id="ecBrokerSignControls">
+    <div class="ec-lock" id="ecLock">플랫폼 이용료 입금확인 후 전자서명이 활성화됩니다.</div>
+    <div class="ec-row"><div class="ec-role" id="ecRole1">매수인</div><input class="ec-phone" id="ecPhone1" type="tel" inputmode="numeric" placeholder="휴대전화번호"><button class="ec-btn" id="ecSend1" type="button">발송</button><div class="ec-state" id="ecState1">발송 대기</div></div>
+    <div class="ec-row"><div class="ec-role" id="ecRole2">매도인</div><input class="ec-phone" id="ecPhone2" type="tel" inputmode="numeric" placeholder="휴대전화번호"><button class="ec-btn" id="ecSend2" type="button">발송</button><div class="ec-state" id="ecState2">발송 대기</div></div>
+    <div class="ec-row"><div class="ec-role">공인중개사</div><input class="ec-phone" id="ecPhone3" type="tel" inputmode="numeric" placeholder="휴대전화번호"><button class="ec-btn" id="ecSend3" type="button">발송</button><div class="ec-state" id="ecState3">발송 대기</div></div>
+    </div>
+
+    <div id="ecParticipantStatus" style="display:none;margin-top:12px;padding:12px;border-radius:9px;background:#f5f8fa;color:#607586;font-size:11px;line-height:1.7;">
+      전자계약서 내용을 확인할 수 있습니다. 전자서명은 공인중개사가 발송한 개인별 문자 링크에서 진행합니다.
+    </div>
+  </div>
+</section>
+
+<div class="ec-modal" id="ecModal">
+ <div class="ec-sheet">
+  <div class="ec-head"><div class="ec-title" id="ecTitle">전자계약서 작성</div><button type="button" class="viewer-close" id="ecClose">×</button></div>
+  <div id="ecEdit">
+   <div class="ec-grid">
+    <div class="ec-field full"><label>부동산 표시</label><input id="ecProperty" placeholder="아파트명, 동·호수 등"></div>
+    <div class="ec-field"><label id="ecParty1Label">매수인</label><input id="ecParty1" placeholder="성명"></div>
+    <div class="ec-field"><label id="ecParty2Label">매도인</label><input id="ecParty2" placeholder="성명"></div>
+    <div class="ec-field"><label id="ecAmountLabel">매매대금</label><input id="ecAmount" placeholder="금액"></div>
+    <div class="ec-field"><label>계약금</label><input id="ecDeposit" placeholder="금액"></div>
+    <div class="ec-field"><label>중도금</label><input id="ecInterim" placeholder="금액 또는 없음"></div>
+    <div class="ec-field"><label>잔금</label><input id="ecBalance" placeholder="금액"></div>
+    <div class="ec-field full"><label>특약사항</label><textarea id="ecSpecial" placeholder="특약사항"></textarea></div>
+   </div>
+   <div class="ec-actions"><button type="button" class="ec-btn" id="ecSave">계약서 저장</button></div>
+  </div>
+  <div id="ecPreview" class="ec-preview" style="display:none"></div>
+ </div>
+</div>
 
 <!-- 이용료 : 매수자에게만 표시 -->
 
@@ -2052,6 +2113,88 @@ function applyDocumentRole(){
 
 applyDocumentRole();
 
+
+
+
+
+/* =========================================
+   전자계약 작성 / 확인 / 전자서명 요청
+========================================= */
+const ecKey="wooriapt_contract_"+(tradeData.tradeNumber||"default");
+let ecData={};
+try{ecData=JSON.parse(localStorage.getItem(ecKey))||{};}catch(e){}
+
+const E=id=>document.getElementById(id);
+const ecStatus=E("ecStatus"),ecWrite=E("ecWrite"),ecView=E("ecView"),ecLock=E("ecLock");
+const ecBrokerSignControls=E("ecBrokerSignControls"),ecParticipantStatus=E("ecParticipantStatus");
+const ecRole1=E("ecRole1"),ecRole2=E("ecRole2");
+const ecPhones=[E("ecPhone1"),E("ecPhone2"),E("ecPhone3")];
+const ecSends=[E("ecSend1"),E("ecSend2"),E("ecSend3")];
+const ecStates=[E("ecState1"),E("ecState2"),E("ecState3")];
+const ecModal=E("ecModal"),ecTitle=E("ecTitle"),ecClose=E("ecClose"),ecEdit=E("ecEdit"),ecPreview=E("ecPreview");
+const ecProperty=E("ecProperty"),ecParty1=E("ecParty1"),ecParty2=E("ecParty2"),ecParty1Label=E("ecParty1Label"),ecParty2Label=E("ecParty2Label");
+const ecAmountLabel=E("ecAmountLabel"),ecAmount=E("ecAmount"),ecDeposit=E("ecDeposit"),ecInterim=E("ecInterim"),ecBalance=E("ecBalance"),ecSpecial=E("ecSpecial"),ecSave=E("ecSave");
+
+function ecNames(){
+ if(tradeType==="sale") return {one:"매수인",two:"매도인",amount:"매매대금",title:"부동산 매매 전자계약서"};
+ if(tradeType==="jeonse") return {one:"임차인",two:"임대인",amount:"전세보증금",title:"부동산 전세 전자계약서"};
+ return {one:"임차인",two:"임대인",amount:"보증금·월세",title:"부동산 월세 전자계약서"};
+}
+function ecFeeConfirmed(){
+ return !!(tradeData.feePaid===true||["paid","confirmed"].includes(tradeData.feeStatus)||["paid","confirmed"].includes(tradeData.paymentStatus));
+}
+function ecStore(){localStorage.setItem(ecKey,JSON.stringify(ecData));}
+function ecRefresh(){
+ const n=ecNames(),saved=!!ecData.saved,paid=ecFeeConfirmed(),canSend=role==="broker"&&saved&&paid;
+ ecRole1.textContent=n.one;ecRole2.textContent=n.two;ecParty1Label.textContent=n.one;ecParty2Label.textContent=n.two;ecAmountLabel.textContent=n.amount;
+ ecStatus.textContent=saved?"작성완료":"작성 대기";ecStatus.className="status-badge "+(saved?"done":"wait");ecView.disabled=!saved;
+ /* 전자계약서 작성·전화번호 입력·문자 발송 권한은 공인중개사에게만 있습니다. */
+ const isBroker = role==="broker";
+ ecWrite.style.display=isBroker?"":"none";
+ ecBrokerSignControls.style.display=isBroker?"block":"none";
+ ecParticipantStatus.style.display=isBroker?"none":"block";
+
+ /* 매수자·매도자(임차인·임대인)는 전자계약서 확인만 가능합니다. */
+ ecPhones.forEach((p,i)=>{p.disabled=!isBroker;p.value=ecData["phone"+(i+1)]||"";});
+ ecSends.forEach(b=>b.disabled=!canSend);
+ if(paid){ecLock.textContent=saved?"플랫폼 이용료 입금이 확인되었습니다. 전자서명 요청 문자를 발송할 수 있습니다.":"플랫폼 이용료 입금은 확인되었습니다. 전자계약서 작성 후 전자서명이 활성화됩니다.";ecLock.classList.add("open");}
+ else{ecLock.textContent="플랫폼 이용료 입금확인 후 전자서명이 활성화됩니다.";ecLock.classList.remove("open");}
+ ecStates.forEach((s,i)=>{let x=i+1;s.textContent=ecData["signed"+x]?"서명완료 ✓":(ecData["sent"+x]?"발송완료":"발송 대기");s.className="ec-state "+(ecData["signed"+x]?"done":"");});
+}
+function ecOpen(mode){
+ if(mode==="edit" && role!=="broker"){
+  alert("전자계약서 작성·수정 권한은 공인중개사에게만 있습니다.");
+  return;
+ }
+ const n=ecNames();ecModal.classList.add("show");
+ if(mode==="edit"){
+  ecTitle.textContent=n.title+" 작성";ecEdit.style.display="block";ecPreview.style.display="none";
+  ecProperty.value=ecData.property||"";ecParty1.value=ecData.party1||"";ecParty2.value=ecData.party2||"";ecAmount.value=ecData.amount||"";ecDeposit.value=ecData.deposit||"";ecInterim.value=ecData.interim||"";ecBalance.value=ecData.balance||"";ecSpecial.value=ecData.special||"";
+ }else{
+  ecTitle.textContent=n.title+" 확인";ecEdit.style.display="none";ecPreview.style.display="block";
+  ecPreview.innerHTML=`<h2 style="text-align:center">${escapeHtml(n.title)}</h2><table><tr><th>부동산 표시</th><td>${escapeHtml(ecData.property)}</td></tr><tr><th>${escapeHtml(n.one)}</th><td>${escapeHtml(ecData.party1)}</td></tr><tr><th>${escapeHtml(n.two)}</th><td>${escapeHtml(ecData.party2)}</td></tr><tr><th>${escapeHtml(n.amount)}</th><td>${escapeHtml(ecData.amount)}</td></tr><tr><th>계약금</th><td>${escapeHtml(ecData.deposit)}</td></tr><tr><th>중도금</th><td>${escapeHtml(ecData.interim)}</td></tr><tr><th>잔금</th><td>${escapeHtml(ecData.balance)}</td></tr><tr><th>특약사항</th><td>${escapeHtml(ecData.special).replace(/\n/g,"<br>")}</td></tr></table>`;
+ }
+}
+ecWrite.addEventListener("click",()=>{if(role==="broker")ecOpen("edit");});
+ecView.addEventListener("click",()=>{if(ecData.saved)ecOpen("view");});
+ecClose.addEventListener("click",()=>ecModal.classList.remove("show"));
+ecSave.addEventListener("click",()=>{
+ ecData={...ecData,property:ecProperty.value.trim(),party1:ecParty1.value.trim(),party2:ecParty2.value.trim(),amount:ecAmount.value.trim(),deposit:ecDeposit.value.trim(),interim:ecInterim.value.trim(),balance:ecBalance.value.trim(),special:ecSpecial.value.trim()};
+ if(!ecData.property||!ecData.party1||!ecData.party2||!ecData.amount){alert("부동산 표시, 계약 당사자, 계약금액을 입력해 주세요.");return;}
+ ecData.saved=true;ecData.savedAt=new Date().toISOString();ecStore();ecModal.classList.remove("show");ecRefresh();alert("전자계약서가 저장되었습니다.");
+});
+ecPhones.forEach(p=>p.addEventListener("input",()=>p.value=p.value.replace(/\D/g,"").slice(0,11)));
+function ecSend(i){
+ if(role!=="broker")return;
+ const p=ecPhones[i-1],phone=p.value.replace(/\D/g,"");
+ if(!/^01[016789][0-9]{7,8}$/.test(phone)){alert("휴대전화번호를 정확히 입력해 주세요.");p.focus();return;}
+ if(!ecData.saved){alert("전자계약서를 먼저 작성해 주세요.");return;}
+ if(!ecFeeConfirmed()){alert("플랫폼 이용료 입금확인 후 전자서명 요청을 발송할 수 있습니다.");return;}
+ ecData["phone"+i]=phone;ecData["sent"+i]=true;ecData["sentAt"+i]=new Date().toISOString();ecStore();ecRefresh();
+ alert("발송 준비가 완료되었습니다. 실제 LMS 발송과 개인별 전자서명 링크는 서버 연결이 필요합니다.");
+}
+ecSends.forEach((b,i)=>b.addEventListener("click",()=>ecSend(i+1)));
+ecRefresh();
 
 
 
