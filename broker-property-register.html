@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#1165d7">
+
 <title>매물 등록 | 우리아파트 안심거래</title>
 
 <style>
@@ -16,365 +17,247 @@ html,body{
 }
 
 body{
-  background:#f4f7fa;
+  background:#f4f6f8;
   color:#172b3d;
   font-family:-apple-system,BlinkMacSystemFont,
   "Segoe UI","Noto Sans KR",Arial,sans-serif;
 }
 
-button,input,select,textarea{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
+a{
+  color:inherit;
+  text-decoration:none;
 }
 
 .wrap{
   width:100%;
-  max-width:760px;
+  max-width:720px;
   margin:0 auto;
-  padding:0 16px 50px;
+  padding:14px 12px 50px;
 }
-
-/* HEADER */
 
 .header{
-  height:76px;
-  display:flex;
-  align-items:center;
-}
-
-.logo{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  color:#173f67;
-  font-size:15px;
-  font-weight:800;
-  text-decoration:none;
-}
-
-.logo-mark{
-  font-size:27px;
-}
-
-.logo strong{
-  display:block;
-  color:#1165d7;
-  font-size:18px;
-}
-
-/* HEAD */
-
-.page-head{
-  margin:22px 0 18px;
-}
-
-.page-head h1{
-  margin:0;
-  font-size:30px;
-  letter-spacing:-1px;
-}
-
-.page-head p{
-  margin:8px 0 0;
-  color:#6b7d8c;
-  font-size:14px;
-}
-
-/* GUIDE */
-
-.guide{
-  margin-bottom:18px;
-  padding:16px 18px;
-  border:1px solid #d8e7f3;
-  border-radius:15px;
-  background:#eef6ff;
-  color:#315875;
-  font-size:14px;
-  line-height:1.6;
-}
-
-/* REQUEST */
-
-.request-box{
-  margin-bottom:18px;
-  padding:20px;
-  background:#fff;
-  border:1px solid #dce5ec;
-  border-radius:18px;
-  box-shadow:0 5px 18px rgba(23,63,103,.05);
-}
-
-.section-title{
-  margin:0 0 13px;
-  font-size:18px;
-  color:#173f67;
-}
-
-.request-row{
-  display:flex;
-  gap:8px;
-}
-
-.request-row input{
-  flex:1;
-  min-width:0;
-  height:46px;
-  padding:0 14px;
-  border:1px solid #cbd8e3;
-  border-radius:11px;
-  font-size:18px;
-  letter-spacing:1px;
-  outline:none;
-}
-
-.request-row input:focus{
-  border-color:#1165d7;
-  box-shadow:0 0 0 3px rgba(17,101,215,.08);
-}
-
-.request-row button{
-  width:82px;
-  border:0;
-  border-radius:11px;
-  background:#1165d7;
-  color:#fff;
-  font-weight:800;
-}
-
-/* CONDITIONS */
-
-.conditions{
-  display:none;
-  margin-bottom:18px;
-  padding:20px;
-  background:#fff;
-  border:1px solid #dce5ec;
-  border-radius:18px;
-}
-
-.condition-head{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:10px;
-  margin-bottom:14px;
+  margin-bottom:16px;
 }
 
-.condition-head h2{
-  margin:0;
-  font-size:18px;
+.brand{
+  color:#173a59;
+  font-size:19px;
+  font-weight:900;
 }
 
-.request-badge{
-  padding:6px 10px;
+.brand strong{
+  color:#1165d7;
+}
+
+.back{
+  padding:8px 11px;
+  border:1px solid #d4dfe7;
+  border-radius:10px;
+  background:#fff;
+  color:#476377;
+  font-size:13px;
+  font-weight:800;
+}
+
+.card{
+  background:#fff;
+  border:1px solid #dce5ec;
+  border-radius:18px;
+  padding:22px 16px;
+  box-shadow:0 6px 18px rgba(26,61,88,.06);
+}
+
+.badge{
+  display:inline-block;
+  margin-bottom:9px;
+  padding:5px 10px;
   border-radius:999px;
-  background:#eef6ff;
+  background:#eaf4ff;
   color:#1165d7;
   font-size:12px;
   font-weight:900;
 }
 
-.condition-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:9px;
+h1{
+  margin:0 0 7px;
+  color:#143b61;
+  font-size:27px;
 }
 
-.condition{
-  padding:12px 13px;
-  background:#f7f9fb;
-  border-radius:10px;
+.desc{
+  margin:0 0 20px;
+  color:#697e8e;
   font-size:14px;
+  line-height:1.65;
 }
 
-.condition span{
-  display:block;
-  margin-bottom:4px;
-  color:#7a8995;
+.notice{
+  margin-bottom:20px;
+  padding:13px;
+  border-radius:11px;
+  background:#f4f9fd;
+  color:#36566e;
   font-size:12px;
+  line-height:1.7;
 }
 
-.condition b{
-  color:#273e50;
-}
-
-/* FORM */
-
-.form-box{
-  display:none;
-  padding:20px;
-  background:#fff;
-  border:1px solid #dce5ec;
-  border-radius:18px;
-  box-shadow:0 5px 18px rgba(23,63,103,.05);
-}
-
-.form-box .section-title{
-  margin-bottom:4px;
-}
-
-.form-desc{
-  margin:0 0 18px;
-  color:#718291;
-  font-size:13px;
-  line-height:1.5;
+.section-title{
+  margin:24px 0 14px;
+  padding-bottom:9px;
+  border-bottom:1px solid #e3eaf0;
+  color:#173e60;
+  font-size:18px;
+  font-weight:900;
 }
 
 .field{
-  margin-bottom:15px;
+  margin-bottom:17px;
 }
 
-.field label{
+label{
   display:block;
   margin-bottom:7px;
-  color:#29455a;
+  color:#173e60;
   font-size:14px;
-  font-weight:800;
-}
-
-.field input,
-.field select,
-.field textarea{
-  width:100%;
-  border:1px solid #cbd8e3;
-  border-radius:11px;
-  outline:none;
-  background:#fff;
-}
-
-.field input,
-.field select{
-  height:45px;
-  padding:0 12px;
-  font-size:15px;
-}
-
-.field textarea{
-  min-height:105px;
-  padding:12px;
-  resize:vertical;
-  line-height:1.5;
-  font-size:14px;
-}
-
-.field input:focus,
-.field select:focus,
-.field textarea:focus{
-  border-color:#1165d7;
-  box-shadow:0 0 0 3px rgba(17,101,215,.08);
-}
-
-.two{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.auto-note{
-  margin:4px 0 16px;
-  padding:12px 13px;
-  border-radius:10px;
-  background:#f7f9fb;
-  color:#687b8a;
-  font-size:12px;
-  line-height:1.5;
-}
-
-.submit{
-  width:100%;
-  height:48px;
-  margin-top:4px;
-  border:0;
-  border-radius:12px;
-  background:#1165d7;
-  color:#fff;
-  font-size:16px;
   font-weight:900;
 }
 
-/* COMPLETE */
+.required{
+  color:#d92d20;
+}
 
-.complete{
-  display:none;
-  margin-top:18px;
-  padding:28px 20px;
-  text-align:center;
+input,
+select,
+textarea{
+  width:100%;
+  border:1px solid #c9d5df;
+  border-radius:10px;
   background:#fff;
-  border:1px solid #dce5ec;
-  border-radius:18px;
+  color:#173e60;
+  font-size:15px;
+  outline:none;
 }
 
-.complete-icon{
-  font-size:40px;
+input,
+select{
+  height:48px;
+  padding:0 13px;
 }
 
-.complete h2{
-  margin:10px 0 7px;
-  font-size:21px;
-}
-
-.complete p{
-  margin:0;
-  color:#6d7f8d;
-  font-size:13px;
+textarea{
+  min-height:110px;
+  padding:12px 13px;
+  resize:vertical;
   line-height:1.6;
 }
 
-.complete button{
-  margin-top:18px;
-  height:44px;
-  padding:0 20px;
-  border:1px solid #1165d7;
-  border-radius:10px;
-  background:#fff;
-  color:#1165d7;
-  font-weight:800;
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#1165d7;
+  box-shadow:0 0 0 3px rgba(17,101,215,.10);
 }
 
-/* FOOTER */
+input[readonly]{
+  background:#f4f7f9;
+  color:#687c8c;
+}
+
+.help{
+  margin-top:6px;
+  color:#718391;
+  font-size:11px;
+  line-height:1.55;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:22px;
+}
+
+button{
+  height:48px;
+  border-radius:11px;
+  font-size:14px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.cancel{
+  border:1px solid #ccd9e2;
+  background:#fff;
+  color:#476377;
+}
+
+.save{
+  border:1px solid #1165d7;
+  background:#1165d7;
+  color:#fff;
+}
+
+.msg{
+  display:none;
+  margin-top:13px;
+  padding:12px;
+  border-radius:10px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.msg.ok{
+  display:block;
+  background:#edf8f1;
+  color:#26733e;
+}
+
+.msg.error{
+  display:block;
+  background:#fff1f0;
+  color:#c62828;
+}
 
 .footer{
-  margin-top:35px;
-  padding-top:20px;
-  border-top:1px solid #dce5ec;
-  color:#7a8995;
-  font-size:12px;
+  margin-top:20px;
+  text-align:center;
+  color:#83939e;
+  font-size:11px;
 }
 
-/* MOBILE */
-
-@media(max-width:600px){
+@media(max-width:430px){
 
   .wrap{
     padding-left:10px;
     padding-right:10px;
   }
 
-  .page-head h1{
-    font-size:25px;
+  .card{
+    padding:19px 13px;
   }
 
-  .request-box,
-  .conditions,
-  .form-box{
-    padding:16px;
+  h1{
+    font-size:24px;
   }
 
-  .condition-grid{
+  .row{
     grid-template-columns:1fr;
   }
 
-  .two{
+  .buttons{
     grid-template-columns:1fr;
-    gap:0;
   }
 
-  .request-row button{
-    width:72px;
-  }
 }
 </style>
 </head>
@@ -384,176 +267,132 @@ button{
 <div class="wrap">
 
 <header class="header">
-  <a class="logo" href="/">
-    <span class="logo-mark">🏠</span>
-    <span>
-      우리아파트
-      <strong>안심거래</strong>
-    </span>
+
+  <a class="brand" href="/">
+    🏠 우리아파트 <strong>안심거래</strong>
   </a>
+
+  <a
+    class="back"
+    href="/broker-dashboard.html">
+    공인중개사 업무
+  </a>
+
 </header>
 
 
-<section class="page-head">
+<main class="card">
 
-  <h1>매물 등록</h1>
+  <span class="badge">
+    공인중개사 전용
+  </span>
 
-  <p>
-    매수요청에 맞는 매물을 간단하게 등록해 주세요.
+  <h1>
+    매물 등록
+  </h1>
+
+  <p class="desc">
+    매수요청번호를 기준으로 해당 요청에 맞는 매물을 등록합니다.
   </p>
 
-</section>
+
+  <div class="notice">
+
+    매수요청번호가 등록된 요청에만 매물을 연결할 수 있습니다.<br>
+    거래 전에는 등본·계약서 등의 서류를 등록하지 않습니다.<br>
+    매수자가 최종 선택하기 전에는 다른 중개사의 연락처가 공개되지 않습니다.
+
+  </div>
 
 
-<div class="guide">
-  매수요청번호를 입력하면 매수자가 요청한 조건이 자동으로 표시됩니다.
-  조건을 확인한 후 매물 정보만 입력하면 됩니다.
-</div>
-
-
-<!-- 매수요청번호 -->
-
-<section class="request-box">
+  <!-- 매수요청 -->
 
   <h2 class="section-title">
-    매수요청번호
+    매수요청 정보
   </h2>
-
-  <div class="request-row">
-
-    <input
-      id="requestNumber"
-      type="text"
-      inputmode="numeric"
-      maxlength="10"
-      autocomplete="off"
-      placeholder="매수요청번호 입력">
-
-    <button
-      id="requestBtn"
-      type="button">
-      확인
-    </button>
-
-  </div>
-
-</section>
-
-
-<!-- 요청 조건 -->
-
-<section
-  class="conditions"
-  id="conditions">
-
-  <div class="condition-head">
-
-    <h2>
-      매수자가 요청한 조건
-    </h2>
-
-    <span
-      class="request-badge"
-      id="requestBadge">
-      요청 확인
-    </span>
-
-  </div>
-
-
-  <div class="condition-grid">
-
-    <div class="condition">
-      <span>지역</span>
-      <b id="reqRegion">-</b>
-    </div>
-
-    <div class="condition">
-      <span>아파트</span>
-      <b id="reqApartment">-</b>
-    </div>
-
-    <div class="condition">
-      <span>거래</span>
-      <b id="reqType">-</b>
-    </div>
-
-    <div class="condition">
-      <span>희망 면적</span>
-      <b id="reqArea">-</b>
-    </div>
-
-    <div class="condition">
-      <span>희망 금액</span>
-      <b id="reqPrice">-</b>
-    </div>
-
-    <div class="condition">
-      <span>희망 층</span>
-      <b id="reqFloor">-</b>
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- 매물 등록 -->
-
-<section
-  class="form-box"
-  id="formBox">
-
-  <h2 class="section-title">
-    매물 정보 등록
-  </h2>
-
-  <p class="form-desc">
-    매수자가 요청한 조건을 확인하고 실제 등록할 매물의 기본정보만 입력해 주세요.
-  </p>
 
 
   <div class="field">
 
-    <label for="aptName">
-      아파트명
+    <label>
+      매수요청번호 <span class="required">*</span>
     </label>
 
     <input
-      id="aptName"
+      id="requestNumber"
+      type="text"
+      maxlength="30"
+      placeholder="매수요청번호를 입력하세요">
+
+    <div class="help">
+      매수자가 등록한 매수요청번호를 입력하세요.
+    </div>
+
+  </div>
+
+
+  <!-- 매물정보 -->
+
+  <h2 class="section-title">
+    매물정보
+  </h2>
+
+
+  <div class="field">
+
+    <label>
+      아파트명 <span class="required">*</span>
+    </label>
+
+    <input
+      id="apartment"
       type="text"
       placeholder="아파트명을 입력하세요">
 
   </div>
 
 
-  <div class="two">
+  <div class="field">
+
+    <label>
+      거래금액 <span class="required">*</span>
+    </label>
+
+    <input
+      id="amount"
+      type="text"
+      inputmode="numeric"
+      placeholder="예: 5억 2,000만원">
+
+  </div>
+
+
+  <div class="row">
 
     <div class="field">
 
-      <label for="price">
-        금액
-      </label>
-
-      <input
-        id="price"
-        type="text"
-        inputmode="decimal"
-        placeholder="예: 5억 2,000만원">
-
-    </div>
-
-
-    <div class="field">
-
-      <label for="floor">
-        층수
+      <label>
+        층수 <span class="required">*</span>
       </label>
 
       <input
         id="floor"
         type="text"
-        placeholder="예: 12층">
+        placeholder="예: 10층">
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        면적 <span class="required">*</span>
+      </label>
+
+      <input
+        id="area"
+        type="text"
+        placeholder="예: 84㎡">
 
     </div>
 
@@ -562,77 +401,87 @@ button{
 
   <div class="field">
 
-    <label for="area">
-      면적
+    <label>
+      매물 간단 설명
+    </label>
+
+    <textarea
+      id="description"
+      placeholder="매수자가 요청한 조건에 맞는 매물의 간단한 정보를 입력하세요."></textarea>
+
+  </div>
+
+
+  <!-- 중개사 정보 -->
+
+  <h2 class="section-title">
+    중개사 정보
+  </h2>
+
+
+  <div class="field">
+
+    <label>
+      중개사무소명 <span class="required">*</span>
     </label>
 
     <input
-      id="area"
+      id="officeName"
       type="text"
-      placeholder="예: 84㎡">
+      placeholder="중개사무소명">
 
   </div>
 
 
   <div class="field">
 
-    <label for="description">
-      매물 내용
+    <label>
+      사무소 전화번호 <span class="required">*</span>
     </label>
 
-    <textarea
-      id="description"
-      placeholder="매물에 대한 간단한 내용을 입력하세요."></textarea>
+    <input
+      id="officePhone"
+      type="tel"
+      inputmode="tel"
+      maxlength="13"
+      placeholder="사무소 전화번호">
+
+    <div class="help">
+      이 전화번호는 매수자가 해당 매물을 최종 선택한 경우에만 공개됩니다.
+    </div>
 
   </div>
 
 
-  <div class="auto-note">
-    ※ 공인중개사 사무소명과 전화번호는 매물 제안 단계에서 매수자에게 공개되지 않습니다.
-    매수자가 거래 결정을 한 경우에만 공개됩니다.
+  <div class="buttons">
+
+    <button
+      class="cancel"
+      type="button"
+      onclick="location.href='/broker-dashboard.html'">
+      취소
+    </button>
+
+    <button
+      id="saveBtn"
+      class="save"
+      type="button">
+      매물 등록
+    </button>
+
   </div>
 
 
-  <button
-    class="submit"
-    id="submitBtn"
-    type="button">
-    매물 등록
-  </button>
-
-</section>
-
-
-<!-- 완료 -->
-
-<section
-  class="complete"
-  id="complete">
-
-  <div class="complete-icon">
-    ✓
+  <div
+    id="msg"
+    class="msg">
   </div>
 
-  <h2>
-    매물이 등록되었습니다.
-  </h2>
-
-  <p>
-    등록한 매물은 해당 매수자의<br>
-    「나의 제안」에 자동으로 표시됩니다.
-  </p>
-
-  <button
-    type="button"
-    onclick="location.href='/broker-request.html'">
-    등록 매물 확인
-  </button>
-
-</section>
+</main>
 
 
 <footer class="footer">
-  © 우리아파트 안심거래. All rights reserved.
+  © 우리아파트 안심거래
 </footer>
 
 </div>
@@ -643,331 +492,231 @@ button{
 "use strict";
 
 
-/*
-  ---------------------------------------
-  임시 매수요청 데이터
-  ---------------------------------------
-
-  실제 운영에서는 Supabase와 연결합니다.
-*/
-
-const requestData = {
-
-  "1234":{
-    region:"광주 양산동",
-    apartment:"○○아파트",
-    type:"매매",
-    area:"84㎡",
-    price:"5억원 이하",
-    floor:"10층 이상"
-  },
-
-  "5678":{
-    region:"광주 북구",
-    apartment:"△△아파트",
-    type:"전세",
-    area:"59㎡",
-    price:"3억원 이하",
-    floor:"5층 이상"
-  }
-
-};
-
-
-/* 요소 */
-
 const requestNumber =
   document.getElementById("requestNumber");
 
-const requestBtn =
-  document.getElementById("requestBtn");
+const apartment =
+  document.getElementById("apartment");
 
-const conditions =
-  document.getElementById("conditions");
+const amount =
+  document.getElementById("amount");
 
-const formBox =
-  document.getElementById("formBox");
+const floor =
+  document.getElementById("floor");
 
-const complete =
-  document.getElementById("complete");
+const area =
+  document.getElementById("area");
+
+const description =
+  document.getElementById("description");
+
+const officeName =
+  document.getElementById("officeName");
+
+const officePhone =
+  document.getElementById("officePhone");
+
+const saveBtn =
+  document.getElementById("saveBtn");
+
+const msg =
+  document.getElementById("msg");
 
 
-/* 숫자만 */
+/* URL로 매수요청번호가 넘어오는 경우 */
 
-requestNumber.addEventListener(
+(function(){
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const request =
+    params.get("request");
+
+  if(request){
+
+    requestNumber.value =
+      request;
+
+  }
+
+})();
+
+
+/* 사무실 전화번호 */
+
+officePhone.addEventListener(
   "input",
   function(){
 
-    this.value =
+    let v =
       this.value
-      .replace(/[^0-9]/g,"")
-      .slice(0,10);
+      .replace(/\D/g,"")
+      .slice(0,11);
 
-  }
-);
+    if(v.length<=3){
 
+      this.value=v;
 
-/* 요청 조회 */
+    }else if(v.length<=7){
 
-requestBtn.addEventListener(
-  "click",
-  loadRequest
-);
+      this.value =
+        v.slice(0,3)+"-"+
+        v.slice(3);
 
+    }else{
 
-requestNumber.addEventListener(
-  "keydown",
-  function(e){
+      this.value =
+        v.slice(0,3)+"-"+
+        v.slice(3,7)+"-"+
+        v.slice(7);
 
-    if(e.key==="Enter"){
-      e.preventDefault();
-      loadRequest();
     }
 
   }
 );
 
 
-function loadRequest(){
+/* 등록 */
 
-  const number =
-    requestNumber.value.trim();
+saveBtn.addEventListener(
+  "click",
+  function(){
 
-  if(!number){
+    const required = [
 
-    alert(
-      "매수요청번호를 입력해 주세요."
-    );
+      requestNumber,
+      apartment,
+      amount,
+      floor,
+      area,
+      officeName,
+      officePhone
 
-    requestNumber.focus();
-
-    return;
-  }
-
-
-  const data =
-    requestData[number];
+    ];
 
 
-  if(!data){
+    for(
+      const input of required
+    ){
 
-    alert(
-      "확인된 매수요청번호가 없습니다."
-    );
+      if(!input.value.trim()){
 
-    conditions.style.display="none";
-    formBox.style.display="none";
-
-    return;
-  }
-
-
-  document.getElementById(
-    "reqRegion"
-  ).textContent=data.region;
-
-
-  document.getElementById(
-    "reqApartment"
-  ).textContent=data.apartment;
-
-
-  document.getElementById(
-    "reqType"
-  ).textContent=data.type;
-
-
-  document.getElementById(
-    "reqArea"
-  ).textContent=data.area;
-
-
-  document.getElementById(
-    "reqPrice"
-  ).textContent=data.price;
-
-
-  document.getElementById(
-    "reqFloor"
-  ).textContent=data.floor;
-
-
-  /*
-    매수자가 요청한 아파트명과 거래종류는
-    등록할 매물의 기본값으로 자동 입력합니다.
-  */
-
-  document.getElementById(
-    "aptName"
-  ).value=data.apartment;
-
-
-  conditions.style.display="block";
-  formBox.style.display="block";
-
-
-  formBox.scrollIntoView({
-    behavior:"smooth",
-    block:"start"
-  });
-
-}
-
-
-/* 매물 등록 */
-
-document
-  .getElementById("submitBtn")
-  .addEventListener(
-    "click",
-    function(){
-
-      const number =
-        requestNumber.value.trim();
-
-      const apt =
-        document.getElementById("aptName")
-        .value.trim();
-
-      const price =
-        document.getElementById("price")
-        .value.trim();
-
-      const floor =
-        document.getElementById("floor")
-        .value.trim();
-
-      const area =
-        document.getElementById("area")
-        .value.trim();
-
-      const description =
-        document.getElementById("description")
-        .value.trim();
-
-
-      if(!number){
-
-        alert(
-          "먼저 매수요청번호를 확인해 주세요."
+        showMsg(
+          "필수 항목을 모두 입력해 주세요.",
+          false
         );
+
+        input.focus();
 
         return;
 
       }
 
-
-      if(!apt){
-
-        alert(
-          "아파트명을 입력해 주세요."
-        );
-
-        document
-          .getElementById("aptName")
-          .focus();
-
-        return;
-
-      }
+    }
 
 
-      if(!price){
+    /*
+      등록 데이터
 
-        alert(
-          "금액을 입력해 주세요."
-        );
+      실제 운영에서는 이 데이터를
+      Supabase의 매물 테이블에 저장하고
+      requestNumber를 매수요청번호와 연결합니다.
+    */
 
-        document
-          .getElementById("price")
-          .focus();
+    const property = {
 
-        return;
+      propertyId:
+        "P"+Date.now(),
 
-      }
+      requestNumber:
+        requestNumber.value.trim(),
 
+      apartment:
+        apartment.value.trim(),
 
-      if(!floor){
+      amount:
+        amount.value.trim(),
 
-        alert(
-          "층수를 입력해 주세요."
-        );
+      floor:
+        floor.value.trim(),
 
-        document
-          .getElementById("floor")
-          .focus();
+      area:
+        area.value.trim(),
 
-        return;
+      description:
+        description.value.trim(),
 
-      }
+      officeName:
+        officeName.value.trim(),
 
+      officePhone:
+        officePhone.value.trim(),
 
-      if(!area){
+      status:
+        "PROPOSED",
 
-        alert(
-          "면적을 입력해 주세요."
-        );
+      createdAt:
+        new Date().toISOString()
 
-        document
-          .getElementById("area")
-          .focus();
-
-        return;
-
-      }
-
-
-      /*
-        실제 운영에서는 여기에서
-        Supabase에 매물 데이터를 저장합니다.
-
-        저장 데이터 예:
-
-        request_number
-        apartment
-        price
-        floor
-        area
-        description
-        broker_id
-        created_at
-
-        그리고 매수자의 나의 제안 화면에서
-        request_number를 기준으로 자동 조회합니다.
-      */
+    };
 
 
-      const property={
-
-        requestNumber:number,
-        apartment:apt,
-        price:price,
-        floor:floor,
-        area:area,
-        description:description,
-        createdAt:new Date().toISOString()
-
-      };
-
-
-      localStorage.setItem(
-        "wooriapt_last_property",
-        JSON.stringify(property)
+    const saved =
+      JSON.parse(
+        localStorage.getItem(
+          "wooriapt_broker_properties"
+        ) || "[]"
       );
 
 
-      formBox.style.display="none";
-      conditions.style.display="none";
-      complete.style.display="block";
+    saved.push(property);
 
 
-      complete.scrollIntoView({
-        behavior:"smooth",
-        block:"center"
-      });
+    localStorage.setItem(
+      "wooriapt_broker_properties",
+      JSON.stringify(saved)
+    );
 
-    }
-  );
+
+    showMsg(
+      "매물이 등록되었습니다. 해당 매수요청번호에 연결되었습니다.",
+      true
+    );
+
+
+    saveBtn.disabled=true;
+
+    setTimeout(
+      function(){
+
+        saveBtn.disabled=false;
+
+      },
+      1500
+    );
+
+  }
+);
+
+
+/* 메시지 */
+
+function showMsg(
+  text,
+  ok
+){
+
+  msg.textContent =
+    text;
+
+  msg.className =
+    "msg "+
+    (ok ? "ok" : "error");
+
+}
 
 </script>
 
