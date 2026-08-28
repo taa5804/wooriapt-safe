@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#12394d">
 
-<title>전자계약서 | 우리아파트 안심거래</title>
+<title>부동산 전자계약서 | 우리아파트 안심거래</title>
 
 <style>
 *{box-sizing:border-box}
@@ -26,9 +26,7 @@ button,input,select,textarea{
   font:inherit;
 }
 
-button{
-  cursor:pointer;
-}
+button{cursor:pointer}
 
 .wrap{
   width:100%;
@@ -92,21 +90,57 @@ button{
   letter-spacing:3px;
 }
 
-.contract-type{
-  margin-top:16px;
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
+/* 거래유형 */
+
+.trade-type-box{
+  margin-top:17px;
+  padding:13px;
+  border-radius:14px;
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.22);
 }
 
-.type-badge{
-  padding:7px 12px;
-  border-radius:999px;
-  background:#fff;
-  color:#12394d;
+.trade-type-title{
   font-size:13px;
   font-weight:900;
+  margin-bottom:10px;
 }
+
+.trade-type-options{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.trade-type-option{
+  position:relative;
+}
+
+.trade-type-option input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.trade-type-option label{
+  min-height:43px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:10px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.30);
+  font-size:14px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.trade-type-option input:checked + label{
+  background:#fff;
+  color:#12394d;
+}
+
+/* CARD */
 
 .card{
   background:#fff;
@@ -127,7 +161,7 @@ button{
   font-size:14px;
   font-weight:900;
   color:#12394d;
-  margin:15px 0 10px;
+  margin:17px 0 10px;
 }
 
 .grid{
@@ -382,6 +416,10 @@ textarea{
     grid-template-columns:1fr;
   }
 
+  .trade-type-options{
+    grid-template-columns:repeat(3,1fr);
+  }
+
   .field.full{
     grid-column:auto;
   }
@@ -389,9 +427,7 @@ textarea{
 
 @media print{
 
-  body{
-    background:#fff;
-  }
+  body{background:#fff}
 
   .wrap{
     max-width:none;
@@ -436,11 +472,10 @@ textarea{
   <div class="header-top">
 
     <div>
-      <h1 id="contractTitle">부동산 전자계약서</h1>
-
+      <h1>부동산 전자계약서</h1>
       <p>
-        계약 내용을 확인한 후 매수자·임차인, 매도자·임대인,
-        공인중개사가 전자서명합니다.
+        거래유형을 선택하고 계약내용을 확인한 후
+        거래 당사자와 공인중개사가 전자서명합니다.
       </p>
     </div>
 
@@ -451,14 +486,61 @@ textarea{
 
   </div>
 
-  <div class="contract-type">
-    <span id="typeBadge" class="type-badge">거래유형 확인중</span>
+
+  <!-- 거래유형 -->
+
+  <div class="trade-type-box">
+
+    <div class="trade-type-title">
+      거래유형
+    </div>
+
+    <div class="trade-type-options">
+
+      <div class="trade-type-option">
+        <input
+          id="typeSale"
+          type="radio"
+          name="tradeType"
+          value="sale">
+
+        <label for="typeSale">
+          매매
+        </label>
+      </div>
+
+      <div class="trade-type-option">
+        <input
+          id="typeJeonse"
+          type="radio"
+          name="tradeType"
+          value="jeonse">
+
+        <label for="typeJeonse">
+          전세
+        </label>
+      </div>
+
+      <div class="trade-type-option">
+        <input
+          id="typeMonthly"
+          type="radio"
+          name="tradeType"
+          value="monthly">
+
+        <label for="typeMonthly">
+          월세
+        </label>
+      </div>
+
+    </div>
+
   </div>
 
 </header>
 
 
-<!-- ① 부동산 표시 -->
+<!-- ① 부동산 -->
 
 <section class="card">
 
@@ -510,89 +592,185 @@ textarea{
 </section>
 
 
-<!-- ② 계약 내용 -->
+<!-- ② 계약금액 -->
 
 <section class="card">
 
   <div class="card-title">
-    ② 계약내용
+    ② 계약금액 및 지급
   </div>
 
-  <div class="money-grid">
 
-    <!-- 매매 -->
+  <!-- 매매 -->
 
-    <div id="salePriceField" class="field">
-      <label>
-        매매대금
-        <span class="req">*</span>
-      </label>
+  <div id="saleMoney">
 
-      <input id="salePrice" type="text" inputmode="numeric">
+    <div class="sub-title">
+      매매금액
     </div>
 
+    <div class="money-grid">
 
-    <!-- 전세 / 월세 -->
+      <div class="field">
+        <label>
+          매매대금
+          <span class="req">*</span>
+        </label>
 
-    <div id="depositField" class="field hidden">
-      <label>
-        보증금
-        <span class="req">*</span>
-      </label>
+        <input id="salePrice" type="text" inputmode="numeric">
+      </div>
 
-      <input id="deposit" type="text" inputmode="numeric">
+      <div class="field">
+        <label>
+          계약금
+          <span class="req">*</span>
+        </label>
+
+        <input id="saleContractMoney" type="text" inputmode="numeric">
+      </div>
+
+      <div class="field">
+        <label>중도금</label>
+
+        <input id="saleInterimMoney" type="text" inputmode="numeric">
+      </div>
+
+      <div class="field">
+        <label>
+          잔금
+          <span class="req">*</span>
+        </label>
+
+        <input id="saleBalanceMoney" type="text" inputmode="numeric">
+      </div>
+
     </div>
 
+  </div>
 
-    <!-- 월세 -->
 
-    <div id="monthlyRentField" class="field hidden">
-      <label>
-        월 차임
-        <span class="req">*</span>
-      </label>
+  <!-- 전세 -->
 
-      <input id="monthlyRent" type="text" inputmode="numeric">
+  <div id="jeonseMoney" class="hidden">
+
+    <div class="sub-title">
+      전세금액
     </div>
 
-    <div id="monthlyPayDayField" class="field hidden">
-      <label>월세 지급일</label>
+    <div class="money-grid">
 
-      <input id="monthlyPayDay" type="text" placeholder="매월 25일">
+      <div class="field">
+        <label>
+          전세보증금
+          <span class="req">*</span>
+        </label>
+
+        <input id="jeonseDeposit" type="text" inputmode="numeric">
+      </div>
+
+      <div class="field">
+        <label>
+          계약금
+          <span class="req">*</span>
+        </label>
+
+        <input id="jeonseContractMoney" type="text" inputmode="numeric">
+      </div>
+
+      <div class="field">
+        <label>중도금</label>
+
+        <input id="jeonseInterimMoney" type="text" inputmode="numeric">
+      </div>
+
+      <div class="field">
+        <label>
+          잔금
+          <span class="req">*</span>
+        </label>
+
+        <input id="jeonseBalanceMoney" type="text" inputmode="numeric">
+      </div>
+
     </div>
 
+  </div>
 
-    <!-- 공통 -->
 
-    <div class="field">
-      <label>
-        계약금
-        <span class="req">*</span>
-      </label>
+  <!-- 월세 -->
 
-      <input id="contractMoney" type="text" inputmode="numeric">
+  <div id="monthlyMoney" class="hidden">
+
+    <div class="sub-title">
+      월세금액
     </div>
 
-    <div class="field">
-      <label>중도금</label>
-      <input id="interimMoney" type="text" inputmode="numeric">
+    <div class="money-grid">
+
+      <div class="field">
+        <label>
+          보증금
+          <span class="req">*</span>
+        </label>
+
+        <input id="monthlyDeposit" type="text" inputmode="numeric">
+      </div>
+
+      <div class="field">
+        <label>
+          월 차임
+          <span class="req">*</span>
+        </label>
+
+        <input id="monthlyRent" type="text" inputmode="numeric">
+      </div>
+
+      <div class="field">
+        <label>월세 지급일</label>
+
+        <input
+          id="monthlyPayDay"
+          type="text"
+          placeholder="예: 매월 25일">
+      </div>
+
+      <div class="field">
+        <label>
+          계약금
+          <span class="req">*</span>
+        </label>
+
+        <input id="monthlyContractMoney" type="text" inputmode="numeric">
+      </div>
+
+      <div class="field">
+        <label>
+          잔금
+          <span class="req">*</span>
+        </label>
+
+        <input id="monthlyBalanceMoney" type="text" inputmode="numeric">
+      </div>
+
     </div>
 
-    <div class="field">
-      <label>
-        잔금
-        <span class="req">*</span>
-      </label>
+  </div>
 
-      <input id="balanceMoney" type="text" inputmode="numeric">
-    </div>
+
+  <!-- 지급일 -->
+
+  <div class="sub-title">
+    지급일
+  </div>
+
+  <div class="grid">
 
     <div class="field">
       <label>계약금 지급일</label>
       <input id="contractMoneyDate" type="date">
     </div>
 
-    <div class="field">
+    <div id="interimDateField" class="field">
       <label>중도금 지급일</label>
       <input id="interimMoneyDate" type="date">
     </div>
@@ -607,7 +785,7 @@ textarea{
 </section>
 
 
-<!-- ③ 계약기간 / 인도 -->
+<!-- ③ 계약기간 -->
 
 <section class="card">
 
@@ -617,7 +795,7 @@ textarea{
 
   <!-- 매매 -->
 
-  <div id="saleDelivery">
+  <div id="salePeriod">
 
     <div class="grid">
 
@@ -644,7 +822,7 @@ textarea{
   </div>
 
 
-  <!-- 임대차 -->
+  <!-- 전세 / 월세 -->
 
   <div id="leasePeriod" class="hidden">
 
@@ -716,7 +894,7 @@ textarea{
 </section>
 
 
-<!-- ⑤ 세금 / 관리비 -->
+<!-- ⑤ 세금 관리비 -->
 
 <section class="card">
 
@@ -749,11 +927,11 @@ textarea{
   </div>
 
   <div class="field">
-    <label>별도 관리비 약정</label>
+    <label>관리비 및 별도 부담사항</label>
 
     <textarea
       id="managementFee"
-      placeholder="관리비 금액 및 별도 부담 항목이 있으면 입력합니다."></textarea>
+      placeholder="관리비 금액 및 부담 항목을 입력합니다."></textarea>
   </div>
 
 </section>
@@ -773,7 +951,7 @@ textarea{
       계약금에 의한 해제
     </span>
 
-    당사자 사이에 별도의 약정이 없는 경우,
+    당사자 사이에 별도의 약정이 없는 경우
     계약 이행에 착수하기 전까지 계약금을 지급한 자는
     계약금을 포기하고, 계약금을 받은 자는 그 배액을 반환하여
     계약을 해제할 수 있습니다.
@@ -796,7 +974,7 @@ textarea{
 </section>
 
 
-<!-- ⑦ 임대차 전용 -->
+<!-- 임대차 -->
 
 <section id="leaseTermsCard" class="card hidden">
 
@@ -827,17 +1005,6 @@ textarea{
 
   </div>
 
-  <div class="check-row">
-
-    <input id="leaseConfirm" type="checkbox">
-
-    <label for="leaseConfirm">
-      임대차 계약과 관련한 보증금, 계약기간, 관리비,
-      권리관계 및 특약사항을 확인하였습니다.
-    </label>
-
-  </div>
-
 </section>
 
 
@@ -850,7 +1017,7 @@ textarea{
   </div>
 
   <div class="notice">
-    당사자 사이에 별도로 합의한 사항이 있는 경우 아래에 작성합니다.
+    당사자 사이에 별도로 합의한 사항이 있는 경우 작성합니다.
   </div>
 
   <textarea
@@ -861,7 +1028,7 @@ textarea{
 </section>
 
 
-<!-- 중개대상물 확인 -->
+<!-- 확인 설명 -->
 
 <section class="card">
 
@@ -871,12 +1038,16 @@ textarea{
 
   <div class="check-row">
 
-    <input id="descriptionConfirm" type="checkbox">
+    <input
+      id="descriptionConfirm"
+      type="checkbox">
 
     <label for="descriptionConfirm">
+
       중개대상물 확인 · 설명서를 확인하였으며,
-      공인중개사로부터 해당 부동산의 상태,
+      공인중개사로부터 부동산의 상태,
       권리관계 및 거래조건에 대한 설명을 들었습니다.
+
     </label>
 
   </div>
@@ -884,7 +1055,7 @@ textarea{
 </section>
 
 
-<!-- 당사자 정보 -->
+<!-- 당사자 -->
 
 <section class="card">
 
@@ -894,11 +1065,13 @@ textarea{
 
   <div class="party-grid">
 
-    <!-- BUYER -->
+    <!-- 매수/임차 -->
 
     <div class="party-box">
 
-      <div id="buyerPartyTitle" class="party-title">
+      <div
+        id="buyerPartyTitle"
+        class="party-title">
         매수인
       </div>
 
@@ -919,7 +1092,9 @@ textarea{
 
       <div class="sign-area">
 
-        <div id="buyerSignPad" class="sign-pad">
+        <div
+          id="buyerSignPad"
+          class="sign-pad">
           전자서명 대기
         </div>
 
@@ -930,18 +1105,22 @@ textarea{
           전자서명
         </button>
 
-        <div id="buyerSignTime" class="sign-time"></div>
+        <div
+          id="buyerSignTime"
+          class="sign-time"></div>
 
       </div>
 
     </div>
 
 
-    <!-- SELLER -->
+    <!-- 매도/임대 -->
 
     <div class="party-box">
 
-      <div id="sellerPartyTitle" class="party-title">
+      <div
+        id="sellerPartyTitle"
+        class="party-title">
         매도인
       </div>
 
@@ -962,7 +1141,9 @@ textarea{
 
       <div class="sign-area">
 
-        <div id="sellerSignPad" class="sign-pad">
+        <div
+          id="sellerSignPad"
+          class="sign-pad">
           전자서명 대기
         </div>
 
@@ -973,14 +1154,16 @@ textarea{
           전자서명
         </button>
 
-        <div id="sellerSignTime" class="sign-time"></div>
+        <div
+          id="sellerSignTime"
+          class="sign-time"></div>
 
       </div>
 
     </div>
 
 
-    <!-- BROKER -->
+    <!-- 중개사 -->
 
     <div class="party-box">
 
@@ -1020,7 +1203,9 @@ textarea{
 
       <div class="sign-area">
 
-        <div id="brokerSignPad" class="sign-pad">
+        <div
+          id="brokerSignPad"
+          class="sign-pad">
           전자서명 대기
         </div>
 
@@ -1031,7 +1216,9 @@ textarea{
           전자서명
         </button>
 
-        <div id="brokerSignTime" class="sign-time"></div>
+        <div
+          id="brokerSignTime"
+          class="sign-time"></div>
 
       </div>
 
@@ -1042,7 +1229,7 @@ textarea{
 </section>
 
 
-<!-- 최종 확인 -->
+<!-- 최종확인 -->
 
 <section class="card">
 
@@ -1055,17 +1242,17 @@ textarea{
     <input id="finalConfirm" type="checkbox">
 
     <label for="finalConfirm">
+
       계약 당사자는 위 계약내용과 특약사항,
       중개대상물 확인 · 설명 내용을 모두 확인하였으며
       본인의 의사에 따라 전자계약을 체결합니다.
+
     </label>
 
   </div>
 
 </section>
 
-
-<!-- BUTTON -->
 
 <div class="bottom">
 
@@ -1101,7 +1288,8 @@ textarea{
 
 "use strict";
 
-const $ = id => document.getElementById(id);
+const $ =
+  id => document.getElementById(id);
 
 const params =
   new URLSearchParams(location.search);
@@ -1113,12 +1301,9 @@ $("roomCode").textContent =
   roomCode || "----";
 
 
-/* ================================
-   진행현황 DATA
-================================ */
-
 let roomData = null;
 let step1Data = null;
+
 
 try{
 
@@ -1132,6 +1317,7 @@ try{
 }catch(e){
   roomData = null;
 }
+
 
 try{
 
@@ -1147,9 +1333,7 @@ try{
 }
 
 
-/* ================================
-   거래유형
-================================ */
+/* 거래유형 */
 
 let tradeType =
   roomData && roomData.tradeType
@@ -1157,15 +1341,79 @@ let tradeType =
   : params.get("type") || "sale";
 
 
-function setTradeType(){
+function selectTradeType(type){
 
-  if(tradeType === "sale"){
+  tradeType = type;
 
-    $("contractTitle").textContent =
-      "부동산 매매 전자계약서";
+  $("typeSale").checked =
+    type === "sale";
 
-    $("typeBadge").textContent =
-      "매매";
+  $("typeJeonse").checked =
+    type === "jeonse";
+
+  $("typeMonthly").checked =
+    type === "monthly";
+
+
+  $("saleMoney")
+    .classList.toggle(
+      "hidden",
+      type !== "sale"
+    );
+
+  $("jeonseMoney")
+    .classList.toggle(
+      "hidden",
+      type !== "jeonse"
+    );
+
+  $("monthlyMoney")
+    .classList.toggle(
+      "hidden",
+      type !== "monthly"
+    );
+
+
+  $("salePeriod")
+    .classList.toggle(
+      "hidden",
+      type !== "sale"
+    );
+
+  $("leasePeriod")
+    .classList.toggle(
+      "hidden",
+      type === "sale"
+    );
+
+
+  $("saleTaxTerm")
+    .classList.toggle(
+      "hidden",
+      type !== "sale"
+    );
+
+  $("leaseTaxTerm")
+    .classList.toggle(
+      "hidden",
+      type === "sale"
+    );
+
+  $("leaseTermsCard")
+    .classList.toggle(
+      "hidden",
+      type === "sale"
+    );
+
+
+  $("interimDateField")
+    .classList.toggle(
+      "hidden",
+      type === "monthly"
+    );
+
+
+  if(type === "sale"){
 
     $("buyerPartyTitle").textContent =
       "매수인";
@@ -1173,129 +1421,39 @@ function setTradeType(){
     $("sellerPartyTitle").textContent =
       "매도인";
 
-    $("salePriceField")
-      .classList.remove("hidden");
-
-    $("depositField")
-      .classList.add("hidden");
-
-    $("monthlyRentField")
-      .classList.add("hidden");
-
-    $("monthlyPayDayField")
-      .classList.add("hidden");
-
-    $("saleDelivery")
-      .classList.remove("hidden");
-
-    $("leasePeriod")
-      .classList.add("hidden");
-
-    $("saleTaxTerm")
-      .classList.remove("hidden");
-
-    $("leaseTaxTerm")
-      .classList.add("hidden");
-
-    $("leaseTermsCard")
-      .classList.add("hidden");
-
-  }
-
-
-  if(tradeType === "jeonse"){
-
-    $("contractTitle").textContent =
-      "주택 전세 전자계약서";
-
-    $("typeBadge").textContent =
-      "전세";
+  }else{
 
     $("buyerPartyTitle").textContent =
       "임차인";
 
     $("sellerPartyTitle").textContent =
       "임대인";
-
-    $("salePriceField")
-      .classList.add("hidden");
-
-    $("depositField")
-      .classList.remove("hidden");
-
-    $("monthlyRentField")
-      .classList.add("hidden");
-
-    $("monthlyPayDayField")
-      .classList.add("hidden");
-
-    $("saleDelivery")
-      .classList.add("hidden");
-
-    $("leasePeriod")
-      .classList.remove("hidden");
-
-    $("saleTaxTerm")
-      .classList.add("hidden");
-
-    $("leaseTaxTerm")
-      .classList.remove("hidden");
-
-    $("leaseTermsCard")
-      .classList.remove("hidden");
-
-  }
-
-
-  if(tradeType === "monthly"){
-
-    $("contractTitle").textContent =
-      "주택 월세 전자계약서";
-
-    $("typeBadge").textContent =
-      "월세";
-
-    $("buyerPartyTitle").textContent =
-      "임차인";
-
-    $("sellerPartyTitle").textContent =
-      "임대인";
-
-    $("salePriceField")
-      .classList.add("hidden");
-
-    $("depositField")
-      .classList.remove("hidden");
-
-    $("monthlyRentField")
-      .classList.remove("hidden");
-
-    $("monthlyPayDayField")
-      .classList.remove("hidden");
-
-    $("saleDelivery")
-      .classList.add("hidden");
-
-    $("leasePeriod")
-      .classList.remove("hidden");
-
-    $("saleTaxTerm")
-      .classList.add("hidden");
-
-    $("leaseTaxTerm")
-      .classList.remove("hidden");
-
-    $("leaseTermsCard")
-      .classList.remove("hidden");
 
   }
 
 }
 
 
-/* ================================
-   진행현황 내용 자동 입력
-================================ */
+document
+.querySelectorAll(
+  'input[name="tradeType"]'
+)
+.forEach(function(input){
+
+  input.addEventListener(
+    "change",
+    function(){
+
+      selectTradeType(this.value);
+      saveContract(false);
+
+    }
+  );
+
+});
+
+
+/* 진행현황 자동입력 */
 
 function loadRoomData(){
 
@@ -1329,9 +1487,7 @@ function loadRoomData(){
 }
 
 
-/* ================================
-   공인중개사 자료 자동입력
-================================ */
+/* 중개사 자동입력 */
 
 function loadBrokerData(){
 
@@ -1345,8 +1501,7 @@ function loadBrokerData(){
     "";
 
   $("brokerOffice").value =
-    step1Data.officeName ||
-    "";
+    step1Data.officeName || "";
 
   $("brokerRegistration").value =
     step1Data.officeRegistrationNo ||
@@ -1370,17 +1525,23 @@ function loadBrokerData(){
 }
 
 
-/* ================================
-   금액 숫자
-================================ */
+/* 금액 콤마 */
 
 [
   "salePrice",
-  "deposit",
+  "saleContractMoney",
+  "saleInterimMoney",
+  "saleBalanceMoney",
+
+  "jeonseDeposit",
+  "jeonseContractMoney",
+  "jeonseInterimMoney",
+  "jeonseBalanceMoney",
+
+  "monthlyDeposit",
   "monthlyRent",
-  "contractMoney",
-  "interimMoney",
-  "balanceMoney"
+  "monthlyContractMoney",
+  "monthlyBalanceMoney"
 ]
 .forEach(function(id){
 
@@ -1388,21 +1549,14 @@ function loadBrokerData(){
     "input",
     function(){
 
-      let number =
-        this.value
-        .replace(/[^\d]/g,"");
+      const value =
+        this.value.replace(/\D/g,"");
 
-      if(number){
-
-        this.value =
-          Number(number)
-          .toLocaleString("ko-KR");
-
-      }else{
-
-        this.value = "";
-
-      }
+      this.value =
+        value
+        ? Number(value)
+          .toLocaleString("ko-KR")
+        : "";
 
     }
   );
@@ -1410,9 +1564,7 @@ function loadBrokerData(){
 });
 
 
-/* ================================
-   전화번호
-================================ */
+/* 휴대전화 */
 
 [
   "buyerPhone",
@@ -1436,9 +1588,7 @@ function loadBrokerData(){
 });
 
 
-/* ================================
-   저장
-================================ */
+/* 저장 데이터 */
 
 function getFormData(){
 
@@ -1447,14 +1597,9 @@ function getFormData(){
     roomCode:roomCode,
     tradeType:tradeType,
 
-    address:
-      $("address").value.trim(),
-
-    apartmentName:
-      $("apartmentName").value.trim(),
-
-    dongHo:
-      $("dongHo").value.trim(),
+    address:$("address").value.trim(),
+    apartmentName:$("apartmentName").value.trim(),
+    dongHo:$("dongHo").value.trim(),
 
     exclusiveArea:
       $("exclusiveArea").value.trim(),
@@ -1462,11 +1607,35 @@ function getFormData(){
     landRight:
       $("landRight").value.trim(),
 
+
     salePrice:
       $("salePrice").value.trim(),
 
-    deposit:
-      $("deposit").value.trim(),
+    saleContractMoney:
+      $("saleContractMoney").value.trim(),
+
+    saleInterimMoney:
+      $("saleInterimMoney").value.trim(),
+
+    saleBalanceMoney:
+      $("saleBalanceMoney").value.trim(),
+
+
+    jeonseDeposit:
+      $("jeonseDeposit").value.trim(),
+
+    jeonseContractMoney:
+      $("jeonseContractMoney").value.trim(),
+
+    jeonseInterimMoney:
+      $("jeonseInterimMoney").value.trim(),
+
+    jeonseBalanceMoney:
+      $("jeonseBalanceMoney").value.trim(),
+
+
+    monthlyDeposit:
+      $("monthlyDeposit").value.trim(),
 
     monthlyRent:
       $("monthlyRent").value.trim(),
@@ -1474,14 +1643,12 @@ function getFormData(){
     monthlyPayDay:
       $("monthlyPayDay").value.trim(),
 
-    contractMoney:
-      $("contractMoney").value.trim(),
+    monthlyContractMoney:
+      $("monthlyContractMoney").value.trim(),
 
-    interimMoney:
-      $("interimMoney").value.trim(),
+    monthlyBalanceMoney:
+      $("monthlyBalanceMoney").value.trim(),
 
-    balanceMoney:
-      $("balanceMoney").value.trim(),
 
     contractMoneyDate:
       $("contractMoneyDate").value,
@@ -1492,11 +1659,13 @@ function getFormData(){
     balanceMoneyDate:
       $("balanceMoneyDate").value,
 
+
     ownershipDate:
       $("ownershipDate").value,
 
     deliveryDate:
       $("deliveryDate").value,
+
 
     leaseStartDate:
       $("leaseStartDate").value,
@@ -1507,6 +1676,7 @@ function getFormData(){
     leaseDeliveryDate:
       $("leaseDeliveryDate").value,
 
+
     rights:
       $("rights").value.trim(),
 
@@ -1516,14 +1686,12 @@ function getFormData(){
     specialTerms:
       $("specialTerms").value.trim(),
 
-    leaseConfirm:
-      $("leaseConfirm").checked,
-
     descriptionConfirm:
       $("descriptionConfirm").checked,
 
     finalConfirm:
       $("finalConfirm").checked,
+
 
     buyerName:
       $("buyerName").value.trim(),
@@ -1534,6 +1702,7 @@ function getFormData(){
     buyerAddress:
       $("buyerAddress").value.trim(),
 
+
     sellerName:
       $("sellerName").value.trim(),
 
@@ -1542,6 +1711,7 @@ function getFormData(){
 
     sellerAddress:
       $("sellerAddress").value.trim(),
+
 
     brokerName:
       $("brokerName").value.trim(),
@@ -1561,6 +1731,7 @@ function getFormData(){
     brokerGuarantee:
       $("brokerGuarantee").value.trim(),
 
+
     buyerSigned:
       $("buyerSignPad")
       .classList.contains("signed"),
@@ -1573,6 +1744,7 @@ function getFormData(){
       $("brokerSignPad")
       .classList.contains("signed"),
 
+
     buyerSignTime:
       $("buyerSignTime").textContent,
 
@@ -1581,6 +1753,7 @@ function getFormData(){
 
     brokerSignTime:
       $("brokerSignTime").textContent,
+
 
     contractCompleted:false,
 
@@ -1602,13 +1775,16 @@ function(showMessage){
     return;
   }
 
-  const old =
+  const previous =
     loadSavedContract();
 
   const data =
     getFormData();
 
-  if(old && old.contractCompleted){
+  if(
+    previous &&
+    previous.contractCompleted
+  ){
     data.contractCompleted = true;
   }
 
@@ -1618,17 +1794,15 @@ function(showMessage){
   );
 
   if(showMessage){
+
     showOk(
       "전자계약서가 저장되었습니다."
     );
+
   }
 
 };
 
-
-/* ================================
-   기존 계약 불러오기
-================================ */
 
 function loadSavedContract(){
 
@@ -1658,6 +1832,11 @@ function loadContract(){
     return;
   }
 
+  if(data.tradeType){
+    selectTradeType(data.tradeType);
+  }
+
+
   const ids = [
 
     "address",
@@ -1667,13 +1846,20 @@ function loadContract(){
     "landRight",
 
     "salePrice",
-    "deposit",
+    "saleContractMoney",
+    "saleInterimMoney",
+    "saleBalanceMoney",
+
+    "jeonseDeposit",
+    "jeonseContractMoney",
+    "jeonseInterimMoney",
+    "jeonseBalanceMoney",
+
+    "monthlyDeposit",
     "monthlyRent",
     "monthlyPayDay",
-
-    "contractMoney",
-    "interimMoney",
-    "balanceMoney",
+    "monthlyContractMoney",
+    "monthlyBalanceMoney",
 
     "contractMoneyDate",
     "interimMoneyDate",
@@ -1707,6 +1893,7 @@ function loadContract(){
 
   ];
 
+
   ids.forEach(function(id){
 
     if(
@@ -1721,9 +1908,6 @@ function loadContract(){
 
   });
 
-
-  $("leaseConfirm").checked =
-    !!data.leaseConfirm;
 
   $("descriptionConfirm").checked =
     !!data.descriptionConfirm;
@@ -1767,29 +1951,27 @@ function loadContract(){
 }
 
 
-/* ================================
-   전자서명
-================================ */
+/* 전자서명 */
 
 function sign(role){
 
-  let nameInput = "";
+  let nameId = "";
 
   if(role === "buyer"){
-    nameInput = "buyerName";
+    nameId = "buyerName";
   }
 
   if(role === "seller"){
-    nameInput = "sellerName";
+    nameId = "sellerName";
   }
 
   if(role === "broker"){
-    nameInput = "brokerName";
+    nameId = "brokerName";
   }
 
 
   const name =
-    $(nameInput).value.trim();
+    $(nameId).value.trim();
 
   if(!name){
 
@@ -1797,7 +1979,7 @@ function sign(role){
       "전자서명 전에 성명을 입력해 주세요."
     );
 
-    $(nameInput).focus();
+    $(nameId).focus();
 
     return;
   }
@@ -1808,15 +1990,11 @@ function sign(role){
     .toLocaleString("ko-KR");
 
 
-  const pad =
-    $(role + "SignPad");
-
-  pad.textContent =
+  $(role + "SignPad").textContent =
     name + " 서명완료";
 
-  pad.className =
+  $(role + "SignPad").className =
     "sign-pad signed";
-
 
   $(role + "SignTime").textContent =
     now;
@@ -1832,31 +2010,22 @@ function sign(role){
 }
 
 
-$("buyerSignBtn")
-.addEventListener(
-  "click",
-  function(){
-    sign("buyer");
-  }
-);
+$("buyerSignBtn").onclick =
+function(){
+  sign("buyer");
+};
 
 
-$("sellerSignBtn")
-.addEventListener(
-  "click",
-  function(){
-    sign("seller");
-  }
-);
+$("sellerSignBtn").onclick =
+function(){
+  sign("seller");
+};
 
 
-$("brokerSignBtn")
-.addEventListener(
-  "click",
-  function(){
-    sign("broker");
-  }
-);
+$("brokerSignBtn").onclick =
+function(){
+  sign("broker");
+};
 
 
 function setSigned(
@@ -1877,9 +2046,7 @@ function setSigned(
 }
 
 
-/* ================================
-   필수 확인
-================================ */
+/* 필수검사 */
 
 function requiredComplete(){
 
@@ -1901,12 +2068,12 @@ function requiredComplete(){
 
     if(
       !$("salePrice").value.trim() ||
-      !$("contractMoney").value.trim() ||
-      !$("balanceMoney").value.trim()
+      !$("saleContractMoney").value.trim() ||
+      !$("saleBalanceMoney").value.trim()
     ){
 
       showError(
-        "매매대금, 계약금, 잔금을 확인해 주세요."
+        "매매대금, 계약금, 잔금을 입력해 주세요."
       );
 
       return false;
@@ -1915,19 +2082,16 @@ function requiredComplete(){
   }
 
 
-  if(
-    tradeType === "jeonse" ||
-    tradeType === "monthly"
-  ){
+  if(tradeType === "jeonse"){
 
     if(
-      !$("deposit").value.trim() ||
-      !$("contractMoney").value.trim() ||
-      !$("balanceMoney").value.trim()
+      !$("jeonseDeposit").value.trim() ||
+      !$("jeonseContractMoney").value.trim() ||
+      !$("jeonseBalanceMoney").value.trim()
     ){
 
       showError(
-        "보증금, 계약금, 잔금을 확인해 주세요."
+        "전세보증금, 계약금, 잔금을 입력해 주세요."
       );
 
       return false;
@@ -1939,11 +2103,14 @@ function requiredComplete(){
   if(tradeType === "monthly"){
 
     if(
-      !$("monthlyRent").value.trim()
+      !$("monthlyDeposit").value.trim() ||
+      !$("monthlyRent").value.trim() ||
+      !$("monthlyContractMoney").value.trim() ||
+      !$("monthlyBalanceMoney").value.trim()
     ){
 
       showError(
-        "월 차임을 입력해 주세요."
+        "월세 보증금, 월 차임, 계약금, 잔금을 입력해 주세요."
       );
 
       return false;
@@ -1952,9 +2119,7 @@ function requiredComplete(){
   }
 
 
-  if(
-    !$("descriptionConfirm").checked
-  ){
+  if(!$("descriptionConfirm").checked){
 
     showError(
       "중개대상물 확인 · 설명 확인이 필요합니다."
@@ -1965,26 +2130,12 @@ function requiredComplete(){
 
 
   if(
-    (
-      tradeType === "jeonse" ||
-      tradeType === "monthly"
-    ) &&
-    !$("leaseConfirm").checked
-  ){
-
-    showError(
-      "임대차 관련 확인이 필요합니다."
-    );
-
-    return false;
-  }
-
-
-  if(
     !$("buyerSignPad")
     .classList.contains("signed") ||
+
     !$("sellerSignPad")
     .classList.contains("signed") ||
+
     !$("brokerSignPad")
     .classList.contains("signed")
   ){
@@ -1997,9 +2148,7 @@ function requiredComplete(){
   }
 
 
-  if(
-    !$("finalConfirm").checked
-  ){
+  if(!$("finalConfirm").checked){
 
     showError(
       "최종 계약 확인에 체크해 주세요."
@@ -2014,9 +2163,7 @@ function requiredComplete(){
 }
 
 
-/* ================================
-   계약완료
-================================ */
+/* 완료 */
 
 window.completeContract =
 function(){
@@ -2038,6 +2185,7 @@ function(){
     JSON.stringify(data)
   );
 
+
   showOk(
     "전자계약이 완료되었습니다."
   );
@@ -2054,9 +2202,7 @@ function(){
 };
 
 
-/* ================================
-   메시지
-================================ */
+/* 메시지 */
 
 function showOk(text){
 
@@ -2080,11 +2226,9 @@ function showError(text){
 }
 
 
-/* ================================
-   START
-================================ */
+/* 시작 */
 
-setTradeType();
+selectTradeType(tradeType);
 
 loadRoomData();
 
