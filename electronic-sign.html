@@ -808,8 +808,10 @@ canvas{
 
         <label for="signConsent">
 
-          본인은 위 계약내용을 확인했으며,
-          본인의 의사로 전자서명합니다.
+          본인은 위 부동산 전자계약서의 계약내용,
+          특약사항 및 중개대상물 확인·설명 내용을 확인하였으며,
+          본인의 의사에 따라 전자서명합니다.
+          전자서명 완료 시 서명일시와 서명상태가 기록됩니다.
 
         </label>
 
@@ -824,7 +826,7 @@ canvas{
         class="btn btn-gray"
         disabled>
 
-        전자서명하기
+        전자서명 완료
 
       </button>
 
@@ -932,10 +934,12 @@ const params =
 
 
 const tradeId =
-  params.get("trade") || "";
+  params.get("code") ||
+  params.get("trade") ||
+  "";
 
 
-const type =
+let type =
   params.get("type") || "";
 
 
@@ -1033,7 +1037,7 @@ const TYPE = {
 
 
 
-const tradeType =
+let tradeType =
   TYPE[type] || null;
 
 
@@ -1043,6 +1047,26 @@ let contractData =
 
 let signatureData =
   null;
+
+
+
+function getCurrentRoleName(){
+
+  if(role === "broker"){
+    return "공인중개사";
+  }
+
+  if(role === "seller"){
+    return tradeType
+      ? tradeType.seller
+      : "매도자·임대인";
+  }
+
+  return tradeType
+    ? tradeType.buyer
+    : "매수자·임차인";
+
+}
 
 
 
@@ -1186,20 +1210,9 @@ async function loadContract(){
 
 
   if(
-    !tradeType
-  ){
-
-    showError(
-      "거래 유형이 올바르지 않습니다."
-    );
-
-    return;
-  }
-
-
-  if(
     role !== "buyer" &&
-    role !== "seller"
+    role !== "seller" &&
+    role !== "broker"
   ){
 
     showError(
@@ -1354,11 +1367,32 @@ async function loadContract(){
 
 
     if(
+      type &&
       contractData.trade_type !== type
     ){
 
       showError(
         "계약서의 거래 유형이 일치하지 않습니다."
+      );
+
+      return;
+    }
+
+
+    type =
+      contractData.trade_type || type;
+
+
+    tradeType =
+      TYPE[type] || null;
+
+
+    if(
+      !tradeType
+    ){
+
+      showError(
+        "거래 유형이 올바르지 않습니다."
       );
 
       return;
@@ -1402,9 +1436,7 @@ async function loadContract(){
 function renderContract(){
 
   const currentRole =
-    role === "seller"
-    ? tradeType.seller
-    : tradeType.buyer;
+    getCurrentRoleName();
 
 
 
@@ -1587,6 +1619,17 @@ function renderContract(){
 
 
   if(
+    role === "broker"
+  ){
+
+    $("personName").value =
+      contractData.broker_name
+      ||
+      signatureData.signer_name
+      ||
+      "";
+
+  }else if(
     role === "seller"
   ){
 
@@ -1653,17 +1696,7 @@ async function showAlreadySigned(){
 
 
   const currentRole =
-    role === "seller"
-    ? (
-        tradeType
-        ? tradeType.seller
-        : "계약 당사자"
-      )
-    : (
-        tradeType
-        ? tradeType.buyer
-        : "계약 당사자"
-      );
+    getCurrentRoleName();
 
 
   $("resultBox").innerHTML =
@@ -2349,7 +2382,7 @@ $("submitSignBtn")
 
 
       this.textContent =
-        "전자서명하기";
+        "전자서명 완료";
 
 
       alert(
@@ -2378,9 +2411,7 @@ $("submitSignBtn")
 
 
     const currentRole =
-      role === "seller"
-      ? tradeType.seller
-      : tradeType.buyer;
+      getCurrentRoleName();
 
 
 
@@ -2402,7 +2433,7 @@ $("submitSignBtn")
 
 
 
-    await checkBothSigned();
+    await checkAllSigned();
 
 
 
@@ -2417,11 +2448,11 @@ $("submitSignBtn")
 
 
 /* =======================================================
-   양쪽 서명 완료 확인
+   3자 서명 완료 확인
 ======================================================= */
 
 
-async function checkBothSigned(){
+async function checkAllSigned(){
 
 
   const result =
@@ -2479,11 +2510,22 @@ async function checkBothSigned(){
     );
 
 
+  const brokerDone =
+    rows.some(
+      row =>
+        row.signer_role === "broker"
+        &&
+        row.signed === true
+    );
+
+
 
   if(
     buyerDone
     &&
     sellerDone
+    &&
+    brokerDone
   ){
 
 
