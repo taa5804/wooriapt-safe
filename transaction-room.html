@@ -314,6 +314,268 @@ button{
   font-weight:900;
 }
 
+
+/* BROKER IDENTITY / DOCUMENT UPLOAD */
+
+.identity-box{
+  margin-bottom:18px;
+  padding:15px;
+  border:1px solid #dce6ed;
+  border-radius:13px;
+  background:#f8fafc;
+}
+
+.identity-title{
+  margin:0 0 8px;
+  color:#263e50;
+  font-size:14px;
+  font-weight:900;
+}
+
+.identity-note{
+  margin:0 0 12px;
+  color:#6f808d;
+  font-size:11px;
+  line-height:1.65;
+}
+
+.identity-checks{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.identity-check{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:11px;
+  border:1px solid #dce6ed;
+  border-radius:10px;
+  background:#fff;
+  color:#31506a;
+  font-size:12px;
+  font-weight:800;
+}
+
+.identity-check input{
+  width:18px;
+  height:18px;
+  flex:none;
+}
+
+.document-upload-list{
+  display:grid;
+  gap:10px;
+}
+
+.upload-item{
+  padding:14px;
+  border:1px solid #e0e7ed;
+  border-radius:12px;
+  background:#fff;
+}
+
+.upload-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.upload-name{
+  color:#263e50;
+  font-size:14px;
+  font-weight:900;
+}
+
+.upload-desc{
+  margin-top:3px;
+  color:#7a8995;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.upload-status{
+  flex:none;
+  padding:6px 9px;
+  border-radius:999px;
+  background:#f1f4f7;
+  color:#70808c;
+  font-size:11px;
+  font-weight:900;
+}
+
+.upload-status.done{
+  background:#eaf8ef;
+  color:#17824b;
+}
+
+.upload-controls{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.file-input{
+  min-width:0;
+  flex:1 1 230px;
+  padding:8px;
+  border:1px solid #cfdce5;
+  border-radius:9px;
+  background:#f8fafc;
+  font-size:11px;
+}
+
+.doc-btn{
+  flex:none;
+  min-height:38px;
+  padding:0 13px;
+  border:0;
+  border-radius:9px;
+  background:#1165d7;
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+}
+
+.doc-btn.view{
+  background:#173e60;
+}
+
+.doc-btn.delete{
+  background:#eef2f5;
+  color:#536a7c;
+}
+
+.doc-btn:disabled{
+  opacity:.45;
+  cursor:default;
+}
+
+.viewer{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  padding:18px;
+  background:rgba(8,20,31,.86);
+  align-items:center;
+  justify-content:center;
+}
+
+.viewer.show{
+  display:flex;
+}
+
+.viewer-box{
+  position:relative;
+  width:min(100%,1100px);
+  height:min(92vh,850px);
+  border-radius:14px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.viewer-head{
+  height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:0 14px;
+  border-bottom:1px solid #e3e9ee;
+  background:#fff;
+}
+
+.viewer-title{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#263e50;
+  font-size:13px;
+  font-weight:900;
+}
+
+.viewer-close{
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:9px;
+  background:#eef2f5;
+  color:#263e50;
+  font-size:20px;
+  font-weight:900;
+}
+
+.viewer-body{
+  width:100%;
+  height:calc(100% - 52px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:auto;
+  background:#eef2f5;
+}
+
+.viewer-body img{
+  display:block;
+  max-width:none;
+  width:auto;
+  height:auto;
+  min-width:min(100%,700px);
+  object-fit:contain;
+  cursor:zoom-in;
+}
+
+.viewer-body iframe{
+  width:100%;
+  height:100%;
+  border:0;
+  background:#fff;
+}
+
+.readonly-doc-note{
+  padding:12px;
+  border-radius:10px;
+  background:#f5f8fa;
+  color:#607586;
+  font-size:11px;
+  line-height:1.65;
+}
+
+@media(max-width:600px){
+  .identity-checks{
+    grid-template-columns:1fr;
+  }
+
+  .upload-controls{
+    align-items:stretch;
+  }
+
+  .file-input{
+    flex-basis:100%;
+    width:100%;
+  }
+
+  .doc-btn{
+    flex:1;
+  }
+
+  .viewer{
+    padding:6px;
+  }
+
+  .viewer-box{
+    height:96vh;
+    border-radius:10px;
+  }
+}
+
+
 /* FEE */
 
 .fee{
@@ -708,65 +970,84 @@ button{
 </section>
 
 
-<!-- 서류 -->
+<!-- 본인확인 / 관련서류 -->
 
 <section class="section">
 
   <h2 class="section-title">
-    서류 확인
+    본인확인 · 관련서류
   </h2>
 
-  <p class="section-desc">
-    거래가 진행되면 필요한 서류가 이곳에 표시됩니다.
+  <p class="section-desc" id="documentSectionDesc">
+    담당 공인중개사가 본인확인 후 거래 관련서류를 등록합니다.
   </p>
 
+  <div class="identity-box" id="brokerIdentityBox">
 
-  <div>
+    <p class="identity-title">
+      공인중개사 본인확인
+    </p>
 
-    <div class="document">
+    <p class="identity-note">
+      신분증 사본은 플랫폼에 업로드하거나 보관하지 않습니다.
+      담당 공인중개사가 당사자의 신분증을 직접 확인한 뒤 아래 항목만 완료 처리합니다.
+    </p>
 
-      <div class="document-name">
-        <b>매매계약 관련 서류</b>
-        <span>거래 진행 후 확인</span>
-      </div>
+    <div class="identity-checks">
 
-      <span class="document-status">
-        대기
-      </span>
+      <label class="identity-check">
+        <input type="checkbox" id="party1Identity">
+        <span id="party1IdentityLabel">매수자 본인확인 완료</span>
+      </label>
 
-    </div>
-
-
-    <div class="document">
-
-      <div class="document-name">
-        <b>등기 관련 서류</b>
-        <span>거래 진행 후 확인</span>
-      </div>
-
-      <span class="document-status">
-        대기
-      </span>
-
-    </div>
-
-
-    <div class="document">
-
-      <div class="document-name">
-        <b>기타 거래서류</b>
-        <span>필요한 경우 표시됩니다.</span>
-      </div>
-
-      <span class="document-status">
-        대기
-      </span>
+      <label class="identity-check">
+        <input type="checkbox" id="party2Identity">
+        <span id="party2IdentityLabel">매도자 본인확인 완료</span>
+      </label>
 
     </div>
 
   </div>
 
+  <div class="section-title" style="font-size:15px;margin-top:4px;">
+    관련서류 등록
+  </div>
+
+  <p class="section-desc" id="uploadGuide">
+    공인중개사가 JPG·PNG·PDF 파일을 등록합니다.
+    등록된 서류는 매수자·매도자·공인중개사가 모두 열어볼 수 있습니다.
+  </p>
+
+  <div id="documentUploadList" class="document-upload-list"></div>
+
 </section>
+
+
+<!-- 서류 크게보기 -->
+
+<div class="viewer" id="documentViewer" aria-hidden="true">
+
+  <div class="viewer-box">
+
+    <div class="viewer-head">
+      <div class="viewer-title" id="viewerTitle">
+        관련서류
+      </div>
+
+      <button
+        type="button"
+        class="viewer-close"
+        id="viewerClose"
+        aria-label="닫기">
+        ×
+      </button>
+    </div>
+
+    <div class="viewer-body" id="viewerBody"></div>
+
+  </div>
+
+</div>
 
 
 <!-- 이용료 : 매수자에게만 표시 -->
@@ -1147,6 +1428,631 @@ if(role==="buyer"){
   ).style.display="block";
 
 }
+
+
+
+/* =========================================
+   거래유형 / 본인확인 / 관련서류
+
+   현재 파일은 화면 기능을 완성한 버전입니다.
+   파일 자체는 브라우저 저장소에 보관되므로
+   실제 서로 다른 기기에서 3자가 공유하려면
+   운영 DB/Storage 연결이 추가로 필요합니다.
+========================================= */
+
+const tradeType =
+  new URLSearchParams(location.search).get("type") ||
+  tradeData.tradeType ||
+  "sale";
+
+const documentDefinitions = {
+
+  sale:[
+    {
+      key:"registry",
+      name:"등기사항전부증명서",
+      desc:"소유권·근저당 등 권리관계 확인"
+    },
+    {
+      key:"building",
+      name:"건축물대장",
+      desc:"건축물 현황 확인"
+    },
+    {
+      key:"land",
+      name:"토지대장",
+      desc:"필요한 경우 토지 현황 확인"
+    },
+    {
+      key:"seal",
+      name:"매도용 인감증명서",
+      desc:"소유권이전등기에 필요한 경우 등록"
+    },
+    {
+      key:"resident",
+      name:"주민등록초본",
+      desc:"주소변동 등 등기 관련 확인이 필요한 경우 등록"
+    },
+    {
+      key:"etc",
+      name:"기타 확인서류",
+      desc:"특약·권리관계 등 추가 확인이 필요한 서류"
+    }
+  ],
+
+  jeonse:[
+    {
+      key:"registry",
+      name:"등기사항전부증명서",
+      desc:"소유권·근저당 등 권리관계 확인"
+    },
+    {
+      key:"building",
+      name:"건축물대장",
+      desc:"건축물 현황 확인"
+    },
+    {
+      key:"owner",
+      name:"임대인 관련 확인서류",
+      desc:"임대권한 및 소유관계 확인에 필요한 서류"
+    },
+    {
+      key:"deposit",
+      name:"보증금·권리관계 확인서류",
+      desc:"전세보증금과 선순위 권리관계 확인에 필요한 서류"
+    },
+    {
+      key:"etc",
+      name:"기타 확인서류",
+      desc:"거래에 추가로 필요한 확인서류"
+    }
+  ],
+
+  monthly:[
+    {
+      key:"registry",
+      name:"등기사항전부증명서",
+      desc:"소유권·근저당 등 권리관계 확인"
+    },
+    {
+      key:"building",
+      name:"건축물대장",
+      desc:"건축물 현황 확인"
+    },
+    {
+      key:"owner",
+      name:"임대인 관련 확인서류",
+      desc:"임대권한 및 소유관계 확인에 필요한 서류"
+    },
+    {
+      key:"rent",
+      name:"보증금·월세 확인서류",
+      desc:"보증금·월세 및 권리관계 확인에 필요한 서류"
+    },
+    {
+      key:"etc",
+      name:"기타 확인서류",
+      desc:"거래에 추가로 필요한 확인서류"
+    }
+  ]
+
+};
+
+const identityKey =
+  "wooriapt_identity_" +
+  (tradeData.tradeNumber || "default");
+
+const documentsKey =
+  "wooriapt_documents_" +
+  (tradeData.tradeNumber || "default");
+
+let identityData = {
+  party1:false,
+  party2:false
+};
+
+let documentData = {};
+
+try{
+  identityData =
+    JSON.parse(localStorage.getItem(identityKey)) ||
+    identityData;
+}catch(e){}
+
+try{
+  documentData =
+    JSON.parse(localStorage.getItem(documentsKey)) ||
+    {};
+}catch(e){}
+
+const party1Identity =
+  document.getElementById("party1Identity");
+
+const party2Identity =
+  document.getElementById("party2Identity");
+
+const party1IdentityLabel =
+  document.getElementById("party1IdentityLabel");
+
+const party2IdentityLabel =
+  document.getElementById("party2IdentityLabel");
+
+const brokerIdentityBox =
+  document.getElementById("brokerIdentityBox");
+
+const uploadGuide =
+  document.getElementById("uploadGuide");
+
+const documentUploadList =
+  document.getElementById("documentUploadList");
+
+const documentViewer =
+  document.getElementById("documentViewer");
+
+const viewerTitle =
+  document.getElementById("viewerTitle");
+
+const viewerBody =
+  document.getElementById("viewerBody");
+
+const viewerClose =
+  document.getElementById("viewerClose");
+
+
+function setIdentityLabels(){
+
+  if(tradeType==="sale"){
+    party1IdentityLabel.textContent =
+      "매수자 본인확인 완료";
+
+    party2IdentityLabel.textContent =
+      "매도자 본인확인 완료";
+  }else{
+    party1IdentityLabel.textContent =
+      "임차인 본인확인 완료";
+
+    party2IdentityLabel.textContent =
+      "임대인 본인확인 완료";
+  }
+
+}
+
+function saveIdentity(){
+
+  identityData.party1 =
+    party1Identity.checked;
+
+  identityData.party2 =
+    party2Identity.checked;
+
+  localStorage.setItem(
+    identityKey,
+    JSON.stringify(identityData)
+  );
+
+}
+
+party1Identity.checked =
+  !!identityData.party1;
+
+party2Identity.checked =
+  !!identityData.party2;
+
+party1Identity.addEventListener(
+  "change",
+  saveIdentity
+);
+
+party2Identity.addEventListener(
+  "change",
+  saveIdentity
+);
+
+
+function escapeHtml(value){
+
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function renderDocuments(){
+
+  const list =
+    documentDefinitions[tradeType] ||
+    documentDefinitions.sale;
+
+  documentUploadList.innerHTML =
+    list.map(function(doc){
+
+      const saved =
+        documentData[doc.key];
+
+      const uploaded =
+        !!(
+          saved &&
+          saved.dataUrl &&
+          saved.fileName
+        );
+
+      const controls =
+        role==="broker"
+        ? `
+          <div class="upload-controls">
+
+            <input
+              class="file-input"
+              id="file_${doc.key}"
+              type="file"
+              accept=".jpg,.jpeg,.png,.pdf">
+
+            <button
+              type="button"
+              class="doc-btn"
+              onclick="registerDocument('${doc.key}')">
+              등록
+            </button>
+
+            <button
+              type="button"
+              class="doc-btn view"
+              ${uploaded ? "" : "disabled"}
+              onclick="openDocument('${doc.key}')">
+              크게보기
+            </button>
+
+            <button
+              type="button"
+              class="doc-btn delete"
+              ${uploaded ? "" : "disabled"}
+              onclick="deleteDocument('${doc.key}')">
+              삭제
+            </button>
+
+          </div>
+        `
+        : `
+          <div class="upload-controls">
+
+            <button
+              type="button"
+              class="doc-btn view"
+              ${uploaded ? "" : "disabled"}
+              onclick="openDocument('${doc.key}')">
+              ${uploaded ? "크게보기" : "등록 대기"}
+            </button>
+
+          </div>
+        `;
+
+      return `
+        <div class="upload-item">
+
+          <div class="upload-head">
+
+            <div>
+              <div class="upload-name">
+                ${escapeHtml(doc.name)}
+              </div>
+
+              <div class="upload-desc">
+                ${escapeHtml(
+                  uploaded
+                  ? saved.fileName
+                  : doc.desc
+                )}
+              </div>
+            </div>
+
+            <span class="upload-status ${uploaded ? "done" : ""}">
+              ${uploaded ? "등록완료" : "대기"}
+            </span>
+
+          </div>
+
+          ${controls}
+
+        </div>
+      `;
+
+    }).join("");
+
+}
+
+
+window.registerDocument =
+function(key){
+
+  if(role!=="broker"){
+    return;
+  }
+
+  const input =
+    document.getElementById(
+      "file_" + key
+    );
+
+  if(
+    !input ||
+    !input.files ||
+    input.files.length===0
+  ){
+    alert(
+      "등록할 JPG·PNG·PDF 파일을 선택해 주세요."
+    );
+    return;
+  }
+
+  const file =
+    input.files[0];
+
+  const allowed =
+    [
+      "image/jpeg",
+      "image/png",
+      "application/pdf"
+    ];
+
+  if(!allowed.includes(file.type)){
+    alert(
+      "JPG·PNG·PDF 파일만 등록할 수 있습니다."
+    );
+    input.value="";
+    return;
+  }
+
+  /*
+    브라우저 저장 테스트를 위해 파일 크기를 제한합니다.
+    실제 운영에서는 Supabase Storage 등에 원본 파일을 저장해야 합니다.
+  */
+  if(file.size > 4 * 1024 * 1024){
+    alert(
+      "현재 테스트 화면에서는 파일당 4MB 이하만 등록할 수 있습니다."
+    );
+    return;
+  }
+
+  const reader =
+    new FileReader();
+
+  reader.onload =
+  function(){
+
+    documentData[key] = {
+      fileName:file.name,
+      mimeType:file.type,
+      dataUrl:reader.result,
+      uploadedAt:new Date().toISOString()
+    };
+
+    try{
+      localStorage.setItem(
+        documentsKey,
+        JSON.stringify(documentData)
+      );
+    }catch(e){
+      delete documentData[key];
+
+      alert(
+        "브라우저 저장공간이 부족합니다. 더 작은 파일로 다시 등록해 주세요."
+      );
+
+      return;
+    }
+
+    renderDocuments();
+
+  };
+
+  reader.readAsDataURL(file);
+
+};
+
+
+window.deleteDocument =
+function(key){
+
+  if(role!=="broker"){
+    return;
+  }
+
+  if(!documentData[key]){
+    return;
+  }
+
+  if(
+    !confirm(
+      "등록된 서류를 삭제하시겠습니까?"
+    )
+  ){
+    return;
+  }
+
+  delete documentData[key];
+
+  localStorage.setItem(
+    documentsKey,
+    JSON.stringify(documentData)
+  );
+
+  renderDocuments();
+
+};
+
+
+window.openDocument =
+function(key){
+
+  const saved =
+    documentData[key];
+
+  if(
+    !saved ||
+    !saved.dataUrl
+  ){
+    alert(
+      "아직 등록된 서류가 없습니다."
+    );
+    return;
+  }
+
+  viewerTitle.textContent =
+    saved.fileName || "관련서류";
+
+  viewerBody.innerHTML="";
+
+  if(
+    saved.mimeType==="application/pdf"
+  ){
+
+    const frame =
+      document.createElement("iframe");
+
+    frame.src =
+      saved.dataUrl;
+
+    frame.title =
+      saved.fileName || "PDF";
+
+    viewerBody.appendChild(frame);
+
+  }else{
+
+    const img =
+      document.createElement("img");
+
+    img.src =
+      saved.dataUrl;
+
+    img.alt =
+      saved.fileName || "관련서류";
+
+    let zoomed=false;
+
+    img.addEventListener(
+      "click",
+      function(){
+
+        zoomed=!zoomed;
+
+        if(zoomed){
+          img.style.width="160%";
+          img.style.maxWidth="none";
+          img.style.cursor="zoom-out";
+        }else{
+          img.style.width="auto";
+          img.style.maxWidth="none";
+          img.style.cursor="zoom-in";
+        }
+
+      }
+    );
+
+    viewerBody.appendChild(img);
+
+  }
+
+  documentViewer.classList.add(
+    "show"
+  );
+
+  documentViewer.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+};
+
+
+function closeDocumentViewer(){
+
+  documentViewer.classList.remove(
+    "show"
+  );
+
+  documentViewer.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  viewerBody.innerHTML="";
+
+}
+
+
+viewerClose.addEventListener(
+  "click",
+  closeDocumentViewer
+);
+
+documentViewer.addEventListener(
+  "click",
+  function(e){
+
+    if(e.target===documentViewer){
+      closeDocumentViewer();
+    }
+
+  }
+);
+
+document.addEventListener(
+  "keydown",
+  function(e){
+
+    if(e.key==="Escape"){
+      closeDocumentViewer();
+    }
+
+  }
+);
+
+
+function applyDocumentRole(){
+
+  setIdentityLabels();
+
+  if(role==="broker"){
+
+    brokerIdentityBox.style.display =
+      "block";
+
+    uploadGuide.textContent =
+      "공인중개사가 JPG·PNG·PDF 파일을 등록합니다. 등록된 서류는 매수자·매도자·공인중개사가 모두 크게 볼 수 있습니다.";
+
+    party1Identity.disabled=false;
+    party2Identity.disabled=false;
+
+  }else{
+
+    /*
+      매수자·매도자는 공인중개사의 본인확인 상태를
+      읽기만 하고 변경할 수 없습니다.
+    */
+
+    brokerIdentityBox.style.display =
+      "block";
+
+    uploadGuide.textContent =
+      "담당 공인중개사가 등록한 관련서류를 확인할 수 있습니다. 등록된 서류의 크게보기를 누르세요.";
+
+    party1Identity.disabled=true;
+    party2Identity.disabled=true;
+
+  }
+
+  renderDocuments();
+
+}
+
+applyDocumentRole();
+
+
 
 
 /* =========================================
