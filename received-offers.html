@@ -1624,6 +1624,18 @@ document
         createTradeNumber();
 
 
+      const testMode=
+        localStorage.getItem(
+          "wooriapt_test_key"
+        )==="5804";
+
+
+      const tradeRoomCode=
+        testMode
+        ? "5804"
+        : createFourDigitCode();
+
+
       const buyerCode=
         createFourDigitCode();
 
@@ -1641,6 +1653,8 @@ document
       const tradeData={
 
         tradeNumber:tradeNumber,
+
+        tradeRoomCode:tradeRoomCode,
 
         offerId:item.id,
 
@@ -1667,6 +1681,12 @@ document
       );
 
 
+      localStorage.setItem(
+        "wooriapt_trade_room_code",
+        tradeRoomCode
+      );
+
+
       closeDecision();
 
 
@@ -1682,7 +1702,10 @@ document
       */
 
       location.href=
-        "/transaction-room.html";
+        "/transaction-room.html?code="+
+        encodeURIComponent(
+          tradeRoomCode
+        );
 
     }
   );
