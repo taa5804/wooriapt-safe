@@ -1403,6 +1403,78 @@ try{
 }
 
 
+/* =========================================
+   거래방 코드 확인
+========================================= */
+
+const roomParams =
+  new URLSearchParams(
+    location.search
+  );
+
+const roomCode =
+  String(
+    roomParams.get("code") || ""
+  ).replace(/[^0-9]/g,"");
+
+
+const isTestRoom =
+  roomCode === "5804" ||
+  localStorage.getItem(
+    "wooriapt_test_key"
+  ) === "5804";
+
+
+if(isTestRoom){
+
+  localStorage.setItem(
+    "wooriapt_test_key",
+    "5804"
+  );
+
+  localStorage.setItem(
+    "wooriapt_trade_room_code",
+    "5804"
+  );
+
+}else{
+
+  const validRoomCodes = [
+    tradeData.tradeRoomCode,
+    tradeData.buyerCode,
+    tradeData.sellerCode
+  ]
+  .filter(Boolean)
+  .map(String);
+
+
+  if(
+    !roomCode ||
+    !validRoomCodes.includes(
+      roomCode
+    )
+  ){
+
+    alert(
+      "발급된 거래방 코드를 확인해 주세요."
+    );
+
+    location.replace("/");
+
+    throw new Error(
+      "INVALID_TRADE_ROOM_CODE"
+    );
+  }
+
+
+  localStorage.setItem(
+    "wooriapt_trade_room_code",
+    roomCode
+  );
+
+}
+
+
 /* 기본 표시 */
 
 document.getElementById(
@@ -1415,6 +1487,7 @@ document.getElementById(
   "propertyName"
 ).textContent=
   tradeData.propertyName ||
+  tradeData.apartment ||
   "거래 매물";
 
 
