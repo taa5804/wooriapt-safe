@@ -518,14 +518,6 @@ nextBtn.addEventListener(
     }
 
 
-    /*
-      1단계 동의 완료 표시
-
-      현재는 브라우저 저장 방식.
-      이후 Supabase 연동 시
-      DB 동의기록으로 교체 가능.
-    */
-
     localStorage.setItem(
       "brokerFeeAgreement_" + code,
       JSON.stringify({
@@ -535,10 +527,6 @@ nextBtn.addEventListener(
       })
     );
 
-
-    /*
-      테스트키 5804 저장
-    */
 
     if(code === "5804"){
 
@@ -550,12 +538,8 @@ nextBtn.addEventListener(
     }
 
 
-    /*
-      2단계 기존 매물 제안 화면 이동
-    */
-
     location.href =
-      "/guest-broker-step1.html?code=" +
+      "/broker-property-register.html?request=" +
       encodeURIComponent(code);
 
   }
