@@ -227,7 +227,8 @@ h1{
   color:#35566e;
   font-size:15px;
   font-weight:900;
-  cursor:pointer;
+  cursor:default;
+  pointer-events:none;
 }
 
 .type-btn.active{
@@ -398,11 +399,11 @@ h1{
         class="location"
         id="locationText"
       >
-        우리아파트 안심거래
+        매수자·임차인 전용 안심거래
       </div>
 
       <h1 id="pageTitle">
-        아파트 매매·전세·월세
+        원하는 아파트, 직접 찾아다니지 마세요.
       </h1>
 
       <p
@@ -425,7 +426,7 @@ h1{
 
         <p id="mainDescription">
           희망가격·면적·입주조건을 등록하면
-          해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다.
+          해당 지역의 매물 제안을 받아 비교하고 선택할 수 있습니다.
         </p>
 
       </div>
@@ -434,31 +435,42 @@ h1{
       <div class="points">
 
         <div class="point">
+
           <span class="check">✓</span>
+
           <span>
             여러 부동산을 직접 찾아다니지 않아도 됩니다.
           </span>
+
         </div>
 
+
         <div class="point">
+
           <span class="check">✓</span>
+
           <span>
             원하는 조건에 맞는 제안을 한곳에서 비교할 수 있습니다.
           </span>
+
         </div>
 
+
         <div class="point">
+
           <span class="check">✓</span>
+
           <span>
             원하는 매물을 선택한 후 안심거래 절차를 진행할 수 있습니다.
           </span>
+
         </div>
 
       </div>
 
 
       <div class="type-title">
-        거래유형을 선택하세요
+        원하시는 거래유형을 선택하세요
       </div>
 
 
@@ -511,8 +523,9 @@ h1{
 
         <p>
           원하는 아파트와 희망조건을 등록하면
-          해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다.
-          받은 제안을 비교한 뒤 원하는 매물을 선택하세요.
+          해당 지역의 매물 제안을 받아 비교한 뒤 원하는 매물을 선택할 수 있습니다.
+          본 서비스의 희망조건 등록은 매수자·임차인 전용이며,
+          매도자·임대인의 매물 등록 서비스가 아닙니다.
         </p>
 
       </div>
@@ -528,12 +541,13 @@ h1{
   >
 
     <h2 id="areaInfoTitle">
-      아파트 찾기
+      매수자·임차인 전용 서비스
     </h2>
 
     <p id="areaInfoText">
-      원하는 지역과 아파트의 매매·전세·월세 희망조건을
-      우리아파트 안심거래에 등록할 수 있습니다.
+      매수자·임차인이 원하는 아파트의 희망조건을 등록하고
+      매물 제안을 받아 비교·선택하는 안심거래 서비스입니다.
+      매도자·임대인의 매물 등록 서비스가 아닙니다.
     </p>
 
   </section>
@@ -616,7 +630,6 @@ function getTypeName(type){
   }
 
   return "매매·전세·월세";
-
 }
 
 
@@ -672,25 +685,30 @@ document.getElementById(
   "pageTitle"
 );
 
+
 const locationText =
 document.getElementById(
   "locationText"
 );
+
 
 const heroSubtitle =
 document.getElementById(
   "heroSubtitle"
 );
 
+
 const mainDescription =
 document.getElementById(
   "mainDescription"
 );
 
+
 const areaInfoTitle =
 document.getElementById(
   "areaInfoTitle"
 );
+
 
 const areaInfoText =
 document.getElementById(
@@ -708,35 +726,26 @@ locationName ||
 
 
 heroSubtitle.textContent =
-"원하는 아파트, 직접 찾아다니지 마세요.";
+"안심거래 플랫폼으로 거래 비용 부담을 최대 50%까지 낮춰보세요.";
 
 
 mainDescription.textContent =
 typeName === "매매·전세·월세"
 ?
-"희망가격·면적·입주조건을 등록하면 해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다."
+"희망가격·면적·입주조건을 등록하면 해당 지역의 매물 제안을 받아 비교하고 선택할 수 있습니다."
 :
 apartmentName +
 " " +
 typeName +
-" 희망가격과 조건을 등록하면 해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다.";
+" 희망가격과 조건을 등록하면 해당 지역의 매물 제안을 받아 비교하고 선택할 수 있습니다.";
 
 
 areaInfoTitle.textContent =
-fullTitle + " 찾기";
+"매수자·임차인 전용 서비스";
 
 
 areaInfoText.textContent =
-locationName
-?
-locationName +
-"의 " +
-apartmentName +
-" " +
-typeName +
-"을 찾고 계신다면 희망조건을 등록하세요. 여러 부동산을 직접 찾아다니지 않고 지역 공인중개사의 매물 제안을 받아 비교할 수 있습니다."
-:
-"원하는 지역과 아파트의 매매·전세·월세 희망조건을 등록하면 지역 공인중개사의 제안을 받아볼 수 있습니다.";
+"매수자·임차인이 원하는 아파트의 희망조건을 등록하고 매물 제안을 받아 비교·선택하는 안심거래 서비스입니다. 매도자·임대인의 매물 등록 서비스가 아닙니다.";
 
 
 /* ===============================
@@ -787,57 +796,21 @@ document.querySelectorAll(
 );
 
 
+/* 거래유형 버튼은 표시만 하고 선택하지 않음 */
+
 function updateTypeButtons(){
 
   typeButtons.forEach(
     function(button){
 
-      const type =
-      button.getAttribute(
-        "data-type"
+      button.classList.remove(
+        "active"
       );
-
-      if(type === selectedType){
-
-        button.classList.add(
-          "active"
-        );
-
-      }else{
-
-        button.classList.remove(
-          "active"
-        );
-
-      }
 
     }
   );
 
 }
-
-
-typeButtons.forEach(
-  function(button){
-
-    button.addEventListener(
-      "click",
-      function(){
-
-        selectedType =
-        this.getAttribute(
-          "data-type"
-        );
-
-        updateTypeButtons();
-
-        updateApplyButton();
-
-      }
-    );
-
-  }
-);
 
 
 updateTypeButtons();
@@ -855,33 +828,6 @@ document.getElementById(
 
 function updateApplyButton(){
 
-  if(selectedType === "sale"){
-
-    applyBtn.textContent =
-    "매수 희망조건 등록";
-
-    return;
-  }
-
-
-  if(selectedType === "jeonse"){
-
-    applyBtn.textContent =
-    "전세 희망조건 등록";
-
-    return;
-  }
-
-
-  if(selectedType === "monthly"){
-
-    applyBtn.textContent =
-    "월세 희망조건 등록";
-
-    return;
-  }
-
-
   applyBtn.textContent =
   "희망조건 등록하기";
 
@@ -895,25 +841,18 @@ applyBtn.addEventListener(
   "click",
   function(){
 
-    if(!selectedType){
-
-      alert(
-        "매매·전세·월세 중 거래유형을 선택해 주세요."
-      );
-
-      return;
-
-    }
-
-
     const nextParams =
     new URLSearchParams();
 
 
-    nextParams.set(
-      "type",
-      selectedType
-    );
+    if(selectedType){
+
+      nextParams.set(
+        "type",
+        selectedType
+      );
+
+    }
 
 
     if(region){
@@ -962,7 +901,6 @@ applyBtn.addEventListener(
 
   }
 );
-
 
 })();
 </script>
