@@ -64,6 +64,10 @@ body{
   box-shadow:0 5px 18px rgba(27,52,78,.06);
 }
 
+.field{
+  margin-bottom:16px;
+}
+
 .field-label{
   display:block;
   margin-bottom:8px;
@@ -107,6 +111,24 @@ body{
   font-weight:500;
 }
 
+.password-input{
+  width:100%;
+  height:48px;
+  border:1px solid #cfd9e3;
+  border-radius:10px;
+  outline:0;
+  padding:0 12px;
+  font-size:17px;
+  color:#172b3d;
+  background:#fff;
+}
+
+.password-input:focus,
+.phone-wrap:focus-within{
+  border-color:#1165d7;
+  box-shadow:0 0 0 3px rgba(17,101,215,.10);
+}
+
 .help{
   margin:8px 0 0;
   font-size:12px;
@@ -117,7 +139,7 @@ body{
 .login-btn{
   width:100%;
   height:50px;
-  margin-top:18px;
+  margin-top:8px;
   border:0;
   border-radius:10px;
   background:#1165d7;
@@ -125,6 +147,11 @@ body{
   font-size:16px;
   font-weight:800;
   cursor:pointer;
+}
+
+.login-btn:disabled{
+  opacity:.6;
+  cursor:default;
 }
 
 .login-btn:active{
@@ -155,10 +182,16 @@ body{
   font-size:13px;
 }
 
-.login-links a{
+.login-links a,
+.login-links button{
+  border:0;
+  padding:0;
+  background:none;
   color:#1165d7;
+  font:inherit;
   font-weight:700;
   text-decoration:none;
+  cursor:pointer;
 }
 
 .notice{
@@ -198,7 +231,7 @@ body{
     </h1>
 
     <p>
-      등록된 휴대전화번호로 로그인하세요.
+      등록된 휴대전화번호와 비밀번호로 로그인하세요.
     </p>
 
   </div>
@@ -207,33 +240,57 @@ body{
 
     <form id="loginForm">
 
-      <label
-        class="field-label"
-        for="phone">
-        휴대전화번호
-      </label>
+      <div class="field">
 
-      <div class="phone-wrap">
+        <label
+          class="field-label"
+          for="phone">
+          휴대전화번호(ID)
+        </label>
 
-        <div class="phone-prefix">
-          010-
+        <div class="phone-wrap">
+
+          <div class="phone-prefix">
+            010-
+          </div>
+
+          <input
+            id="phone"
+            type="tel"
+            inputmode="numeric"
+            autocomplete="username"
+            maxlength="8"
+            placeholder="12345678">
+
         </div>
 
-        <input
-          id="phone"
-          type="tel"
-          inputmode="numeric"
-          autocomplete="tel"
-          maxlength="8"
-          placeholder="12345678">
+        <p class="help">
+          휴대전화번호 뒤 8자리를 입력해 주세요.
+        </p>
 
       </div>
 
-      <p class="help">
-        휴대전화번호 뒤 8자리를 입력해 주세요.
-      </p>
+
+      <div class="field">
+
+        <label
+          class="field-label"
+          for="password">
+          비밀번호
+        </label>
+
+        <input
+          id="password"
+          class="password-input"
+          type="password"
+          autocomplete="current-password"
+          placeholder="비밀번호를 입력하세요">
+
+      </div>
+
 
       <button
+        id="loginBtn"
         type="submit"
         class="login-btn">
         로그인
@@ -241,10 +298,12 @@ body{
 
       <div
         id="msg"
-        class="msg">
+        class="msg"
+        aria-live="polite">
       </div>
 
     </form>
+
 
     <div class="login-links">
 
@@ -252,14 +311,22 @@ body{
         공인중개사 회원가입
       </a>
 
+      <button
+        id="findPasswordBtn"
+        type="button">
+        비밀번호 찾기
+      </button>
+
       <a href="/broker-guide.html">
         공인중개사 이용안내
       </a>
 
     </div>
 
+
     <div class="notice">
-      공인중개사 회원은 등록된 휴대전화번호를 이용해 로그인할 수 있습니다.
+      휴대전화번호는 로그인 ID로 사용됩니다.
+      비밀번호를 잊은 경우 비밀번호 찾기를 이용해 주세요.
     </div>
 
   </div>
@@ -272,70 +339,442 @@ body{
 
 </div>
 
+
 <script>
 (function(){
 
 "use strict";
 
+
+/* =====================================================
+   Supabase
+===================================================== */
+
+const SUPABASE_URL =
+  "https://wpshlmijsscmlasqtapa.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K";
+
+
+/* =====================================================
+   DOM
+===================================================== */
+
 const form =
-document.getElementById("loginForm");
+  document.getElementById("loginForm");
 
 const phone =
-document.getElementById("phone");
+  document.getElementById("phone");
+
+const password =
+  document.getElementById("password");
+
+const loginBtn =
+  document.getElementById("loginBtn");
 
 const msg =
-document.getElementById("msg");
+  document.getElementById("msg");
+
+const findPasswordBtn =
+  document.getElementById("findPasswordBtn");
+
+
+/* =====================================================
+   메시지
+===================================================== */
+
+function showMessage(type,text){
+
+  msg.className =
+    "msg " + type;
+
+  msg.textContent =
+    text;
+
+}
+
+
+/* =====================================================
+   Base64 → Uint8Array
+===================================================== */
+
+function base64ToBytes(base64){
+
+  const binary =
+    atob(base64);
+
+  const bytes =
+    new Uint8Array(binary.length);
+
+  for(
+    let i = 0;
+    i < binary.length;
+    i++
+  ){
+
+    bytes[i] =
+      binary.charCodeAt(i);
+
+  }
+
+  return bytes;
+
+}
+
+
+/* =====================================================
+   Uint8Array → Base64
+===================================================== */
+
+function bytesToBase64(bytes){
+
+  let binary = "";
+
+  for(
+    let i = 0;
+    i < bytes.length;
+    i++
+  ){
+
+    binary +=
+      String.fromCharCode(bytes[i]);
+
+  }
+
+  return btoa(binary);
+
+}
+
+
+/* =====================================================
+   비밀번호 검증
+   회원가입과 동일:
+   PBKDF2 + SHA-256
+   iterations 210000
+===================================================== */
+
+async function verifyPassword(
+  passwordValue,
+  storedSalt,
+  storedHash
+){
+
+  const encoder =
+    new TextEncoder();
+
+  const salt =
+    base64ToBytes(storedSalt);
+
+  const keyMaterial =
+    await crypto.subtle.importKey(
+      "raw",
+      encoder.encode(passwordValue),
+      "PBKDF2",
+      false,
+      ["deriveBits"]
+    );
+
+  const derivedBits =
+    await crypto.subtle.deriveBits(
+      {
+        name:"PBKDF2",
+        salt:salt,
+        iterations:210000,
+        hash:"SHA-256"
+      },
+      keyMaterial,
+      256
+    );
+
+  const calculatedHash =
+    bytesToBase64(
+      new Uint8Array(derivedBits)
+    );
+
+  return (
+    calculatedHash ===
+    storedHash
+  );
+
+}
+
+
+/* =====================================================
+   휴대전화 숫자만
+===================================================== */
 
 phone.addEventListener(
-"input",
-function(){
+  "input",
+  function(){
 
-this.value =
-this.value
-.replace(/\D/g,"")
-.slice(0,8);
+    this.value =
+      this.value
+      .replace(/\D/g,"")
+      .slice(0,8);
 
-}
+  }
 );
+
+
+/* =====================================================
+   로그인
+===================================================== */
 
 form.addEventListener(
-"submit",
-function(e){
+  "submit",
+  async function(e){
 
-e.preventDefault();
+    e.preventDefault();
 
-msg.className = "msg";
+    msg.className =
+      "msg";
 
-if(phone.value.length !== 8){
+    msg.textContent =
+      "";
 
-msg.textContent =
-"휴대전화번호 뒤 8자리를 정확히 입력해 주세요.";
 
-msg.classList.add("error");
+    const phoneBack =
+      phone.value.trim();
 
-phone.focus();
+    const passwordValue =
+      password.value;
 
-return;
 
-}
+    if(phoneBack.length !== 8){
 
-msg.textContent =
-"로그인되었습니다.";
+      showMessage(
+        "error",
+        "휴대전화번호 뒤 8자리를 정확히 입력해 주세요."
+      );
 
-msg.classList.add("ok");
+      phone.focus();
 
-setTimeout(function(){
+      return;
 
-location.href =
-"/broker-dashboard.html";
+    }
 
-},300);
 
-}
+    if(!passwordValue){
+
+      showMessage(
+        "error",
+        "비밀번호를 입력해 주세요."
+      );
+
+      password.focus();
+
+      return;
+
+    }
+
+
+    const fullPhone =
+      "010" + phoneBack;
+
+
+    loginBtn.disabled =
+      true;
+
+    loginBtn.textContent =
+      "로그인 확인 중...";
+
+
+    try{
+
+
+      /* =============================================
+         회원 조회
+      ============================================= */
+
+      const response =
+        await fetch(
+
+          SUPABASE_URL +
+          "/rest/v1/agent_members" +
+          "?select=id,phone,representative_name,office_name,email,password_hash,password_salt,registration_status,membership_status" +
+          "&phone=eq." +
+          encodeURIComponent(fullPhone) +
+          "&limit=1",
+
+          {
+            method:"GET",
+
+            headers:{
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                SUPABASE_KEY
+            }
+          }
+
+        );
+
+
+      if(!response.ok){
+
+        throw new Error(
+          "회원정보를 확인하지 못했습니다."
+        );
+
+      }
+
+
+      const rows =
+        await response.json();
+
+
+      if(
+        !Array.isArray(rows) ||
+        rows.length === 0
+      ){
+
+        showMessage(
+          "error",
+          "등록되지 않은 휴대전화번호입니다."
+        );
+
+        return;
+
+      }
+
+
+      const member =
+        rows[0];
+
+
+      /* =============================================
+         기존 비밀번호 등록 여부
+      ============================================= */
+
+      if(
+        !member.password_hash ||
+        !member.password_salt
+      ){
+
+        showMessage(
+          "error",
+          "비밀번호가 등록되지 않은 회원입니다. 비밀번호 찾기를 이용해 주세요."
+        );
+
+        return;
+
+      }
+
+
+      /* =============================================
+         비밀번호 확인
+      ============================================= */
+
+      const passwordOk =
+        await verifyPassword(
+          passwordValue,
+          member.password_salt,
+          member.password_hash
+        );
+
+
+      if(!passwordOk){
+
+        showMessage(
+          "error",
+          "비밀번호가 일치하지 않습니다."
+        );
+
+        password.focus();
+
+        return;
+
+      }
+
+
+      /* =============================================
+         로그인 정보 저장
+      ============================================= */
+
+      sessionStorage.setItem(
+        "broker_member_id",
+        String(member.id || "")
+      );
+
+      sessionStorage.setItem(
+        "broker_phone",
+        member.phone || fullPhone
+      );
+
+      sessionStorage.setItem(
+        "broker_name",
+        member.representative_name || ""
+      );
+
+      sessionStorage.setItem(
+        "broker_office_name",
+        member.office_name || ""
+      );
+
+
+      showMessage(
+        "ok",
+        "로그인되었습니다."
+      );
+
+
+      setTimeout(
+        function(){
+
+          location.href =
+            "/broker-dashboard.html";
+
+        },
+        300
+      );
+
+
+    }catch(error){
+
+      console.error(
+        "공인중개사 로그인 오류",
+        error
+      );
+
+      showMessage(
+        "error",
+        error.message ||
+        "로그인 처리 중 오류가 발생했습니다."
+      );
+
+    }finally{
+
+      loginBtn.disabled =
+        false;
+
+      loginBtn.textContent =
+        "로그인";
+
+    }
+
+  }
 );
 
-})();
 
+/* =====================================================
+   비밀번호 찾기
+===================================================== */
+
+findPasswordBtn.addEventListener(
+  "click",
+  function(){
+
+    location.href =
+      "/broker-password-find.html";
+
+  }
+);
+
+
+})();
 </script>
 
 </body>
