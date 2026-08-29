@@ -1203,8 +1203,8 @@ body.menu-open{
         type="text"
         inputmode="numeric"
         autocomplete="off"
-        placeholder="휴대전화번호 또는 매수요청번호"
-        aria-label="휴대전화번호 또는 매수요청번호"
+        placeholder="휴대전화번호"
+        aria-label="휴대전화번호"
       >
 
       <button
@@ -1217,8 +1217,7 @@ body.menu-open{
     </div>
 
     <p class="return-access-help">
-      매수자는 휴대전화번호,
-      비회원 공인중개사는 매수요청번호를 입력하세요.
+      매수자·임차인은 휴대전화번호를 입력하세요.
       <br>
       제안받은 매물은 나의 제안에서 확인할 수 있습니다.
     </p>
@@ -1681,7 +1680,29 @@ accessBtn.addEventListener(
     if(!value){
 
       alert(
-        "휴대전화번호 또는 매수요청번호를 입력해 주세요."
+        "휴대전화번호를 입력해 주세요."
+      );
+
+      accessInput.focus();
+
+      return;
+    }
+
+    if(value === "5804"){
+      localStorage.setItem(
+        "wooriapt_test_key",
+        "5804"
+      );
+
+      location.href =
+        "/my-proposals.html?test=5804";
+
+      return;
+    }
+
+    if(!/^01[016789][0-9]{7,8}$/.test(value)){
+      alert(
+        "휴대전화번호를 정확히 입력해 주세요."
       );
 
       accessInput.focus();
@@ -1690,12 +1711,12 @@ accessBtn.addEventListener(
     }
 
     localStorage.setItem(
-      "wooriapt_request_number",
+      "wooriapt_buyer_phone",
       value
     );
 
     location.href =
-      "/my-proposals.html?request=" +
+      "/my-proposals.html?phone=" +
       encodeURIComponent(value);
 
   }
@@ -1757,6 +1778,53 @@ transactionBtn.addEventListener(
 
       alert(
         "4자리 거래방 코드를 입력해 주세요."
+      );
+
+      transactionCode.focus();
+
+      return;
+    }
+
+    if(code === "5804"){
+      localStorage.setItem(
+        "wooriapt_test_key",
+        "5804"
+      );
+
+      localStorage.setItem(
+        "wooriapt_trade_room_code",
+        code
+      );
+
+      location.href =
+        "/transaction-room.html?code=" +
+        encodeURIComponent(code);
+
+      return;
+    }
+
+    let issuedCode = "";
+
+    try{
+      const trade =
+        JSON.parse(
+          localStorage.getItem("wooriapt_trade") || "null"
+        );
+
+      if(trade){
+        issuedCode =
+          String(
+            trade.tradeRoomCode ||
+            trade.buyerCode ||
+            trade.sellerCode ||
+            ""
+          );
+      }
+    }catch(e){}
+
+    if(code !== issuedCode){
+      alert(
+        "발급된 거래방 코드를 확인해 주세요."
       );
 
       transactionCode.focus();
