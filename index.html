@@ -1203,8 +1203,8 @@ body.menu-open{
         type="text"
         inputmode="numeric"
         autocomplete="off"
-        placeholder="휴대전화번호"
-        aria-label="휴대전화번호"
+        placeholder="매수·임차인 휴대전화번호"
+        aria-label="매수·임차인 휴대전화번호"
       >
 
       <button
@@ -1217,9 +1217,7 @@ body.menu-open{
     </div>
 
     <p class="return-access-help">
-      매수자·임차인은 휴대전화번호를 입력하세요.
-      <br>
-      제안받은 매물은 나의 제안에서 확인할 수 있습니다.
+      등록한 휴대전화번호를 입력하고 확인을 눌러주세요.
     </p>
 
   </div>
@@ -1803,7 +1801,7 @@ transactionBtn.addEventListener(
       return;
     }
 
-    let issuedCode = "";
+    let issuedCodes = [];
 
     try{
       const trade =
@@ -1812,17 +1810,17 @@ transactionBtn.addEventListener(
         );
 
       if(trade){
-        issuedCode =
-          String(
-            trade.tradeRoomCode ||
-            trade.buyerCode ||
-            trade.sellerCode ||
-            ""
-          );
+        issuedCodes = [
+          trade.tradeRoomCode,
+          trade.buyerCode,
+          trade.sellerCode
+        ]
+        .filter(Boolean)
+        .map(String);
       }
     }catch(e){}
 
-    if(code !== issuedCode){
+    if(!issuedCodes.includes(code)){
       alert(
         "발급된 거래방 코드를 확인해 주세요."
       );
