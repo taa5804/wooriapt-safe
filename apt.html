@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1165d7">
+
+<title>아파트 매매·전세·월세 | 우리아파트 안심거래</title>
+
+<meta
+  id="metaDescription"
+  name="description"
+  content="원하는 아파트를 직접 찾아다니지 마세요. 희망조건을 등록하면 해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다."
+>
+
+<meta
+  name="robots"
+  content="index,follow"
+>
+
+<link
+  id="canonicalLink"
+  rel="canonical"
+  href="https://wooriapt.app/apt.html"
+>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  background:#f4f7fa;
+  color:#172b3d;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Noto Sans KR",
+    Arial,
+    sans-serif;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.wrap{
+  width:100%;
+  max-width:760px;
+  margin:0 auto;
+  padding:18px 14px 55px;
+}
+
+
+/* 상단 */
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.brand{
+  color:#173a59;
+  font-size:20px;
+  font-weight:900;
+}
+
+.brand strong{
+  color:#1165d7;
+}
+
+.home{
+  padding:9px 12px;
+  border:1px solid #d4e0e8;
+  border-radius:10px;
+  background:#fff;
+  color:#456177;
+  font-size:13px;
+  font-weight:800;
+}
+
+
+/* 메인 */
+
+.hero{
+  overflow:hidden;
+  border:1px solid #dce5ec;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 7px 22px rgba(22,56,83,.07);
+}
+
+.hero-top{
+  padding:30px 22px;
+  background:
+    linear-gradient(
+      135deg,
+      #0f5fcf 0%,
+      #2381e7 100%
+    );
+  color:#fff;
+}
+
+.location{
+  margin-bottom:9px;
+  font-size:14px;
+  font-weight:800;
+  opacity:.92;
+}
+
+h1{
+  margin:0;
+  font-size:30px;
+  line-height:1.4;
+  word-break:keep-all;
+}
+
+.subtitle{
+  margin:13px 0 0;
+  font-size:16px;
+  line-height:1.7;
+  opacity:.97;
+  word-break:keep-all;
+}
+
+
+.hero-body{
+  padding:25px 20px 28px;
+}
+
+.main-message{
+  margin-bottom:19px;
+}
+
+.main-message strong{
+  display:block;
+  margin-bottom:7px;
+  color:#173e60;
+  font-size:21px;
+  line-height:1.5;
+}
+
+.main-message p{
+  margin:0;
+  color:#627889;
+  font-size:15px;
+  line-height:1.75;
+  word-break:keep-all;
+}
+
+
+/* 특징 */
+
+.points{
+  display:grid;
+  gap:9px;
+  margin:20px 0 23px;
+}
+
+.point{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:12px 13px;
+  border:1px solid #e0e8ee;
+  border-radius:11px;
+  background:#f8fafc;
+}
+
+.check{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:22px;
+  height:22px;
+  flex:none;
+  border-radius:50%;
+  background:#e6f1ff;
+  color:#1165d7;
+  font-size:13px;
+  font-weight:900;
+}
+
+.point span:last-child{
+  color:#3e596d;
+  font-size:14px;
+  line-height:1.6;
+}
+
+
+/* 거래유형 */
+
+.type-title{
+  margin:0 0 11px;
+  color:#193e5d;
+  font-size:17px;
+  font-weight:900;
+}
+
+.type-buttons{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+}
+
+.type-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:51px;
+  padding:8px;
+  border:1px solid #cbd9e4;
+  border-radius:11px;
+  background:#fff;
+  color:#35566e;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.type-btn.active{
+  border-color:#1165d7;
+  background:#1165d7;
+  color:#fff;
+}
+
+
+/* 메인 신청 버튼 */
+
+.apply{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:57px;
+  margin-top:16px;
+  padding:12px;
+  border:0;
+  border-radius:12px;
+  background:
+    linear-gradient(
+      135deg,
+      #1165d7,
+      #2582e6
+    );
+  color:#fff;
+  font-size:17px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 7px 18px rgba(17,101,215,.21);
+}
+
+.apply:active{
+  transform:translateY(1px);
+}
+
+
+/* 안내 */
+
+.guide{
+  margin-top:18px;
+  padding:17px 15px;
+  border-radius:13px;
+  background:#edf6ff;
+  color:#35536a;
+}
+
+.guide-title{
+  margin-bottom:8px;
+  color:#16466c;
+  font-size:15px;
+  font-weight:900;
+}
+
+.guide p{
+  margin:0;
+  font-size:13px;
+  line-height:1.7;
+  word-break:keep-all;
+}
+
+
+.area-info{
+  margin-top:18px;
+  padding:18px 15px;
+  border:1px solid #e0e8ee;
+  border-radius:13px;
+  background:#fff;
+}
+
+.area-info h2{
+  margin:0 0 9px;
+  color:#193e5d;
+  font-size:18px;
+}
+
+.area-info p{
+  margin:0;
+  color:#617789;
+  font-size:14px;
+  line-height:1.75;
+  word-break:keep-all;
+}
+
+
+.footer{
+  margin-top:22px;
+  text-align:center;
+  color:#82929e;
+  font-size:11px;
+  line-height:1.7;
+}
+
+
+@media(max-width:480px){
+
+  .wrap{
+    padding:12px 10px 45px;
+  }
+
+  .brand{
+    font-size:18px;
+  }
+
+  .hero-top{
+    padding:25px 17px;
+  }
+
+  h1{
+    font-size:25px;
+  }
+
+  .subtitle{
+    font-size:15px;
+  }
+
+  .hero-body{
+    padding:21px 15px 24px;
+  }
+
+  .main-message strong{
+    font-size:19px;
+  }
+
+  .type-buttons{
+    gap:6px;
+  }
+
+  .type-btn{
+    font-size:14px;
+  }
+
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="wrap">
+
+  <header class="header">
+
+    <a
+      class="brand"
+      href="/"
+    >
+      🏠 우리아파트 <strong>안심거래</strong>
+    </a>
+
+    <a
+      class="home"
+      href="/"
+    >
+      홈으로
+    </a>
+
+  </header>
+
+
+  <main class="hero">
+
+    <section class="hero-top">
+
+      <div
+        class="location"
+        id="locationText"
+      >
+        우리아파트 안심거래
+      </div>
+
+      <h1 id="pageTitle">
+        아파트 매매·전세·월세
+      </h1>
+
+      <p
+        class="subtitle"
+        id="heroSubtitle"
+      >
+        원하는 아파트, 직접 찾아다니지 마세요.
+      </p>
+
+    </section>
+
+
+    <section class="hero-body">
+
+      <div class="main-message">
+
+        <strong>
+          희망조건만 등록하세요.
+        </strong>
+
+        <p id="mainDescription">
+          희망가격·면적·입주조건을 등록하면
+          해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다.
+        </p>
+
+      </div>
+
+
+      <div class="points">
+
+        <div class="point">
+          <span class="check">✓</span>
+          <span>
+            여러 부동산을 직접 찾아다니지 않아도 됩니다.
+          </span>
+        </div>
+
+        <div class="point">
+          <span class="check">✓</span>
+          <span>
+            원하는 조건에 맞는 제안을 한곳에서 비교할 수 있습니다.
+          </span>
+        </div>
+
+        <div class="point">
+          <span class="check">✓</span>
+          <span>
+            원하는 매물을 선택한 후 안심거래 절차를 진행할 수 있습니다.
+          </span>
+        </div>
+
+      </div>
+
+
+      <div class="type-title">
+        거래유형을 선택하세요
+      </div>
+
+
+      <div class="type-buttons">
+
+        <button
+          class="type-btn"
+          id="saleBtn"
+          type="button"
+          data-type="sale"
+        >
+          매매
+        </button>
+
+        <button
+          class="type-btn"
+          id="jeonseBtn"
+          type="button"
+          data-type="jeonse"
+        >
+          전세
+        </button>
+
+        <button
+          class="type-btn"
+          id="monthlyBtn"
+          type="button"
+          data-type="monthly"
+        >
+          월세
+        </button>
+
+      </div>
+
+
+      <button
+        class="apply"
+        id="applyBtn"
+        type="button"
+      >
+        희망조건 등록하기
+      </button>
+
+
+      <div class="guide">
+
+        <div class="guide-title">
+          어떻게 이용하나요?
+        </div>
+
+        <p>
+          원하는 아파트와 희망조건을 등록하면
+          해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다.
+          받은 제안을 비교한 뒤 원하는 매물을 선택하세요.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <section
+    class="area-info"
+    id="areaInfo"
+  >
+
+    <h2 id="areaInfoTitle">
+      아파트 찾기
+    </h2>
+
+    <p id="areaInfoText">
+      원하는 지역과 아파트의 매매·전세·월세 희망조건을
+      우리아파트 안심거래에 등록할 수 있습니다.
+    </p>
+
+  </section>
+
+
+  <footer class="footer">
+    © 우리아파트 안심거래
+  </footer>
+
+</div>
+
+
+<script>
+(function(){
+
+"use strict";
+
+
+const params =
+new URLSearchParams(
+  window.location.search
+);
+
+
+/* ===============================
+   검색페이지 데이터
+================================ */
+
+const region =
+String(
+  params.get("region") || ""
+).trim();
+
+const city =
+String(
+  params.get("city") || ""
+).trim();
+
+const dong =
+String(
+  params.get("dong") || ""
+).trim();
+
+const apt =
+String(
+  params.get("apt") || ""
+).trim();
+
+let selectedType =
+String(
+  params.get("type") || ""
+).trim();
+
+
+if(
+  selectedType !== "sale" &&
+  selectedType !== "jeonse" &&
+  selectedType !== "monthly"
+){
+  selectedType = "";
+}
+
+
+/* ===============================
+   거래유형 명칭
+================================ */
+
+function getTypeName(type){
+
+  if(type === "sale"){
+    return "매매";
+  }
+
+  if(type === "jeonse"){
+    return "전세";
+  }
+
+  if(type === "monthly"){
+    return "월세";
+  }
+
+  return "매매·전세·월세";
+
+}
+
+
+/* ===============================
+   지역 문자열
+================================ */
+
+const locationParts = [];
+
+if(region){
+  locationParts.push(region);
+}
+
+if(city){
+  locationParts.push(city);
+}
+
+if(dong){
+  locationParts.push(dong);
+}
+
+
+const locationName =
+locationParts.join(" ");
+
+
+const apartmentName =
+apt || "아파트";
+
+
+const typeName =
+getTypeName(
+  selectedType
+);
+
+
+/* ===============================
+   화면 제목
+================================ */
+
+const fullTitle =
+[
+  locationName,
+  apartmentName,
+  typeName
+]
+.filter(Boolean)
+.join(" ");
+
+
+const pageTitle =
+document.getElementById(
+  "pageTitle"
+);
+
+const locationText =
+document.getElementById(
+  "locationText"
+);
+
+const heroSubtitle =
+document.getElementById(
+  "heroSubtitle"
+);
+
+const mainDescription =
+document.getElementById(
+  "mainDescription"
+);
+
+const areaInfoTitle =
+document.getElementById(
+  "areaInfoTitle"
+);
+
+const areaInfoText =
+document.getElementById(
+  "areaInfoText"
+);
+
+
+pageTitle.textContent =
+fullTitle;
+
+
+locationText.textContent =
+locationName ||
+"전국 아파트";
+
+
+heroSubtitle.textContent =
+"원하는 아파트, 직접 찾아다니지 마세요.";
+
+
+mainDescription.textContent =
+typeName === "매매·전세·월세"
+?
+"희망가격·면적·입주조건을 등록하면 해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다."
+:
+apartmentName +
+" " +
+typeName +
+" 희망가격과 조건을 등록하면 해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다.";
+
+
+areaInfoTitle.textContent =
+fullTitle + " 찾기";
+
+
+areaInfoText.textContent =
+locationName
+?
+locationName +
+"의 " +
+apartmentName +
+" " +
+typeName +
+"을 찾고 계신다면 희망조건을 등록하세요. 여러 부동산을 직접 찾아다니지 않고 지역 공인중개사의 매물 제안을 받아 비교할 수 있습니다."
+:
+"원하는 지역과 아파트의 매매·전세·월세 희망조건을 등록하면 지역 공인중개사의 제안을 받아볼 수 있습니다.";
+
+
+/* ===============================
+   네이버 검색 제목 / 설명
+================================ */
+
+document.title =
+fullTitle +
+" | 원하는 조건으로 매물 제안받기 | 우리아파트 안심거래";
+
+
+const metaDescription =
+document.getElementById(
+  "metaDescription"
+);
+
+
+metaDescription.setAttribute(
+  "content",
+  fullTitle +
+  "을 찾고 계신가요? 원하는 가격과 조건을 등록하면 해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다."
+);
+
+
+/* ===============================
+   canonical
+================================ */
+
+const canonicalLink =
+document.getElementById(
+  "canonicalLink"
+);
+
+
+canonicalLink.href =
+window.location.origin +
+window.location.pathname +
+window.location.search;
+
+
+/* ===============================
+   거래유형 버튼
+================================ */
+
+const typeButtons =
+document.querySelectorAll(
+  ".type-btn"
+);
+
+
+function updateTypeButtons(){
+
+  typeButtons.forEach(
+    function(button){
+
+      const type =
+      button.getAttribute(
+        "data-type"
+      );
+
+      if(type === selectedType){
+
+        button.classList.add(
+          "active"
+        );
+
+      }else{
+
+        button.classList.remove(
+          "active"
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+typeButtons.forEach(
+  function(button){
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        selectedType =
+        this.getAttribute(
+          "data-type"
+        );
+
+        updateTypeButtons();
+
+        updateApplyButton();
+
+      }
+    );
+
+  }
+);
+
+
+updateTypeButtons();
+
+
+/* ===============================
+   신청버튼
+================================ */
+
+const applyBtn =
+document.getElementById(
+  "applyBtn"
+);
+
+
+function updateApplyButton(){
+
+  if(selectedType === "sale"){
+
+    applyBtn.textContent =
+    "매수 희망조건 등록";
+
+    return;
+  }
+
+
+  if(selectedType === "jeonse"){
+
+    applyBtn.textContent =
+    "전세 희망조건 등록";
+
+    return;
+  }
+
+
+  if(selectedType === "monthly"){
+
+    applyBtn.textContent =
+    "월세 희망조건 등록";
+
+    return;
+  }
+
+
+  applyBtn.textContent =
+  "희망조건 등록하기";
+
+}
+
+
+updateApplyButton();
+
+
+applyBtn.addEventListener(
+  "click",
+  function(){
+
+    if(!selectedType){
+
+      alert(
+        "매매·전세·월세 중 거래유형을 선택해 주세요."
+      );
+
+      return;
+
+    }
+
+
+    const nextParams =
+    new URLSearchParams();
+
+
+    nextParams.set(
+      "type",
+      selectedType
+    );
+
+
+    if(region){
+
+      nextParams.set(
+        "region",
+        region
+      );
+
+    }
+
+
+    if(city){
+
+      nextParams.set(
+        "city",
+        city
+      );
+
+    }
+
+
+    if(dong){
+
+      nextParams.set(
+        "dong",
+        dong
+      );
+
+    }
+
+
+    if(apt){
+
+      nextParams.set(
+        "apt",
+        apt
+      );
+
+    }
+
+
+    location.href =
+    "/request.html?" +
+    nextParams.toString();
+
+  }
+);
+
+
+})();
+</script>
+
+</body>
+</html>
