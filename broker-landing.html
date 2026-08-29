@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1165d7">
+
+<title>공인중개사 회원모집 | 우리아파트 안심거래</title>
+
+<meta name="description"
+content="매수·임차인의 희망조건을 확인하고 직접 매물을 제안하세요. 우리아파트 안심거래 공인중개사 회원모집.">
+
+<meta name="robots" content="index,follow">
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  background:#f4f7fa;
+  color:#172b3d;
+  font-family:
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  "Noto Sans KR",
+  Arial,
+  sans-serif;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+#brokerLanding{
+  width:100%;
+  max-width:720px;
+  margin:0 auto;
+  min-height:100vh;
+  background:#fff;
+}
+
+/* 상단 */
+
+.header{
+  padding:17px 18px;
+  border-bottom:1px solid #e3eaf0;
+  background:#fff;
+}
+
+.brand{
+  color:#1165d7;
+  font-size:19px;
+  font-weight:900;
+}
+
+/* 메인 */
+
+.hero{
+  padding:42px 20px 34px;
+  text-align:center;
+  background:
+  linear-gradient(
+    180deg,
+    #eef6ff 0%,
+    #ffffff 100%
+  );
+}
+
+.hero-badge{
+  display:inline-block;
+  margin-bottom:15px;
+  padding:7px 13px;
+  border-radius:30px;
+  background:#dcecff;
+  color:#1165d7;
+  font-size:13px;
+  font-weight:900;
+}
+
+.hero h1{
+  margin:0;
+  color:#172b3d;
+  font-size:29px;
+  line-height:1.35;
+  letter-spacing:-1.2px;
+}
+
+.hero h1 strong{
+  color:#1165d7;
+}
+
+.hero-text{
+  margin:18px auto 0;
+  max-width:540px;
+  color:#536b7c;
+  font-size:16px;
+  line-height:1.75;
+  word-break:keep-all;
+}
+
+/* 핵심 */
+
+.point-wrap{
+  padding:8px 18px 28px;
+}
+
+.point{
+  display:flex;
+  align-items:flex-start;
+  gap:13px;
+  margin-bottom:11px;
+  padding:17px 16px;
+  border:1px solid #e1e8ee;
+  border-radius:13px;
+  background:#fff;
+}
+
+.point-icon{
+  flex:0 0 34px;
+  width:34px;
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#eaf3ff;
+  font-size:18px;
+}
+
+.point-text strong{
+  display:block;
+  margin-bottom:4px;
+  color:#243d50;
+  font-size:15px;
+}
+
+.point-text span{
+  display:block;
+  color:#657b8b;
+  font-size:14px;
+  line-height:1.55;
+}
+
+/* 이용방법 */
+
+.section{
+  padding:30px 20px;
+  border-top:8px solid #f4f7fa;
+}
+
+.section-title{
+  margin:0 0 22px;
+  text-align:center;
+  font-size:21px;
+  font-weight:900;
+}
+
+.steps{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.step{
+  padding:18px 8px;
+  border:1px solid #e1e8ee;
+  border-radius:12px;
+  text-align:center;
+}
+
+.step-num{
+  width:29px;
+  height:29px;
+  margin:0 auto 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#1165d7;
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+}
+
+.step strong{
+  display:block;
+  margin-bottom:5px;
+  font-size:14px;
+}
+
+.step span{
+  color:#6b7f8e;
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* 회원비 */
+
+.fee-box{
+  margin-top:22px;
+  padding:20px 16px;
+  border:1px solid #cfe1f5;
+  border-radius:14px;
+  background:#f3f8ff;
+  text-align:center;
+}
+
+.fee-label{
+  margin-bottom:6px;
+  color:#526b7d;
+  font-size:14px;
+}
+
+.fee{
+  color:#1165d7;
+  font-size:27px;
+  font-weight:900;
+}
+
+.fee small{
+  color:#526b7d;
+  font-size:14px;
+}
+
+/* CTA */
+
+.cta-area{
+  padding:30px 20px 40px;
+  border-top:8px solid #f4f7fa;
+  text-align:center;
+}
+
+.cta-title{
+  margin-bottom:8px;
+  font-size:21px;
+  font-weight:900;
+}
+
+.cta-text{
+  margin-bottom:20px;
+  color:#607788;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.signup-btn{
+  display:flex;
+  width:100%;
+  min-height:57px;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  background:#1165d7;
+  color:#fff;
+  font-size:17px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:
+  0 7px 18px
+  rgba(17,101,215,.20);
+}
+
+.signup-btn:active{
+  transform:translateY(1px);
+}
+
+/* 하단 */
+
+.footer{
+  padding:25px 18px 35px;
+  background:#f4f7fa;
+  color:#7b8c99;
+  text-align:center;
+  font-size:12px;
+  line-height:1.7;
+}
+
+/* 모바일 */
+
+@media(max-width:520px){
+
+  .hero{
+    padding:34px 17px 28px;
+  }
+
+  .hero h1{
+    font-size:25px;
+  }
+
+  .hero-text{
+    font-size:15px;
+  }
+
+  .steps{
+    grid-template-columns:1fr;
+  }
+
+  .step{
+    display:flex;
+    align-items:center;
+    text-align:left;
+    padding:14px;
+  }
+
+  .step-num{
+    flex:0 0 29px;
+    margin:0 12px 0 0;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div id="brokerLanding">
+
+  <header class="header">
+    <div class="brand">
+      🏠 우리아파트 안심거래
+    </div>
+  </header>
+
+
+  <main>
+
+    <section class="hero">
+
+      <div class="hero-badge">
+        공인중개사 회원모집
+      </div>
+
+      <h1>
+        매수·임차인을 기다리지 말고<br>
+        <strong>먼저 매물을 제안하세요.</strong>
+      </h1>
+
+      <div class="hero-text">
+        우리아파트 안심거래에서는
+        집을 구하는 고객이 먼저 희망조건을 등록합니다.<br>
+        공인중개사는 고객의 조건을 확인하고
+        맞는 매물을 직접 제안할 수 있습니다.
+      </div>
+
+    </section>
+
+
+    <section class="point-wrap">
+
+      <div class="point">
+
+        <div class="point-icon">
+          👤
+        </div>
+
+        <div class="point-text">
+          <strong>
+            실제 집을 찾는 고객
+          </strong>
+
+          <span>
+            매수·임차인이 원하는 지역과
+            아파트, 가격 등의 희망조건을 직접 등록합니다.
+          </span>
+        </div>
+
+      </div>
+
+
+      <div class="point">
+
+        <div class="point-icon">
+          🏢
+        </div>
+
+        <div class="point-text">
+          <strong>
+            조건에 맞는 매물 직접 제안
+          </strong>
+
+          <span>
+            고객의 희망조건을 확인하고
+            보유하고 있는 적합한 매물을 제안할 수 있습니다.
+          </span>
+        </div>
+
+      </div>
+
+
+      <div class="point">
+
+        <div class="point-icon">
+          🤝
+        </div>
+
+        <div class="point-text">
+          <strong>
+            선택받으면 거래 진행
+          </strong>
+
+          <span>
+            고객이 제안받은 매물을 비교한 뒤
+            원하는 매물을 선택하면 거래를 진행합니다.
+          </span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="section">
+
+      <h2 class="section-title">
+        이용방법
+      </h2>
+
+      <div class="steps">
+
+        <div class="step">
+
+          <div class="step-num">
+            1
+          </div>
+
+          <div>
+            <strong>
+              회원가입
+            </strong>
+
+            <span>
+              공인중개사 회원으로
+              가입합니다.
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="step">
+
+          <div class="step-num">
+            2
+          </div>
+
+          <div>
+            <strong>
+              희망조건 확인
+            </strong>
+
+            <span>
+              매수·임차인의
+              희망조건을 확인합니다.
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="step">
+
+          <div class="step-num">
+            3
+          </div>
+
+          <div>
+            <strong>
+              매물 제안
+            </strong>
+
+            <span>
+              조건에 맞는 매물을
+              고객에게 제안합니다.
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="fee-box">
+
+        <div class="fee-label">
+          공인중개사 회원 이용료
+        </div>
+
+        <div class="fee">
+          월 30,000원
+          <small>
+            (부가세 포함)
+          </small>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="cta-area">
+
+      <div class="cta-title">
+        새로운 매수·임차 고객을 만나보세요.
+      </div>
+
+      <div class="cta-text">
+        회원가입 후 고객의 희망조건을 확인하고<br>
+        보유 매물을 직접 제안할 수 있습니다.
+      </div>
+
+      <a
+        class="signup-btn"
+        href="/broker-signup.html"
+      >
+        공인중개사 회원가입
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <footer class="footer">
+    우리아파트 안심거래<br>
+    공인중개사 회원 전용 서비스
+    <br><br>
+    © 우리아파트 안심거래
+  </footer>
+
+</div>
+
+</body>
+</html>
