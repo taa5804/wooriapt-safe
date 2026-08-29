@@ -537,11 +537,25 @@ nextBtn.addEventListener(
 
 
     /*
-      2단계 매물 제안방 이동
+      테스트키 5804 저장
+    */
+
+    if(code === "5804"){
+
+      localStorage.setItem(
+        "wooriapt_test_key",
+        "5804"
+      );
+
+    }
+
+
+    /*
+      2단계 기존 매물 제안 화면 이동
     */
 
     location.href =
-      "/proposal-room.html?code=" +
+      "/guest-broker-step1.html?code=" +
       encodeURIComponent(code);
 
   }
