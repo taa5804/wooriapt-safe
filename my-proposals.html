@@ -469,6 +469,8 @@ const msg =
 
 let requestNumber = "";
 
+let testMode = false;
+
 let properties = [];
 
 let selectedId = null;
@@ -485,6 +487,13 @@ let selectedId = null;
       window.location.search
     );
 
+  testMode =
+    params.get("test") === "5804" ||
+    localStorage.getItem(
+      "wooriapt_test_key"
+    ) === "5804";
+
+
   requestNumber =
     params.get("request") ||
     localStorage.getItem(
@@ -493,7 +502,12 @@ let selectedId = null;
     "";
 
 
-  if(requestNumber){
+  if(testMode){
+
+    requestNumberEl.textContent =
+      "5804";
+
+  }else if(requestNumber){
 
     requestNumberEl.textContent =
       requestNumber;
@@ -526,17 +540,19 @@ let selectedId = null;
 
 
     properties =
-      all.filter(
-        function(item){
+      testMode
+      ? all
+      : all.filter(
+          function(item){
 
-          return String(
-            item.requestNumber || ""
-          ) === String(
-            requestNumber
-          );
+            return String(
+              item.requestNumber || ""
+            ) === String(
+              requestNumber
+            );
 
-        }
-      );
+          }
+        );
 
 
   }catch(e){
@@ -836,10 +852,24 @@ decisionBtn.addEventListener(
       Date.now().toString().slice(-10);
 
 
+    const tradeRoomCode =
+      testMode
+      ? "5804"
+      : String(
+          Math.floor(
+            1000+
+            Math.random()*9000
+          )
+        );
+
+
     const transaction = {
 
       transactionNumber:
         transactionNumber,
+
+      tradeRoomCode:
+        tradeRoomCode,
 
       requestNumber:
         requestNumber,
@@ -876,9 +906,48 @@ decisionBtn.addEventListener(
     );
 
 
+    localStorage.setItem(
+      "wooriapt_trade",
+      JSON.stringify({
+        tradeNumber:
+          transactionNumber,
+        transactionNumber:
+          transactionNumber,
+        tradeRoomCode:
+          tradeRoomCode,
+        requestNumber:
+          requestNumber,
+        propertyId:
+          property.propertyId,
+        apartment:
+          property.apartment,
+        amount:
+          property.amount,
+        brokerName:
+          property.officeName,
+        brokerOffice:
+          property.officeName,
+        brokerPhone:
+          property.officePhone,
+        status:
+          "거래 진행 중",
+        createdAt:
+          transaction.createdAt
+      })
+    );
+
+
+    localStorage.setItem(
+      "wooriapt_trade_room_code",
+      tradeRoomCode
+    );
+
+
     showMsg(
       "거래가 결정되었습니다. 거래번호 "+
       transactionNumber+
+      ", 거래방 코드 "+
+      tradeRoomCode+
       "가 생성되었습니다.",
       true
     );
@@ -930,11 +999,29 @@ decisionBtn.addEventListener(
           "<br>거래번호: "+
           escapeHtml(
             transactionNumber
+          )+
+          "<br>거래방 코드: "+
+          escapeHtml(
+            tradeRoomCode
           );
 
       }
 
     }
+
+
+    setTimeout(
+      function(){
+
+        location.href =
+          "/transaction-room.html?code="+
+          encodeURIComponent(
+            tradeRoomCode
+          );
+
+      },
+      300
+    );
 
   }
 );
