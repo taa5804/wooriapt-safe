@@ -35,16 +35,40 @@ export default async function handler(req, res) {
      MOLIT_APT_API_KEY
   ========================================= */
 
-  const serviceKey =
+  const storedServiceKey =
     process.env.MOLIT_APT_API_KEY;
 
 
-  if (!serviceKey) {
+  if (!storedServiceKey) {
 
     return res.status(500).json({
       ok: false,
       message: "공동주택 API 인증키가 설정되지 않았습니다."
     });
+
+  }
+
+
+  /*
+    공공데이터포털의 Encoding 인증키를
+    Vercel에 저장한 경우 URLSearchParams에서
+    다시 Encoding되는 것을 방지하기 위해
+    먼저 원래 값으로 복원합니다.
+  */
+
+  let serviceKey =
+    storedServiceKey.trim();
+
+
+  try {
+
+    serviceKey =
+      decodeURIComponent(serviceKey);
+
+  } catch (error) {
+
+    serviceKey =
+      storedServiceKey.trim();
 
   }
 
@@ -85,12 +109,6 @@ export default async function handler(req, res) {
   const query =
     new URLSearchParams();
 
-
-  /*
-    공공데이터포털에서 발급받은 Encoding 키를
-    Vercel에 저장했으므로 URLSearchParams에
-    그대로 전달합니다.
-  */
 
   query.set(
     "serviceKey",
