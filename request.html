@@ -2553,13 +2553,186 @@ function message(
 
 
 /* =========================================
-   제출 검증
+   4자리 매수요청번호 생성
+========================================= */
+
+function createRequestNumber(){
+
+  return String(
+    Math.floor(
+      1000 + Math.random() * 9000
+    )
+  );
+
+}
+
+
+/* =========================================
+   거래 요청 Supabase 저장
+========================================= */
+
+async function savePropertyRequest(
+  requestNumber,
+  phone
+){
+
+  const body = {
+
+    request_number:
+    requestNumber,
+
+    request_type:
+    type,
+
+    phone:
+    phone,
+
+    sido:
+    $("#sido").value,
+
+    sigungu:
+    $("#sgg").value,
+
+    dong:
+    $("#dong").value,
+
+    apartment:
+    $("#apt").value.trim() || null,
+
+    size:
+    selectedSize,
+
+    sale_min:
+    type === "sale"
+    ? Number($("#saleMin").value)
+    : null,
+
+    sale_max:
+    type === "sale"
+    ? Number($("#saleMax").value)
+    : null,
+
+    jeonse_min:
+    type === "jeonse"
+    ? Number($("#jeonseMin").value)
+    : null,
+
+    jeonse_max:
+    type === "jeonse"
+    ? Number($("#jeonseMax").value)
+    : null,
+
+    monthly_deposit_min:
+    type === "monthly"
+    ? Number($("#monthlyDepositMin").value)
+    : null,
+
+    monthly_deposit_max:
+    type === "monthly"
+    ? Number($("#monthlyDepositMax").value)
+    : null,
+
+    monthly_rent:
+    type === "monthly"
+    ? Number($("#monthlyRent").value)
+    : null,
+
+    move_date:
+    $("#moveDate").value,
+
+    move_flexible:
+    $("#moveFlexible").checked,
+
+    memo:
+    $("#memo").value.trim() || null,
+
+    status:
+    "OPEN",
+
+    proposal_count:
+    0,
+
+    ars_round:
+    0
+
+  };
+
+
+  const res =
+  await fetch(
+
+    SUPABASE_URL +
+    "/rest/v1/property_requests",
+
+    {
+
+      method:
+      "POST",
+
+      headers:{
+
+        apikey:
+        SUPABASE_KEY,
+
+        "Content-Type":
+        "application/json",
+
+        Prefer:
+        "return=minimal"
+
+      },
+
+      body:
+      JSON.stringify(body)
+
+    }
+
+  );
+
+
+  if(res.ok){
+
+    return {
+      ok:true
+    };
+
+  }
+
+
+  const errorText =
+  await res.text();
+
+
+  if(
+    res.status === 409 ||
+    errorText.includes("23505") ||
+    errorText.includes("duplicate key")
+  ){
+
+    return {
+      ok:false,
+      duplicate:true
+    };
+
+  }
+
+
+  throw new Error(
+    errorText ||
+    "거래 요청 저장에 실패했습니다."
+  );
+
+}
+
+
+/* =========================================
+   제출 검증 + 실제 저장
 ========================================= */
 
 $("#requestForm")
 .addEventListener(
   "submit",
-  function(e){
+  async function(e){
 
     e.preventDefault();
 
@@ -2771,19 +2944,111 @@ $("#requestForm")
     }
 
 
-    /*
-      실제 거래 요청 저장 API 연결 위치
+    const submitBtn =
+    $("#submitBtn");
 
-      기존 코드와 동일하게
-      임의 데이터베이스 저장은
-      추가하지 않았습니다.
-    */
+    const originalText =
+    submitBtn.textContent;
 
 
-    message(
-      "ok",
-      "입력내용이 확인되었습니다."
-    );
+    submitBtn.disabled=true;
+
+    submitBtn.textContent=
+    "등록 중...";
+
+
+    try{
+
+      let savedNumber="";
+
+
+      for(
+        let i=0;
+        i<30;
+        i++
+      ){
+
+        const requestNumber =
+        createRequestNumber();
+
+        const result =
+        await savePropertyRequest(
+          requestNumber,
+          phone
+        );
+
+
+        if(result.ok){
+
+          savedNumber =
+          requestNumber;
+
+          break;
+
+        }
+
+
+        if(!result.duplicate){
+
+          throw new Error(
+            "거래 요청 저장에 실패했습니다."
+          );
+
+        }
+
+      }
+
+
+      if(!savedNumber){
+
+        throw new Error(
+          "매수요청번호를 발급하지 못했습니다. 다시 시도해 주세요."
+        );
+
+      }
+
+
+      localStorage.setItem(
+        "wooriapt_request_number",
+        savedNumber
+      );
+
+      localStorage.setItem(
+        "wooriapt_buyer_phone",
+        phone
+      );
+
+
+      message(
+        "ok",
+        "등록이 완료되었습니다. 매수요청번호는 " +
+        savedNumber +
+        "번입니다."
+      );
+
+
+      submitBtn.textContent=
+      "등록 완료 · " +
+      savedNumber +
+      "번";
+
+
+    }catch(err){
+
+      console.error(err);
+
+      message(
+        "error",
+        err.message ||
+        "거래 요청 저장에 실패했습니다."
+      );
+
+      submitBtn.disabled=false;
+
+      submitBtn.textContent=
+      originalText;
+
+    }
 
   }
 );
