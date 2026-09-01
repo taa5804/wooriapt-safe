@@ -2176,7 +2176,7 @@ async function lookupRequest(){
 
   try{
     const response = await fetch(
-      "/api/property-request?requestNumber=" +
+      "/api/property-request-lookup?requestNumber=" +
       encodeURIComponent(requestNumber),
       {
         method:"GET",
