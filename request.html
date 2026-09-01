@@ -2553,35 +2553,16 @@ function message(
 
 
 /* =========================================
-   4자리 매수요청번호 생성
-========================================= */
-
-function createRequestNumber(){
-
-  return String(
-    Math.floor(
-      1000 + Math.random() * 9000
-    )
-  );
-
-}
-
-
-/* =========================================
-   거래 요청 Supabase 저장
+   거래 요청 API 저장
 ========================================= */
 
 async function savePropertyRequest(
-  requestNumber,
   phone
 ){
 
   const body = {
 
-    request_number:
-    requestNumber,
-
-    request_type:
+    requestType:
     type,
 
     phone:
@@ -2597,130 +2578,105 @@ async function savePropertyRequest(
     $("#dong").value,
 
     apartment:
-    $("#apt").value.trim() || null,
+    $("#apt").value.trim(),
 
     size:
     selectedSize,
 
-    sale_min:
+    saleMin:
     type === "sale"
     ? Number($("#saleMin").value)
     : null,
 
-    sale_max:
+    saleMax:
     type === "sale"
     ? Number($("#saleMax").value)
     : null,
 
-    jeonse_min:
+    jeonseMin:
     type === "jeonse"
     ? Number($("#jeonseMin").value)
     : null,
 
-    jeonse_max:
+    jeonseMax:
     type === "jeonse"
     ? Number($("#jeonseMax").value)
     : null,
 
-    monthly_deposit_min:
+    monthlyDepositMin:
     type === "monthly"
     ? Number($("#monthlyDepositMin").value)
     : null,
 
-    monthly_deposit_max:
+    monthlyDepositMax:
     type === "monthly"
     ? Number($("#monthlyDepositMax").value)
     : null,
 
-    monthly_rent:
+    monthlyRent:
     type === "monthly"
     ? Number($("#monthlyRent").value)
     : null,
 
-    move_date:
+    moveDate:
     $("#moveDate").value,
 
-    move_flexible:
+    moveFlexible:
     $("#moveFlexible").checked,
 
     memo:
-    $("#memo").value.trim() || null,
-
-    status:
-    "OPEN",
-
-    proposal_count:
-    0,
-
-    ars_round:
-    0
+    $("#memo").value.trim()
 
   };
 
 
   const res =
   await fetch(
-
-    SUPABASE_URL +
-    "/rest/v1/property_requests",
-
+    "/api/property-request",
     {
 
       method:
       "POST",
 
       headers:{
-
-        apikey:
-        SUPABASE_KEY,
-
         "Content-Type":
-        "application/json",
-
-        Prefer:
-        "return=minimal"
-
+        "application/json"
       },
 
       body:
       JSON.stringify(body)
 
     }
-
   );
 
 
-  if(res.ok){
-
-    return {
-      ok:true
-    };
-
-  }
-
-
-  const errorText =
-  await res.text();
+  const data =
+  await res
+  .json()
+  .catch(
+    ()=>({})
+  );
 
 
   if(
-    res.status === 409 ||
-    errorText.includes("23505") ||
-    errorText.includes("duplicate key")
+    !res.ok ||
+    data.ok !== true ||
+    !data.requestNumber
   ){
 
-    return {
-      ok:false,
-      duplicate:true
-    };
+    throw new Error(
+      data.message ||
+      "거래 요청 저장에 실패했습니다."
+    );
 
   }
 
 
-  throw new Error(
-    errorText ||
-    "거래 요청 저장에 실패했습니다."
-  );
+  return {
+    ok:true,
+    requestNumber:
+    String(data.requestNumber)
+  };
 
 }
 
@@ -2959,53 +2915,13 @@ $("#requestForm")
 
     try{
 
-      let savedNumber="";
+      const result =
+      await savePropertyRequest(
+        phone
+      );
 
-
-      for(
-        let i=0;
-        i<30;
-        i++
-      ){
-
-        const requestNumber =
-        createRequestNumber();
-
-        const result =
-        await savePropertyRequest(
-          requestNumber,
-          phone
-        );
-
-
-        if(result.ok){
-
-          savedNumber =
-          requestNumber;
-
-          break;
-
-        }
-
-
-        if(!result.duplicate){
-
-          throw new Error(
-            "거래 요청 저장에 실패했습니다."
-          );
-
-        }
-
-      }
-
-
-      if(!savedNumber){
-
-        throw new Error(
-          "매수요청번호를 발급하지 못했습니다. 다시 시도해 주세요."
-        );
-
-      }
+      const savedNumber =
+      result.requestNumber;
 
 
       localStorage.setItem(
