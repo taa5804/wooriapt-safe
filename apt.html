@@ -53,13 +53,6 @@ a{
   text-decoration:none;
 }
 
-/* 확대·축소 영역 */
-
-#pageScale{
-  width:100%;
-  zoom:.55;
-}
-
 .wrap{
   width:100%;
   max-width:760px;
@@ -234,8 +227,7 @@ h1{
   color:#35566e;
   font-size:15px;
   font-weight:900;
-  cursor:default;
-  pointer-events:none;
+  cursor:pointer;
 }
 
 .type-btn.active{
@@ -332,59 +324,6 @@ h1{
 }
 
 
-/* 확대·축소 버튼 */
-
-.zoom-control{
-  position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:99999;
-
-  display:flex;
-  align-items:center;
-  gap:6px;
-
-  padding:7px;
-  border:1px solid #d9e1e8;
-  border-radius:12px;
-  background:#fff;
-
-  box-shadow:
-    0 4px 16px
-    rgba(0,0,0,.14);
-}
-
-.zoom-control button{
-  width:38px;
-  height:38px;
-  padding:0;
-
-  border:0;
-  border-radius:9px;
-
-  background:#1165d7;
-  color:#fff;
-
-  font-size:23px;
-  font-weight:900;
-
-  cursor:pointer;
-}
-
-.zoom-control button:active{
-  transform:translateY(1px);
-}
-
-#zoomValue{
-  min-width:48px;
-  text-align:center;
-
-  color:#243d50;
-  font-size:13px;
-  font-weight:900;
-}
-
-
 @media(max-width:480px){
 
   .wrap{
@@ -423,19 +362,14 @@ h1{
     font-size:14px;
   }
 
-  .zoom-control{
-    right:10px;
-    bottom:10px;
-  }
-
 }
 </style>
+<meta name="keywords" content="아파트 매수, 아파트 매매, 아파트 매수 방법, 아파트 매매 찾기, 아파트 매물 찾기, 아파트 매수 매물, 아파트 매수자, 내집 마련, 내집마련 아파트, 아파트 구하기, 전세 구하기, 아파트 전세, 전세 매물 찾기, 아파트 전세 구하기, 전세 아파트 찾기, 월세 구하기, 아파트 월세, 월세 매물 찾기, 아파트 월세 구하기, 월세 아파트 찾기, 원하는 아파트 찾기, 희망조건 아파트, 조건 맞는 아파트, 아파트 매물 제안, 부동산 매물 제안, 아파트 가격 비교, 아파트 매물 비교, 지역 아파트 매물, 우리동네 아파트, 우리아파트 안심거래">
+<meta name="robots" content="index,follow">
 </head>
 
 
 <body>
-
-<div id="pageScale">
 
 <div class="wrap">
 
@@ -502,35 +436,24 @@ h1{
       <div class="points">
 
         <div class="point">
-
           <span class="check">✓</span>
-
           <span>
             여러 부동산을 직접 찾아다니지 않아도 됩니다.
           </span>
-
         </div>
 
-
         <div class="point">
-
           <span class="check">✓</span>
-
           <span>
             원하는 조건에 맞는 제안을 한곳에서 비교할 수 있습니다.
           </span>
-
         </div>
 
-
         <div class="point">
-
           <span class="check">✓</span>
-
           <span>
             원하는 매물을 선택한 후 안심거래 절차를 진행할 수 있습니다.
           </span>
-
         </div>
 
       </div>
@@ -626,84 +549,6 @@ h1{
 
 </div>
 
-</div>
-
-
-<div class="zoom-control">
-
-  <button
-    type="button"
-    onclick="changeLandingZoom(-5)"
-    aria-label="축소"
-  >
-    −
-  </button>
-
-  <span id="zoomValue">
-    55%
-  </span>
-
-  <button
-    type="button"
-    onclick="changeLandingZoom(5)"
-    aria-label="확대"
-  >
-    ＋
-  </button>
-
-</div>
-
-
-<script>
-
-var currentZoom = 55;
-
-function applyLandingZoom(){
-
-  var pageScale =
-    document.getElementById("pageScale");
-
-  var zoomValue =
-    document.getElementById("zoomValue");
-
-  if(!pageScale){
-    return;
-  }
-
-  pageScale.style.zoom =
-    String(currentZoom / 100);
-
-  if(zoomValue){
-    zoomValue.textContent =
-      currentZoom + "%";
-  }
-
-}
-
-function changeLandingZoom(amount){
-
-  currentZoom =
-    currentZoom + amount;
-
-  if(currentZoom < 40){
-    currentZoom = 40;
-  }
-
-  if(currentZoom > 200){
-    currentZoom = 200;
-  }
-
-  applyLandingZoom();
-
-}
-
-window.changeLandingZoom =
-  changeLandingZoom;
-
-applyLandingZoom();
-
-</script>
-
 
 <script>
 (function(){
@@ -719,7 +564,7 @@ new URLSearchParams(
 
 /* ===============================
    검색페이지 데이터
-=============================== */
+================================ */
 
 const region =
 String(
@@ -758,7 +603,7 @@ if(
 
 /* ===============================
    거래유형 명칭
-=============================== */
+================================ */
 
 function getTypeName(type){
 
@@ -775,12 +620,13 @@ function getTypeName(type){
   }
 
   return "매매·전세·월세";
+
 }
 
 
 /* ===============================
    지역 문자열
-=============================== */
+================================ */
 
 const locationParts = [];
 
@@ -813,7 +659,7 @@ getTypeName(
 
 /* ===============================
    화면 제목
-=============================== */
+================================ */
 
 const fullTitle =
 [
@@ -830,30 +676,25 @@ document.getElementById(
   "pageTitle"
 );
 
-
 const locationText =
 document.getElementById(
   "locationText"
 );
-
 
 const heroSubtitle =
 document.getElementById(
   "heroSubtitle"
 );
 
-
 const mainDescription =
 document.getElementById(
   "mainDescription"
 );
 
-
 const areaInfoTitle =
 document.getElementById(
   "areaInfoTitle"
 );
-
 
 const areaInfoText =
 document.getElementById(
@@ -895,7 +736,7 @@ areaInfoText.textContent =
 
 /* ===============================
    네이버 검색 제목 / 설명
-=============================== */
+================================ */
 
 document.title =
 fullTitle +
@@ -917,7 +758,7 @@ metaDescription.setAttribute(
 
 /* ===============================
    canonical
-=============================== */
+================================ */
 
 const canonicalLink =
 document.getElementById(
@@ -933,7 +774,7 @@ window.location.search;
 
 /* ===============================
    거래유형 버튼
-=============================== */
+================================ */
 
 const typeButtons =
 document.querySelectorAll(
@@ -941,16 +782,29 @@ document.querySelectorAll(
 );
 
 
-/* 거래유형 버튼은 표시만 하고 선택하지 않음 */
-
 function updateTypeButtons(){
 
   typeButtons.forEach(
     function(button){
 
-      button.classList.remove(
-        "active"
+      const type =
+      button.getAttribute(
+        "data-type"
       );
+
+      if(type === selectedType){
+
+        button.classList.add(
+          "active"
+        );
+
+      }else{
+
+        button.classList.remove(
+          "active"
+        );
+
+      }
 
     }
   );
@@ -958,12 +812,35 @@ function updateTypeButtons(){
 }
 
 
+typeButtons.forEach(
+  function(button){
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        selectedType =
+        this.getAttribute(
+          "data-type"
+        );
+
+        updateTypeButtons();
+
+        updateApplyButton();
+
+      }
+    );
+
+  }
+);
+
+
 updateTypeButtons();
 
 
 /* ===============================
    신청버튼
-=============================== */
+================================ */
 
 const applyBtn =
 document.getElementById(
@@ -972,6 +849,33 @@ document.getElementById(
 
 
 function updateApplyButton(){
+
+  if(selectedType === "sale"){
+
+    applyBtn.textContent =
+    "매수 희망조건 등록";
+
+    return;
+  }
+
+
+  if(selectedType === "jeonse"){
+
+    applyBtn.textContent =
+    "전세 희망조건 등록";
+
+    return;
+  }
+
+
+  if(selectedType === "monthly"){
+
+    applyBtn.textContent =
+    "월세 희망조건 등록";
+
+    return;
+  }
+
 
   applyBtn.textContent =
   "희망조건 등록하기";
@@ -986,18 +890,25 @@ applyBtn.addEventListener(
   "click",
   function(){
 
+    if(!selectedType){
+
+      alert(
+        "매매·전세·월세 중 거래유형을 선택해 주세요."
+      );
+
+      return;
+
+    }
+
+
     const nextParams =
     new URLSearchParams();
 
 
-    if(selectedType){
-
-      nextParams.set(
-        "type",
-        selectedType
-      );
-
-    }
+    nextParams.set(
+      "type",
+      selectedType
+    );
 
 
     if(region){
@@ -1046,6 +957,7 @@ applyBtn.addEventListener(
 
   }
 );
+
 
 })();
 </script>
