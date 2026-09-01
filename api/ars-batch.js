@@ -515,10 +515,12 @@ export default async function handler(req, res) {
 
       const members =
         await supabaseGet(
-          "agent_members" +
+          "safe_brokers" +
           `?dong=eq.${encodeURIComponent(request.dong)}` +
           "&membership_status=eq.ACTIVE" +
-          "&select=id,phone,office_name,membership_status,created_at"
+          "&is_active=eq.true" +
+          "&receive_voice_call=eq.true" +
+          "&select=id,mobile_phone,office_name,membership_status,is_active,receive_voice_call,created_at"
         );
 
 
@@ -532,7 +534,7 @@ export default async function handler(req, res) {
 
           const phone =
             normalizePhone(
-              item.phone
+              item.mobile_phone
             );
 
           return (
@@ -542,14 +544,19 @@ export default async function handler(req, res) {
               phone
             )
           );
-        });
+        })
+        .map(item => ({
+          ...item,
+          phone:
+            item.mobile_phone
+        }));
 
 
       const shortage =
         Math.max(
           0,
           10 -
-          selectedMembers.length
+            selectedMembers.length
         );
 
 
