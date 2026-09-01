@@ -583,7 +583,7 @@ officePhone.addEventListener(
 
 saveBtn.addEventListener(
   "click",
-  function(){
+  async function(){
 
     const required = [
 
@@ -618,76 +618,155 @@ saveBtn.addEventListener(
     }
 
 
-    /*
-      등록 데이터
-
-      실제 운영에서는 이 데이터를
-      Supabase의 매물 테이블에 저장하고
-      requestNumber를 매수요청번호와 연결합니다.
-    */
-
-    const property = {
-
-      propertyId:
-        "P"+Date.now(),
-
-      requestNumber:
-        requestNumber.value.trim(),
-
-      apartment:
-        apartment.value.trim(),
-
-      amount:
-        amount.value.trim(),
-
-      floor:
-        floor.value.trim(),
-
-      area:
-        area.value.trim(),
-
-      description:
-        description.value.trim(),
-
-      officeName:
-        officeName.value.trim(),
-
-      officePhone:
-        officePhone.value.trim(),
-
-      status:
-        "PROPOSED",
-
-      createdAt:
-        new Date().toISOString()
-
-    };
+    saveBtn.disabled=true;
 
 
-    const saved =
-      JSON.parse(
-        localStorage.getItem(
-          "wooriapt_broker_properties"
-        ) || "[]"
+    try{
+
+      const response =
+        await fetch(
+          "/api/property-proposal",
+          {
+            method:"POST",
+
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+
+                requestNumber:
+                  requestNumber.value.trim(),
+
+                apartment:
+                  apartment.value.trim(),
+
+                amount:
+                  amount.value.trim(),
+
+                floor:
+                  floor.value.trim(),
+
+                area:
+                  area.value.trim(),
+
+                description:
+                  description.value.trim(),
+
+                officeName:
+                  officeName.value.trim(),
+
+                officePhone:
+                  officePhone.value.trim()
+
+              })
+          }
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if(
+        !response.ok ||
+        !data.ok
+      ){
+
+        showMsg(
+          data.message ||
+          "매물 등록 중 오류가 발생했습니다.",
+          false
+        );
+
+        saveBtn.disabled=false;
+
+        return;
+
+      }
+
+
+      const property = {
+
+        propertyId:
+          data.proposal?.id
+            ? String(data.proposal.id)
+            : "P"+Date.now(),
+
+        requestNumber:
+          requestNumber.value.trim(),
+
+        apartment:
+          apartment.value.trim(),
+
+        amount:
+          amount.value.trim(),
+
+        floor:
+          floor.value.trim(),
+
+        area:
+          area.value.trim(),
+
+        description:
+          description.value.trim(),
+
+        officeName:
+          officeName.value.trim(),
+
+        officePhone:
+          officePhone.value.trim(),
+
+        status:
+          "PROPOSED",
+
+        createdAt:
+          data.proposal?.created_at ||
+          new Date().toISOString()
+
+      };
+
+
+      const saved =
+        JSON.parse(
+          localStorage.getItem(
+            "wooriapt_broker_properties"
+          ) || "[]"
+        );
+
+
+      saved.push(property);
+
+
+      localStorage.setItem(
+        "wooriapt_broker_properties",
+        JSON.stringify(saved)
       );
 
 
-    saved.push(property);
+      showMsg(
+        "매물이 등록되었습니다. 해당 매수요청번호에 연결되었습니다.",
+        true
+      );
 
 
-    localStorage.setItem(
-      "wooriapt_broker_properties",
-      JSON.stringify(saved)
-    );
+    }catch(error){
+
+      console.error(
+        "property register error:",
+        error
+      );
 
 
-    showMsg(
-      "매물이 등록되었습니다. 해당 매수요청번호에 연결되었습니다.",
-      true
-    );
+      showMsg(
+        "매물 등록 중 오류가 발생했습니다.",
+        false
+      );
 
+    }
 
-    saveBtn.disabled=true;
 
     setTimeout(
       function(){
