@@ -53,6 +53,13 @@ a{
   text-decoration:none;
 }
 
+/* 확대·축소 영역 */
+
+#pageScale{
+  width:100%;
+  zoom:.55;
+}
+
 .wrap{
   width:100%;
   max-width:760px;
@@ -325,6 +332,59 @@ h1{
 }
 
 
+/* 확대·축소 버튼 */
+
+.zoom-control{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:99999;
+
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  padding:7px;
+  border:1px solid #d9e1e8;
+  border-radius:12px;
+  background:#fff;
+
+  box-shadow:
+    0 4px 16px
+    rgba(0,0,0,.14);
+}
+
+.zoom-control button{
+  width:38px;
+  height:38px;
+  padding:0;
+
+  border:0;
+  border-radius:9px;
+
+  background:#1165d7;
+  color:#fff;
+
+  font-size:23px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+.zoom-control button:active{
+  transform:translateY(1px);
+}
+
+#zoomValue{
+  min-width:48px;
+  text-align:center;
+
+  color:#243d50;
+  font-size:13px;
+  font-weight:900;
+}
+
+
 @media(max-width:480px){
 
   .wrap{
@@ -363,12 +423,19 @@ h1{
     font-size:14px;
   }
 
+  .zoom-control{
+    right:10px;
+    bottom:10px;
+  }
+
 }
 </style>
 </head>
 
 
 <body>
+
+<div id="pageScale">
 
 <div class="wrap">
 
@@ -559,6 +626,84 @@ h1{
 
 </div>
 
+</div>
+
+
+<div class="zoom-control">
+
+  <button
+    type="button"
+    onclick="changeLandingZoom(-5)"
+    aria-label="축소"
+  >
+    −
+  </button>
+
+  <span id="zoomValue">
+    55%
+  </span>
+
+  <button
+    type="button"
+    onclick="changeLandingZoom(5)"
+    aria-label="확대"
+  >
+    ＋
+  </button>
+
+</div>
+
+
+<script>
+
+var currentZoom = 55;
+
+function applyLandingZoom(){
+
+  var pageScale =
+    document.getElementById("pageScale");
+
+  var zoomValue =
+    document.getElementById("zoomValue");
+
+  if(!pageScale){
+    return;
+  }
+
+  pageScale.style.zoom =
+    String(currentZoom / 100);
+
+  if(zoomValue){
+    zoomValue.textContent =
+      currentZoom + "%";
+  }
+
+}
+
+function changeLandingZoom(amount){
+
+  currentZoom =
+    currentZoom + amount;
+
+  if(currentZoom < 40){
+    currentZoom = 40;
+  }
+
+  if(currentZoom > 200){
+    currentZoom = 200;
+  }
+
+  applyLandingZoom();
+
+}
+
+window.changeLandingZoom =
+  changeLandingZoom;
+
+applyLandingZoom();
+
+</script>
+
 
 <script>
 (function(){
@@ -574,7 +719,7 @@ new URLSearchParams(
 
 /* ===============================
    검색페이지 데이터
-================================ */
+=============================== */
 
 const region =
 String(
@@ -613,7 +758,7 @@ if(
 
 /* ===============================
    거래유형 명칭
-================================ */
+=============================== */
 
 function getTypeName(type){
 
@@ -635,7 +780,7 @@ function getTypeName(type){
 
 /* ===============================
    지역 문자열
-================================ */
+=============================== */
 
 const locationParts = [];
 
@@ -668,7 +813,7 @@ getTypeName(
 
 /* ===============================
    화면 제목
-================================ */
+=============================== */
 
 const fullTitle =
 [
@@ -750,7 +895,7 @@ areaInfoText.textContent =
 
 /* ===============================
    네이버 검색 제목 / 설명
-================================ */
+=============================== */
 
 document.title =
 fullTitle +
@@ -772,7 +917,7 @@ metaDescription.setAttribute(
 
 /* ===============================
    canonical
-================================ */
+=============================== */
 
 const canonicalLink =
 document.getElementById(
@@ -788,7 +933,7 @@ window.location.search;
 
 /* ===============================
    거래유형 버튼
-================================ */
+=============================== */
 
 const typeButtons =
 document.querySelectorAll(
@@ -818,7 +963,7 @@ updateTypeButtons();
 
 /* ===============================
    신청버튼
-================================ */
+=============================== */
 
 const applyBtn =
 document.getElementById(
