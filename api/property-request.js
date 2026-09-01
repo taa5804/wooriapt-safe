@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+
   if (req.method !== "POST") {
     return res.status(405).json({
       ok: false,
@@ -6,11 +7,13 @@ export default async function handler(req, res) {
     });
   }
 
+
   const SUPABASE_URL =
     process.env.SUPABASE_URL;
 
   const SUPABASE_SERVICE_ROLE_KEY =
     process.env.SUPABASE_SERVICE_ROLE_KEY;
+
 
   if (
     !SUPABASE_URL ||
@@ -22,61 +25,102 @@ export default async function handler(req, res) {
     });
   }
 
+
   try {
+
     const body =
       typeof req.body === "string"
         ? JSON.parse(req.body)
         : (req.body || {});
 
+
     const requestType =
-      String(body.requestType || "").trim();
+      String(
+        body.requestType || ""
+      ).trim();
+
 
     const phone =
-      String(body.phone || "")
-        .replace(/\D/g, "");
+      String(
+        body.phone || ""
+      )
+      .replace(/\D/g, "");
+
 
     const sido =
-      String(body.sido || "").trim();
+      String(
+        body.sido || ""
+      ).trim();
+
 
     const sigungu =
-      String(body.sigungu || "").trim();
+      String(
+        body.sigungu || ""
+      ).trim();
+
 
     const dong =
-      String(body.dong || "").trim();
+      String(
+        body.dong || ""
+      ).trim();
+
 
     const apartment =
-      String(body.apartment || "").trim();
+      String(
+        body.apartment || ""
+      ).trim();
+
 
     const size =
-      String(body.size || "").trim();
+      String(
+        body.size || ""
+      ).trim();
+
 
     const moveDate =
-      String(body.moveDate || "").trim();
+      String(
+        body.moveDate || ""
+      ).trim();
+
 
     const moveFlexible =
       body.moveFlexible === true;
 
+
     const memo =
-      String(body.memo || "").trim();
+      String(
+        body.memo || ""
+      ).trim();
+
 
     if (
-      !["sale", "jeonse", "monthly"]
-        .includes(requestType)
+      ![
+        "sale",
+        "jeonse",
+        "monthly"
+      ].includes(
+        requestType
+      )
     ) {
       return res.status(400).json({
         ok: false,
-        message: "거래유형을 확인해 주세요."
+        message:
+          "거래유형을 확인해 주세요."
       });
     }
 
+
     if (
-      !/^01[016789][0-9]{7,8}$/.test(phone)
+      !/^01[016789][0-9]{7,8}$/
+        .test(phone)
     ) {
       return res.status(400).json({
         ok: false,
-        message: "휴대전화번호를 확인해 주세요."
+        message:
+          "휴대전화번호를 확인해 주세요."
       });
     }
+
 
     if (
       !sido ||
@@ -87,11 +131,16 @@ export default async function handler(req, res) {
     ) {
       return res.status(400).json({
         ok: false,
-        message: "필수 입력사항을 확인해 주세요."
+        message:
+          "필수 입력사항을 확인해 주세요."
       });
     }
 
-    function numberOrNull(value) {
+
+    function numberOrNull(
+      value
+    ) {
+
       if (
         value === null ||
         value === undefined ||
@@ -100,42 +149,63 @@ export default async function handler(req, res) {
         return null;
       }
 
+
       const number =
         Number(
-          String(value).replace(/,/g, "")
+          String(value)
+            .replace(/,/g, "")
         );
 
-      return Number.isFinite(number)
+
+      return Number.isFinite(
+        number
+      )
         ? number
         : null;
     }
 
+
     const saleMin =
-      numberOrNull(body.saleMin);
+      numberOrNull(
+        body.saleMin
+      );
+
 
     const saleMax =
-      numberOrNull(body.saleMax);
+      numberOrNull(
+        body.saleMax
+      );
+
 
     const jeonseMin =
-      numberOrNull(body.jeonseMin);
+      numberOrNull(
+        body.jeonseMin
+      );
+
 
     const jeonseMax =
-      numberOrNull(body.jeonseMax);
+      numberOrNull(
+        body.jeonseMax
+      );
+
 
     const monthlyDepositMin =
       numberOrNull(
         body.monthlyDepositMin
       );
 
+
     const monthlyDepositMax =
       numberOrNull(
         body.monthlyDepositMax
       );
 
+
     const monthlyRent =
       numberOrNull(
         body.monthlyRent
       );
+
 
     if (
       requestType === "sale" &&
@@ -146,9 +216,11 @@ export default async function handler(req, res) {
     ) {
       return res.status(400).json({
         ok: false,
-        message: "매매 희망가격을 확인해 주세요."
+        message:
+          "매매 희망가격을 확인해 주세요."
       });
     }
+
 
     if (
       requestType === "jeonse" &&
@@ -159,9 +231,11 @@ export default async function handler(req, res) {
     ) {
       return res.status(400).json({
         ok: false,
-        message: "전세 희망가격을 확인해 주세요."
+        message:
+          "전세 희망가격을 확인해 주세요."
       });
     }
+
 
     if (
       requestType === "monthly" &&
@@ -173,31 +247,45 @@ export default async function handler(req, res) {
     ) {
       return res.status(400).json({
         ok: false,
-        message: "월세 희망가격을 확인해 주세요."
+        message:
+          "월세 희망가격을 확인해 주세요."
       });
     }
+
 
     async function requestNumberExists(
       requestNumber
     ) {
+
       const url =
         `${SUPABASE_URL}` +
         `/rest/v1/property_requests` +
         `?request_number=eq.` +
-        encodeURIComponent(requestNumber) +
+        encodeURIComponent(
+          requestNumber
+        ) +
         `&select=id&limit=1`;
 
+
       const response =
-        await fetch(url, {
-          method: "GET",
-          headers: {
-            apikey:
-              SUPABASE_SERVICE_ROLE_KEY,
-            Authorization:
-              `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-            Accept: "application/json"
+        await fetch(
+          url,
+          {
+            method: "GET",
+
+            headers: {
+              apikey:
+                SUPABASE_SERVICE_ROLE_KEY,
+
+              Authorization:
+                `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+
+              Accept:
+                "application/json"
+            }
           }
-        });
+        );
+
 
       if (!response.ok) {
         throw new Error(
@@ -205,8 +293,10 @@ export default async function handler(req, res) {
         );
       }
 
+
       const data =
         await response.json();
+
 
       return (
         Array.isArray(data) &&
@@ -214,12 +304,15 @@ export default async function handler(req, res) {
       );
     }
 
+
     async function createRequestNumber() {
+
       for (
         let attempt = 0;
         attempt < 30;
         attempt++
       ) {
+
         const requestNumber =
           String(
             Math.floor(
@@ -228,25 +321,31 @@ export default async function handler(req, res) {
             )
           );
 
+
         const exists =
           await requestNumberExists(
             requestNumber
           );
+
 
         if (!exists) {
           return requestNumber;
         }
       }
 
+
       throw new Error(
         "REQUEST_NUMBER_GENERATION_FAILED"
       );
     }
 
+
     const requestNumber =
       await createRequestNumber();
 
+
     const row = {
+
       request_number:
         requestNumber,
 
@@ -322,65 +421,172 @@ export default async function handler(req, res) {
         0,
 
       ars_round:
-        0
+        0,
+
+      next_ars_at:
+        new Date().toISOString()
     };
+
 
     const insertUrl =
       `${SUPABASE_URL}` +
       `/rest/v1/property_requests`;
 
+
     const insertResponse =
-      await fetch(insertUrl, {
-        method: "POST",
+      await fetch(
+        insertUrl,
+        {
+          method:
+            "POST",
 
-        headers: {
-          apikey:
-            SUPABASE_SERVICE_ROLE_KEY,
+          headers: {
 
-          Authorization:
-            `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+            apikey:
+              SUPABASE_SERVICE_ROLE_KEY,
 
-          "Content-Type":
-            "application/json",
+            Authorization:
+              `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
 
-          Prefer:
-            "return=representation"
-        },
+            "Content-Type":
+              "application/json",
 
-        body:
-          JSON.stringify(row)
-      });
+            Prefer:
+              "return=representation"
+          },
+
+          body:
+            JSON.stringify(
+              row
+            )
+        }
+      );
+
 
     const insertData =
       await insertResponse.json();
 
-    if (!insertResponse.ok) {
+
+    if (
+      !insertResponse.ok
+    ) {
+
       console.error(
         "property-request insert error:",
         insertData
       );
 
+
       return res.status(500).json({
         ok: false,
-        message: "거래 요청 저장에 실패했습니다."
+        message:
+          "거래 요청 저장에 실패했습니다."
       });
     }
 
+
+    /*
+      1차 ARS 자동 시작
+    */
+
+    try {
+
+      const protocol =
+        req.headers[
+          "x-forwarded-proto"
+        ] || "https";
+
+
+      const host =
+        req.headers.host;
+
+
+      if (host) {
+
+        const arsUrl =
+          `${protocol}://${host}` +
+          `/api/ars-batch`;
+
+
+        const arsResponse =
+          await fetch(
+            arsUrl,
+            {
+              method:
+                "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify({
+                  requestNumber:
+                    requestNumber,
+
+                  round:
+                    1
+                })
+            }
+          );
+
+
+        const arsData =
+          await arsResponse
+            .json()
+            .catch(
+              () => null
+            );
+
+
+        if (
+          !arsResponse.ok
+        ) {
+          console.error(
+            "first ARS start failed:",
+            arsData
+          );
+        }
+
+      }
+
+    } catch (
+      arsError
+    ) {
+
+      console.error(
+        "first ARS call error:",
+        arsError
+      );
+
+    }
+
+
     return res.status(200).json({
-      ok: true,
+
+      ok:
+        true,
+
       requestNumber:
         requestNumber
     });
 
-  } catch (error) {
+
+  } catch (
+    error
+  ) {
+
     console.error(
       "property-request error:",
       error
     );
 
+
     return res.status(500).json({
       ok: false,
-      message: "서버 오류가 발생했습니다."
+      message:
+        "서버 오류가 발생했습니다."
     });
   }
 }
