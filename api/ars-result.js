@@ -71,6 +71,134 @@ export default async function handler(req, res) {
   }
 
 
+  function parseRequestBody(body) {
+
+    if (!body) {
+      return {};
+    }
+
+
+    if (
+      typeof body === "object"
+    ) {
+      return body;
+    }
+
+
+    if (
+      typeof body !== "string"
+    ) {
+      return {};
+    }
+
+
+    const text =
+      body.trim();
+
+
+    if (!text) {
+      return {};
+    }
+
+
+    /*
+      JSON 요청 처리
+    */
+
+    try {
+
+      const parsed =
+        JSON.parse(text);
+
+      if (
+        parsed &&
+        typeof parsed === "object"
+      ) {
+        return parsed;
+      }
+
+    } catch (error) {
+      // JSON이 아니면 아래에서 form-urlencoded 처리
+    }
+
+
+    /*
+      ClawOps Webhook
+      application/x-www-form-urlencoded 처리
+    */
+
+    const params =
+      new URLSearchParams(text);
+
+    const result = {};
+
+
+    for (
+      const [key, value]
+      of params.entries()
+    ) {
+      result[key] = value;
+    }
+
+
+    return result;
+  }
+
+
+  function parseVariables(value) {
+
+    if (!value) {
+      return {};
+    }
+
+
+    if (
+      typeof value === "object"
+    ) {
+      return value;
+    }
+
+
+    if (
+      typeof value !== "string"
+    ) {
+      return {};
+    }
+
+
+    const text =
+      value.trim();
+
+
+    if (!text) {
+      return {};
+    }
+
+
+    try {
+
+      const parsed =
+        JSON.parse(text);
+
+      if (
+        parsed &&
+        typeof parsed === "object"
+      ) {
+        return parsed;
+      }
+
+    } catch (error) {
+      console.log(
+        "Variables JSON parse skipped:",
+        text
+      );
+    }
+
+
+    return {};
+  }
+
+
   async function supabaseGet(path) {
 
     const response =
@@ -82,8 +210,23 @@ export default async function handler(req, res) {
         }
       );
 
-    const data =
-      await response.json();
+
+    const text =
+      await response.text();
+
+
+    let data = null;
+
+
+    try {
+      data =
+        text
+          ? JSON.parse(text)
+          : null;
+    } catch {
+      data = text;
+    }
+
 
     if (!response.ok) {
 
@@ -96,6 +239,7 @@ export default async function handler(req, res) {
         "SUPABASE_GET_FAILED"
       );
     }
+
 
     return data;
   }
@@ -115,6 +259,7 @@ export default async function handler(req, res) {
 
           headers: {
             ...headers,
+
             Prefer:
               "return=representation"
           },
@@ -124,8 +269,23 @@ export default async function handler(req, res) {
         }
       );
 
-    const data =
-      await response.json();
+
+    const text =
+      await response.text();
+
+
+    let data = null;
+
+
+    try {
+      data =
+        text
+          ? JSON.parse(text)
+          : null;
+    } catch {
+      data = text;
+    }
+
 
     if (!response.ok) {
 
@@ -138,6 +298,7 @@ export default async function handler(req, res) {
         "SUPABASE_PATCH_FAILED"
       );
     }
+
 
     return data;
   }
@@ -156,6 +317,7 @@ export default async function handler(req, res) {
 
           headers: {
             ...headers,
+
             Prefer:
               "return=representation"
           },
@@ -165,8 +327,23 @@ export default async function handler(req, res) {
         }
       );
 
-    const data =
-      await response.json();
+
+    const text =
+      await response.text();
+
+
+    let data = null;
+
+
+    try {
+      data =
+        text
+          ? JSON.parse(text)
+          : null;
+    } catch {
+      data = text;
+    }
+
 
     if (!response.ok) {
 
@@ -180,31 +357,68 @@ export default async function handler(req, res) {
       );
     }
 
+
     return data;
   }
 
 
   try {
 
+    /*
+      1.
+      ClawOps 요청 본문 처리
+
+      JSON
+      또는
+      application/x-www-form-urlencoded
+      둘 다 처리
+    */
+
     const body =
-      typeof req.body === "string"
-        ? JSON.parse(req.body)
-        : (req.body || {});
+      parseRequestBody(
+        req.body
+      );
 
 
     const payload =
-      body.data ||
-      body.Data ||
-      body;
+      (
+        body.data &&
+        typeof body.data === "object"
+      )
+        ? body.data
+        :
+      (
+        body.Data &&
+        typeof body.Data === "object"
+      )
+        ? body.Data
+        : body;
 
 
-    const variables =
+    /*
+      2.
+      ClawOps Variables는
+      JSON 문자열로 전달될 수 있으므로 파싱
+    */
+
+    const rawVariables =
       payload.Variables ||
       payload.variables ||
       body.Variables ||
       body.variables ||
       {};
 
+
+    const variables =
+      parseVariables(
+        rawVariables
+      );
+
+
+    /*
+      3.
+      매수요청번호
+    */
 
     const requestNumber =
       cleanText(
@@ -227,6 +441,11 @@ export default async function handler(req, res) {
       .slice(0, 4);
 
 
+    /*
+      4.
+      수신 전화번호
+    */
+
     const phone =
       normalizePhone(
         getFirstValue(
@@ -245,6 +464,29 @@ export default async function handler(req, res) {
       );
 
 
+    /*
+      5.
+      ClawOps 통화 ID
+    */
+
+    const callId =
+      cleanText(
+        getFirstValue(
+          payload,
+          [
+            "CallId",
+            "callId",
+            "call_id"
+          ]
+        )
+      );
+
+
+    /*
+      6.
+      배치 Task ID
+    */
+
     const taskId =
       cleanText(
         getFirstValue(
@@ -260,6 +502,11 @@ export default async function handler(req, res) {
       );
 
 
+    /*
+      7.
+      Batch ID
+    */
+
     const batchId =
       cleanText(
         getFirstValue(
@@ -274,6 +521,11 @@ export default async function handler(req, res) {
         )
       );
 
+
+    /*
+      8.
+      통화 상태
+    */
 
     const callStatus =
       cleanText(
@@ -291,6 +543,14 @@ export default async function handler(req, res) {
       )
       .toUpperCase();
 
+
+    /*
+      9.
+      DTMF 결과
+
+      ClawOps 콜 플로우에서
+      캡처된 값은 Variables 안에 들어올 수 있음
+    */
 
     let dtmf =
       cleanText(
@@ -321,10 +581,16 @@ export default async function handler(req, res) {
             variables,
             [
               "dtmf",
+              "DTMF",
               "digit",
               "digits",
               "pressed_key",
-              "pressedKey"
+              "pressedKey",
+              "choice",
+              "selection",
+              "menu_choice",
+              "menuChoice",
+              "menu_main"
             ]
           )
         );
@@ -332,9 +598,28 @@ export default async function handler(req, res) {
 
 
     dtmf =
-      dtmf.replace(/[^0-9*#]/g, "")
+      dtmf
+      .replace(/[^0-9*#]/g, "")
       .slice(0, 1);
 
+
+    console.log(
+      "ClawOps callflow.ended:",
+      {
+        callId,
+        phone,
+        requestNumber,
+        callStatus,
+        dtmf,
+        variables
+      }
+    );
+
+
+    /*
+      10.
+      기존 ARS 발신 기록 찾기
+    */
 
     let logRows = [];
 
@@ -373,6 +658,23 @@ export default async function handler(req, res) {
         : null;
 
 
+    /*
+      Webhook URL 확인용 요청이나
+      아직 발신 로그가 없는 통화도
+      ClawOps에는 반드시 200 응답
+    */
+
+    if (!log) {
+
+      return res.status(200).json({
+        ok: true,
+        ignored: true,
+        message:
+          "일치하는 ARS 발신기록이 없습니다."
+      });
+    }
+
+
     const finalRequestNumber =
       requestNumber ||
       cleanText(
@@ -387,16 +689,10 @@ export default async function handler(req, res) {
       );
 
 
-    if (!log) {
-
-      return res.status(200).json({
-        ok: true,
-        ignored: true,
-        message:
-          "일치하는 ARS 발신기록이 없습니다."
-      });
-    }
-
+    /*
+      11.
+      기본 통화 결과 저장
+    */
 
     const patchValues = {};
 
@@ -439,6 +735,12 @@ export default async function handler(req, res) {
     }
 
 
+    /*
+      12.
+      1번
+      이번 매수요청에 매물 제안 가능
+    */
+
     if (dtmf === "1") {
 
       await supabasePatch(
@@ -456,6 +758,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         ok: true,
+
         action:
           "PROPOSAL_AVAILABLE",
 
@@ -468,7 +771,51 @@ export default async function handler(req, res) {
     }
 
 
+    /*
+      13.
+      2번
+      이번 요청에만 제안하지 않음
+
+      영구 수신거부 아님
+    */
+
     if (dtmf === "2") {
+
+      await supabasePatch(
+        "ars_dispatch_logs",
+        `id=eq.${encodeURIComponent(log.id)}`,
+        {
+          dtmf_result:
+            "2",
+
+          call_status:
+            "DECLINED_THIS_REQUEST"
+        }
+      );
+
+
+      return res.status(200).json({
+        ok: true,
+
+        action:
+          "DECLINED_THIS_REQUEST",
+
+        requestNumber:
+          finalRequestNumber,
+
+        phone:
+          finalPhone
+      });
+    }
+
+
+    /*
+      14.
+      3번
+      앞으로 ARS 영구 수신거부
+    */
+
+    if (dtmf === "3") {
 
       if (finalPhone) {
 
@@ -495,7 +842,7 @@ export default async function handler(req, res) {
                 finalPhone,
 
               reason:
-                "DTMF_2",
+                "DTMF_3",
 
               request_number:
                 finalRequestNumber || null,
@@ -514,7 +861,7 @@ export default async function handler(req, res) {
         `id=eq.${encodeURIComponent(log.id)}`,
         {
           dtmf_result:
-            "2",
+            "3",
 
           call_status:
             "OPT_OUT"
@@ -524,6 +871,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         ok: true,
+
         action:
           "OPT_OUT",
 
@@ -532,6 +880,11 @@ export default async function handler(req, res) {
       });
     }
 
+
+    /*
+      번호 입력 없이 종료되거나
+      통화만 완료된 경우
+    */
 
     return res.status(200).json({
       ok: true,
@@ -561,8 +914,14 @@ export default async function handler(req, res) {
     );
 
 
+    /*
+      ClawOps가 Webhook 자체를 실패로
+      판단하지 않도록 서버 오류 내용은 로그에 남김
+    */
+
     return res.status(500).json({
       ok: false,
+
       message:
         "ARS 결과 처리 중 오류가 발생했습니다."
     });
