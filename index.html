@@ -263,11 +263,22 @@ body.menu-open{
   border-radius:20px;
   background:
     linear-gradient(
-      135deg,
+      90deg,
       #f5faff 0%,
-      #eef6ff 100%
-    );
+      #eef6ff 48%,
+      rgba(238,246,255,.96) 55%,
+      rgba(238,246,255,.62) 67%,
+      rgba(238,246,255,.08) 82%
+    ),
+    url("/apartment.jpg") right center / auto 100% no-repeat,
+    #eef6ff;
   border:1px solid #dce9f5;
+}
+
+.hero-text{
+  position:relative;
+  z-index:1;
+  width:58%;
 }
 
 .hero-text h1{
@@ -917,6 +928,16 @@ body.menu-open{
 
   .hero{
     padding:35px 20px;
+    background:
+      linear-gradient(
+        135deg,
+        #f5faff 0%,
+        #eef6ff 100%
+      );
+  }
+
+  .hero-text{
+    width:100%;
   }
 
   .hero-text h1{
