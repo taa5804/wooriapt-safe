@@ -315,6 +315,106 @@ h1{
 }
 
 
+/* 전국 아파트 검색 */
+
+.apt-search{
+  margin-top:16px;
+}
+
+.apt-search-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+}
+
+.apt-search-input{
+  width:100%;
+  min-width:0;
+  height:46px;
+  padding:0 13px;
+  border:1px solid #cbd9e4;
+  border-radius:10px;
+  background:#fff;
+  color:#172b3d;
+  font-size:15px;
+  outline:none;
+}
+
+.apt-search-input:focus{
+  border-color:#1165d7;
+  box-shadow:0 0 0 3px rgba(17,101,215,.08);
+}
+
+.apt-search-btn{
+  min-width:78px;
+  height:46px;
+  padding:0 15px;
+  border:0;
+  border-radius:10px;
+  background:#1165d7;
+  color:#fff;
+  font-size:14px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.apt-search-status{
+  min-height:20px;
+  margin-top:9px;
+  color:#6b7f8f;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.apt-search-results{
+  display:none;
+  overflow:hidden;
+  margin-top:8px;
+  border:1px solid #dce5ec;
+  border-radius:11px;
+  background:#fff;
+}
+
+.apt-search-results.show{
+  display:block;
+}
+
+.apt-result{
+  display:block;
+  width:100%;
+  padding:12px 13px;
+  border:0;
+  border-bottom:1px solid #edf1f4;
+  background:#fff;
+  text-align:left;
+  cursor:pointer;
+}
+
+.apt-result:last-child{
+  border-bottom:0;
+}
+
+.apt-result:hover{
+  background:#f5f9ff;
+}
+
+.apt-result-name{
+  display:block;
+  color:#173e60;
+  font-size:14px;
+  font-weight:900;
+  line-height:1.45;
+}
+
+.apt-result-address{
+  display:block;
+  margin-top:4px;
+  color:#718493;
+  font-size:12px;
+  line-height:1.45;
+}
+
+
 .footer{
   margin-top:22px;
   text-align:center;
@@ -364,29 +464,68 @@ h1{
 
 }
 </style>
-<meta name="keywords" content="아파트 매수, 아파트 매매, 아파트 매수 방법, 아파트 매매 찾기, 아파트 매물 찾기, 아파트 매수 매물, 아파트 매수자, 내집 마련, 내집마련 아파트, 아파트 구하기, 전세 구하기, 아파트 전세, 전세 매물 찾기, 아파트 전세 구하기, 전세 아파트 찾기, 월세 구하기, 아파트 월세, 월세 매물 찾기, 아파트 월세 구하기, 월세 아파트 찾기, 원하는 아파트 찾기, 희망조건 아파트, 조건 맞는 아파트, 아파트 매물 제안, 부동산 매물 제안, 아파트 가격 비교, 아파트 매물 비교, 지역 아파트 매물, 우리동네 아파트, 우리아파트 안심거래">
-<meta name="robots" content="index,follow">
-<script>
-  window.va =
-    window.va ||
-    function () {
-      (window.vaq = window.vaq || []).push(arguments);
-    };
-</script>
-
-<script
-  defer
-  src="/_vercel/insights/script.js"
-></script>
-
+<link rel="stylesheet" href="/apt-landing.css">
 </head>
 
 
 <body>
 
-<div class="wrap">
+<div class="promo-shell">
+  <header class="promo-header">
+    <a class="promo-brand" href="/" aria-label="우리아파트 안심거래 홈">
+      <span class="brand-mark">⌂</span>
+      <span>우리아파트 <strong>안심거래</strong></span>
+    </a>
+    <a class="promo-home" href="/">홈으로</a>
+  </header>
 
-  <header class="header">
+  <main class="promo-hero">
+    <div class="promo-overlay"></div>
+    <section class="promo-copy">
+      <p class="promo-kicker">전자계약 기반 아파트 안심거래</p>
+      <div class="promo-badges" aria-label="서비스 안내">
+        <span class="badge buyer">매수자 전용 혜택</span>
+        <span class="badge all-types">매매 · 전세 · 월세 모두 가능</span>
+      </div>
+
+      <h1 class="promo-title">
+        <span>추가 비용 없이</span>
+        <span>플랫폼 서비스 이용료 <em>50%</em>로</span>
+        <span>내 집 장만</span>
+      </h1>
+
+      <p class="promo-description">
+        원하는 아파트와 조건만 등록하세요.<br>
+        공인중개사가 맞춤 매물을 제안합니다.
+      </p>
+
+      <div class="trust-list">
+        <span>✓ 안전한 전자계약</span>
+        <span>✓ 원하는 조건만 등록</span>
+        <span>✓ 제안을 한곳에서 비교</span>
+      </div>
+
+      <a class="buyer-cta" id="buyerCta" href="/request.html?type=sale">
+        매수 아파트 등록하기 <span aria-hidden="true">→</span>
+      </a>
+
+      <p class="promo-note">거래 조건과 적용 비용은 계약 전에 투명하게 안내합니다.</p>
+    </section>
+
+    <aside class="process-card" aria-label="이용 절차">
+      <p class="process-title">직접 찾아다닐 필요 없이</p>
+      <ol>
+        <li><b>1</b><span><strong>희망조건 등록</strong><small>원하는 아파트와 조건 입력</small></span></li>
+        <li><b>2</b><span><strong>공인중개사 제안</strong><small>조건에 맞는 매물 확인</small></span></li>
+        <li><b>3</b><span><strong>안심거래 진행</strong><small>전자계약 기반으로 안전하게</small></span></li>
+      </ol>
+    </aside>
+  </main>
+</div>
+
+<div class="wrap service-wrap">
+
+  <header class="header service-header">
 
     <a
       class="brand"
@@ -405,7 +544,7 @@ h1{
   </header>
 
 
-  <main class="hero">
+  <main class="hero service-panel">
 
     <section class="hero-top">
 
@@ -413,11 +552,11 @@ h1{
         class="location"
         id="locationText"
       >
-        매수자·임차인 전용 안심거래
+        우리아파트 안심거래
       </div>
 
       <h1 id="pageTitle">
-        원하는 아파트, 직접 찾아다니지 마세요.
+        아파트 매매·전세·월세
       </h1>
 
       <p
@@ -440,7 +579,7 @@ h1{
 
         <p id="mainDescription">
           희망가격·면적·입주조건을 등록하면
-          해당 지역의 매물 제안을 받아 비교하고 선택할 수 있습니다.
+          해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다.
         </p>
 
       </div>
@@ -473,7 +612,7 @@ h1{
 
 
       <div class="type-title">
-        원하시는 거래유형을 선택하세요
+        거래유형을 선택하세요
       </div>
 
 
@@ -526,9 +665,8 @@ h1{
 
         <p>
           원하는 아파트와 희망조건을 등록하면
-          해당 지역의 매물 제안을 받아 비교한 뒤 원하는 매물을 선택할 수 있습니다.
-          본 서비스의 희망조건 등록은 매수자·임차인 전용이며,
-          매도자·임대인의 매물 등록 서비스가 아닙니다.
+          해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다.
+          받은 제안을 비교한 뒤 원하는 매물을 선택하세요.
         </p>
 
       </div>
@@ -544,14 +682,48 @@ h1{
   >
 
     <h2 id="areaInfoTitle">
-      매수자·임차인 전용 서비스
+      아파트 찾기
     </h2>
 
     <p id="areaInfoText">
-      매수자·임차인이 원하는 아파트의 희망조건을 등록하고
-      매물 제안을 받아 비교·선택하는 안심거래 서비스입니다.
-      매도자·임대인의 매물 등록 서비스가 아닙니다.
+      원하는 지역과 아파트의 매매·전세·월세 희망조건을
+      우리아파트 안심거래에 등록할 수 있습니다.
     </p>
+
+
+    <div class="apt-search" id="aptSearch">
+
+      <div class="apt-search-row">
+
+        <input
+          class="apt-search-input"
+          id="aptSearchInput"
+          type="search"
+          placeholder="지역 또는 아파트명을 입력하세요"
+          autocomplete="off"
+        >
+
+        <button
+          class="apt-search-btn"
+          id="aptSearchBtn"
+          type="button"
+        >
+          검색
+        </button>
+
+      </div>
+
+      <div
+        class="apt-search-status"
+        id="aptSearchStatus"
+      ></div>
+
+      <div
+        class="apt-search-results"
+        id="aptSearchResults"
+      ></div>
+
+    </div>
 
   </section>
 
@@ -725,26 +897,35 @@ locationName ||
 
 
 heroSubtitle.textContent =
-"안심거래 플랫폼으로 거래 비용 부담을 최대 50%까지 낮춰보세요.";
+"원하는 아파트, 직접 찾아다니지 마세요.";
 
 
 mainDescription.textContent =
 typeName === "매매·전세·월세"
 ?
-"희망가격·면적·입주조건을 등록하면 해당 지역의 매물 제안을 받아 비교하고 선택할 수 있습니다."
+"희망가격·면적·입주조건을 등록하면 해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다."
 :
 apartmentName +
 " " +
 typeName +
-" 희망가격과 조건을 등록하면 해당 지역의 매물 제안을 받아 비교하고 선택할 수 있습니다.";
+" 희망가격과 조건을 등록하면 해당 지역 공인중개사가 조건에 맞는 매물을 제안합니다.";
 
 
 areaInfoTitle.textContent =
-"매수자·임차인 전용 서비스";
+fullTitle + " 찾기";
 
 
 areaInfoText.textContent =
-"매수자·임차인이 원하는 아파트의 희망조건을 등록하고 매물 제안을 받아 비교·선택하는 안심거래 서비스입니다. 매도자·임대인의 매물 등록 서비스가 아닙니다.";
+locationName
+?
+locationName +
+"의 " +
+apartmentName +
+" " +
+typeName +
+"을 찾고 계신다면 희망조건을 등록하세요. 여러 부동산을 직접 찾아다니지 않고 지역 공인중개사의 매물 제안을 받아 비교할 수 있습니다."
+:
+"원하는 지역과 아파트의 매매·전세·월세 희망조건을 등록하면 지역 공인중개사의 제안을 받아볼 수 있습니다.";
 
 
 /* ===============================
@@ -783,6 +964,340 @@ canonicalLink.href =
 window.location.origin +
 window.location.pathname +
 window.location.search;
+
+
+/* ===============================
+   전국 아파트 검색
+================================ */
+
+const aptSearchInput =
+document.getElementById(
+  "aptSearchInput"
+);
+
+const aptSearchBtn =
+document.getElementById(
+  "aptSearchBtn"
+);
+
+const aptSearchStatus =
+document.getElementById(
+  "aptSearchStatus"
+);
+
+const aptSearchResults =
+document.getElementById(
+  "aptSearchResults"
+);
+
+const APT_CACHE_KEY =
+"wooriapt_apt_list_v1";
+
+const APT_CACHE_TIME_KEY =
+"wooriapt_apt_list_time_v1";
+
+const APT_CACHE_MAX_AGE =
+12 * 60 * 60 * 1000;
+
+let apartmentList = null;
+let apartmentLoadPromise = null;
+
+if(apt && aptSearchInput){
+  aptSearchInput.value =
+  [locationName, apt]
+  .filter(Boolean)
+  .join(" ");
+}
+
+function normalizeSearchText(value){
+  return String(value || "")
+  .toLowerCase()
+  .replace(/\s+/g, "");
+}
+
+function readApartmentCache(){
+  try{
+    const savedAt = Number(
+      localStorage.getItem(APT_CACHE_TIME_KEY) || "0"
+    );
+
+    if(!savedAt || Date.now() - savedAt > APT_CACHE_MAX_AGE){
+      return null;
+    }
+
+    const raw = localStorage.getItem(APT_CACHE_KEY);
+    if(!raw){
+      return null;
+    }
+
+    const parsed = JSON.parse(raw);
+    if(!Array.isArray(parsed)){
+      return null;
+    }
+
+    return parsed;
+  }catch(error){
+    return null;
+  }
+}
+
+function saveApartmentCache(list){
+  try{
+    const compact = list.map(function(item){
+      return [
+        item.kaptName || "",
+        item.region || "",
+        item.city || "",
+        item.dong || "",
+        item.detail || ""
+      ];
+    });
+
+    localStorage.setItem(APT_CACHE_KEY, JSON.stringify(compact));
+    localStorage.setItem(APT_CACHE_TIME_KEY, String(Date.now()));
+  }catch(error){
+  }
+}
+
+function restoreCompactApartments(list){
+  return list.map(function(item){
+    if(Array.isArray(item)){
+      return {
+        kaptName:item[0] || "",
+        region:item[1] || "",
+        city:item[2] || "",
+        dong:item[3] || "",
+        detail:item[4] || ""
+      };
+    }
+    return item;
+  });
+}
+
+async function fetchApartmentPage(pageNo){
+  const response = await fetch(
+    "/api/apt-list?pageNo=" +
+    encodeURIComponent(pageNo) +
+    "&numOfRows=1000",
+    {
+      method:"GET",
+      headers:{Accept:"application/json"}
+    }
+  );
+
+  if(!response.ok){
+    throw new Error("아파트 목록을 불러오지 못했습니다.");
+  }
+
+  const data = await response.json();
+
+  if(!data || data.ok !== true){
+    throw new Error(
+      data && data.message
+      ? data.message
+      : "아파트 목록을 불러오지 못했습니다."
+    );
+  }
+
+  return data;
+}
+
+async function loadAllApartments(){
+  if(apartmentList){
+    return apartmentList;
+  }
+
+  if(apartmentLoadPromise){
+    return apartmentLoadPromise;
+  }
+
+  apartmentLoadPromise = (async function(){
+    const cached = readApartmentCache();
+
+    if(cached){
+      apartmentList = restoreCompactApartments(cached);
+      return apartmentList;
+    }
+
+    aptSearchStatus.textContent =
+    "전국 아파트 목록을 불러오는 중입니다.";
+
+    const first = await fetchApartmentPage(1);
+
+    let all = Array.isArray(first.apartments)
+    ? first.apartments.slice()
+    : [];
+
+    const totalCount = Number(first.totalCount || all.length);
+    const totalPages = Math.max(1, Math.ceil(totalCount / 1000));
+
+    for(let start=2; start<=totalPages; start+=4){
+      const jobs = [];
+
+      for(
+        let page=start;
+        page<start+4 && page<=totalPages;
+        page++
+      ){
+        jobs.push(fetchApartmentPage(page));
+      }
+
+      const pages = await Promise.all(jobs);
+
+      pages.forEach(function(pageData){
+        if(pageData && Array.isArray(pageData.apartments)){
+          all = all.concat(pageData.apartments);
+        }
+      });
+    }
+
+    apartmentList = all;
+    saveApartmentCache(apartmentList);
+
+    aptSearchStatus.textContent =
+    "전국 아파트 " +
+    apartmentList.length.toLocaleString() +
+    "개 검색 준비가 완료되었습니다.";
+
+    return apartmentList;
+  })().catch(function(error){
+    apartmentLoadPromise = null;
+    throw error;
+  });
+
+  return apartmentLoadPromise;
+}
+
+function showApartmentResults(list){
+  aptSearchResults.innerHTML = "";
+
+  if(!list.length){
+    aptSearchResults.classList.remove("show");
+    aptSearchStatus.textContent = "검색 결과가 없습니다.";
+    return;
+  }
+
+  const visible = list.slice(0,30);
+
+  visible.forEach(function(item){
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "apt-result";
+
+    const name = document.createElement("span");
+    name.className = "apt-result-name";
+    name.textContent = item.kaptName || "아파트";
+
+    const address = document.createElement("span");
+    address.className = "apt-result-address";
+    address.textContent = [
+      item.region,
+      item.city,
+      item.dong,
+      item.detail
+    ]
+    .filter(Boolean)
+    .join(" ");
+
+    button.appendChild(name);
+    button.appendChild(address);
+
+    button.addEventListener("click", function(){
+      const next = new URLSearchParams();
+
+      if(selectedType){
+        next.set("type", selectedType);
+      }
+      if(item.region){
+        next.set("region", item.region);
+      }
+      if(item.city){
+        next.set("city", item.city);
+      }
+      if(item.dong){
+        next.set("dong", item.dong);
+      }
+      if(item.kaptName){
+        next.set("apt", item.kaptName);
+      }
+
+      location.href = "/apt.html?" + next.toString();
+    });
+
+    aptSearchResults.appendChild(button);
+  });
+
+  aptSearchResults.classList.add("show");
+
+  aptSearchStatus.textContent =
+  list.length.toLocaleString() +
+  "개가 검색되었습니다." +
+  (
+    list.length > 30
+    ? " 상위 30개를 표시합니다."
+    : ""
+  );
+}
+
+async function searchApartments(){
+  const keyword = String(aptSearchInput.value || "").trim();
+
+  if(keyword.length < 2){
+    aptSearchResults.classList.remove("show");
+    aptSearchStatus.textContent =
+    "지역명 또는 아파트명을 2자 이상 입력해 주세요.";
+    aptSearchInput.focus();
+    return;
+  }
+
+  aptSearchBtn.disabled = true;
+  aptSearchBtn.textContent = "검색중";
+
+  try{
+    const list = await loadAllApartments();
+    const normalizedKeyword = normalizeSearchText(keyword);
+
+    const results = list.filter(function(item){
+      const target = normalizeSearchText(
+        [
+          item.region,
+          item.city,
+          item.dong,
+          item.detail,
+          item.kaptName
+        ]
+        .filter(Boolean)
+        .join(" ")
+      );
+
+      return target.includes(normalizedKeyword);
+    });
+
+    showApartmentResults(results);
+  }catch(error){
+    aptSearchResults.classList.remove("show");
+    aptSearchStatus.textContent =
+    "아파트 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.";
+  }finally{
+    aptSearchBtn.disabled = false;
+    aptSearchBtn.textContent = "검색";
+  }
+}
+
+aptSearchBtn.addEventListener(
+  "click",
+  searchApartments
+);
+
+aptSearchInput.addEventListener(
+  "keydown",
+  function(event){
+    if(event.key === "Enter"){
+      event.preventDefault();
+      searchApartments();
+    }
+  }
+);
 
 
 /* ===============================
