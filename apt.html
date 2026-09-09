@@ -1015,6 +1015,8 @@ if(apt && aptSearchInput){
 function normalizeSearchText(value){
   return String(value || "")
   .toLowerCase()
+  .replace(/매매|전세|월세|매수|임대/g, "")
+  .replace(/아파트/g, "")
   .replace(/\s+/g, "");
 }
 
