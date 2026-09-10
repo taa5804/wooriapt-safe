@@ -593,6 +593,84 @@ export default async function handler(req, res) {
     }
 
 
+    /*
+      1차 회원 공인중개사 알림 자동 시작
+      ars-batch의 round 1은 회원만 처리
+    */
+
+    try {
+
+      const protocol =
+        req.headers[
+          "x-forwarded-proto"
+        ] || "https";
+
+
+      const host =
+        req.headers.host;
+
+
+      if (host) {
+
+        const arsUrl =
+          `${protocol}://${host}` +
+          `/api/ars-batch`;
+
+
+        const arsResponse =
+          await fetch(
+            arsUrl,
+            {
+              method:
+                "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify({
+                  requestNumber:
+                    requestNumber,
+
+                  round:
+                    1
+                })
+            }
+          );
+
+
+        const arsData =
+          await arsResponse
+            .json()
+            .catch(
+              () => null
+            );
+
+
+        if (
+          !arsResponse.ok
+        ) {
+
+          console.error(
+            "first member notification failed:",
+            arsData
+          );
+        }
+      }
+
+    } catch (
+      notificationError
+    ) {
+
+      console.error(
+        "first member notification error:",
+        notificationError
+      );
+    }
+
+
     return res.status(200).json({
 
       ok:
