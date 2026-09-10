@@ -253,6 +253,114 @@ export default async function handler(req, res) {
     }
 
 
+    /*
+      동일 휴대전화 매수요청 제한
+      - 동시에 OPEN 요청 1건만 가능
+      - 휴대전화번호 기준 전체 최대 2건
+    */
+
+    const existingRequestUrl =
+      `${SUPABASE_URL}` +
+      `/rest/v1/property_requests` +
+      `?phone=eq.` +
+      encodeURIComponent(
+        phone
+      ) +
+      `&select=id,request_number,status,sido,sigungu,dong` +
+      `&order=id.desc`;
+
+
+    const existingRequestResponse =
+      await fetch(
+        existingRequestUrl,
+        {
+          method:
+            "GET",
+
+          headers: {
+
+            apikey:
+              SUPABASE_SERVICE_ROLE_KEY,
+
+            Authorization:
+              `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+
+            Accept:
+              "application/json"
+          }
+        }
+      );
+
+
+    if (
+      !existingRequestResponse.ok
+    ) {
+
+      throw new Error(
+        "PROPERTY_REQUEST_CHECK_FAILED"
+      );
+    }
+
+
+    const existingRequests =
+      await existingRequestResponse.json();
+
+
+    const requestCount =
+      Array.isArray(
+        existingRequests
+      )
+        ? existingRequests.length
+        : 0;
+
+
+    const hasOpenRequest =
+      Array.isArray(
+        existingRequests
+      ) &&
+      existingRequests.some(
+        function(row) {
+
+          return (
+            String(
+              row.status || ""
+            )
+            .trim()
+            .toUpperCase() ===
+            "OPEN"
+          );
+        }
+      );
+
+
+    if (
+      hasOpenRequest
+    ) {
+
+      return res.status(409).json({
+        ok:
+          false,
+
+        message:
+          "현재 진행 중인 매수요청이 있습니다. 기존 요청이 종료된 후 다른 지역을 등록해 주세요."
+      });
+    }
+
+
+    if (
+      requestCount >= 2
+    ) {
+
+      return res.status(409).json({
+        ok:
+          false,
+
+        message:
+          "매수요청은 휴대전화번호 기준 최대 2개 지역까지만 등록할 수 있습니다."
+      });
+    }
+
+
     async function requestNumberExists(
       requestNumber
     ) {
@@ -482,84 +590,6 @@ export default async function handler(req, res) {
         message:
           "거래 요청 저장에 실패했습니다."
       });
-    }
-
-
-    /*
-      1차 ARS 자동 시작
-    */
-
-    try {
-
-      const protocol =
-        req.headers[
-          "x-forwarded-proto"
-        ] || "https";
-
-
-      const host =
-        req.headers.host;
-
-
-      if (host) {
-
-        const arsUrl =
-          `${protocol}://${host}` +
-          `/api/ars-batch`;
-
-
-        const arsResponse =
-          await fetch(
-            arsUrl,
-            {
-              method:
-                "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-                  requestNumber:
-                    requestNumber,
-
-                  round:
-                    1
-                })
-            }
-          );
-
-
-        const arsData =
-          await arsResponse
-            .json()
-            .catch(
-              () => null
-            );
-
-
-        if (
-          !arsResponse.ok
-        ) {
-          console.error(
-            "first ARS start failed:",
-            arsData
-          );
-        }
-
-      }
-
-    } catch (
-      arsError
-    ) {
-
-      console.error(
-        "first ARS call error:",
-        arsError
-      );
-
     }
 
 
