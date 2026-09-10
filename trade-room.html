@@ -901,6 +901,49 @@ select{
 
     </div>
 
+
+    <div class="doc-row">
+
+      <div class="doc-head">
+        <div class="doc-title">
+          보증보험 · 공제증서
+          <span class="req">*</span>
+        </div>
+
+        <span id="docStatus7" class="doc-status">
+          미등록
+        </span>
+      </div>
+
+      <div class="file-area">
+
+        <div id="docName7" class="file-name">
+          선택된 파일 없음
+        </div>
+
+        <label class="file-label">
+          파일 선택
+
+          <input
+            type="file"
+            class="doc-input"
+            data-index="7"
+            accept=".jpg,.jpeg,.png,.pdf">
+        </label>
+
+        <button
+          type="button"
+          id="viewDoc7"
+          class="view-btn"
+          onclick="viewDocument(7)"
+          disabled>
+          보기
+        </button>
+
+      </div>
+
+    </div>
+
   </div>
 
 
@@ -1259,7 +1302,7 @@ $("roomCode").textContent = roomCode || "----";
 /* FILES */
 
 const documents = [
-  null,null,null,null,null,null,null
+  null,null,null,null,null,null,null,null
 ];
 
 
@@ -1448,7 +1491,7 @@ window.viewDocument = function(index){
 
 function requiredDocumentsComplete(){
 
-  return !!documents[0] && !!documents[1];
+  return !!documents[0] && !!documents[1] && !!documents[7];
 
 }
 
