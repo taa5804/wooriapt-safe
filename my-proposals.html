@@ -256,6 +256,50 @@ h1{
   cursor:not-allowed;
 }
 
+.additional-request-area{
+  margin-top:18px;
+  padding:14px;
+  border:1px solid #d7e5ef;
+  border-radius:12px;
+  background:#f6faff;
+}
+
+.additional-request-title{
+  margin-bottom:7px;
+  color:#173e60;
+  font-size:14px;
+  font-weight:900;
+}
+
+.additional-request-help{
+  margin-bottom:11px;
+  color:#718391;
+  font-size:11px;
+  line-height:1.55;
+}
+
+.additional-request-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.additional-request-btn{
+  width:100%;
+  height:44px;
+  border:0;
+  border-radius:10px;
+  background:#1165d7;
+  color:#fff;
+  font-size:14px;
+  font-weight:900;
+}
+
+.additional-request-btn:disabled{
+  background:#b9c6d0;
+  cursor:not-allowed;
+}
+
 .notice{
   margin-top:16px;
   padding:13px;
@@ -384,6 +428,40 @@ h1{
   <div id="propertyList"></div>
 
 
+  <!-- 추가 요청 -->
+
+  <div class="additional-request-area">
+
+    <div class="additional-request-title">
+      추가 매물 요청
+    </div>
+
+    <div class="additional-request-help">
+      더 많은 매물을 확인하려면 매수자가 직접 추가 요청을 눌러주세요.
+    </div>
+
+    <div class="additional-request-buttons">
+
+      <button
+        id="secondRequestBtn"
+        class="additional-request-btn"
+        type="button">
+        2차 요청
+      </button>
+
+      <button
+        id="thirdRequestBtn"
+        class="additional-request-btn"
+        type="button"
+        disabled>
+        3차 요청
+      </button>
+
+    </div>
+
+  </div>
+
+
   <!-- 결정 -->
 
   <div class="action-area">
@@ -467,6 +545,17 @@ const msg =
   );
 
 
+const secondRequestBtn =
+  document.getElementById(
+    "secondRequestBtn"
+  );
+
+const thirdRequestBtn =
+  document.getElementById(
+    "thirdRequestBtn"
+  );
+
+
 let requestNumber = "";
 
 let testMode = false;
@@ -474,6 +563,10 @@ let testMode = false;
 let properties = [];
 
 let selectedId = null;
+
+let secondRequestDone = false;
+
+let thirdRequestDone = false;
 
 
 /*
@@ -518,6 +611,50 @@ let selectedId = null;
       "매수요청번호가 없습니다.";
 
   }
+
+})();
+
+
+/*
+  2차·3차 요청 버튼 상태
+*/
+
+(function restoreAdditionalRequestState(){
+
+  if(!requestNumber && !testMode){
+
+    secondRequestBtn.disabled=true;
+    thirdRequestBtn.disabled=true;
+
+    return;
+  }
+
+
+  const key =
+    testMode
+    ? "5804"
+    : requestNumber;
+
+
+  secondRequestDone =
+    localStorage.getItem(
+      "wooriapt_ars_round_2_"+key
+    ) === "done";
+
+
+  thirdRequestDone =
+    localStorage.getItem(
+      "wooriapt_ars_round_3_"+key
+    ) === "done";
+
+
+  secondRequestBtn.disabled =
+    secondRequestDone;
+
+
+  thirdRequestBtn.disabled =
+    !secondRequestDone ||
+    thirdRequestDone;
 
 })();
 
@@ -793,6 +930,195 @@ function updateSelection(){
   decisionBtn.disabled=true;
 
 }
+
+
+/*
+  2차·3차 추가 요청
+*/
+
+async function runAdditionalRequest(round){
+
+  const targetRequestNumber =
+    testMode
+    ? "5804"
+    : requestNumber;
+
+
+  if(!targetRequestNumber){
+
+    showMsg(
+      "매수요청번호를 확인해 주세요.",
+      false
+    );
+
+    return false;
+  }
+
+
+  const response =
+    await fetch(
+      "/api/ars-batch",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          requestNumber:targetRequestNumber,
+          round:round
+        })
+      }
+    );
+
+
+  const data =
+    await response
+      .json()
+      .catch(
+        function(){
+          return null;
+        }
+      );
+
+
+  if(!response.ok){
+
+    throw new Error(
+      data && data.message
+      ? data.message
+      : "추가 요청 처리 중 오류가 발생했습니다."
+    );
+  }
+
+
+  return true;
+}
+
+
+secondRequestBtn.addEventListener(
+  "click",
+  async function(){
+
+    if(secondRequestDone){
+      return;
+    }
+
+
+    secondRequestBtn.disabled=true;
+
+
+    try{
+
+      const ok =
+        await runAdditionalRequest(2);
+
+
+      if(!ok){
+        secondRequestBtn.disabled=false;
+        return;
+      }
+
+
+      const key =
+        testMode
+        ? "5804"
+        : requestNumber;
+
+
+      secondRequestDone=true;
+
+
+      localStorage.setItem(
+        "wooriapt_ars_round_2_"+key,
+        "done"
+      );
+
+
+      thirdRequestBtn.disabled=false;
+
+
+      showMsg(
+        "2차 요청이 완료되었습니다.",
+        true
+      );
+
+    }catch(error){
+
+      secondRequestBtn.disabled=false;
+
+      showMsg(
+        error.message ||
+        "2차 요청 처리 중 오류가 발생했습니다.",
+        false
+      );
+
+    }
+
+  }
+);
+
+
+thirdRequestBtn.addEventListener(
+  "click",
+  async function(){
+
+    if(
+      !secondRequestDone ||
+      thirdRequestDone
+    ){
+      return;
+    }
+
+
+    thirdRequestBtn.disabled=true;
+
+
+    try{
+
+      const ok =
+        await runAdditionalRequest(3);
+
+
+      if(!ok){
+        thirdRequestBtn.disabled=false;
+        return;
+      }
+
+
+      const key =
+        testMode
+        ? "5804"
+        : requestNumber;
+
+
+      thirdRequestDone=true;
+
+
+      localStorage.setItem(
+        "wooriapt_ars_round_3_"+key,
+        "done"
+      );
+
+
+      showMsg(
+        "3차 요청이 완료되었습니다.",
+        true
+      );
+
+    }catch(error){
+
+      thirdRequestBtn.disabled=false;
+
+      showMsg(
+        error.message ||
+        "3차 요청 처리 중 오류가 발생했습니다.",
+        false
+      );
+
+    }
+
+  }
+);
 
 
 /*
