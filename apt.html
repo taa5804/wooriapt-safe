@@ -505,7 +505,7 @@ h1{
         <span>✓ 제안을 한곳에서 비교</span>
       </div>
 
-      <a class="buyer-cta" id="buyerCta" href="/request.html?type=sale">
+      <a class="buyer-cta" id="buyerCta" href="/">
         매수 아파트 등록하기 <span aria-hidden="true">→</span>
       </a>
 
@@ -1015,8 +1015,6 @@ if(apt && aptSearchInput){
 function normalizeSearchText(value){
   return String(value || "")
   .toLowerCase()
-  .replace(/매매|전세|월세|매수|임대/g, "")
-  .replace(/아파트/g, "")
   .replace(/\s+/g, "");
 }
 
