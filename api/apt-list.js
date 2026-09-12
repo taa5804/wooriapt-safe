@@ -30,47 +30,14 @@ export default async function handler(req, res) {
 
 
   /* =========================================
-     공공데이터포털 인증키
-     Vercel Environment Variables
-     MOLIT_APT_API_KEY
+     Supabase 설정
   ========================================= */
 
-  const storedServiceKey =
-    process.env.MOLIT_APT_API_KEY;
+  const SUPABASE_URL =
+    "https://dcysjuxyjqtvkihdsjvv.supabase.co";
 
-
-  if (!storedServiceKey) {
-
-    return res.status(500).json({
-      ok: false,
-      message: "공동주택 API 인증키가 설정되지 않았습니다."
-    });
-
-  }
-
-
-  /*
-    공공데이터포털의 Encoding 인증키를
-    Vercel에 저장한 경우 URLSearchParams에서
-    다시 Encoding되는 것을 방지하기 위해
-    먼저 원래 값으로 복원합니다.
-  */
-
-  let serviceKey =
-    storedServiceKey.trim();
-
-
-  try {
-
-    serviceKey =
-      decodeURIComponent(serviceKey);
-
-  } catch (error) {
-
-    serviceKey =
-      storedServiceKey.trim();
-
-  }
+  const SUPABASE_KEY =
+    "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
 
 
   /* =========================================
@@ -98,45 +65,39 @@ export default async function handler(req, res) {
     );
 
 
+  const offset =
+    (pageNo - 1) * numOfRows;
+
+
+  const end =
+    offset + numOfRows - 1;
+
+
   /* =========================================
-     국토교통부 공동주택 단지 목록 API
+     Supabase safe_apartments 조회
   ========================================= */
-
-  const endpoint =
-    "https://apis.data.go.kr/1613000/AptListService4/getTotalAptList4";
-
 
   const query =
     new URLSearchParams();
 
-
   query.set(
-    "serviceKey",
-    serviceKey
+    "select",
+    "시도,시군구,읍면,동리,단지명"
   );
 
   query.set(
-    "pageNo",
-    String(pageNo)
-  );
-
-  query.set(
-    "numOfRows",
-    String(numOfRows)
+    "order",
+    "시도.asc,시군구.asc,읍면.asc,동리.asc,단지명.asc"
   );
 
 
   const apiUrl =
-    endpoint +
-    "?" +
+    SUPABASE_URL +
+    "/rest/v1/safe_apartments?" +
     query.toString();
 
 
   try {
-
-    /* =========================================
-       국토교통부 API 호출
-    ========================================= */
 
     const response =
       await fetch(
@@ -144,7 +105,22 @@ export default async function handler(req, res) {
         {
           method: "GET",
           headers: {
-            Accept: "application/json"
+
+            apikey:
+              SUPABASE_KEY,
+
+            Authorization:
+              "Bearer " + SUPABASE_KEY,
+
+            Accept:
+              "application/json",
+
+            Prefer:
+              "count=exact",
+
+            Range:
+              offset + "-" + end
+
           }
         }
       );
@@ -152,10 +128,21 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
 
+      const errorText =
+        await response.text();
+
+      console.error(
+        "SUPABASE APT LIST ERROR:",
+        errorText
+      );
+
+
       return res.status(502).json({
         ok: false,
-        message: "국토교통부 공동주택 API 호출에 실패했습니다.",
-        status: response.status
+        message:
+          "아파트 목록을 불러오지 못했습니다.",
+        status:
+          response.status
       });
 
     }
@@ -166,101 +153,135 @@ export default async function handler(req, res) {
 
 
     /* =========================================
-       응답 구조 확인
-    ========================================= */
+       전체 개수 확인
+  ========================================= */
 
-    const responseData =
-      data &&
-      data.response
-        ? data.response
-        : {};
-
-
-    const header =
-      responseData.header || {};
+    const contentRange =
+      response.headers.get(
+        "content-range"
+      ) || "";
 
 
-    const body =
-      responseData.body || {};
+    let totalCount =
+      data.length;
 
 
     if (
-      header.resultCode &&
-      String(header.resultCode) !== "00"
+      contentRange &&
+      contentRange.includes("/")
     ) {
 
-      return res.status(502).json({
-        ok: false,
-        message:
-          header.resultMsg ||
-          "공동주택 데이터를 불러오지 못했습니다.",
-        resultCode:
-          header.resultCode
-      });
+      const total =
+        contentRange
+          .split("/")
+          .pop();
+
+
+      if (
+        total &&
+        total !== "*"
+      ) {
+
+        const parsed =
+          Number(total);
+
+
+        if (
+          Number.isFinite(parsed)
+        ) {
+
+          totalCount =
+            parsed;
+
+        }
+
+      }
 
     }
 
 
     /* =========================================
-       아파트 목록 정리
-    ========================================= */
-
-    let items = [];
-
-
-    if (
-      body.items &&
-      Array.isArray(body.items.item)
-    ) {
-
-      items =
-        body.items.item;
-
-    } else if (
-      body.items &&
-      body.items.item
-    ) {
-
-      items = [
-        body.items.item
-      ];
-
-    } else if (
-      Array.isArray(body.items)
-    ) {
-
-      items =
-        body.items;
-
-    }
-
+       기존 apt-list 응답 구조 유지
+  ========================================= */
 
     const apartments =
-      items.map(
-        function(item) {
+      data.map(
+        function(item, index) {
+
+          const eupmyeon =
+            item["읍면"] || "";
+
+          const dongri =
+            item["동리"] || "";
+
 
           return {
 
+            /*
+              기존 국토부 kaptCode 대신
+              내부 임시 식별값
+            */
+
             kaptCode:
-              item.kaptCode || "",
+              String(
+                offset +
+                index +
+                1
+              ),
+
+
+            /*
+              아파트명
+            */
 
             kaptName:
-              item.kaptName || "",
+              item["단지명"] || "",
+
+
+            /*
+              기존 국토부 법정동코드는
+              현재 safe_apartments에 없으므로 공백 유지
+            */
 
             bjdCode:
-              item.bjdCode || "",
+              "",
+
+
+            /*
+              시도
+            */
 
             region:
-              item.as1 || "",
+              item["시도"] || "",
+
+
+            /*
+              시군구
+            */
 
             city:
-              item.as2 || "",
+              item["시군구"] || "",
+
+
+            /*
+              읍면 + 동리
+            */
 
             dong:
-              item.as3 || "",
+              [
+                eupmyeon,
+                dongri
+              ]
+              .filter(Boolean)
+              .join(" "),
+
+
+            /*
+              상세 지역
+            */
 
             detail:
-              item.as4 || ""
+              dongri || eupmyeon || ""
 
           };
 
@@ -270,29 +291,20 @@ export default async function handler(req, res) {
 
     /* =========================================
        우리아파트 안심거래용 응답
-    ========================================= */
+  ========================================= */
 
     return res.status(200).json({
 
       ok: true,
 
       pageNo:
-        Number(
-          body.pageNo ||
-          pageNo
-        ),
+        pageNo,
 
       numOfRows:
-        Number(
-          body.numOfRows ||
-          numOfRows
-        ),
+        numOfRows,
 
       totalCount:
-        Number(
-          body.totalCount ||
-          apartments.length
-        ),
+        totalCount,
 
       count:
         apartments.length,
@@ -306,7 +318,7 @@ export default async function handler(req, res) {
   } catch (error) {
 
     console.error(
-      "APT LIST API ERROR:",
+      "SAFE APARTMENTS API ERROR:",
       error
     );
 
@@ -316,7 +328,7 @@ export default async function handler(req, res) {
       ok: false,
 
       message:
-        "공동주택 데이터를 불러오는 중 오류가 발생했습니다."
+        "아파트 데이터를 불러오는 중 오류가 발생했습니다."
 
     });
 
