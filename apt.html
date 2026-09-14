@@ -1765,7 +1765,6 @@ body.menu-open{
     이용료 확인
   </button>
 
-
 </section>
 
 
@@ -2950,6 +2949,40 @@ calcBtn
             "nearest"
 
         });
+
+    }
+  );
+
+        return;
+
+      }
+
+
+      /*
+        중요:
+        VAT 제외 플랫폼 서비스 이용료를 저장합니다.
+        service-fee-payment.html에서
+        VAT 10%를 한 번만 계산합니다.
+      */
+
+      localStorage
+        .setItem(
+          "wooriapt_service_fee",
+          String(
+            calculatedPlatformBase
+          )
+        );
+
+
+      localStorage
+        .setItem(
+          "wooriapt_service_type",
+          currentType
+        );
+
+
+      location.href =
+        "/service-fee-payment.html";
 
     }
   );
