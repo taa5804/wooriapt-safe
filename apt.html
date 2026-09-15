@@ -2509,8 +2509,8 @@ typeButtons.forEach(
           );
 
 
-        paymentBtn.style.display =
-          "none";
+        paymentBtn?.style && (paymentBtn.style.display =
+          "none");
 
 
         calculatedPlatformBase =
@@ -2965,6 +2965,10 @@ calcBtn
         );
 
 
+      paymentBtn?.style && (paymentBtn.style.display =
+        "block");
+
+
       result
         .scrollIntoView({
 
@@ -2985,7 +2989,7 @@ calcBtn
 ========================= */
 
 paymentBtn
-  .addEventListener(
+  ?.addEventListener(
     "click",
     function(){
 
