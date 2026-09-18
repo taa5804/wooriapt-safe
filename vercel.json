@@ -29,6 +29,18 @@
       "destination": "/api/apt-page?mode=broker-sitemap"
     },
     {
+      "source": "/mart-search/:region/:city/:place/:mart",
+      "destination": "/api/mart-page?region=:region&city=:city&place=:place&mart=:mart"
+    },
+    {
+      "source": "/sitemaps/marts-:page.xml",
+      "destination": "/api/mart-sitemap?page=:page"
+    },
+    {
+      "source": "/mart-sitemap.xml",
+      "destination": "/api/mart-sitemap-index"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
     }
