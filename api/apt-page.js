@@ -737,6 +737,14 @@ async function handleSitemap(
       new Set();
 
 
+    if (page === 1) {
+      urlSet.add(
+        SITE_ORIGIN +
+        "/broker-landing.html"
+      );
+    }
+
+
     const tradeTypes =
       [
         "sale",
