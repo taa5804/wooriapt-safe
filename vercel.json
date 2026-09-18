@@ -21,8 +21,12 @@
       "destination": "/api/apt-page?mode=sitemap-index"
     },
     {
+      "source": "/broker-search/:region/:city/:place",
+      "destination": "/api/apt-page?mode=broker-page&region=:region&city=:city&place=:place"
+    },
+    {
       "source": "/broker-sitemap.xml",
-      "destination": "/api/broker-page?mode=sitemap-index"
+      "destination": "/api/apt-page?mode=broker-sitemap"
     },
     {
       "source": "/sitemap.xml",
