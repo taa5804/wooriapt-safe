@@ -1351,7 +1351,7 @@ h1 {
 
       <a
         class="cta"
-        href="/"
+        href="/apt.html"
       >
         매수 아파트 등록하기
       </a>
