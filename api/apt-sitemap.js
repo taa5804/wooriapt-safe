@@ -1,23 +1,9 @@
-const SUPABASE_URL =
-  "https://dcysjuxyjqtvkihdsjvv.supabase.co";
+"use strict";
 
-const SUPABASE_KEY =
-  "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
+const SITE_URL = "https://wooriapt.app";
+const PAGE_SIZE = 5000;
 
-const SITE_ORIGIN =
-  "https://www.wooriapt.app";
-
-const ROWS_PER_SITEMAP =
-  1000;
-
-const TYPES = [
-  "sale",
-  "jeonse",
-  "monthly"
-];
-
-
-function xml(value) {
+function xmlEscape(value) {
   return String(value || "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -26,245 +12,137 @@ function xml(value) {
     .replace(/'/g, "&apos;");
 }
 
-
-function part(value) {
-  return encodeURIComponent(
-    String(value || "").trim()
-  );
+function pathEncode(value) {
+  return encodeURIComponent(String(value || "").trim());
 }
 
+function makeUrl(path) {
+  return `${SITE_URL}${path}`;
+}
 
-export default async function handler(
-  req,
-  res
-) {
+module.exports = async function handler(req, res) {
+  res.setHeader(
+    "Content-Type",
+    "application/xml; charset=utf-8"
+  );
+
+  res.setHeader(
+    "Cache-Control",
+    "s-maxage=3600, stale-while-revalidate=86400"
+  );
+
   if (req.method !== "GET") {
-    return res
-      .status(405)
-      .send("Method Not Allowed");
+    res.statusCode = 405;
+    return res.end("Method Not Allowed");
   }
-
-
-  const page =
-    Math.max(
-      1,
-      parseInt(
-        req.query.page || "1",
-        10
-      )
-    );
-
-
-  const offset =
-    (page - 1) *
-    ROWS_PER_SITEMAP;
-
-
-  const end =
-    offset +
-    ROWS_PER_SITEMAP -
-    1;
-
-
-  const query =
-    new URLSearchParams();
-
-
-  query.set(
-    "select",
-    "시도,시군구,읍면,동리,단지명"
-  );
-
-
-  query.set(
-    "order",
-    "시도.asc,시군구.asc,읍면.asc,동리.asc,단지명.asc"
-  );
-
 
   try {
-    const response =
-      await fetch(
-        SUPABASE_URL +
-        "/rest/v1/safe_apartments?" +
-        query.toString(),
-        {
-          headers: {
-            apikey:
-              SUPABASE_KEY,
+    const page = Math.max(
+      1,
+      parseInt(req.query.page || "1", 10)
+    );
 
-            Authorization:
-              "Bearer " +
-              SUPABASE_KEY,
+    const start = (page - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE - 1;
 
-            Range:
-              offset +
-              "-" +
-              end
-          }
-        }
-      );
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey =
+      process.env.SUPABASE_ANON_KEY ||
+      process.env.SUPABASE_KEY;
 
-
-    if (!response.ok) {
-      return res
-        .status(502)
-        .send(
-          "Sitemap data error"
-        );
+    if (!supabaseUrl || !supabaseKey) {
+      res.statusCode = 500;
+      return res.end("Supabase environment variables are missing.");
     }
 
+    const apiUrl =
+      `${supabaseUrl}/rest/v1/safe_apartments` +
+      `?select=${encodeURIComponent("시도,시군구,읍면,동리,단지명")}` +
+      `&order=${encodeURIComponent("시도.asc,시군구.asc,동리.asc,단지명.asc")}`;
 
-    const rows =
-      await response.json();
-
-
-    const urls =
-      new Set();
-
-
-    rows.forEach(
-      function(row) {
-
-        const region =
-          String(
-            row["시도"] || ""
-          ).trim();
-
-
-        const city =
-          String(
-            row["시군구"] || ""
-          ).trim();
-
-
-        const place =
-          [
-            row["읍면"],
-            row["동리"]
-          ]
-            .map(function(value) {
-              return String(
-                value || ""
-              ).trim();
-            })
-            .filter(Boolean)
-            .join(" ");
-
-
-        const apartment =
-          String(
-            row["단지명"] || ""
-          ).trim();
-
-
-        if (
-          !place ||
-          !apartment
-        ) {
-          return;
-        }
-
-
-        TYPES.forEach(
-          function(type) {
-
-            /*
-              지역형 주소
-
-              예:
-              양산동 아파트 매매
-            */
-
-            urls.add(
-              SITE_ORIGIN +
-              "/apt-search/" +
-              [
-                region,
-                city,
-                place,
-                type
-              ]
-                .map(part)
-                .join("/")
-            );
-
-
-            /*
-              단지형 주소
-
-              예:
-              양산동 호반아파트 매매
-            */
-
-            urls.add(
-              SITE_ORIGIN +
-              "/apt-search/" +
-              [
-                region,
-                city,
-                place,
-                apartment,
-                type
-              ]
-                .map(part)
-                .join("/")
-            );
-
-          }
-        );
-
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+        Range: `${start}-${end}`,
+        Prefer: "count=exact"
       }
-    );
+    });
 
-
-    const body =
-      Array.from(urls)
-        .map(function(url) {
-          return (
-            "<url>" +
-              "<loc>" +
-                xml(url) +
-              "</loc>" +
-            "</url>"
-          );
-        })
-        .join("");
-
-
-    res.setHeader(
-      "Content-Type",
-      "application/xml; charset=utf-8"
-    );
-
-
-    res.setHeader(
-      "Cache-Control",
-      "s-maxage=86400, stale-while-revalidate=604800"
-    );
-
-
-    return res
-      .status(200)
-      .send(
-        '<?xml version="1.0" encoding="UTF-8"?>' +
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-        body +
-        "</urlset>"
+    if (!response.ok) {
+      const message = await response.text();
+      throw new Error(
+        `Supabase request failed: ${response.status} ${message}`
       );
+    }
 
+    const rows = await response.json();
+    const urlSet = new Set();
+    const tradeTypes = ["sale", "jeonse", "monthly"];
+
+    for (const row of rows) {
+      const region = String(row["시도"] || "").trim();
+      const city = String(row["시군구"] || "").trim();
+      const place = String(
+        row["동리"] || row["읍면"] || ""
+      ).trim();
+      const apartment = String(row["단지명"] || "").trim();
+
+      if (!region || !city || !place) {
+        continue;
+      }
+
+      for (const type of tradeTypes) {
+        const regionPath =
+          `/apt-search/${pathEncode(region)}` +
+          `/${pathEncode(city)}` +
+          `/${pathEncode(place)}` +
+          `/${type}`;
+
+        urlSet.add(makeUrl(regionPath));
+
+        if (apartment) {
+          const apartmentPath =
+            `/apt-search/${pathEncode(region)}` +
+            `/${pathEncode(city)}` +
+            `/${pathEncode(place)}` +
+            `/${pathEncode(apartment)}` +
+            `/${type}`;
+
+          urlSet.add(makeUrl(apartmentPath));
+        }
+      }
+    }
+
+    const lastmod = new Date().toISOString().split("T")[0];
+
+    const urls = Array.from(urlSet)
+      .map((url) => {
+        return [
+          "  <url>",
+          `    <loc>${xmlEscape(url)}</loc>`,
+          `    <lastmod>${lastmod}</lastmod>`,
+          "    <changefreq>weekly</changefreq>",
+          "    <priority>0.8</priority>",
+          "  </url>"
+        ].join("\n");
+      })
+      .join("\n");
+
+    const xml = [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+      urls,
+      "</urlset>"
+    ].join("\n");
+
+    res.statusCode = 200;
+    return res.end(xml);
   } catch (error) {
+    console.error("apt-sitemap error:", error);
 
-    console.error(
-      "APT SITEMAP ERROR:",
-      error
-    );
-
-
-    return res
-      .status(500)
-      .send(
-        "Sitemap error"
-      );
+    res.statusCode = 500;
+    return res.end("Sitemap generation failed.");
   }
-}
+};
