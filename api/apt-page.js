@@ -661,48 +661,76 @@ async function handleSitemap(
       query.toString();
 
 
-    const response =
-      await fetch(
-        apiUrl,
-        {
-          method: "GET",
+    const rows = [];
 
-          headers: {
-            apikey:
-              SUPABASE_KEY,
 
-            Authorization:
-              "Bearer " +
-              SUPABASE_KEY,
+    for (
+      let batchStart = start;
+      batchStart <= end;
+      batchStart += 1000
+    ) {
+      const batchEnd =
+        Math.min(
+          batchStart + 999,
+          end
+        );
 
-            Range:
-              start +
-              "-" +
-              end,
 
-            Prefer:
-              "count=exact"
+      const response =
+        await fetch(
+          apiUrl,
+          {
+            method: "GET",
+
+            headers: {
+              apikey:
+                SUPABASE_KEY,
+
+              Authorization:
+                "Bearer " +
+                SUPABASE_KEY,
+
+              Range:
+                batchStart +
+                "-" +
+                batchEnd,
+
+              Prefer:
+                "count=exact"
+            }
           }
-        }
+        );
+
+
+      if (!response.ok) {
+        const message =
+          await response.text();
+
+
+        throw new Error(
+          "Supabase request failed: " +
+          response.status +
+          " " +
+          message
+        );
+      }
+
+
+      const batchRows =
+        await response.json();
+
+
+      rows.push(
+        ...batchRows
       );
 
 
-    if (!response.ok) {
-      const message =
-        await response.text();
-
-
-      throw new Error(
-        "Supabase request failed: " +
-        response.status +
-        " " +
-        message
-      );
+      if (
+        batchRows.length < 1000
+      ) {
+        break;
+      }
     }
-
-
-    const rows =
-      await response.json();
 
 
     const urlSet =
