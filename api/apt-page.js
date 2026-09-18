@@ -7,6 +7,8 @@ const SUPABASE_KEY =
 const SITE_ORIGIN =
   "https://www.wooriapt.app";
 
+const SITEMAP_PAGE_SIZE = 5000;
+
 
 function clean(value) {
   return String(value || "")
@@ -22,6 +24,23 @@ function html(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+
+function xmlEscape(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+
+function pathEncode(value) {
+  return encodeURIComponent(
+    String(value || "").trim()
+  );
 }
 
 
@@ -89,17 +108,758 @@ function addPlaceFilter(query, place) {
 }
 
 
-export default async function handler(
+/* =========================================
+   아파트 목록 API
+========================================= */
+
+async function handleApartmentList(
   req,
   res
 ) {
-  if (req.method !== "GET") {
-    return res
-      .status(405)
-      .send("Method Not Allowed");
+  res.setHeader(
+    "Content-Type",
+    "application/json; charset=utf-8"
+  );
+
+  res.setHeader(
+    "Cache-Control",
+    "s-maxage=3600, stale-while-revalidate=86400"
+  );
+
+
+  const pageNo =
+    Math.max(
+      1,
+      parseInt(
+        req.query.pageNo || "1",
+        10
+      )
+    );
+
+
+  const requestedRows =
+    parseInt(
+      req.query.numOfRows || "1000",
+      10
+    );
+
+
+  const numOfRows =
+    Math.min(
+      Math.max(
+        requestedRows,
+        1
+      ),
+      1000
+    );
+
+
+  const offset =
+    (pageNo - 1) *
+    numOfRows;
+
+
+  const end =
+    offset +
+    numOfRows -
+    1;
+
+
+  const rawKeyword =
+    String(
+      req.query.q || ""
+    ).trim();
+
+
+  const searchKeyword =
+    rawKeyword
+      .replace(
+        /매매|전세|월세|아파트/g,
+        " "
+      )
+      .replace(
+        /\s+/g,
+        " "
+      )
+      .trim();
+
+
+  const searchTokens =
+    searchKeyword
+      .split(" ")
+      .map(function(token) {
+        return token
+          .replace(
+            /[(),.*]/g,
+            ""
+          )
+          .trim();
+      })
+      .filter(function(token) {
+        return token.length >= 2;
+      })
+      .slice(0, 5);
+
+
+  const query =
+    new URLSearchParams();
+
+
+  query.set(
+    "select",
+    "시도,시군구,읍면,동리,단지명"
+  );
+
+
+  query.set(
+    "order",
+    "시도.asc,시군구.asc,읍면.asc,동리.asc,단지명.asc"
+  );
+
+
+  if (searchTokens.length === 1) {
+    const token =
+      searchTokens[0];
+
+
+    query.set(
+      "or",
+      "(" +
+      [
+        "시도",
+        "시군구",
+        "읍면",
+        "동리",
+        "단지명"
+      ]
+        .map(function(column) {
+          return (
+            column +
+            ".ilike.*" +
+            token +
+            "*"
+          );
+        })
+        .join(",") +
+      ")"
+    );
   }
 
 
+  if (searchTokens.length > 1) {
+    const tokenFilters =
+      searchTokens.map(
+        function(token) {
+          return (
+            "or(" +
+            [
+              "시도",
+              "시군구",
+              "읍면",
+              "동리",
+              "단지명"
+            ]
+              .map(
+                function(column) {
+                  return (
+                    column +
+                    ".ilike.*" +
+                    token +
+                    "*"
+                  );
+                }
+              )
+              .join(",") +
+            ")"
+          );
+        }
+      );
+
+
+    query.set(
+      "and",
+      "(" +
+      tokenFilters.join(",") +
+      ")"
+    );
+  }
+
+
+  const apiUrl =
+    SUPABASE_URL +
+    "/rest/v1/safe_apartments?" +
+    query.toString();
+
+
+  try {
+    const response =
+      await fetch(
+        apiUrl,
+        {
+          method: "GET",
+
+          headers: {
+            apikey:
+              SUPABASE_KEY,
+
+            Authorization:
+              "Bearer " +
+              SUPABASE_KEY,
+
+            Accept:
+              "application/json",
+
+            Prefer:
+              "count=exact",
+
+            Range:
+              offset +
+              "-" +
+              end
+          }
+        }
+      );
+
+
+    if (!response.ok) {
+      const errorText =
+        await response.text();
+
+
+      console.error(
+        "SUPABASE APT LIST ERROR:",
+        errorText
+      );
+
+
+      return res.status(502).json({
+        ok: false,
+
+        message:
+          "아파트 목록을 불러오지 못했습니다.",
+
+        status:
+          response.status
+      });
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const contentRange =
+      response.headers.get(
+        "content-range"
+      ) || "";
+
+
+    let totalCount =
+      data.length;
+
+
+    if (
+      contentRange &&
+      contentRange.includes("/")
+    ) {
+      const total =
+        contentRange
+          .split("/")
+          .pop();
+
+
+      if (
+        total &&
+        total !== "*"
+      ) {
+        const parsed =
+          Number(total);
+
+
+        if (
+          Number.isFinite(parsed)
+        ) {
+          totalCount =
+            parsed;
+        }
+      }
+    }
+
+
+    const apartments =
+      data.map(
+        function(item, index) {
+
+          const eupmyeon =
+            item["읍면"] || "";
+
+          const dongri =
+            item["동리"] || "";
+
+
+          return {
+            kaptCode:
+              String(
+                offset +
+                index +
+                1
+              ),
+
+            kaptName:
+              item["단지명"] || "",
+
+            bjdCode:
+              "",
+
+            region:
+              item["시도"] || "",
+
+            city:
+              item["시군구"] || "",
+
+            dong:
+              [
+                eupmyeon,
+                dongri
+              ]
+                .filter(Boolean)
+                .join(" "),
+
+            detail:
+              dongri ||
+              eupmyeon ||
+              ""
+          };
+        }
+      );
+
+
+    return res
+      .status(200)
+      .json({
+        ok: true,
+
+        pageNo:
+          pageNo,
+
+        numOfRows:
+          numOfRows,
+
+        totalCount:
+          totalCount,
+
+        count:
+          apartments.length,
+
+        apartments:
+          apartments
+      });
+
+  } catch (error) {
+
+    console.error(
+      "SAFE APARTMENTS API ERROR:",
+      error
+    );
+
+
+    return res
+      .status(500)
+      .json({
+        ok: false,
+
+        message:
+          "아파트 데이터를 불러오는 중 오류가 발생했습니다."
+      });
+  }
+}
+
+
+/* =========================================
+   아파트 사이트맵 인덱스
+========================================= */
+
+async function handleSitemapIndex(
+  req,
+  res
+) {
+  try {
+    const response =
+      await fetch(
+        SUPABASE_URL +
+        "/rest/v1/safe_apartments?select=단지명",
+        {
+          headers: {
+            apikey:
+              SUPABASE_KEY,
+
+            Authorization:
+              "Bearer " +
+              SUPABASE_KEY,
+
+            Prefer:
+              "count=exact",
+
+            Range:
+              "0-0"
+          }
+        }
+      );
+
+
+    if (!response.ok) {
+      return res
+        .status(502)
+        .send(
+          "Sitemap count error"
+        );
+    }
+
+
+    const contentRange =
+      response.headers.get(
+        "content-range"
+      ) || "0/0";
+
+
+    const totalCount =
+      Number(
+        contentRange
+          .split("/")
+          .pop()
+      ) || 0;
+
+
+    const pages =
+      Math.max(
+        1,
+        Math.ceil(
+          totalCount /
+          SITEMAP_PAGE_SIZE
+        )
+      );
+
+
+    let sitemapItems = "";
+
+
+    for (
+      let page = 1;
+      page <= pages;
+      page += 1
+    ) {
+      sitemapItems +=
+        "<sitemap>" +
+          "<loc>" +
+            SITE_ORIGIN +
+            "/sitemaps/apartments-" +
+            page +
+            ".xml" +
+          "</loc>" +
+        "</sitemap>";
+    }
+
+
+    res.setHeader(
+      "Content-Type",
+      "application/xml; charset=utf-8"
+    );
+
+
+    res.setHeader(
+      "Cache-Control",
+      "s-maxage=86400, stale-while-revalidate=604800"
+    );
+
+
+    return res
+      .status(200)
+      .send(
+        '<?xml version="1.0" encoding="UTF-8"?>' +
+        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+        sitemapItems +
+        "</sitemapindex>"
+      );
+
+  } catch (error) {
+
+    console.error(
+      "APT SITEMAP INDEX ERROR:",
+      error
+    );
+
+
+    return res
+      .status(500)
+      .send(
+        "Sitemap error"
+      );
+  }
+}
+
+
+/* =========================================
+   아파트 개별 사이트맵
+========================================= */
+
+async function handleSitemap(
+  req,
+  res
+) {
+  res.setHeader(
+    "Content-Type",
+    "application/xml; charset=utf-8"
+  );
+
+  res.setHeader(
+    "Cache-Control",
+    "s-maxage=3600, stale-while-revalidate=86400"
+  );
+
+
+  try {
+    const page =
+      Math.max(
+        1,
+        parseInt(
+          req.query.page || "1",
+          10
+        )
+      );
+
+
+    const start =
+      (page - 1) *
+      SITEMAP_PAGE_SIZE;
+
+
+    const end =
+      start +
+      SITEMAP_PAGE_SIZE -
+      1;
+
+
+    const query =
+      new URLSearchParams();
+
+
+    query.set(
+      "select",
+      "시도,시군구,읍면,동리,단지명"
+    );
+
+
+    query.set(
+      "order",
+      "시도.asc,시군구.asc,동리.asc,단지명.asc"
+    );
+
+
+    const apiUrl =
+      SUPABASE_URL +
+      "/rest/v1/safe_apartments?" +
+      query.toString();
+
+
+    const response =
+      await fetch(
+        apiUrl,
+        {
+          method: "GET",
+
+          headers: {
+            apikey:
+              SUPABASE_KEY,
+
+            Authorization:
+              "Bearer " +
+              SUPABASE_KEY,
+
+            Range:
+              start +
+              "-" +
+              end,
+
+            Prefer:
+              "count=exact"
+          }
+        }
+      );
+
+
+    if (!response.ok) {
+      const message =
+        await response.text();
+
+
+      throw new Error(
+        "Supabase request failed: " +
+        response.status +
+        " " +
+        message
+      );
+    }
+
+
+    const rows =
+      await response.json();
+
+
+    const urlSet =
+      new Set();
+
+
+    const tradeTypes =
+      [
+        "sale",
+        "jeonse",
+        "monthly"
+      ];
+
+
+    for (const row of rows) {
+      const region =
+        String(
+          row["시도"] || ""
+        ).trim();
+
+
+      const city =
+        String(
+          row["시군구"] || ""
+        ).trim();
+
+
+      const place =
+        String(
+          row["동리"] ||
+          row["읍면"] ||
+          ""
+        ).trim();
+
+
+      const apartment =
+        String(
+          row["단지명"] || ""
+        ).trim();
+
+
+      if (
+        !region ||
+        !city ||
+        !place
+      ) {
+        continue;
+      }
+
+
+      for (const type of tradeTypes) {
+        const regionPath =
+          "/apt-search/" +
+          pathEncode(region) +
+          "/" +
+          pathEncode(city) +
+          "/" +
+          pathEncode(place) +
+          "/" +
+          type;
+
+
+        urlSet.add(
+          SITE_ORIGIN +
+          regionPath
+        );
+
+
+        if (apartment) {
+          const apartmentPath =
+            "/apt-search/" +
+            pathEncode(region) +
+            "/" +
+            pathEncode(city) +
+            "/" +
+            pathEncode(place) +
+            "/" +
+            pathEncode(apartment) +
+            "/" +
+            type;
+
+
+          urlSet.add(
+            SITE_ORIGIN +
+            apartmentPath
+          );
+        }
+      }
+    }
+
+
+    const lastmod =
+      new Date()
+        .toISOString()
+        .split("T")[0];
+
+
+    const urls =
+      Array.from(urlSet)
+        .map(function(url) {
+          return [
+            "  <url>",
+            "    <loc>" +
+              xmlEscape(url) +
+              "</loc>",
+            "    <lastmod>" +
+              lastmod +
+              "</lastmod>",
+            "    <changefreq>weekly</changefreq>",
+            "    <priority>0.8</priority>",
+            "  </url>"
+          ].join("\n");
+        })
+        .join("\n");
+
+
+    const xml =
+      [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+
+        urls,
+
+        "</urlset>"
+      ].join("\n");
+
+
+    return res
+      .status(200)
+      .send(xml);
+
+  } catch (error) {
+
+    console.error(
+      "APT SITEMAP ERROR:",
+      error
+    );
+
+
+    return res
+      .status(500)
+      .send(
+        "Sitemap generation failed."
+      );
+  }
+}
+
+
+/* =========================================
+   아파트 자동 검색페이지
+========================================= */
+
+async function handleApartmentPage(
+  req,
+  res
+) {
   const region =
     clean(req.query.region);
 
@@ -654,4 +1414,58 @@ h1 {
         "페이지를 불러오는 중 오류가 발생했습니다."
       );
   }
+}
+
+
+/* =========================================
+   통합 진입점
+========================================= */
+
+export default async function handler(
+  req,
+  res
+) {
+  if (req.method !== "GET") {
+    return res
+      .status(405)
+      .send(
+        "Method Not Allowed"
+      );
+  }
+
+
+  const mode =
+    String(
+      req.query.mode || "page"
+    ).trim();
+
+
+  if (mode === "list") {
+    return handleApartmentList(
+      req,
+      res
+    );
+  }
+
+
+  if (mode === "sitemap-index") {
+    return handleSitemapIndex(
+      req,
+      res
+    );
+  }
+
+
+  if (mode === "sitemap") {
+    return handleSitemap(
+      req,
+      res
+    );
+  }
+
+
+  return handleApartmentPage(
+    req,
+    res
+  );
 }
