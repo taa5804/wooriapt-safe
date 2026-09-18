@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+Sitemap: https://www.wooriapt.app/sitemap.xml
 Sitemap: https://www.wooriapt.app/apt-sitemap.xml
