@@ -1324,7 +1324,30 @@ async function searchApartments(){
   aptSearchBtn.textContent = "검색중";
 
   try{
-    const list = await loadAllApartments();
+    const searchResponse = await fetch(
+      "/api/apt-list?q=" +
+      encodeURIComponent(searchKeyword) +
+      "&pageNo=1&numOfRows=1000",
+      {
+        method:"GET",
+        headers:{Accept:"application/json"}
+      }
+    );
+
+    const searchData = await searchResponse.json();
+
+    if(
+      !searchResponse.ok ||
+      !searchData ||
+      searchData.ok !== true
+    ){
+      throw new Error("아파트 목록을 불러오지 못했습니다.");
+    }
+
+    const list = Array.isArray(searchData.apartments)
+    ? searchData.apartments
+    : [];
+
     const searchTokens = searchKeyword
     .split(/\s+/)
     .map(normalizeSearchText)
