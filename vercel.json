@@ -1,6 +1,22 @@
 {
   "rewrites": [
     {
+      "source": "/apt-search/:region/:city/:place/:apartment/:type",
+      "destination": "/api/apt-page?region=:region&city=:city&place=:place&apartment=:apartment&type=:type"
+    },
+    {
+      "source": "/apt-search/:region/:city/:place/:type",
+      "destination": "/api/apt-page?region=:region&city=:city&place=:place&type=:type"
+    },
+    {
+      "source": "/sitemaps/apartments-:page.xml",
+      "destination": "/api/apt-sitemap?page=:page"
+    },
+    {
+      "source": "/apt-sitemap.xml",
+      "destination": "/api/apt-sitemap-index"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
     }
