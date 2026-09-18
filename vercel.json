@@ -21,6 +21,10 @@
       "destination": "/api/apt-page?mode=sitemap-index"
     },
     {
+      "source": "/broker-sitemap.xml",
+      "destination": "/api/broker-page?mode=sitemap-index"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
     }
