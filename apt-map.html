@@ -319,24 +319,11 @@ function getApartmentName(row) {
 }
 
 
-function getAddress(row) {
+/* =========================================
+   주소 후보 생성
+========================================= */
 
-  const fullAddress = getValue(
-    row,
-    [
-      "address",
-      "road_address",
-      "road_address_name",
-      "jibun_address",
-      "jibun_address_name",
-      "full_address"
-    ]
-  );
-
-  if (fullAddress) {
-    return fullAddress;
-  }
-
+function getAddressCandidates(row) {
 
   const region = getValue(
     row,
@@ -347,7 +334,6 @@ function getAddress(row) {
     ]
   );
 
-
   const city = getValue(
     row,
     [
@@ -357,17 +343,15 @@ function getAddress(row) {
     ]
   );
 
-
-  const place = getValue(
+  const dong = getValue(
     row,
     [
-      "place",
       "dong",
+      "place",
       "eupmyeondong",
       "town"
     ]
   );
-
 
   const detail = getValue(
     row,
@@ -376,22 +360,44 @@ function getAddress(row) {
     ]
   );
 
+  const apartment =
+    getApartmentName(row);
 
-  const apartment = getApartmentName(row);
+  const candidates = [
 
+    [region, city, dong, detail]
+      .filter(Boolean)
+      .join(" "),
+
+    [region, city, dong, apartment]
+      .filter(Boolean)
+      .join(" "),
+
+    [region, city, detail]
+      .filter(Boolean)
+      .join(" "),
+
+    [region, city, dong]
+      .filter(Boolean)
+      .join(" ")
+
+  ];
 
   return [
-    region,
-    city,
-    place,
-    detail,
-    apartment
-  ]
-    .filter(Boolean)
-    .filter((value, index, array) =>
-      array.indexOf(value) === index
+    ...new Set(
+      candidates.filter(Boolean)
     )
-    .join(" ");
+  ];
+
+}
+
+
+function getAddress(row) {
+
+  const candidates =
+    getAddressCandidates(row);
+
+  return candidates[0] || "";
 
 }
 
@@ -402,10 +408,16 @@ function getAddress(row) {
 
 function normalizeRows(data) {
 
+  if (
+    data &&
+    Array.isArray(data.apartments)
+  ) {
+    return data.apartments;
+  }
+
   if (Array.isArray(data)) {
     return data;
   }
-
 
   if (
     data &&
@@ -414,7 +426,6 @@ function normalizeRows(data) {
     return data.items;
   }
 
-
   if (
     data &&
     Array.isArray(data.data)
@@ -422,22 +433,12 @@ function normalizeRows(data) {
     return data.data;
   }
 
-
   if (
     data &&
     Array.isArray(data.rows)
   ) {
     return data.rows;
   }
-
-
-  if (
-    data &&
-    Array.isArray(data.apartments)
-  ) {
-    return data.apartments;
-  }
-
 
   return [];
 
@@ -473,7 +474,9 @@ async function loadApartments() {
   }
 
 
-  const data = await response.json();
+  const data =
+    await response.json();
+
 
   return normalizeRows(data);
 
@@ -481,10 +484,10 @@ async function loadApartments() {
 
 
 /* =========================================
-   주소 → 좌표
+   주소 1개 → 좌표
 ========================================= */
 
-async function geocode(address) {
+async function geocodeOne(address) {
 
   const url =
     GEOCODE_API +
@@ -492,12 +495,14 @@ async function geocode(address) {
     encodeURIComponent(address);
 
 
-  const response = await fetch(
-    url,
-    {
-      method: "GET"
-    }
-  );
+  const response =
+    await fetch(
+      url,
+      {
+        method: "GET",
+        cache: "no-store"
+      }
+    );
 
 
   if (!response.ok) {
@@ -505,25 +510,86 @@ async function geocode(address) {
   }
 
 
-  const data = await response.json();
+  const data =
+    await response.json();
 
 
   if (
     !data ||
-    data.ok !== true ||
-    !Number.isFinite(Number(data.latitude)) ||
-    !Number.isFinite(Number(data.longitude))
+    data.ok !== true
   ) {
-
     return null;
+  }
 
+
+  const lat =
+    Number(
+      data.latitude ??
+      data.y
+    );
+
+  const lng =
+    Number(
+      data.longitude ??
+      data.x
+    );
+
+
+  if (
+    !Number.isFinite(lat) ||
+    !Number.isFinite(lng)
+  ) {
+    return null;
   }
 
 
   return {
-    lat: Number(data.latitude),
-    lng: Number(data.longitude)
+    lat: lat,
+    lng: lng,
+    address: address
   };
+
+}
+
+
+/* =========================================
+   여러 주소 후보 → 좌표
+========================================= */
+
+async function geocodeApartment(row) {
+
+  const candidates =
+    getAddressCandidates(row);
+
+
+  for (
+    const address of candidates
+  ) {
+
+    try {
+
+      const position =
+        await geocodeOne(address);
+
+
+      if (position) {
+        return position;
+      }
+
+    } catch (error) {
+
+      console.warn(
+        "좌표 변환 실패:",
+        address,
+        error
+      );
+
+    }
+
+  }
+
+
+  return null;
 
 }
 
@@ -542,6 +608,7 @@ function createBalloon(
     getApartmentName(row);
 
   const address =
+    position.address ||
     getAddress(row);
 
   const message =
@@ -559,23 +626,26 @@ function createBalloon(
     '</div>';
 
 
-  const icon = L.divIcon({
-    className: "apt-balloon-wrap",
-    html: html,
-    iconSize: null,
-    iconAnchor: [0, 0]
-  });
+  const icon =
+    L.divIcon({
+      className:
+        "apt-balloon-wrap",
+      html: html,
+      iconSize: null,
+      iconAnchor: [0, 0]
+    });
 
 
-  const marker = L.marker(
-    [
-      position.lat,
-      position.lng
-    ],
-    {
-      icon: icon
-    }
-  );
+  const marker =
+    L.marker(
+      [
+        position.lat,
+        position.lng
+      ],
+      {
+        icon: icon
+      }
+    );
 
 
   const popup =
@@ -650,54 +720,32 @@ async function renderApartments() {
         targets[i];
 
 
-      const address =
-        getAddress(row);
+      const position =
+        await geocodeApartment(row);
 
 
-      if (!address) {
+      if (!position) {
         continue;
       }
 
 
-      try {
-
-        const position =
-          await geocode(address);
-
-
-        if (!position) {
-          continue;
-        }
-
-
-        const marker =
-          createBalloon(
-            row,
-            position,
-            i
-          );
-
-
-        markers.push(marker);
-
-        successCount++;
-
-
-        statusEl.textContent =
-          "아파트 " +
-          successCount +
-          "개를 지도에 표시했습니다.";
-
-
-      } catch (error) {
-
-        console.warn(
-          "좌표 변환 실패:",
-          address,
-          error
+      const marker =
+        createBalloon(
+          row,
+          position,
+          i
         );
 
-      }
+
+      markers.push(marker);
+
+      successCount++;
+
+
+      statusEl.textContent =
+        "아파트 " +
+        successCount +
+        "개를 지도에 표시했습니다.";
 
     }
 
