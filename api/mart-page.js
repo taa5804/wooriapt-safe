@@ -697,13 +697,13 @@ ${urls}
 
     res.statusCode = 500;
 
+    const cause =
+      error && error.cause
+        ? JSON.stringify(error.cause)
+        : "no cause";
 
     return res.end(
-      `Mart sitemap error: ${
-        String(
-          error.message || error
-        )
-      }`
+      `Mart sitemap error: ${String(error.message || error)} | cause: ${cause}`
     );
   }
 }
