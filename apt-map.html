@@ -306,6 +306,7 @@ function getApartmentName(row) {
   return getValue(
     row,
     [
+      "kaptName",
       "apartment",
       "apartment_name",
       "apt",
@@ -368,6 +369,14 @@ function getAddress(row) {
   );
 
 
+  const detail = getValue(
+    row,
+    [
+      "detail"
+    ]
+  );
+
+
   const apartment = getApartmentName(row);
 
 
@@ -375,9 +384,13 @@ function getAddress(row) {
     region,
     city,
     place,
+    detail,
     apartment
   ]
     .filter(Boolean)
+    .filter((value, index, array) =>
+      array.indexOf(value) === index
+    )
     .join(" ");
 
 }
