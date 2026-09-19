@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>우리아파트 지도</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans KR",
+        sans-serif;
+    }
+
+    #map {
+      width: 100%;
+      height: 100vh;
+      background: #f3f4f6;
+    }
+
+    .price-marker {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      min-width: 92px;
+      height: 42px;
+
+      padding: 0 14px;
+
+      background: #0b63ce;
+      color: #ffffff;
+
+      border-radius: 21px;
+
+      font-size: 15px;
+      font-weight: 700;
+
+      white-space: nowrap;
+
+      box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.25);
+
+      cursor: pointer;
+    }
+
+    .price-marker::after {
+      content: "";
+
+      position: absolute;
+
+      left: 50%;
+      bottom: -8px;
+
+      transform: translateX(-50%);
+
+      width: 0;
+      height: 0;
+
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 10px solid #0b63ce;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="map"></div>
+
+  <script
+    type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=여기에_카카오_JavaScript키"
+  ></script>
+
+  <script>
+    const latitude = 35.0218010353355;
+    const longitude = 126.790327011452;
+
+    const container = document.getElementById("map");
+
+    const centerPosition =
+      new kakao.maps.LatLng(
+        latitude,
+        longitude
+      );
+
+    const options = {
+      center: centerPosition,
+      level: 4
+    };
+
+    const map =
+      new kakao.maps.Map(
+        container,
+        options
+      );
+
+
+    /*
+      ========================================
+      가격 풍선
+      ========================================
+    */
+
+    const markerContent = document.createElement("div");
+
+    markerContent.className = "price-marker";
+
+    markerContent.innerText =
+      "거래비용 50%↓";
+
+
+    const customOverlay =
+      new kakao.maps.CustomOverlay({
+        position: centerPosition,
+        content: markerContent,
+        yAnchor: 1.35
+      });
+
+
+    customOverlay.setMap(map);
+
+
+    /*
+      ========================================
+      풍선 클릭
+      ========================================
+    */
+
+    markerContent.addEventListener(
+      "click",
+      function () {
+
+        alert(
+          "우리아파트 안심거래\n아파트 거래비용 50% 절약"
+        );
+
+      }
+    );
+  </script>
+
+</body>
+</html>
