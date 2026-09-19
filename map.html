@@ -100,6 +100,8 @@
 
       font-size: 14px;
       font-weight: 700;
+
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -113,6 +115,7 @@
   </div>
 
 
+  <!-- 카카오 지도 SDK -->
   <script
     type="text/javascript"
     src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=afb1495e5138ed5d431f6203b02a7a29&libraries=services"
@@ -122,9 +125,9 @@
   <script>
 
     /*
-    ========================================
-    지도
-    ========================================
+    ==================================================
+    지도 기본 설정
+    ==================================================
     */
 
     const map =
@@ -136,28 +139,35 @@
               36.5,
               127.8
             ),
+
           level: 13
         }
       );
 
 
-    const geocoder =
-      new kakao.maps.services.Geocoder();
+    /*
+    ==================================================
+    카카오 장소검색
+    ==================================================
+    */
+
+    const places =
+      new kakao.maps.services.Places();
 
 
     /*
-    ========================================
+    ==================================================
     표시된 풍선
-    ========================================
+    ==================================================
     */
 
     const overlays = [];
 
 
     /*
-    ========================================
-    아파트 단지 중복 제거
-    ========================================
+    ==================================================
+    중복 단지 방지
+    ==================================================
     */
 
     const apartmentKeys =
@@ -165,9 +175,9 @@
 
 
     /*
-    ========================================
-    주소값 찾기
-    ========================================
+    ==================================================
+    DB 값 읽기
+    ==================================================
     */
 
     function getValue(
@@ -195,19 +205,16 @@
       }
 
       return "";
-
     }
 
 
     /*
-    ========================================
-    지역 정보
-    ========================================
+    ==================================================
+    시도
+    ==================================================
     */
 
-    function getRegion(
-      item
-    ) {
+    function getRegion(item) {
 
       return getValue(
         item,
@@ -222,9 +229,13 @@
     }
 
 
-    function getCity(
-      item
-    ) {
+    /*
+    ==================================================
+    시군구
+    ==================================================
+    */
+
+    function getCity(item) {
 
       return getValue(
         item,
@@ -238,9 +249,13 @@
     }
 
 
-    function getDong(
-      item
-    ) {
+    /*
+    ==================================================
+    읍면동
+    ==================================================
+    */
+
+    function getDong(item) {
 
       return getValue(
         item,
@@ -258,14 +273,12 @@
 
 
     /*
-    ========================================
+    ==================================================
     아파트 단지명
-    ========================================
+    ==================================================
     */
 
-    function getApartmentName(
-      item
-    ) {
+    function getApartmentName(item) {
 
       return getValue(
         item,
@@ -283,14 +296,12 @@
 
 
     /*
-    ========================================
-    전체 주소가 DB에 있으면 우선 사용
-    ========================================
+    ==================================================
+    주소
+    ==================================================
     */
 
-    function getFullAddress(
-      item
-    ) {
+    function getFullAddress(item) {
 
       return getValue(
         item,
@@ -311,63 +322,131 @@
 
 
     /*
-    ========================================
-    검색 주소 생성
-    ========================================
+    ==================================================
+    검색어 만들기
+    ==================================================
     */
 
-    function makeSearchAddress(
-      item
-    ) {
+    function makeSearchWords(item) {
+
+      const region =
+        getRegion(item);
+
+      const city =
+        getCity(item);
+
+      const dong =
+        getDong(item);
+
+      const apartmentName =
+        getApartmentName(item);
 
       const fullAddress =
         getFullAddress(item);
 
 
-      const apartmentName =
-        getApartmentName(item);
+      const words = [];
 
 
       /*
-      전체 주소가 있으면
-      주소 + 단지명을 사용
+      1순위
+      전체주소 + 아파트명
       */
 
       if (
-        fullAddress
+        fullAddress &&
+        apartmentName
       ) {
 
-        return [
-          fullAddress,
+        words.push(
+          fullAddress +
+          " " +
           apartmentName
-        ]
-        .filter(Boolean)
-        .join(" ");
+        );
 
       }
 
 
       /*
-      전체 주소가 없으면
-      시도 + 시군구 + 동 + 단지명
+      2순위
+      시도 + 시군구 + 동 + 아파트명
+      */
+
+      if (
+        apartmentName
+      ) {
+
+        words.push(
+          [
+            region,
+            city,
+            dong,
+            apartmentName
+          ]
+          .filter(Boolean)
+          .join(" ")
+        );
+
+      }
+
+
+      /*
+      3순위
+      시군구 + 동 + 아파트명
+      */
+
+      if (
+        apartmentName
+      ) {
+
+        words.push(
+          [
+            city,
+            dong,
+            apartmentName
+          ]
+          .filter(Boolean)
+          .join(" ")
+        );
+
+      }
+
+
+      /*
+      4순위
+      아파트명만
+      */
+
+      if (
+        apartmentName
+      ) {
+
+        words.push(
+          apartmentName
+        );
+
+      }
+
+
+      /*
+      중복 검색어 제거
       */
 
       return [
-        getRegion(item),
-        getCity(item),
-        getDong(item),
-        apartmentName
-      ]
-      .filter(Boolean)
-      .join(" ");
+        ...new Set(
+          words.filter(
+            Boolean
+          )
+        )
+      ];
 
     }
 
 
     /*
-    ========================================
-    풍선 표시
-    ========================================
+    ==================================================
+    풍선 생성
+    ==================================================
     */
 
     function createApartmentOverlay(
@@ -420,9 +499,7 @@
 
 
       /*
-      ========================================
       풍선 클릭
-      ========================================
       */
 
       content.addEventListener(
@@ -442,107 +519,68 @@
 
 
     /*
-    ========================================
-    단지 1개 좌표 검색
-    ========================================
+    ==================================================
+    카카오 장소검색 1회
+    ==================================================
     */
 
-    function geocodeApartment(
-      item,
-      index,
-      total
+    function keywordSearch(
+      keyword
     ) {
 
       return new Promise(
-        function (
-          resolve
-        ) {
-
-          const searchAddress =
-            makeSearchAddress(item);
-
-
-          const apartmentName =
-            getApartmentName(item);
-
+        function(resolve) {
 
           if (
-            !searchAddress ||
-            !apartmentName
+            !keyword
           ) {
 
-            resolve();
-
+            resolve(null);
             return;
 
           }
 
 
-          /*
-          같은 단지 중복 방지
-          */
+          places.keywordSearch(
+            keyword,
 
-          const key =
-            searchAddress
-              .replace(
-                /\s+/g,
-                " "
-              )
-              .trim();
-
-
-          if (
-            apartmentKeys.has(key)
-          ) {
-
-            resolve();
-
-            return;
-
-          }
-
-
-          apartmentKeys.add(
-            key
-          );
-
-
-          geocoder.addressSearch(
-            searchAddress,
-            function (
+            function(
               result,
               status
             ) {
 
               if (
-                status ===
-                kakao.maps.services.Status.OK &&
-                result &&
-                result.length > 0
+                status !==
+                kakao.maps.services.Status.OK
               ) {
 
-                const position =
-                  new kakao.maps.LatLng(
-                    Number(
-                      result[0].y
-                    ),
-                    Number(
-                      result[0].x
-                    )
-                  );
-
-
-                createApartmentOverlay(
-                  item,
-                  position
-                );
+                resolve(null);
+                return;
 
               }
 
 
-              resolve();
+              if (
+                !result ||
+                result.length === 0
+              ) {
 
+                resolve(null);
+                return;
+
+              }
+
+
+              resolve(
+                result
+              );
+
+            },
+
+            {
+              size: 15
             }
+
           );
 
         }
@@ -552,9 +590,257 @@
 
 
     /*
-    ========================================
+    ==================================================
+    검색 결과에서 해당 아파트 선택
+    ==================================================
+    */
+
+    function findApartmentResult(
+      results,
+      apartmentName
+    ) {
+
+      if (
+        !results ||
+        results.length === 0
+      ) {
+
+        return null;
+
+      }
+
+
+      const cleanName =
+        String(
+          apartmentName || ""
+        )
+        .replace(
+          /\s+/g,
+          ""
+        )
+        .toLowerCase();
+
+
+      /*
+      아파트명이 결과에 포함된 결과 우선
+      */
+
+      for (
+        const result of results
+      ) {
+
+        const placeName =
+          String(
+            result.place_name || ""
+          )
+          .replace(
+            /\s+/g,
+            ""
+          )
+          .toLowerCase();
+
+
+        if (
+          cleanName &&
+          placeName.includes(
+            cleanName
+          )
+        ) {
+
+          return result;
+
+        }
+
+      }
+
+
+      /*
+      정확히 못 찾으면
+      첫 번째 결과 사용
+      */
+
+      return results[0];
+
+    }
+
+
+    /*
+    ==================================================
+    단지 1개 좌표 찾기
+    ==================================================
+    */
+
+    async function findApartmentPosition(
+      item
+    ) {
+
+      const apartmentName =
+        getApartmentName(item);
+
+
+      if (
+        !apartmentName
+      ) {
+
+        return null;
+
+      }
+
+
+      const searchWords =
+        makeSearchWords(item);
+
+
+      /*
+      검색어를 순서대로 시도
+      */
+
+      for (
+        const keyword of searchWords
+      ) {
+
+        const results =
+          await keywordSearch(
+            keyword
+          );
+
+
+        const result =
+          findApartmentResult(
+            results,
+            apartmentName
+          );
+
+
+        if (
+          result &&
+          result.y &&
+          result.x
+        ) {
+
+          return {
+            lat:
+              Number(
+                result.y
+              ),
+
+            lng:
+              Number(
+                result.x
+              )
+          };
+
+        }
+
+      }
+
+
+      return null;
+
+    }
+
+
+    /*
+    ==================================================
+    아파트 1개 처리
+    ==================================================
+    */
+
+    async function processApartment(
+      item
+    ) {
+
+      const apartmentName =
+        getApartmentName(item);
+
+
+      if (
+        !apartmentName
+      ) {
+
+        return false;
+
+      }
+
+
+      /*
+      단지 중복 제거 키
+      */
+
+      const key =
+        [
+          getRegion(item),
+          getCity(item),
+          getDong(item),
+          apartmentName
+        ]
+        .filter(Boolean)
+        .join("|")
+        .replace(
+          /\s+/g,
+          ""
+        );
+
+
+      if (
+        apartmentKeys.has(key)
+      ) {
+
+        return false;
+
+      }
+
+
+      apartmentKeys.add(
+        key
+      );
+
+
+      /*
+      실제 아파트 단지 좌표 검색
+      */
+
+      const position =
+        await findApartmentPosition(
+          item
+        );
+
+
+      if (
+        !position
+      ) {
+
+        return false;
+
+      }
+
+
+      const latLng =
+        new kakao.maps.LatLng(
+          position.lat,
+          position.lng
+        );
+
+
+      /*
+      풍선 표시
+      */
+
+      createApartmentOverlay(
+        item,
+        latLng
+      );
+
+
+      return true;
+
+    }
+
+
+    /*
+    ==================================================
     아파트 DB 불러오기
-    ========================================
+    ==================================================
     */
 
     async function loadApartments() {
@@ -570,6 +856,10 @@
         loading.innerText =
           "전국 아파트 DB를 불러오는 중...";
 
+
+        /*
+        기존 API 그대로 사용
+        */
 
         const response =
           await fetch(
@@ -597,11 +887,11 @@
 
 
         /*
-        API가 배열을 직접 반환하거나
-        객체 안에 배열을 반환하는 경우 대응
+        API 응답 형태 대응
         */
 
-        let apartments = [];
+        let apartments =
+          [];
 
 
         if (
@@ -664,14 +954,21 @@
 
 
         /*
-        ========================================
-        중요:
-        동 하나의 좌표를 쓰지 않고
-        각 아파트 단지별로 개별 검색
-        ========================================
+        ==================================================
+        중요
+
+        DB의 각 아파트 단지명을 기준으로
+        카카오 장소검색을 실시한다.
+
+        동 하나의 좌표를 사용하는 것이 아니다.
+        ==================================================
         */
 
+
         let completed =
+          0;
+
+        let found =
           0;
 
 
@@ -680,8 +977,8 @@
 
 
         /*
-        카카오 요청을 한꺼번에 폭주시키지 않도록
-        순차 처리
+        너무 많은 요청을 한꺼번에 보내지 않고
+        순차적으로 처리
         */
 
         for (
@@ -690,30 +987,56 @@
           i++
         ) {
 
-          await geocodeApartment(
-            apartments[i],
-            i,
-            total
-          );
+          const result =
+            await processApartment(
+              apartments[i]
+            );
 
 
           completed++;
+
+
+          if (
+            result
+          ) {
+
+            found++;
+
+          }
 
 
           loading.innerText =
             "아파트 단지 위치 확인 " +
             completed +
             " / " +
-            total;
+            total +
+            " · 표시 " +
+            found;
+
+
+          /*
+          카카오 검색 요청 사이에
+          짧은 간격을 둔다.
+          */
+
+          await new Promise(
+            function(resolve) {
+
+              setTimeout(
+                resolve,
+                80
+              );
+
+            }
+          );
 
         }
 
 
         /*
-        ========================================
-        전국 좌표를 모두 찾은 뒤
-        적당한 위치로 이동
-        ========================================
+        ==================================================
+        결과
+        ==================================================
         */
 
         if (
@@ -721,68 +1044,57 @@
         ) {
 
           loading.innerText =
-            "아파트 지도 표시 완료";
+            "아파트 지도 표시 완료 · " +
+            overlays.length +
+            "개";
 
 
           /*
           첫 번째 실제 아파트 위치로 이동
           */
 
-          const first =
-            apartments.find(
-              function (item) {
-
-                return (
-                  getApartmentName(
-                    item
-                  ) !== ""
-                );
-
-              }
-            );
+          const firstOverlay =
+            overlays[0];
 
 
-          if (first) {
+          if (
+            firstOverlay
+          ) {
 
-            const firstAddress =
-              makeSearchAddress(
-                first
+            const position =
+              firstOverlay.getPosition();
+
+
+            if (
+              position
+            ) {
+
+              map.setCenter(
+                position
               );
 
+              map.setLevel(
+                7
+              );
 
-            geocoder.addressSearch(
-              firstAddress,
-              function (
-                result,
-                status
-              ) {
-
-                if (
-                  status ===
-                  kakao.maps.services.Status.OK
-                ) {
-
-                  map.setCenter(
-                    new kakao.maps.LatLng(
-                      Number(
-                        result[0].y
-                      ),
-                      Number(
-                        result[0].x
-                      )
-                    )
-                  );
-
-                  map.setLevel(
-                    7
-                  );
-
-                }
-
-              }
-            );
+            }
 
           }
+
+
+          /*
+          3초 후 안내창 제거
+          */
+
+          setTimeout(
+            function() {
+
+              loading.style.display =
+                "none";
+
+            },
+            3000
+          );
 
         }
 
@@ -795,7 +1107,6 @@
 
 
       }
-
       catch (
         error
       ) {
@@ -814,9 +1125,9 @@
 
 
     /*
-    ========================================
+    ==================================================
     시작
-    ========================================
+    ==================================================
     */
 
     loadApartments();
