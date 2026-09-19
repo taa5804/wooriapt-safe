@@ -5,10 +5,10 @@
 ========================================= */
 
 const SUPABASE_URL =
-  process.env.MART_SUPABASE_URL;
+  process.env.SUPABASE_URL;
 
 const SUPABASE_KEY =
-  process.env.MART_SUPABASE_ANON_KEY;
+  process.env.SUPABASE_KEY;
 
 const BASE_URL = "https://www.wooriapt.app";
 
