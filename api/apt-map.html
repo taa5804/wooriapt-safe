@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<title>전국 아파트 지도 | 우리아파트 안심거래</title>
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "Noto Sans KR",
+      "Malgun Gothic",
+      sans-serif;
+    background: #f5f7fa;
+  }
+
+  .page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px 16px;
+    position: relative;
+    z-index: 1000;
+  }
+
+  .topbar-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #111827;
+  }
+
+  .sub {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #6b7280;
+  }
+
+  .status {
+    margin-top: 7px;
+    font-size: 12px;
+    color: #2563eb;
+  }
+
+  #map {
+    flex: 1;
+    width: 100%;
+    min-height: 500px;
+  }
+
+  .apt-balloon-wrap {
+    background: transparent;
+    border: 0;
+  }
+
+  .apt-balloon {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    padding: 7px 11px;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 2px solid #1769e0;
+    color: #0f172a;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.25;
+    box-shadow: 0 3px 10px rgba(0,0,0,.18);
+    transform: translate(-50%, -100%);
+  }
+
+  .apt-balloon::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 8px solid #1769e0;
+  }
+
+  .apt-balloon .name {
+    display: block;
+    margin-bottom: 2px;
+    color: #075bba;
+    font-size: 12px;
+  }
+
+  .apt-balloon .message {
+    display: block;
+    color: #111827;
+  }
+
+  .apt-popup {
+    min-width: 180px;
+    line-height: 1.5;
+  }
+
+  .apt-popup strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+
+  .apt-popup .address {
+    color: #6b7280;
+    font-size: 12px;
+  }
+
+  .apt-popup .cta {
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1769e0;
+  }
+
+  @media (max-width: 640px) {
+    .topbar {
+      padding: 10px 12px;
+    }
+
+    .title {
+      font-size: 17px;
+    }
+
+    .sub {
+      font-size: 12px;
+    }
+
+    .apt-balloon {
+      padding: 6px 9px;
+      font-size: 11px;
+    }
+
+    .apt-balloon .name {
+      font-size: 11px;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1 class="title">우리아파트 안심거래</h1>
+
+      <div class="sub">
+        전국 아파트를 지도에서 확인하세요.
+      </div>
+
+      <div id="status" class="status">
+        아파트 정보를 불러오는 중입니다.
+      </div>
+    </div>
+  </header>
+
+  <div id="map"></div>
+
+</div>
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<script>
+"use strict";
+
+
+/* =========================================
+   기본 설정
+========================================= */
+
+const APT_LIST_API = "/api/apt-list";
+
+const GEOCODE_API =
+  "https://mart-platform-git-main-taa5804-9958s-projects.vercel.app/api/kakao-geocode";
+
+const MAX_APARTMENTS = 40;
+
+const statusEl = document.getElementById("status");
+
+
+/* =========================================
+   지도 생성
+========================================= */
+
+const map = L.map("map", {
+  zoomControl: true
+}).setView(
+  [36.4, 127.8],
+  7
+);
+
+
+L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom: 19,
+    attribution:
+      '&copy; OpenStreetMap contributors'
+  }
+).addTo(map);
+
+
+/* =========================================
+   풍선 문구
+========================================= */
+
+const BALLOON_MESSAGES = [
+  "아파트 거래비용 50% 절약",
+  "희망조건만 등록하세요",
+  "원하는 아파트를 등록하세요",
+  "매매·전세·월세 모두 가능",
+  "공인중개사가 매물을 제안합니다",
+  "직접 찾아다니지 마세요"
+];
+
+
+function getBalloonMessage(index) {
+
+  return BALLOON_MESSAGES[
+    index % BALLOON_MESSAGES.length
+  ];
+
+}
+
+
+/* =========================================
+   HTML 안전 처리
+========================================= */
+
+function esc(value) {
+
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+}
+
+
+/* =========================================
+   DB 필드 대응
+========================================= */
+
+function getValue(row, names) {
+
+  for (const name of names) {
+
+    if (
+      row &&
+      row[name] !== undefined &&
+      row[name] !== null &&
+      String(row[name]).trim() !== ""
+    ) {
+
+      return String(row[name]).trim();
+
+    }
+
+  }
+
+  return "";
+
+}
+
+
+function getApartmentName(row) {
+
+  return getValue(
+    row,
+    [
+      "apartment",
+      "apartment_name",
+      "apt",
+      "apt_name",
+      "name",
+      "complex_name"
+    ]
+  ) || "아파트";
+
+}
+
+
+function getAddress(row) {
+
+  const fullAddress = getValue(
+    row,
+    [
+      "address",
+      "road_address",
+      "road_address_name",
+      "jibun_address",
+      "jibun_address_name",
+      "full_address"
+    ]
+  );
+
+  if (fullAddress) {
+    return fullAddress;
+  }
+
+
+  const region = getValue(
+    row,
+    [
+      "region",
+      "sido",
+      "province"
+    ]
+  );
+
+
+  const city = getValue(
+    row,
+    [
+      "city",
+      "sigungu",
+      "district"
+    ]
+  );
+
+
+  const place = getValue(
+    row,
+    [
+      "place",
+      "dong",
+      "eupmyeondong",
+      "town"
+    ]
+  );
+
+
+  const apartment = getApartmentName(row);
+
+
+  return [
+    region,
+    city,
+    place,
+    apartment
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+}
+
+
+/* =========================================
+   목록 API 결과 정규화
+========================================= */
+
+function normalizeRows(data) {
+
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+
+  if (
+    data &&
+    Array.isArray(data.items)
+  ) {
+    return data.items;
+  }
+
+
+  if (
+    data &&
+    Array.isArray(data.data)
+  ) {
+    return data.data;
+  }
+
+
+  if (
+    data &&
+    Array.isArray(data.rows)
+  ) {
+    return data.rows;
+  }
+
+
+  if (
+    data &&
+    Array.isArray(data.apartments)
+  ) {
+    return data.apartments;
+  }
+
+
+  return [];
+
+}
+
+
+/* =========================================
+   아파트 목록 불러오기
+========================================= */
+
+async function loadApartments() {
+
+  statusEl.textContent =
+    "전국 아파트 DB를 불러오는 중입니다.";
+
+
+  const response = await fetch(
+    APT_LIST_API,
+    {
+      method: "GET",
+      cache: "no-store"
+    }
+  );
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      "아파트 목록 API 오류: " +
+      response.status
+    );
+
+  }
+
+
+  const data = await response.json();
+
+  return normalizeRows(data);
+
+}
+
+
+/* =========================================
+   주소 → 좌표
+========================================= */
+
+async function geocode(address) {
+
+  const url =
+    GEOCODE_API +
+    "?address=" +
+    encodeURIComponent(address);
+
+
+  const response = await fetch(
+    url,
+    {
+      method: "GET"
+    }
+  );
+
+
+  if (!response.ok) {
+    return null;
+  }
+
+
+  const data = await response.json();
+
+
+  if (
+    !data ||
+    data.ok !== true ||
+    !Number.isFinite(Number(data.latitude)) ||
+    !Number.isFinite(Number(data.longitude))
+  ) {
+
+    return null;
+
+  }
+
+
+  return {
+    lat: Number(data.latitude),
+    lng: Number(data.longitude)
+  };
+
+}
+
+
+/* =========================================
+   풍선 생성
+========================================= */
+
+function createBalloon(
+  row,
+  position,
+  index
+) {
+
+  const apartmentName =
+    getApartmentName(row);
+
+  const address =
+    getAddress(row);
+
+  const message =
+    getBalloonMessage(index);
+
+
+  const html =
+    '<div class="apt-balloon">' +
+      '<span class="name">' +
+        esc(apartmentName) +
+      '</span>' +
+      '<span class="message">' +
+        esc(message) +
+      '</span>' +
+    '</div>';
+
+
+  const icon = L.divIcon({
+    className: "apt-balloon-wrap",
+    html: html,
+    iconSize: null,
+    iconAnchor: [0, 0]
+  });
+
+
+  const marker = L.marker(
+    [
+      position.lat,
+      position.lng
+    ],
+    {
+      icon: icon
+    }
+  );
+
+
+  const popup =
+    '<div class="apt-popup">' +
+      '<strong>' +
+        esc(apartmentName) +
+      '</strong>' +
+      '<div class="address">' +
+        esc(address) +
+      '</div>' +
+      '<div class="cta">' +
+        '희망조건 등록 →' +
+      '</div>' +
+    '</div>';
+
+
+  marker.bindPopup(popup);
+
+  marker.addTo(map);
+
+
+  return marker;
+
+}
+
+
+/* =========================================
+   지도 표시
+========================================= */
+
+async function renderApartments() {
+
+  try {
+
+    const rows =
+      await loadApartments();
+
+
+    if (!rows.length) {
+
+      statusEl.textContent =
+        "표시할 아파트 정보를 찾지 못했습니다.";
+
+      return;
+
+    }
+
+
+    const targets =
+      rows.slice(
+        0,
+        MAX_APARTMENTS
+      );
+
+
+    const markers = [];
+
+    let successCount = 0;
+
+
+    statusEl.textContent =
+      "아파트 위치를 지도에 표시하는 중입니다.";
+
+
+    for (
+      let i = 0;
+      i < targets.length;
+      i++
+    ) {
+
+      const row =
+        targets[i];
+
+
+      const address =
+        getAddress(row);
+
+
+      if (!address) {
+        continue;
+      }
+
+
+      try {
+
+        const position =
+          await geocode(address);
+
+
+        if (!position) {
+          continue;
+        }
+
+
+        const marker =
+          createBalloon(
+            row,
+            position,
+            i
+          );
+
+
+        markers.push(marker);
+
+        successCount++;
+
+
+        statusEl.textContent =
+          "아파트 " +
+          successCount +
+          "개를 지도에 표시했습니다.";
+
+
+      } catch (error) {
+
+        console.warn(
+          "좌표 변환 실패:",
+          address,
+          error
+        );
+
+      }
+
+    }
+
+
+    if (markers.length) {
+
+      const group =
+        L.featureGroup(markers);
+
+
+      map.fitBounds(
+        group.getBounds(),
+        {
+          padding: [40, 40],
+          maxZoom: 13
+        }
+      );
+
+    }
+
+
+    statusEl.textContent =
+      "아파트 " +
+      successCount +
+      "개를 지도에 표시했습니다.";
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    statusEl.textContent =
+      "아파트 정보를 불러오지 못했습니다.";
+
+  }
+
+}
+
+
+/* =========================================
+   시작
+========================================= */
+
+renderApartments();
+
+</script>
+
+</body>
+</html>
