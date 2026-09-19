@@ -1,6 +1,5 @@
 "use strict";
 
-
 /* =========================================
    기본 설정
 ========================================= */
@@ -13,17 +12,15 @@ const SUPABASE_KEY =
   process.env.SUPABASE_ANON_KEY ||
   process.env.SUPABASE_KEY;
 
-const BASE_URL =
-  "https://www.wooriapt.app";
+const BASE_URL = "https://www.wooriapt.app";
 
 const PAGE_SIZE = 5000;
 
 /*
-  현재 마트 DB 약 16,994개
-  사이트맵당 최대 5,000개
-  = 4개 사이트맵
+  mart_directory 현재 약 26,255개
+  5,000개씩 나누면 6개 사이트맵 필요
 */
-const TOTAL_SITEMAPS = 4;
+const TOTAL_SITEMAPS = 6;
 
 
 /* =========================================
@@ -39,16 +36,6 @@ function esc(value) {
     .replace(/'/g, "&#39;");
 }
 
-
-function jsonEsc(value) {
-  return String(value || "")
-    .replace(/\\/g, "\\\\")
-    .replace(/"/g, '\\"')
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "\\r");
-}
-
-
 function xmlEscape(value) {
   return String(value || "")
     .replace(/&/g, "&amp;")
@@ -58,7 +45,6 @@ function xmlEscape(value) {
     .replace(/'/g, "&apos;");
 }
 
-
 function encodePart(value) {
   return encodeURIComponent(
     String(value || "").trim()
@@ -67,18 +53,24 @@ function encodePart(value) {
 
 
 /* =========================================
-   1. 마트 자동검색 페이지
+   1. 마트 자동 검색 페이지
 ========================================= */
 
-async function handleMartPage(req, res) {
+function handleMartPage(req, res) {
 
   const q = req.query || {};
 
-  const mart =
-    String(q.mart || "").trim();
-
   const region =
     String(q.region || "").trim();
+
+  const city =
+    String(q.city || "").trim();
+
+  const place =
+    String(q.place || "").trim();
+
+  const mart =
+    String(q.mart || "").trim();
 
   const address =
     String(q.address || "").trim();
@@ -93,225 +85,164 @@ async function handleMartPage(req, res) {
       "text/html; charset=utf-8"
     );
 
-    return res.end(`
-<!doctype html>
+    return res.end(
+`<!doctype html>
 <html lang="ko">
 <head>
-
 <meta charset="utf-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1"
->
-
-<meta
-  name="robots"
-  content="noindex,follow"
->
-
-<title>
-마트 정보를 찾을 수 없습니다
-</title>
-
+<meta name="robots" content="noindex">
+<title>마트 정보를 찾을 수 없습니다</title>
 </head>
-
 <body>
-
-<h1>
-마트 정보를 찾을 수 없습니다.
-</h1>
-
+<h1>마트 정보를 찾을 수 없습니다.</h1>
 </body>
-</html>
-    `);
+</html>`
+    );
   }
-
-
-  const safeMart =
-    esc(mart);
-
-  const safeRegion =
-    esc(region);
-
-  const safeAddress =
-    esc(address);
 
 
   const pathParts = [
     region,
+    city,
+    place,
     mart
   ]
     .filter(Boolean)
-    .map(function(v) {
-      return encodeURIComponent(v);
-    });
+    .map(encodePart);
 
 
-  const canonicalUrl =
+  const canonical =
     `${BASE_URL}/mart-search/${pathParts.join("/")}`;
 
 
+  const locationText =
+    [region, city, place]
+      .filter(Boolean)
+      .join(" ");
+
+
   const title =
-    region
-      ? `${safeRegion} ${safeMart} | 마트 정보`
-      : `${safeMart} | 마트 정보`;
+    `${locationText ? locationText + " " : ""}${mart} | 우리아파트 마트 플랫폼`;
 
 
   const description =
-    address
-      ? `${safeMart}은(는) ${safeAddress}에 위치한 마트입니다. 매장 정보와 특가·행사상품 안내를 확인하세요.`
-      : region
-        ? `${safeRegion} ${safeMart}의 매장 정보와 특가·행사상품 안내를 확인하세요.`
-        : `${safeMart}의 매장 정보와 특가·행사상품 안내를 확인하세요.`;
+    `${locationText ? locationText + " " : ""}${mart} 정보를 확인하고 우리아파트 마트 고객유치 플랫폼을 알아보세요.`;
 
 
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "GroceryStore",
     "name": mart,
-    "url": canonicalUrl
+    "address": address || locationText,
+    "url": canonical
   };
 
 
-  if (address) {
-
-    structuredData.address = {
-      "@type": "PostalAddress",
-      "streetAddress": address,
-      "addressCountry": "KR"
-    };
-  }
-
-
-  const pageHtml = `
-<!doctype html>
+  const html =
+`<!doctype html>
 <html lang="ko">
-
 <head>
 
 <meta charset="utf-8">
 
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,viewport-fit=cover"
->
+<meta name="viewport"
+content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-<title>${title}</title>
+<title>${esc(title)}</title>
 
-<meta
-  name="description"
-  content="${description}"
->
+<meta name="description"
+content="${esc(description)}">
 
-<meta
-  name="robots"
-  content="index,follow"
->
+<link rel="canonical"
+href="${esc(canonical)}">
 
-<link
-  rel="canonical"
-  href="${canonicalUrl}"
->
+<meta name="robots"
+content="index,follow">
 
 <script type="application/ld+json">
-${JSON.stringify(structuredData, null, 2)}
+${JSON.stringify(structuredData)}
 </script>
 
 <style>
 
-* {
-  box-sizing: border-box;
+*{
+  box-sizing:border-box;
 }
 
-body {
-  margin: 0;
-
+body{
+  margin:0;
   font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    "Noto Sans KR",
     Arial,
+    "Noto Sans KR",
     sans-serif;
-
-  background: #f7f8f7;
-  color: #222;
+  background:#f5f7f6;
+  color:#222;
 }
 
-.wrap {
-  width: 100%;
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 24px 16px 50px;
+.wrap{
+  max-width:760px;
+  margin:0 auto;
+  padding:40px 20px;
 }
 
-.card {
-  background: #fff;
-  border: 1px solid #e5e5e5;
-  border-radius: 14px;
-  padding: 26px 20px;
+.card{
+  background:#fff;
+  border-radius:16px;
+  padding:32px 24px;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,.08);
 }
 
-.label {
-  font-size: 14px;
-  margin-bottom: 8px;
+.badge{
+  display:inline-block;
+  padding:7px 12px;
+  border-radius:20px;
+  background:#e8f5ee;
+  color:#075b32;
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:18px;
 }
 
-h1 {
-  margin: 0 0 18px;
-  font-size: 28px;
-  line-height: 1.35;
+h1{
+  margin:0 0 18px;
+  font-size:30px;
+  line-height:1.35;
 }
 
-.info {
-  margin-bottom: 22px;
-  padding: 16px;
-  background: #f8faf8;
-  border-radius: 10px;
+.location{
+  margin-bottom:10px;
+  font-size:17px;
+  color:#555;
 }
 
-.info-row {
-  font-size: 15px;
-  line-height: 1.7;
+.address{
+  margin-bottom:24px;
+  font-size:15px;
+  color:#777;
 }
 
-.text {
-  font-size: 16px;
-  line-height: 1.8;
-  margin-bottom: 26px;
+.desc{
+  font-size:17px;
+  line-height:1.7;
+  margin-bottom:28px;
 }
 
-.owner-box {
-  margin-top: 28px;
-  padding: 22px 18px;
-  border: 1px solid #dfe6df;
-  border-radius: 12px;
+.cta{
+  display:block;
+  width:100%;
+  padding:16px 20px;
+  text-align:center;
+  text-decoration:none;
+  border-radius:10px;
+  background:#075b32;
+  color:#fff;
+  font-size:18px;
+  font-weight:700;
 }
 
-.owner-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.owner-text {
-  font-size: 15px;
-  line-height: 1.7;
-  margin-bottom: 18px;
-}
-
-.button {
-  display: block;
-  width: 100%;
-  padding: 15px 16px;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 9px;
-  background: #075b32;
-  color: #fff;
-  font-size: 17px;
-  font-weight: 700;
+.cta:hover{
+  opacity:.92;
 }
 
 </style>
@@ -320,86 +251,47 @@ h1 {
 
 <body>
 
-<main class="wrap">
+<div class="wrap">
 
-<section class="card">
+  <div class="card">
 
-  <div class="label">
-    우리동네 마트 정보
-  </div>
-
-  <h1>
-    ${safeMart}
-  </h1>
-
-
-  <div class="info">
-
-    ${
-      safeRegion
-        ? `
-        <div class="info-row">
-          <strong>지역</strong> : ${safeRegion}
-        </div>
-        `
-        : ""
-    }
-
-    ${
-      safeAddress
-        ? `
-        <div class="info-row">
-          <strong>주소</strong> : ${safeAddress}
-        </div>
-        `
-        : ""
-    }
-
-  </div>
-
-
-  <div class="text">
-
-    ${
-      safeRegion
-        ? `${safeRegion}에서 ${safeMart}을(를) 찾고 계신가요?`
-        : `${safeMart}을(를) 찾고 계신가요?`
-    }
-
-    이 페이지에서 매장 정보를 확인하고,
-    등록된 특가상품과 행사상품 정보를 확인할 수 있습니다.
-
-  </div>
-
-
-  <div class="owner-box">
-
-    <div class="owner-title">
-      이 마트의 사장님이신가요?
+    <div class="badge">
+      우리아파트 마트 플랫폼
     </div>
 
-    <div class="owner-text">
-      고객이 우리 매장을 검색하고 있습니다.
-      매장 정보와 특가·행사상품을 직접 등록해
-      고객에게 보여주세요.
+    <h1>
+      ${esc(mart)}
+    </h1>
+
+    ${
+      locationText
+        ? `<div class="location">${esc(locationText)}</div>`
+        : ""
+    }
+
+    ${
+      address
+        ? `<div class="address">${esc(address)}</div>`
+        : ""
+    }
+
+    <div class="desc">
+      ${esc(mart)}을 찾으셨나요?<br>
+      우리아파트 마트 고객유치 플랫폼을 확인해보세요.
     </div>
 
     <a
-      class="button"
-      href="/mart-landing.html"
-    >
-      마트 플랫폼 알아보기
+      class="cta"
+      href="/mart-landing.html">
+      자세히 알아보기
     </a>
 
   </div>
 
-</section>
-
-</main>
+</div>
 
 </body>
-</html>
-  `;
+</html>`;
 
 
   res.statusCode = 200;
@@ -414,12 +306,12 @@ h1 {
     "s-maxage=3600, stale-while-revalidate=86400"
   );
 
-  return res.end(pageHtml);
+  return res.end(html);
 }
 
 
 /* =========================================
-   2. 마트 DB 검색 API
+   2. 마트 검색 API
 ========================================= */
 
 async function handleMartSearch(req, res) {
@@ -467,19 +359,19 @@ async function handleMartSearch(req, res) {
 
     params.set(
       "select",
-      "id,mart_code,mart_name,approval_status,service_status"
+      "시도,시군구,읍면동,상호명,주소,전화번호"
     );
 
 
     params.set(
-      "mart_name",
+      "상호명",
       `ilike.*${q}*`
     );
 
 
     params.set(
       "order",
-      "mart_name.asc"
+      "상호명.asc"
     );
 
 
@@ -490,7 +382,7 @@ async function handleMartSearch(req, res) {
 
 
     const url =
-      `${SUPABASE_URL}/rest/v1/mart_members?${params.toString()}`;
+      `${SUPABASE_URL}/rest/v1/mart_directory?${params.toString()}`;
 
 
     const response =
@@ -500,8 +392,7 @@ async function handleMartSearch(req, res) {
           method: "GET",
 
           headers: {
-            apikey:
-              SUPABASE_KEY,
+            apikey: SUPABASE_KEY,
 
             Authorization:
               `Bearer ${SUPABASE_KEY}`,
@@ -523,10 +414,8 @@ async function handleMartSearch(req, res) {
         .status(response.status)
         .json({
           ok: false,
-
           message:
             "마트 DB 조회에 실패했습니다.",
-
           error:
             errorText
         });
@@ -541,15 +430,9 @@ async function handleMartSearch(req, res) {
       .status(200)
       .json({
         ok: true,
-
-        query:
-          q,
-
-        count:
-          rows.length,
-
-        marts:
-          rows
+        query: q,
+        count: rows.length,
+        marts: rows
       });
 
 
@@ -559,14 +442,11 @@ async function handleMartSearch(req, res) {
       .status(500)
       .json({
         ok: false,
-
         message:
           "마트 검색 중 오류가 발생했습니다.",
-
         error:
           String(
-            error.message ||
-            error
+            error.message || error
           )
       });
   }
@@ -574,8 +454,7 @@ async function handleMartSearch(req, res) {
 
 
 /* =========================================
-   3. 마트 사이트맵 인덱스
-   /mart-sitemap.xml
+   3. 마트 사이트맵 INDEX
 ========================================= */
 
 function handleMartSitemapIndex(
@@ -596,7 +475,8 @@ function handleMartSitemapIndex(
       `${BASE_URL}/sitemaps/marts-${page}.xml`;
 
 
-    items += `
+    items +=
+`
   <sitemap>
     <loc>${xmlEscape(loc)}</loc>
   </sitemap>`;
@@ -606,7 +486,7 @@ function handleMartSitemapIndex(
   const xml =
 `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${items}
 </sitemapindex>`;
 
@@ -631,10 +511,7 @@ ${items}
 
 
 /* =========================================
-   4. 마트 개별 사이트맵
-   /sitemaps/marts-1.xml
-   /sitemaps/marts-2.xml
-   ...
+   4. 개별 마트 사이트맵
 ========================================= */
 
 async function handleMartSitemap(
@@ -663,14 +540,11 @@ async function handleMartSitemap(
 
 
   const from =
-    (page - 1) *
-    PAGE_SIZE;
+    (page - 1) * PAGE_SIZE;
 
 
   const to =
-    from +
-    PAGE_SIZE -
-    1;
+    from + PAGE_SIZE - 1;
 
 
   try {
@@ -681,18 +555,18 @@ async function handleMartSitemap(
 
     params.set(
       "select",
-      "id,mart_code,mart_name"
+      "시도,시군구,읍면동,상호명,주소,전화번호"
     );
 
 
     params.set(
       "order",
-      "id.asc"
+      "시도.asc,시군구.asc,읍면동.asc,상호명.asc"
     );
 
 
     const url =
-      `${SUPABASE_URL}/rest/v1/mart_members?${params.toString()}`;
+      `${SUPABASE_URL}/rest/v1/mart_directory?${params.toString()}`;
 
 
     const response =
@@ -743,44 +617,60 @@ async function handleMartSitemap(
 
     const urls =
       rows
-        .filter(function(row) {
-          return (
+
+        .filter(
+          row =>
             row &&
-            row.mart_name
-          );
-        })
-        .map(function(row) {
+            row["시도"] &&
+            row["시군구"] &&
+            row["읍면동"] &&
+            row["상호명"]
+        )
 
-          const martName =
-            encodePart(
-              row.mart_name
-            );
+        .map(
+          row => {
+
+            const region =
+              encodePart(
+                row["시도"]
+              );
+
+            const city =
+              encodePart(
+                row["시군구"]
+              );
+
+            const place =
+              encodePart(
+                row["읍면동"]
+              );
+
+            const mart =
+              encodePart(
+                row["상호명"]
+              );
 
 
-          const martCode =
-            encodePart(
-              row.mart_code ||
-              row.id
-            );
+            const loc =
+              `${BASE_URL}/mart-search/${region}/${city}/${place}/${mart}`;
 
 
-          const loc =
-            `${BASE_URL}/mart-search/${martCode}/${martName}`;
-
-
-          return `
+            return (
+`
   <url>
     <loc>${xmlEscape(loc)}</loc>
-  </url>`;
+  </url>`
+            );
+          }
+        )
 
-        })
         .join("");
 
 
     const xml =
 `<?xml version="1.0" encoding="UTF-8"?>
 <urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls}
 </urlset>`;
 
@@ -811,8 +701,7 @@ ${urls}
     return res.end(
       `Mart sitemap error: ${
         String(
-          error.message ||
-          error
+          error.message || error
         )
       }`
     );
@@ -821,70 +710,66 @@ ${urls}
 
 
 /* =========================================
-   통합 진입점
+   통합 HANDLER
 ========================================= */
 
 module.exports =
-  async function handler(
-    req,
-    res
+async function handler(
+  req,
+  res
+) {
+
+  if (req.method !== "GET") {
+
+    res.statusCode = 405;
+
+    return res.end(
+      "Method Not Allowed"
+    );
+  }
+
+
+  const mode =
+    String(
+      req.query.mode || "mart-page"
+    ).trim();
+
+
+  if (
+    mode === "mart-search"
   ) {
 
-    if (req.method !== "GET") {
-
-      res.statusCode = 405;
-
-      return res.end(
-        "Method Not Allowed"
-      );
-    }
-
-
-    const mode =
-      String(
-        req.query.mode ||
-        "page"
-      ).trim();
-
-
-    if (
-      mode ===
-      "mart-search"
-    ) {
-
-      return handleMartSearch(
-        req,
-        res
-      );
-    }
-
-
-    if (
-      mode ===
-      "mart-sitemap"
-    ) {
-
-      return handleMartSitemap(
-        req,
-        res
-      );
-    }
-
-
-    if (
-      mode ===
-      "mart-sitemap-index"
-    ) {
-
-      return handleMartSitemapIndex(
-        req,
-        res
-      );
-    }
-
-
-    return handleMartPage(
+    return handleMartSearch(
       req,
       res
     );
-  };
+  }
+
+
+  if (
+    mode === "mart-sitemap"
+  ) {
+
+    return handleMartSitemap(
+      req,
+      res
+    );
+  }
+
+
+  if (
+    mode === "mart-sitemap-index"
+  ) {
+
+    return handleMartSitemapIndex(
+      req,
+      res
+    );
+  }
+
+
+  return handleMartPage(
+    req,
+    res
+  );
+};
