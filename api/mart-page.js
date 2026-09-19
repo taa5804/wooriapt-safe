@@ -5,11 +5,10 @@
 ========================================= */
 
 const SUPABASE_URL =
-  "https://dcysjuxyjqtvkihdsjvv.supabase.co";
+  process.env.MART_SUPABASE_URL;
 
 const SUPABASE_KEY =
-  process.env.SUPABASE_ANON_KEY ||
-  process.env.SUPABASE_KEY;
+  process.env.MART_SUPABASE_ANON_KEY;
 
 const BASE_URL = "https://www.wooriapt.app";
 
@@ -275,7 +274,7 @@ h1{
     }
 
     <div class="desc">
-      ${esc(mart)}을 찾으셨나요?<br>
+      ${esc(mart)}을 찾으셨나요}?<br>
       우리아파트 마트 고객유치 플랫폼을 확인해보세요.
     </div>
 
@@ -326,12 +325,12 @@ async function handleMartSearch(req, res) {
   );
 
 
-  if (!SUPABASE_KEY) {
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
 
     return res.status(500).json({
       ok: false,
       message:
-        "Supabase 환경변수가 설정되지 않았습니다."
+        "마트 Supabase 환경변수가 설정되지 않았습니다."
     });
   }
 
@@ -518,12 +517,12 @@ async function handleMartSitemap(
   res
 ) {
 
-  if (!SUPABASE_KEY) {
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
 
     res.statusCode = 500;
 
     return res.end(
-      "Supabase environment variable missing"
+      "Mart Supabase environment variable missing"
     );
   }
 
