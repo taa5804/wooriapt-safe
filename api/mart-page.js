@@ -5,10 +5,10 @@
 ========================================= */
 
 const SUPABASE_URL =
-  process.env.SUPABASE_URL;
+  process.env.MART_SUPABASE_URL;
 
 const SUPABASE_KEY =
-  process.env.SUPABASE_KEY;
+  process.env.MART_SUPABASE_ANON_KEY;
 
 const BASE_URL = "https://www.wooriapt.app";
 
@@ -452,6 +452,122 @@ async function handleMartSearch(req, res) {
 
 
 /* =========================================
+   2-1. 마트 DB 직접 연결 테스트
+========================================= */
+
+async function handleMartDbTest(req, res) {
+
+  res.setHeader(
+    "Content-Type",
+    "application/json; charset=utf-8"
+  );
+
+  res.setHeader(
+    "Cache-Control",
+    "no-store"
+  );
+
+
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+
+    return res.status(500).json({
+      ok: false,
+      test: "mart-db-test",
+      message:
+        "마트 Supabase 환경변수가 설정되지 않았습니다."
+    });
+  }
+
+
+  try {
+
+    const params =
+      new URLSearchParams();
+
+
+    params.set(
+      "select",
+      "시도,시군구,읍면동,상호명,주소,전화번호"
+    );
+
+
+    params.set(
+      "limit",
+      "1"
+    );
+
+
+    const url =
+      `${SUPABASE_URL}/rest/v1/mart_directory?${params.toString()}`;
+
+
+    const response =
+      await fetch(
+        url,
+        {
+          method: "GET",
+
+          headers: {
+            apikey: SUPABASE_KEY,
+
+            Authorization:
+              `Bearer ${SUPABASE_KEY}`,
+
+            Accept:
+              "application/json"
+          }
+        }
+      );
+
+
+    if (!response.ok) {
+
+      const errorText =
+        await response.text();
+
+
+      return res
+        .status(response.status)
+        .json({
+          ok: false,
+          test: "mart-db-test",
+          status: response.status,
+          error: errorText
+        });
+    }
+
+
+    const rows =
+      await response.json();
+
+
+    return res
+      .status(200)
+      .json({
+        ok: true,
+        test: "mart-db-test",
+        count: rows.length,
+        rows: rows
+      });
+
+
+  } catch (error) {
+
+    return res
+      .status(500)
+      .json({
+        ok: false,
+        test: "mart-db-test",
+        error:
+          String(
+            error.message || error
+          )
+      });
+  }
+}
+
+
+/* =========================================
    3. 마트 사이트맵 INDEX
 ========================================= */
 
@@ -738,6 +854,17 @@ async function handler(
   ) {
 
     return handleMartSearch(
+      req,
+      res
+    );
+  }
+
+
+  if (
+    mode === "mart-db-test"
+  ) {
+
+    return handleMartDbTest(
       req,
       res
     );
