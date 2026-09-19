@@ -5,7 +5,6 @@
 ========================================= */
 
 const SUPABASE_URL =
-  process.env.SUPABASE_URL ||
   "https://dcysjuxyjqtvkihdsjvv.supabase.co";
 
 const SUPABASE_KEY =
