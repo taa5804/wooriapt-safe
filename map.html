@@ -37,7 +37,6 @@
 
     .price-marker {
       position: relative;
-
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -219,8 +218,8 @@
       return getValue(
         item,
         [
-          "시도",
           "region",
+          "시도",
           "sido",
           "do"
         ]
@@ -240,8 +239,8 @@
       return getValue(
         item,
         [
-          "시군구",
           "city",
+          "시군구",
           "sigungu"
         ]
       );
@@ -260,10 +259,10 @@
       return getValue(
         item,
         [
+          "dong",
           "읍면동",
           "읍면",
           "동리",
-          "dong",
           "emd",
           "legal_dong"
         ]
@@ -283,6 +282,7 @@
       return getValue(
         item,
         [
+          "kaptName",
           "단지명",
           "아파트명",
           "apt_name",
@@ -306,6 +306,7 @@
       return getValue(
         item,
         [
+          "detail",
           "도로명주소",
           "도로명",
           "road_address",
@@ -350,7 +351,7 @@
 
       /*
       1순위
-      전체주소 + 아파트명
+      주소 + 아파트명
       */
 
       if (
@@ -414,7 +415,7 @@
 
       /*
       4순위
-      아파트명만
+      동 + 아파트명
       */
 
       if (
@@ -422,7 +423,12 @@
       ) {
 
         words.push(
-          apartmentName
+          [
+            dong,
+            apartmentName
+          ]
+          .filter(Boolean)
+          .join(" ")
         );
 
       }
@@ -434,9 +440,7 @@
 
       return [
         ...new Set(
-          words.filter(
-            Boolean
-          )
+          words.filter(Boolean)
         )
       ];
 
@@ -520,7 +524,7 @@
 
     /*
     ==================================================
-    카카오 장소검색 1회
+    카카오 장소검색
     ==================================================
     */
 
@@ -655,8 +659,7 @@
 
 
       /*
-      정확히 못 찾으면
-      첫 번째 결과 사용
+      검색 결과가 있으면 첫 번째 결과
       */
 
       return results[0];
@@ -692,7 +695,7 @@
 
 
       /*
-      검색어를 순서대로 시도
+      검색어 순서대로 검색
       */
 
       for (
@@ -719,6 +722,7 @@
         ) {
 
           return {
+
             lat:
               Number(
                 result.y
@@ -728,6 +732,7 @@
               Number(
                 result.x
               )
+
           };
 
         }
@@ -764,7 +769,7 @@
 
 
       /*
-      단지 중복 제거 키
+      단지 중복 제거
       */
 
       const key =
@@ -858,7 +863,7 @@
 
 
         /*
-        기존 API 그대로 사용
+        기존 API 사용
         */
 
         const response =
@@ -953,18 +958,6 @@
           "아파트 단지 위치를 찾는 중...";
 
 
-        /*
-        ==================================================
-        중요
-
-        DB의 각 아파트 단지명을 기준으로
-        카카오 장소검색을 실시한다.
-
-        동 하나의 좌표를 사용하는 것이 아니다.
-        ==================================================
-        */
-
-
         let completed =
           0;
 
@@ -977,8 +970,7 @@
 
 
         /*
-        너무 많은 요청을 한꺼번에 보내지 않고
-        순차적으로 처리
+        DB의 각 아파트 단지별 처리
         */
 
         for (
@@ -1015,8 +1007,7 @@
 
 
           /*
-          카카오 검색 요청 사이에
-          짧은 간격을 둔다.
+          카카오 검색 요청 간격
           */
 
           await new Promise(
