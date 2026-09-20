@@ -10,16 +10,18 @@
  2) /api/sitemap?geocode=1
     -> safe_apartments 전체 지오코딩 실행
 
- API 파일을 추가하지 않으므로
- Vercel Hobby 12개 제한 유지
+ Vercel API 파일 추가 없음
 =========================================================
 */
 
 const SUPABASE_URL =
   process.env.SUPABASE_URL;
 
+/*
+  현재 프로젝트의 서버용 Secret Key 사용
+*/
 const SUPABASE_SERVICE_ROLE_KEY =
-  process.env.SUPABASE_SERVICE_ROLE_KEY;
+  process.env.SUPABASE_SECRET_KEY;
 
 const KAKAO_REST_API_KEY =
   process.env.KAKAO_REST_API_KEY;
@@ -65,11 +67,6 @@ function getApartmentAddress(apt) {
     return String(directAddress).trim();
   }
 
-
-  /*
-    직접 주소가 없을 경우
-    지역 + 단지명 조합
-  */
 
   return [
     apt.sido ||
@@ -203,7 +200,7 @@ async function updateApartment(id, body) {
 
 
 /* =====================================================
-   지오코딩 실행
+   전체 지오코딩
 ===================================================== */
 
 async function runApartmentGeocode(req, res) {
@@ -223,21 +220,16 @@ async function runApartmentGeocode(req, res) {
   try {
 
     /*
-    -----------------------------------------------------
-    아직 처리하지 않은 아파트 50개
-    -----------------------------------------------------
+      좌표가 없고 아직 처리 대기중인
+      아파트 50개씩 가져옴
     */
 
     const dbResponse = await fetch(
 
       `${SUPABASE_URL}/rest/v1/safe_apartments` +
-
       `?select=*` +
-
       `&latitude=is.null` +
-
       `&geocode_status=eq.PENDING` +
-
       `&limit=${GEOCODE_BATCH_SIZE}`,
 
       {
@@ -263,9 +255,7 @@ async function runApartmentGeocode(req, res) {
 
 
     /*
-    -----------------------------------------------------
-    작업 완료
-    -----------------------------------------------------
+      남은 PENDING 데이터가 없으면 완료
     */
 
     if (apartments.length === 0) {
@@ -286,9 +276,7 @@ async function runApartmentGeocode(req, res) {
 
 
     /*
-    -----------------------------------------------------
-    현재 배치 처리
-    -----------------------------------------------------
+      현재 50개 처리
     */
 
     for (const apt of apartments) {
@@ -298,7 +286,7 @@ async function runApartmentGeocode(req, res) {
 
 
       /*
-        주소 자체가 없는 경우
+        사용할 주소가 전혀 없음
       */
 
       if (!address) {
@@ -332,10 +320,8 @@ async function runApartmentGeocode(req, res) {
       try {
 
         /*
-        -------------------------------------------------
-        1차
-        정확한 주소 검색
-        -------------------------------------------------
+          1차:
+          정확한 주소로 검색
         */
 
         let document =
@@ -345,11 +331,9 @@ async function runApartmentGeocode(req, res) {
 
 
         /*
-        -------------------------------------------------
-        2차
-        주소 검색 실패하면
-        장소/아파트명 키워드 검색
-        -------------------------------------------------
+          2차:
+          주소검색 실패 시
+          아파트/장소 키워드 검색
         */
 
         if (!document) {
@@ -362,9 +346,7 @@ async function runApartmentGeocode(req, res) {
 
 
         /*
-        -------------------------------------------------
-        그래도 검색 결과 없음
-        -------------------------------------------------
+          검색 결과 없음
         */
 
         if (!document) {
@@ -385,9 +367,7 @@ async function runApartmentGeocode(req, res) {
 
 
         /*
-        -------------------------------------------------
-        좌표
-        -------------------------------------------------
+          좌표 추출
         */
 
         const latitude =
@@ -418,9 +398,7 @@ async function runApartmentGeocode(req, res) {
 
 
         /*
-        -------------------------------------------------
-        Supabase 저장
-        -------------------------------------------------
+          Supabase에 좌표 영구 저장
         */
 
         await updateApartment(
@@ -442,9 +420,8 @@ async function runApartmentGeocode(req, res) {
       catch (error) {
 
         /*
-          Kakao API의 일시적인 오류 등은
-          PENDING 상태로 남김.
-          다음 실행 때 다시 처리 가능.
+          일시적 오류는 PENDING 유지
+          다음 처리 때 재시도
         */
 
         console.error(
@@ -456,18 +433,12 @@ async function runApartmentGeocode(req, res) {
       }
 
 
-      /*
-        Kakao API 요청 간격
-      */
-
       await sleep(50);
     }
 
 
     /*
-    -----------------------------------------------------
-    다음 50개 자동 호출
-    -----------------------------------------------------
+      다음 50개 자동 요청
     */
 
     const protocol =
@@ -494,9 +465,7 @@ async function runApartmentGeocode(req, res) {
 
 
     /*
-    -----------------------------------------------------
-    현재 배치 결과
-    -----------------------------------------------------
+      현재 처리 결과
     */
 
     return res.status(200).json({
@@ -536,16 +505,10 @@ async function runApartmentGeocode(req, res) {
 
 
 /* =====================================================
-   기존 sitemap
+   sitemap
 ===================================================== */
 
 async function runSitemap(req, res) {
-
-  /*
-    sitemap 기능은 유지.
-
-    자동검색 페이지 sitemap index
-  */
 
   const baseUrl =
     "https://www.wooriapt.app";
@@ -586,7 +549,7 @@ module.exports =
 async function handler(req, res) {
 
   /*
-    지오코딩
+    geocode 실행
   */
 
   if (
@@ -602,7 +565,7 @@ async function handler(req, res) {
 
 
   /*
-    기존 sitemap
+    일반 sitemap 요청
   */
 
   return runSitemap(
