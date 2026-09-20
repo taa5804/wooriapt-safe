@@ -1,20 +1,17 @@
 "use strict";
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY =
-  process.env.SUPABASE_SERVICE_ROLE_KEY;
-const KAKAO_REST_API_KEY =
-  process.env.KAKAO_REST_API_KEY;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY;
 
 const BATCH_SIZE = 50;
 const DELAY_MS = 50;
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+const sleep = (ms) =>
+  new Promise(resolve => setTimeout(resolve, ms));
 
 function getAddress(apt) {
-  return (
+  return String(
     apt.address ||
     apt.주소 ||
     apt.road_address ||
@@ -25,120 +22,50 @@ function getAddress(apt) {
   ).trim();
 }
 
-async function geocode(address) {
-  const url =
-    "https://dapi.kakao.com/v2/local/search/address.json?query=" +
-    encodeURIComponent(address);
-
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error(`Kakao HTTP ${response.status}`);
-  }
-
-  const data = await response.json();
-
-  if (!data.documents || data.documents.length === 0) {
-    return null;
-  }
-
-  return {
-    longitude: Number(data.documents[0].x),
-    latitude: Number(data.documents[0].y)
-  };
-}
-
-async function updateCoordinates(id, coords) {
-  const response = await fetch(
+async function updateRow(id, body) {
+  const r = await fetch(
     `${SUPABASE_URL}/rest/v1/safe_apartments?id=eq.${encodeURIComponent(id)}`,
     {
       method: "PATCH",
       headers: {
         apikey: SUPABASE_SERVICE_ROLE_KEY,
-        Authorization:
-          `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+        Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
         "Content-Type": "application/json",
         Prefer: "return=minimal"
       },
-      body: JSON.stringify(coords)
+      body: JSON.stringify(body)
     }
   );
 
-  if (!response.ok) {
-    throw new Error(await response.text());
+  if (!r.ok) {
+    throw new Error(await r.text());
   }
 }
 
-async function processBatch(baseUrl) {
-  const response = await fetch(
-    `${SUPABASE_URL}/rest/v1/safe_apartments?select=*&latitude=is.null&limit=${BATCH_SIZE}`,
+async function geocode(address) {
+  const r = await fetch(
+    "https://dapi.kakao.com/v2/local/search/address.json?query=" +
+      encodeURIComponent(address),
     {
       headers: {
-        apikey: SUPABASE_SERVICE_ROLE_KEY,
-        Authorization:
-          `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+        Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`
       }
     }
   );
 
-  if (!response.ok) {
-    throw new Error(await response.text());
+  if (!r.ok) {
+    throw new Error(`Kakao HTTP ${r.status}`);
   }
 
-  const apartments = await response.json();
+  const data = await r.json();
 
-  if (apartments.length === 0) {
-    return {
-      done: true,
-      processed: 0
-    };
+  if (!data.documents?.length) {
+    return null;
   }
-
-  let success = 0;
-  let failed = 0;
-
-  for (const apt of apartments) {
-    const address = getAddress(apt);
-
-    if (!address) {
-      failed++;
-      continue;
-    }
-
-    try {
-      const coords = await geocode(address);
-
-      if (!coords) {
-        failed++;
-        continue;
-      }
-
-      await updateCoordinates(apt.id, coords);
-      success++;
-
-    } catch (error) {
-      failed++;
-    }
-
-    await sleep(DELAY_MS);
-  }
-
-  /*
-    현재 요청이 끝나기 전에
-    다음 배치를 자동으로 호출
-  */
-  fetch(`${baseUrl}/api/geocode-apartments?continue=1`)
-    .catch(() => {});
 
   return {
-    done: false,
-    processed: apartments.length,
-    success,
-    failed
+    latitude: Number(data.documents[0].y),
+    longitude: Number(data.documents[0].x)
   };
 }
 
@@ -159,26 +86,98 @@ module.exports = async function handler(req, res) {
   }
 
   try {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/safe_apartments` +
+      `?select=*&geocode_status=eq.PENDING&limit=${BATCH_SIZE}`,
+      {
+        headers: {
+          apikey: SUPABASE_SERVICE_ROLE_KEY,
+          Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+        }
+      }
+    );
+
+    if (!r.ok) {
+      throw new Error(await r.text());
+    }
+
+    const apartments = await r.json();
+
+    if (apartments.length === 0) {
+      return res.status(200).json({
+        done: true,
+        message: "전체 지오코딩 완료"
+      });
+    }
+
+    let success = 0;
+    let failed = 0;
+
+    for (const apt of apartments) {
+      const address = getAddress(apt);
+
+      if (!address) {
+        await updateRow(apt.id, {
+          geocode_status: "FAILED"
+        });
+
+        failed++;
+        continue;
+      }
+
+      try {
+        const coords = await geocode(address);
+
+        if (!coords) {
+          await updateRow(apt.id, {
+            geocode_status: "FAILED"
+          });
+
+          failed++;
+        } else {
+          await updateRow(apt.id, {
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+            geocode_status: "SUCCESS"
+          });
+
+          success++;
+        }
+      } catch (e) {
+        await updateRow(apt.id, {
+          geocode_status: "FAILED"
+        });
+
+        failed++;
+      }
+
+      await sleep(DELAY_MS);
+    }
+
+    /*
+      다음 50건을 자동 실행
+    */
     const protocol =
       req.headers["x-forwarded-proto"] || "https";
 
     const host = req.headers.host;
 
-    const baseUrl = `${protocol}://${host}`;
+    const nextUrl =
+      `${protocol}://${host}/api/geocode-apartments`;
 
-    const result =
-      await processBatch(baseUrl);
+    fetch(nextUrl).catch(() => {});
 
     return res.status(200).json({
-      message: result.done
-        ? "전체 지오코딩 완료"
-        : "전체 자동 지오코딩 진행 중",
-      ...result
+      done: false,
+      message: "전체 자동 지오코딩 진행 중",
+      batch: apartments.length,
+      success,
+      failed
     });
 
-  } catch (error) {
+  } catch (e) {
     return res.status(500).json({
-      error: error.message
+      error: e.message
     });
   }
 };
