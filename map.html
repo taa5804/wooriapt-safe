@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-<title>전국 아파트 지도 | 우리아파트 안심거래</title>
+<title>전국 아파트 지도</title>
 
 <style>
 * {
@@ -17,58 +17,12 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Noto Sans KR",
-    "Malgun Gothic",
-    sans-serif;
-  background: #f5f7fa;
-}
-
-.page {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.topbar {
-  background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 12px 16px;
-  position: relative;
-  z-index: 10;
-}
-
-.topbar-inner {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.title {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 800;
-  color: #111827;
-}
-
-.sub {
-  margin-top: 5px;
-  font-size: 13px;
-  color: #6b7280;
-}
-
-.status {
-  margin-top: 7px;
-  font-size: 12px;
-  color: #2563eb;
+  overflow: hidden;
 }
 
 #map {
-  flex: 1;
   width: 100%;
-  min-height: 500px;
+  height: 100%;
 }
 
 /* =========================================
@@ -158,18 +112,6 @@ body {
 
 @media (max-width:640px) {
 
-  .topbar {
-    padding: 10px 12px;
-  }
-
-  .title {
-    font-size: 17px;
-  }
-
-  .sub {
-    font-size: 12px;
-  }
-
   .apt-icon {
     width: 24px;
     height: 28px;
@@ -185,47 +127,14 @@ body {
 
 <body>
 
-<div class="page">
-
-<header class="topbar">
-
-  <div class="topbar-inner">
-
-    <h1 class="title">
-      우리아파트 안심거래
-    </h1>
-
-    <div class="sub">
-      전국 아파트를 지도에서 확인하세요.
-    </div>
-
-    <div id="status" class="status">
-      전국 지도를 불러오는 중입니다.
-    </div>
-
-  </div>
-
-</header>
-
 <div id="map"></div>
 
-</div>
-
-
-<!--
-=================================================
-기존에 발급받은 카카오 JavaScript 키를 그대로 사용
-=================================================
--->
-
 <script
-src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=여기에_현재_카카오_JavaScript키">
+src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=afb1495e5138ed5d431f6203b02a7a29">
 </script>
-
 
 <script>
 "use strict";
-
 
 /* =========================================
    기본 설정
@@ -247,18 +156,12 @@ const APT_LIST_API = "/api/apt-list";
 
 const APARTMENT_START_LEVEL = 5;
 
-
 /*
   서버 조회 상한
   화면 표시 개수를 40개로 제한하는 용도가 아님
 */
 
 const MAP_LIMIT = 1000;
-
-
-const statusEl =
-  document.getElementById("status");
-
 
 /* =========================================
    확정 풍선 문구 12개
@@ -281,7 +184,6 @@ const BALLOON_MESSAGES = [
 
 ];
 
-
 function getBalloonMessage(index) {
 
   return BALLOON_MESSAGES[
@@ -289,7 +191,6 @@ function getBalloonMessage(index) {
   ];
 
 }
-
 
 /* =========================================
    HTML 안전 처리
@@ -305,7 +206,6 @@ function esc(value) {
     .replace(/'/g, "&#39;");
 
 }
-
 
 /* =========================================
    DB 필드 대응
@@ -332,7 +232,6 @@ function getValue(row, names) {
 
 }
 
-
 function getApartmentName(row) {
 
   return getValue(
@@ -351,7 +250,6 @@ function getApartmentName(row) {
 
 }
 
-
 function getAddress(row) {
 
   return getValue(
@@ -369,7 +267,6 @@ function getAddress(row) {
 
 }
 
-
 /* =========================================
    좌표 읽기
 ========================================= */
@@ -386,7 +283,6 @@ function getLatitude(row) {
 
 }
 
-
 function getLongitude(row) {
 
   return Number(
@@ -400,7 +296,6 @@ function getLongitude(row) {
 
 }
 
-
 /* =========================================
    카카오맵 생성
 ========================================= */
@@ -411,7 +306,6 @@ function getLongitude(row) {
 
 const mapContainer =
   document.getElementById("map");
-
 
 const mapOption = {
 
@@ -425,20 +319,17 @@ const mapOption = {
 
 };
 
-
 const map =
   new kakao.maps.Map(
     mapContainer,
     mapOption
   );
 
-
 /* =========================================
    현재 표시된 오버레이 관리
 ========================================= */
 
 let overlays = [];
-
 
 /* =========================================
    요청 상태
@@ -449,7 +340,6 @@ let loading = false;
 let requestSerial = 0;
 
 let moveTimer = null;
-
 
 /* =========================================
    카카오맵 Level 5 확인
@@ -463,7 +353,6 @@ function canLoadApartments() {
   );
 
 }
-
 
 /* =========================================
    기존 말풍선 제거
@@ -483,7 +372,6 @@ function clearApartmentOverlays() {
 
 }
 
-
 /* =========================================
    현재 카카오맵 화면 영역 아파트 조회
 ========================================= */
@@ -499,45 +387,33 @@ async function loadApartmentsInBounds() {
 
     clearApartmentOverlays();
 
-    statusEl.textContent =
-      "지도를 확대하면 아파트가 표시됩니다.";
-
     return;
 
   }
 
-
   const bounds =
     map.getBounds();
-
 
   const southWest =
     bounds.getSouthWest();
 
-
   const northEast =
     bounds.getNorthEast();
-
 
   const south =
     southWest.getLat();
 
-
   const west =
     southWest.getLng();
-
 
   const north =
     northEast.getLat();
 
-
   const east =
     northEast.getLng();
 
-
   const serial =
     ++requestSerial;
-
 
   if (loading) {
 
@@ -545,13 +421,7 @@ async function loadApartmentsInBounds() {
 
   }
 
-
   loading = true;
-
-
-  statusEl.textContent =
-    "현재 지도 영역의 아파트를 불러오는 중입니다.";
-
 
   try {
 
@@ -569,7 +439,6 @@ async function loadApartmentsInBounds() {
       "&limit=" +
       encodeURIComponent(MAP_LIMIT);
 
-
     const response =
       await fetch(
         url,
@@ -583,7 +452,6 @@ async function loadApartmentsInBounds() {
         }
       );
 
-
     if (!response.ok) {
 
       throw new Error(
@@ -593,10 +461,8 @@ async function loadApartmentsInBounds() {
 
     }
 
-
     const data =
       await response.json();
-
 
     /*
       이전 요청 결과가 늦게 도착했으면
@@ -612,18 +478,12 @@ async function loadApartmentsInBounds() {
 
     }
 
-
     const rows =
       Array.isArray(data.apartments)
       ? data.apartments
       : [];
 
-
     clearApartmentOverlays();
-
-
-    let successCount = 0;
-
 
     rows.forEach(
       function(row, index) {
@@ -631,10 +491,8 @@ async function loadApartmentsInBounds() {
         const lat =
           getLatitude(row);
 
-
         const lng =
           getLongitude(row);
-
 
         if (
           !Number.isFinite(lat) ||
@@ -645,7 +503,6 @@ async function loadApartmentsInBounds() {
 
         }
 
-
         createApartmentOverlay(
           row,
           lat,
@@ -653,18 +510,8 @@ async function loadApartmentsInBounds() {
           index
         );
 
-
-        successCount++;
-
       }
     );
-
-
-    statusEl.textContent =
-      "현재 영역 아파트 " +
-      successCount +
-      "개 표시";
-
 
   } catch (error) {
 
@@ -673,13 +520,7 @@ async function loadApartmentsInBounds() {
       error
     );
 
-
     clearApartmentOverlays();
-
-
-    statusEl.textContent =
-      "현재 지도 영역의 아파트를 불러오지 못했습니다.";
-
 
   } finally {
 
@@ -688,7 +529,6 @@ async function loadApartmentsInBounds() {
   }
 
 }
-
 
 /* =========================================
    아파트 말풍선 생성
@@ -704,22 +544,17 @@ function createApartmentOverlay(
   const apartmentName =
     getApartmentName(row);
 
-
   const address =
     getAddress(row);
-
 
   const message =
     getBalloonMessage(index);
 
-
   const content =
     document.createElement("div");
 
-
   content.className =
     "apt-marker";
-
 
   content.innerHTML =
 
@@ -735,13 +570,11 @@ function createApartmentOverlay(
 
     '</div>';
 
-
   const position =
     new kakao.maps.LatLng(
       lat,
       lng
     );
-
 
   const overlay =
     new kakao.maps.CustomOverlay({
@@ -760,13 +593,11 @@ function createApartmentOverlay(
 
     });
 
-
   /*
     말풍선을 지도에 표시
   */
 
   overlay.setMap(map);
-
 
   /*
     클릭하면 아파트 정보 표시
@@ -779,7 +610,6 @@ function createApartmentOverlay(
       let text =
         apartmentName;
 
-
       if (address) {
 
         text +=
@@ -788,26 +618,21 @@ function createApartmentOverlay(
 
       }
 
-
       text +=
         "\n우리아파트 안심거래";
-
 
       alert(text);
 
     }
   );
 
-
   overlays.push(
     overlay
   );
 
-
   return overlay;
 
 }
-
 
 /* =========================================
    지도 이동 후 조회
@@ -818,7 +643,6 @@ function scheduleMapLoad() {
   clearTimeout(
     moveTimer
   );
-
 
   moveTimer =
     setTimeout(
@@ -831,7 +655,6 @@ function scheduleMapLoad() {
     );
 
 }
-
 
 /* =========================================
    카카오맵 이벤트
@@ -851,7 +674,6 @@ kakao.maps.event.addListener(
   }
 );
 
-
 /*
   확대 / 축소가 변경됐을 때
 */
@@ -870,19 +692,14 @@ kakao.maps.event.addListener(
 
       clearApartmentOverlays();
 
-      statusEl.textContent =
-        "지도를 확대하면 아파트가 표시됩니다.";
-
       return;
 
     }
-
 
     scheduleMapLoad();
 
   }
 );
-
 
 /* =========================================
    최초 실행
@@ -893,14 +710,6 @@ kakao.maps.event.addListener(
 
   Level 5까지 확대되기 전에는
   전국 아파트 DB를 불러오지 않음.
-*/
-
-statusEl.textContent =
-  "지도를 확대하면 아파트가 표시됩니다.";
-
-
-/*
-  Level 5 이하인 경우에만 조회
 */
 
 if (canLoadApartments()) {
