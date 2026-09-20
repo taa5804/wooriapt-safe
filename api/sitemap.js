@@ -4,6 +4,13 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY;
 const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY;
 
+// 확정값
+const BATCH_SIZE = 50;
+
+// 함수 시간초과를 피하기 위해
+// 한 번 실행에서 최대 4묶음 = 200개 처리
+const MAX_BATCHES = 4;
+
 module.exports = async function handler(req, res) {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.setHeader("Cache-Control", "no-store");
@@ -25,213 +32,240 @@ module.exports = async function handler(req, res) {
 
     const baseUrl = SUPABASE_URL.replace(/\/rest\/v1\/?$/, "");
 
-    // PENDING 50개 가져오기
-    const selectUrl =
-      `${baseUrl}/rest/v1/safe_apartments` +
-      `?select=*` +
-      `&geocode_status=eq.PENDING` +
-      `&limit=50`;
+    let totalProcessed = 0;
+    let totalSuccess = 0;
+    let totalFailed = 0;
 
-    const selectResponse = await fetch(selectUrl, {
-      method: "GET",
-      headers: {
-        apikey: SUPABASE_SECRET_KEY,
-        Authorization: `Bearer ${SUPABASE_SECRET_KEY}`,
-        Accept: "application/json"
-      }
-    });
+    const failedResults = [];
 
-    const selectText = await selectResponse.text();
+    for (let batch = 1; batch <= MAX_BATCHES; batch++) {
 
-    if (!selectResponse.ok) {
-      return res.status(500).json({
-        ok: false,
-        step: "supabase_select",
-        status: selectResponse.status,
-        response: selectText
+      // PENDING 50개 가져오기
+      const selectUrl =
+        `${baseUrl}/rest/v1/safe_apartments` +
+        `?select=*` +
+        `&geocode_status=eq.PENDING` +
+        `&limit=${BATCH_SIZE}`;
+
+      const selectResponse = await fetch(selectUrl, {
+        method: "GET",
+        headers: {
+          apikey: SUPABASE_SECRET_KEY,
+          Authorization: `Bearer ${SUPABASE_SECRET_KEY}`,
+          Accept: "application/json"
+        }
       });
-    }
 
-    let rows;
+      const selectText = await selectResponse.text();
 
-    try {
-      rows = JSON.parse(selectText);
-    } catch (e) {
-      return res.status(500).json({
-        ok: false,
-        step: "parse_supabase_response",
-        response: selectText
-      });
-    }
-
-    if (!rows || rows.length === 0) {
-      return res.status(200).json({
-        ok: true,
-        message: "PENDING 데이터 없음",
-        processed: 0,
-        success: 0,
-        failed: 0
-      });
-    }
-
-    let success = 0;
-    let failed = 0;
-    const results = [];
-
-    for (const row of rows) {
-      // 실제 DB 컬럼명 고정
-      const apartmentName =
-        String(row["단지명"] || "").trim();
-
-      const address =
-        String(row["관리사무소 주소"] || "").trim();
-
-      if (!apartmentName || !address) {
-        failed++;
-
-        results.push({
-          apartmentName,
-          address,
+      if (!selectResponse.ok) {
+        return res.status(500).json({
           ok: false,
-          error: !apartmentName ? "단지명 없음" : "주소 없음"
+          step: "supabase_select",
+          status: selectResponse.status,
+          response: selectText
         });
-
-        continue;
       }
+
+      let rows;
 
       try {
-        // 카카오 주소검색
-        const kakaoUrl =
-          "https://dapi.kakao.com/v2/local/search/address.json?query=" +
-          encodeURIComponent(address);
-
-        const kakaoResponse = await fetch(kakaoUrl, {
-          method: "GET",
-          headers: {
-            Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`
-          }
+        rows = JSON.parse(selectText);
+      } catch (e) {
+        return res.status(500).json({
+          ok: false,
+          step: "parse_supabase_response",
+          response: selectText
         });
+      }
 
-        const kakaoText = await kakaoResponse.text();
+      // 더 이상 PENDING 없음
+      if (!rows || rows.length === 0) {
+        return res.status(200).json({
+          ok: true,
+          completed: true,
+          message: "PENDING 데이터 없음 - 전체 완료",
+          processed: totalProcessed,
+          success: totalSuccess,
+          failed: totalFailed,
+          failedResults
+        });
+      }
 
-        if (!kakaoResponse.ok) {
-          failed++;
+      for (const row of rows) {
 
-          results.push({
-            apartmentName,
+        // 실제 DB 확정 컬럼
+        const apartmentName =
+          String(row["단지명"] || "").trim();
+
+        const address =
+          String(row["관리사무소 주소"] || "").trim();
+
+        totalProcessed++;
+
+        // 단지명 없음
+        if (!apartmentName) {
+          totalFailed++;
+
+          failedResults.push({
+            apartmentName: "",
             address,
-            ok: false,
-            error: "카카오 API 오류",
-            status: kakaoResponse.status
+            error: "단지명 없음"
           });
 
           continue;
         }
 
-        let kakaoData;
+        // 주소 없음
+        if (!address) {
+          totalFailed++;
+
+          failedResults.push({
+            apartmentName,
+            address: "",
+            error: "주소 없음"
+          });
+
+          continue;
+        }
 
         try {
-          kakaoData = JSON.parse(kakaoText);
-        } catch (e) {
-          failed++;
 
-          results.push({
-            apartmentName,
-            address,
-            ok: false,
-            error: "카카오 응답 파싱 오류"
+          // ==============================
+          // 카카오 주소 → 위도/경도
+          // ==============================
+
+          const kakaoUrl =
+            "https://dapi.kakao.com/v2/local/search/address.json?query=" +
+            encodeURIComponent(address);
+
+          const kakaoResponse = await fetch(kakaoUrl, {
+            method: "GET",
+            headers: {
+              Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`
+            }
           });
 
-          continue;
-        }
+          const kakaoText = await kakaoResponse.text();
 
-        if (
-          !kakaoData.documents ||
-          kakaoData.documents.length === 0
-        ) {
-          failed++;
+          if (!kakaoResponse.ok) {
+            totalFailed++;
 
-          results.push({
-            apartmentName,
-            address,
-            ok: false,
-            error: "카카오 주소검색 결과 없음"
+            failedResults.push({
+              apartmentName,
+              address,
+              error: "카카오 API 오류",
+              status: kakaoResponse.status
+            });
+
+            continue;
+          }
+
+          let kakaoData;
+
+          try {
+            kakaoData = JSON.parse(kakaoText);
+          } catch (e) {
+            totalFailed++;
+
+            failedResults.push({
+              apartmentName,
+              address,
+              error: "카카오 응답 파싱 오류"
+            });
+
+            continue;
+          }
+
+          if (
+            !kakaoData.documents ||
+            kakaoData.documents.length === 0
+          ) {
+            totalFailed++;
+
+            failedResults.push({
+              apartmentName,
+              address,
+              error: "카카오 주소검색 결과 없음"
+            });
+
+            continue;
+          }
+
+          const latitude =
+            Number(kakaoData.documents[0].y);
+
+          const longitude =
+            Number(kakaoData.documents[0].x);
+
+          // ==============================
+          // Supabase 업데이트
+          // 단지명 + 관리사무소 주소
+          // ==============================
+
+          const updateUrl =
+            `${baseUrl}/rest/v1/safe_apartments` +
+            `?${encodeURIComponent("단지명")}=eq.${encodeURIComponent(apartmentName)}` +
+            `&${encodeURIComponent("관리사무소 주소")}=eq.${encodeURIComponent(address)}`;
+
+          const updateResponse = await fetch(updateUrl, {
+            method: "PATCH",
+            headers: {
+              apikey: SUPABASE_SECRET_KEY,
+              Authorization: `Bearer ${SUPABASE_SECRET_KEY}`,
+              "Content-Type": "application/json",
+              Prefer: "return=minimal"
+            },
+            body: JSON.stringify({
+              latitude,
+              longitude,
+              geocode_status: "DONE"
+            })
           });
 
-          continue;
-        }
+          const updateText = await updateResponse.text();
 
-        const latitude =
-          Number(kakaoData.documents[0].y);
+          if (!updateResponse.ok) {
+            totalFailed++;
 
-        const longitude =
-          Number(kakaoData.documents[0].x);
+            failedResults.push({
+              apartmentName,
+              address,
+              error: "Supabase 업데이트 오류",
+              response: updateText
+            });
 
-        // 확정된 실제 DB 컬럼명
-        const updateUrl =
-          `${baseUrl}/rest/v1/safe_apartments` +
-          `?${encodeURIComponent("단지명")}=eq.${encodeURIComponent(apartmentName)}` +
-          `&${encodeURIComponent("관리사무소 주소")}=eq.${encodeURIComponent(address)}`;
+            continue;
+          }
 
-        const updateResponse = await fetch(updateUrl, {
-          method: "PATCH",
-          headers: {
-            apikey: SUPABASE_SECRET_KEY,
-            Authorization: `Bearer ${SUPABASE_SECRET_KEY}`,
-            "Content-Type": "application/json",
-            Prefer: "return=representation"
-          },
-          body: JSON.stringify({
-            latitude,
-            longitude,
-            geocode_status: "DONE"
-          })
-        });
+          totalSuccess++;
 
-        const updateText = await updateResponse.text();
+        } catch (error) {
+          totalFailed++;
 
-        if (!updateResponse.ok) {
-          failed++;
-
-          results.push({
+          failedResults.push({
             apartmentName,
             address,
-            ok: false,
-            error: "Supabase 업데이트 오류",
-            response: updateText
+            error: error.message
           });
-
-          continue;
         }
+      }
 
-        success++;
-
-        results.push({
-          apartmentName,
-          address,
-          latitude,
-          longitude,
-          ok: true
-        });
-
-      } catch (error) {
-        failed++;
-
-        results.push({
-          apartmentName,
-          address,
-          ok: false,
-          error: error.message
-        });
+      // 50개보다 적게 가져왔다면
+      // 마지막 묶음일 가능성이 높음
+      if (rows.length < BATCH_SIZE) {
+        break;
       }
     }
 
     return res.status(200).json({
       ok: true,
-      processed: rows.length,
-      success,
-      failed,
-      results
+      completed: false,
+      message: "이번 실행 완료 - 다시 실행하면 다음 PENDING부터 계속",
+      processed: totalProcessed,
+      success: totalSuccess,
+      failed: totalFailed,
+      failedResults
     });
 
   } catch (error) {
