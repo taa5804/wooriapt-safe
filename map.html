@@ -6,211 +6,180 @@
 
 <title>전국 아파트 지도 | 우리아파트 안심거래</title>
 
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-
 <style>
-  * {
-    box-sizing: border-box;
-  }
+* {
+  box-sizing: border-box;
+}
 
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    font-family:
-      -apple-system,
-      BlinkMacSystemFont,
-      "Noto Sans KR",
-      "Malgun Gothic",
-      sans-serif;
-    background: #f5f7fa;
-  }
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+  background: #f5f7fa;
+}
 
-  .page {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
+.page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 12px 16px;
+  position: relative;
+  z-index: 10;
+}
+
+.topbar-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.sub {
+  margin-top: 5px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.status {
+  margin-top: 7px;
+  font-size: 12px;
+  color: #2563eb;
+}
+
+#map {
+  flex: 1;
+  width: 100%;
+  min-height: 500px;
+}
+
+/* =========================================
+   아파트 마커
+========================================= */
+
+.apt-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+/* 아파트 아이콘 */
+
+.apt-icon {
+  width: 28px;
+  height: 32px;
+  position: relative;
+  background: #1769e0;
+  border: 2px solid #ffffff;
+  border-radius: 4px 4px 2px 2px;
+  box-shadow: 0 2px 7px rgba(0,0,0,.25);
+}
+
+.apt-icon::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  width: 4px;
+  height: 4px;
+  background: #ffffff;
+  box-shadow:
+    8px 0 #ffffff,
+    0 8px #ffffff,
+    8px 8px #ffffff,
+    0 16px #ffffff,
+    8px 16px #ffffff;
+}
+
+.apt-icon::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  bottom: -7px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 8px solid #1769e0;
+}
+
+/* 말풍선 */
+
+.apt-balloon {
+  position: relative;
+  display: inline-block;
+  padding: 6px 9px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 2px solid #1769e0;
+  color: #111827;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+  box-shadow: 0 3px 10px rgba(0,0,0,.18);
+}
+
+.apt-balloon::after {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 7px solid #1769e0;
+}
+
+.apt-balloon .message {
+  display: block;
+}
+
+@media (max-width:640px) {
 
   .topbar {
-    background: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
-    padding: 12px 16px;
-    position: relative;
-    z-index: 1000;
-  }
-
-  .topbar-inner {
-    max-width: 1400px;
-    margin: 0 auto;
+    padding: 10px 12px;
   }
 
   .title {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 800;
-    color: #111827;
+    font-size: 17px;
   }
 
   .sub {
-    margin-top: 5px;
-    font-size: 13px;
-    color: #6b7280;
-  }
-
-  .status {
-    margin-top: 7px;
     font-size: 12px;
-    color: #2563eb;
   }
 
-  #map {
-    flex: 1;
-    width: 100%;
-    min-height: 500px;
-  }
-
-  /* ================================
-     아파트 마커
-  ================================= */
-
-  .apt-marker-wrap {
-    background: transparent;
-    border: 0;
-  }
-
-  .apt-marker {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transform: translate(-50%, -100%);
-    white-space: nowrap;
-  }
-
-  /* 아파트 모양 아이콘 */
   .apt-icon {
-    width: 28px;
-    height: 32px;
-    position: relative;
-    background: #1769e0;
-    border: 2px solid #ffffff;
-    border-radius: 4px 4px 2px 2px;
-    box-shadow: 0 2px 7px rgba(0,0,0,.25);
+    width: 24px;
+    height: 28px;
   }
 
-  .apt-icon::before {
-    content: "";
-    position: absolute;
-    left: 5px;
-    top: 6px;
-    width: 4px;
-    height: 4px;
-    background: #ffffff;
-    box-shadow:
-      8px 0 #ffffff,
-      0 8px #ffffff,
-      8px 8px #ffffff,
-      0 16px #ffffff,
-      8px 16px #ffffff;
-  }
-
-  .apt-icon::after {
-    content: "";
-    position: absolute;
-    left: 10px;
-    bottom: -7px;
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 8px solid #1769e0;
-  }
-
-  /* 짧은 사각 말풍선 */
   .apt-balloon {
-    position: relative;
-    display: inline-block;
-    padding: 6px 9px;
-    border-radius: 6px;
-    background: #ffffff;
-    border: 2px solid #1769e0;
-    color: #111827;
-    font-size: 11px;
-    font-weight: 800;
-    line-height: 1.2;
-    box-shadow: 0 3px 10px rgba(0,0,0,.18);
+    padding: 5px 7px;
+    font-size: 10px;
   }
-
-  .apt-balloon::after {
-    content: "";
-    position: absolute;
-    left: -7px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
-    border-right: 7px solid #1769e0;
-  }
-
-  .apt-balloon .message {
-    display: block;
-  }
-
-  .apt-popup {
-    min-width: 180px;
-    line-height: 1.5;
-  }
-
-  .apt-popup strong {
-    display: block;
-    margin-bottom: 4px;
-    font-size: 14px;
-  }
-
-  .apt-popup .address {
-    color: #6b7280;
-    font-size: 12px;
-  }
-
-  .apt-popup .cta {
-    margin-top: 8px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #1769e0;
-  }
-
-  @media (max-width: 640px) {
-    .topbar {
-      padding: 10px 12px;
-    }
-
-    .title {
-      font-size: 17px;
-    }
-
-    .sub {
-      font-size: 12px;
-    }
-
-    .apt-icon {
-      width: 24px;
-      height: 28px;
-    }
-
-    .apt-balloon {
-      padding: 5px 7px;
-      font-size: 10px;
-    }
-  }
+}
 </style>
 </head>
 
@@ -218,31 +187,41 @@
 
 <div class="page">
 
-  <header class="topbar">
-    <div class="topbar-inner">
+<header class="topbar">
 
-      <h1 class="title">
-        우리아파트 안심거래
-      </h1>
+  <div class="topbar-inner">
 
-      <div class="sub">
-        전국 아파트를 지도에서 확인하세요.
-      </div>
+    <h1 class="title">
+      우리아파트 안심거래
+    </h1>
 
-      <div id="status" class="status">
-        전국 지도를 불러오는 중입니다.
-      </div>
-
+    <div class="sub">
+      전국 아파트를 지도에서 확인하세요.
     </div>
-  </header>
 
-  <div id="map"></div>
+    <div id="status" class="status">
+      전국 지도를 불러오는 중입니다.
+    </div>
+
+  </div>
+
+</header>
+
+<div id="map"></div>
 
 </div>
 
+
+<!--
+=================================================
+기존에 발급받은 카카오 JavaScript 키를 그대로 사용
+=================================================
+-->
+
 <script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=여기에_현재_카카오_JavaScript키">
 </script>
+
 
 <script>
 "use strict";
@@ -255,15 +234,27 @@
 const APT_LIST_API = "/api/apt-list";
 
 /*
-   줌 7부터 아파트 조회
-   현재 지도에서 사용하는 Leaflet zoom 기준
+  카카오맵 기준
+
+  Level 6 이상 :
+  아파트 조회 안 함
+
+  Level 5 이하 :
+  현재 화면 영역 아파트 조회
+
+  카카오맵은 숫자가 작을수록 확대됨
 */
-const APARTMENT_MIN_ZOOM = 7;
+
+const APARTMENT_START_LEVEL = 5;
+
 
 /*
-   한 번의 지도 영역 조회 최대 건수
+  서버 조회 상한
+  화면 표시 개수를 40개로 제한하는 용도가 아님
 */
+
 const MAP_LIMIT = 1000;
+
 
 const statusEl =
   document.getElementById("status");
@@ -411,39 +402,46 @@ function getLongitude(row) {
 
 
 /* =========================================
-   지도 생성
+   카카오맵 생성
 ========================================= */
 
+/*
+  최초에는 전국이 보이도록 설정
+*/
+
+const mapContainer =
+  document.getElementById("map");
+
+
+const mapOption = {
+
+  center:
+    new kakao.maps.LatLng(
+      36.4,
+      127.8
+    ),
+
+  level: 13
+
+};
+
+
 const map =
-  L.map("map", {
-    zoomControl: true
-  })
-  .setView(
-    [36.4, 127.8],
-    4
+  new kakao.maps.Map(
+    mapContainer,
+    mapOption
   );
 
 
-L.tileLayer(
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  {
-    maxZoom: 19,
-    attribution:
-      "&copy; OpenStreetMap contributors"
-  }
-).addTo(map);
-
-
 /* =========================================
-   현재 표시된 마커 관리
+   현재 표시된 오버레이 관리
 ========================================= */
 
-const markerLayer =
-  L.layerGroup().addTo(map);
+let overlays = [];
 
 
 /* =========================================
-   중복 요청 방지
+   요청 상태
 ========================================= */
 
 let loading = false;
@@ -454,25 +452,52 @@ let moveTimer = null;
 
 
 /* =========================================
-   줌 7 이상 확대 여부
+   카카오맵 Level 5 확인
 ========================================= */
 
 function canLoadApartments() {
 
-  return map.getZoom() >= APARTMENT_MIN_ZOOM;
+  return (
+    map.getLevel() <=
+    APARTMENT_START_LEVEL
+  );
 
 }
 
 
 /* =========================================
-   현재 지도 영역 조회
+   기존 말풍선 제거
+========================================= */
+
+function clearApartmentOverlays() {
+
+  overlays.forEach(
+    function(overlay) {
+
+      overlay.setMap(null);
+
+    }
+  );
+
+  overlays = [];
+
+}
+
+
+/* =========================================
+   현재 카카오맵 화면 영역 아파트 조회
 ========================================= */
 
 async function loadApartmentsInBounds() {
 
+  /*
+    Level 6 이상에서는
+    아파트를 불러오지 않음
+  */
+
   if (!canLoadApartments()) {
 
-    markerLayer.clearLayers();
+    clearApartmentOverlays();
 
     statusEl.textContent =
       "지도를 확대하면 아파트가 표시됩니다.";
@@ -486,17 +511,28 @@ async function loadApartmentsInBounds() {
     map.getBounds();
 
 
+  const southWest =
+    bounds.getSouthWest();
+
+
+  const northEast =
+    bounds.getNorthEast();
+
+
   const south =
-    bounds.getSouth();
+    southWest.getLat();
+
 
   const west =
-    bounds.getWest();
+    southWest.getLng();
+
 
   const north =
-    bounds.getNorth();
+    northEast.getLat();
+
 
   const east =
-    bounds.getEast();
+    northEast.getLng();
 
 
   const serial =
@@ -563,11 +599,14 @@ async function loadApartmentsInBounds() {
 
 
     /*
-       더 최신 요청이 생겼으면
-       이전 결과는 표시하지 않음
+      이전 요청 결과가 늦게 도착했으면
+      화면에 표시하지 않음
     */
 
-    if (serial !== requestSerial) {
+    if (
+      serial !==
+      requestSerial
+    ) {
 
       return;
 
@@ -580,7 +619,7 @@ async function loadApartmentsInBounds() {
       : [];
 
 
-    markerLayer.clearLayers();
+    clearApartmentOverlays();
 
 
     let successCount = 0;
@@ -591,6 +630,7 @@ async function loadApartmentsInBounds() {
 
         const lat =
           getLatitude(row);
+
 
         const lng =
           getLongitude(row);
@@ -606,7 +646,7 @@ async function loadApartmentsInBounds() {
         }
 
 
-        createApartmentMarker(
+        createApartmentOverlay(
           row,
           lat,
           lng,
@@ -634,11 +674,12 @@ async function loadApartmentsInBounds() {
     );
 
 
-    markerLayer.clearLayers();
+    clearApartmentOverlays();
 
 
     statusEl.textContent =
       "현재 지도 영역의 아파트를 불러오지 못했습니다.";
+
 
   } finally {
 
@@ -650,10 +691,10 @@ async function loadApartmentsInBounds() {
 
 
 /* =========================================
-   아파트 마커 생성
+   아파트 말풍선 생성
 ========================================= */
 
-function createApartmentMarker(
+function createApartmentOverlay(
   row,
   lat,
   lng,
@@ -672,96 +713,104 @@ function createApartmentMarker(
     getBalloonMessage(index);
 
 
-  const html =
+  const content =
+    document.createElement("div");
 
-    '<div class="apt-marker">' +
 
-      '<div class="apt-icon"></div>' +
+  content.className =
+    "apt-marker";
 
-      '<div class="apt-balloon">' +
 
-        '<span class="message">' +
+  content.innerHTML =
 
-          esc(message) +
+    '<div class="apt-icon"></div>' +
 
-        '</span>' +
+    '<div class="apt-balloon">' +
 
-      '</div>' +
+      '<span class="message">' +
+
+        esc(message) +
+
+      '</span>' +
 
     '</div>';
 
 
-  const icon =
-    L.divIcon({
+  const position =
+    new kakao.maps.LatLng(
+      lat,
+      lng
+    );
 
-      className:
-        "apt-marker-wrap",
 
-      html:
-        html,
+  const overlay =
+    new kakao.maps.CustomOverlay({
 
-      iconSize:
-        [0, 0],
+      position:
+        position,
 
-      iconAnchor:
-        [0, 0]
+      content:
+        content,
+
+      xAnchor:
+        0.5,
+
+      yAnchor:
+        1
 
     });
 
 
-  const marker =
-    L.marker(
-      [lat, lng],
-      {
-        icon: icon
+  /*
+    말풍선을 지도에 표시
+  */
+
+  overlay.setMap(map);
+
+
+  /*
+    클릭하면 아파트 정보 표시
+  */
+
+  content.addEventListener(
+    "click",
+    function() {
+
+      let text =
+        apartmentName;
+
+
+      if (address) {
+
+        text +=
+          "\n" +
+          address;
+
       }
-    );
 
 
-  const popup =
-
-    '<div class="apt-popup">' +
-
-      '<strong>' +
-
-        esc(apartmentName) +
-
-      '</strong>' +
-
-      (
-        address
-        ? '<div class="address">' +
-            esc(address) +
-          '</div>'
-        : ""
-      ) +
-
-      '<div class="cta">' +
-
-        "아파트 안심거래 확인 →" +
-
-      '</div>' +
-
-    '</div>';
+      text +=
+        "\n우리아파트 안심거래";
 
 
-  marker.bindPopup(
-    popup
+      alert(text);
+
+    }
   );
 
 
-  markerLayer.addLayer(
-    marker
+  overlays.push(
+    overlay
   );
 
 
-  return marker;
+  return overlay;
 
 }
 
 
 /* =========================================
-   지도 이동 / 확대·축소
+   지도 이동 후 조회
 ========================================= */
 
 function scheduleMapLoad() {
@@ -784,15 +833,54 @@ function scheduleMapLoad() {
 }
 
 
-map.on(
-  "moveend",
-  scheduleMapLoad
+/* =========================================
+   카카오맵 이벤트
+========================================= */
+
+/*
+  지도 이동이 끝났을 때
+*/
+
+kakao.maps.event.addListener(
+  map,
+  "idle",
+  function() {
+
+    scheduleMapLoad();
+
+  }
 );
 
 
-map.on(
-  "zoomend",
-  scheduleMapLoad
+/*
+  확대 / 축소가 변경됐을 때
+*/
+
+kakao.maps.event.addListener(
+  map,
+  "zoom_changed",
+  function() {
+
+    /*
+      Level 6 이상으로 축소하면
+      기존 말풍선을 즉시 제거
+    */
+
+    if (!canLoadApartments()) {
+
+      clearApartmentOverlays();
+
+      statusEl.textContent =
+        "지도를 확대하면 아파트가 표시됩니다.";
+
+      return;
+
+    }
+
+
+    scheduleMapLoad();
+
+  }
 );
 
 
@@ -801,9 +889,10 @@ map.on(
 ========================================= */
 
 /*
-   처음에는 전국 지도만 표시.
-   줌 7보다 확대된 상태가 아니므로
-   DB를 조회하지 않음.
+  처음에는 전국 지도만 표시.
+
+  Level 5까지 확대되기 전에는
+  전국 아파트 DB를 불러오지 않음.
 */
 
 statusEl.textContent =
@@ -811,7 +900,7 @@ statusEl.textContent =
 
 
 /*
-   줌 7 이상인 경우에만 아파트 조회
+  Level 5 이하인 경우에만 조회
 */
 
 if (canLoadApartments()) {
