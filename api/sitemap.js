@@ -4,11 +4,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY;
 const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY;
 
-// 확정값
 const BATCH_SIZE = 50;
-
-// 함수 시간초과를 피하기 위해
-// 한 번 실행에서 최대 4묶음 = 200개 처리
 const MAX_BATCHES = 4;
 
 module.exports = async function handler(req, res) {
@@ -38,9 +34,47 @@ module.exports = async function handler(req, res) {
 
     const failedResults = [];
 
+    // =====================================================
+    // 상태 변경 함수
+    // 단지명 + 관리사무소 주소 기준
+    // =====================================================
+
+    async function updateApartment(
+      apartmentName,
+      address,
+      data
+    ) {
+      const updateUrl =
+        `${baseUrl}/rest/v1/safe_apartments` +
+        `?${encodeURIComponent("단지명")}=eq.${encodeURIComponent(apartmentName)}` +
+        `&${encodeURIComponent("관리사무소 주소")}=eq.${encodeURIComponent(address)}`;
+
+      const response = await fetch(updateUrl, {
+        method: "PATCH",
+        headers: {
+          apikey: SUPABASE_SECRET_KEY,
+          Authorization: `Bearer ${SUPABASE_SECRET_KEY}`,
+          "Content-Type": "application/json",
+          Prefer: "return=minimal"
+        },
+        body: JSON.stringify(data)
+      });
+
+      const text = await response.text();
+
+      return {
+        ok: response.ok,
+        status: response.status,
+        response: text
+      };
+    }
+
+    // =====================================================
+    // 최대 4회 × 50개 = 200개
+    // =====================================================
+
     for (let batch = 1; batch <= MAX_BATCHES; batch++) {
 
-      // PENDING 50개 가져오기
       const selectUrl =
         `${baseUrl}/rest/v1/safe_apartments` +
         `?select=*` +
@@ -71,7 +105,7 @@ module.exports = async function handler(req, res) {
 
       try {
         rows = JSON.parse(selectText);
-      } catch (e) {
+      } catch (error) {
         return res.status(500).json({
           ok: false,
           step: "parse_supabase_response",
@@ -79,12 +113,15 @@ module.exports = async function handler(req, res) {
         });
       }
 
-      // 더 이상 PENDING 없음
+      // ===================================================
+      // PENDING 없음 = 전체 좌표변환 작업 완료
+      // ===================================================
+
       if (!rows || rows.length === 0) {
         return res.status(200).json({
           ok: true,
           completed: true,
-          message: "PENDING 데이터 없음 - 전체 완료",
+          message: "전체 좌표 변환 완료",
           processed: totalProcessed,
           success: totalSuccess,
           failed: totalFailed,
@@ -92,9 +129,13 @@ module.exports = async function handler(req, res) {
         });
       }
 
+      // ===================================================
+      // 50개 처리
+      // ===================================================
+
       for (const row of rows) {
 
-        // 실제 DB 확정 컬럼
+        // 확정된 실제 DB 컬럼
         const apartmentName =
           String(row["단지명"] || "").trim();
 
@@ -103,7 +144,10 @@ module.exports = async function handler(req, res) {
 
         totalProcessed++;
 
+        // =================================================
         // 단지명 없음
+        // =================================================
+
         if (!apartmentName) {
           totalFailed++;
 
@@ -116,7 +160,10 @@ module.exports = async function handler(req, res) {
           continue;
         }
 
+        // =================================================
         // 주소 없음
+        // =================================================
+
         if (!address) {
           totalFailed++;
 
@@ -131,9 +178,9 @@ module.exports = async function handler(req, res) {
 
         try {
 
-          // ==============================
-          // 카카오 주소 → 위도/경도
-          // ==============================
+          // =================================================
+          // 카카오 주소검색
+          // =================================================
 
           const kakaoUrl =
             "https://dapi.kakao.com/v2/local/search/address.json?query=" +
@@ -147,6 +194,11 @@ module.exports = async function handler(req, res) {
           });
 
           const kakaoText = await kakaoResponse.text();
+
+          // =================================================
+          // 카카오 API 자체 오류
+          // 이 경우는 FAILED 처리하지 않고 다음 실행에서 재시도
+          // =================================================
 
           if (!kakaoResponse.ok) {
             totalFailed++;
@@ -165,7 +217,7 @@ module.exports = async function handler(req, res) {
 
           try {
             kakaoData = JSON.parse(kakaoText);
-          } catch (e) {
+          } catch (error) {
             totalFailed++;
 
             failedResults.push({
@@ -177,10 +229,37 @@ module.exports = async function handler(req, res) {
             continue;
           }
 
+          // =================================================
+          // 주소검색 결과 없음
+          // FAILED로 변경해서 반복 검색 방지
+          // =================================================
+
           if (
             !kakaoData.documents ||
             kakaoData.documents.length === 0
           ) {
+
+            const failedUpdate = await updateApartment(
+              apartmentName,
+              address,
+              {
+                geocode_status: "FAILED"
+              }
+            );
+
+            if (!failedUpdate.ok) {
+              totalFailed++;
+
+              failedResults.push({
+                apartmentName,
+                address,
+                error: "FAILED 상태 저장 오류",
+                response: failedUpdate.response
+              });
+
+              continue;
+            }
+
             totalFailed++;
 
             failedResults.push({
@@ -192,47 +271,38 @@ module.exports = async function handler(req, res) {
             continue;
           }
 
+          // =================================================
+          // 위도 / 경도
+          // =================================================
+
           const latitude =
             Number(kakaoData.documents[0].y);
 
           const longitude =
             Number(kakaoData.documents[0].x);
 
-          // ==============================
-          // Supabase 업데이트
-          // 단지명 + 관리사무소 주소
-          // ==============================
+          // =================================================
+          // 성공 데이터 저장
+          // =================================================
 
-          const updateUrl =
-            `${baseUrl}/rest/v1/safe_apartments` +
-            `?${encodeURIComponent("단지명")}=eq.${encodeURIComponent(apartmentName)}` +
-            `&${encodeURIComponent("관리사무소 주소")}=eq.${encodeURIComponent(address)}`;
-
-          const updateResponse = await fetch(updateUrl, {
-            method: "PATCH",
-            headers: {
-              apikey: SUPABASE_SECRET_KEY,
-              Authorization: `Bearer ${SUPABASE_SECRET_KEY}`,
-              "Content-Type": "application/json",
-              Prefer: "return=minimal"
-            },
-            body: JSON.stringify({
+          const doneUpdate = await updateApartment(
+            apartmentName,
+            address,
+            {
               latitude,
               longitude,
               geocode_status: "DONE"
-            })
-          });
+            }
+          );
 
-          const updateText = await updateResponse.text();
-
-          if (!updateResponse.ok) {
+          if (!doneUpdate.ok) {
             totalFailed++;
 
             failedResults.push({
               apartmentName,
               address,
               error: "Supabase 업데이트 오류",
-              response: updateText
+              response: doneUpdate.response
             });
 
             continue;
@@ -241,6 +311,7 @@ module.exports = async function handler(req, res) {
           totalSuccess++;
 
         } catch (error) {
+
           totalFailed++;
 
           failedResults.push({
@@ -251,8 +322,7 @@ module.exports = async function handler(req, res) {
         }
       }
 
-      // 50개보다 적게 가져왔다면
-      // 마지막 묶음일 가능성이 높음
+      // 마지막 묶음
       if (rows.length < BATCH_SIZE) {
         break;
       }
@@ -261,7 +331,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({
       ok: true,
       completed: false,
-      message: "이번 실행 완료 - 다시 실행하면 다음 PENDING부터 계속",
+      message: "이번 실행 완료 - 남은 PENDING 데이터 있음",
       processed: totalProcessed,
       success: totalSuccess,
       failed: totalFailed,
