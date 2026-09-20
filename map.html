@@ -35,6 +35,7 @@ body {
   align-items: center;
   gap: 5px;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 /* 아파트 아이콘 */
@@ -145,16 +146,16 @@ const APT_LIST_API = "/api/apt-list";
 /*
   카카오맵 기준
 
-  Level 6 이상 :
+  Level 5 이상 :
   아파트 조회 안 함
 
-  Level 5 이하 :
+  Level 4 이하 :
   현재 화면 영역 아파트 조회
 
   카카오맵은 숫자가 작을수록 확대됨
 */
 
-const APARTMENT_START_LEVEL = 5;
+const APARTMENT_START_LEVEL = 4;
 
 /*
   서버 조회 상한
@@ -342,7 +343,7 @@ let requestSerial = 0;
 let moveTimer = null;
 
 /* =========================================
-   카카오맵 Level 5 확인
+   카카오맵 Level 4 확인
 ========================================= */
 
 function canLoadApartments() {
@@ -379,7 +380,7 @@ function clearApartmentOverlays() {
 async function loadApartmentsInBounds() {
 
   /*
-    Level 6 이상에서는
+    Level 5 이상에서는
     아파트를 불러오지 않음
   */
 
@@ -529,8 +530,7 @@ async function loadApartmentsInBounds() {
   }
 
 }
-
-/* =========================================
+  /* =========================================
    아파트 말풍선 생성
 ========================================= */
 
@@ -600,28 +600,63 @@ function createApartmentOverlay(
   overlay.setMap(map);
 
   /*
-    클릭하면 아파트 정보 표시
+    클릭하면 해당 아파트 자동검색 페이지로 이동
   */
 
   content.addEventListener(
     "click",
     function() {
 
-      let text =
-        apartmentName;
+      const region =
+        getValue(
+          row,
+          [
+            "region",
+            "시도"
+          ]
+        );
 
-      if (address) {
+      const city =
+        getValue(
+          row,
+          [
+            "city",
+            "시군구"
+          ]
+        );
 
-        text +=
-          "\n" +
-          address;
+      const place =
+        getValue(
+          row,
+          [
+            "detail",
+            "동리",
+            "읍면",
+            "dong"
+          ]
+        );
+
+      if (
+        !region ||
+        !city ||
+        !place ||
+        !apartmentName
+      ) {
+
+        return;
 
       }
 
-      text +=
-        "\n우리아파트 안심거래";
-
-      alert(text);
+      window.location.href =
+        "/apt-search/" +
+        encodeURIComponent(region) +
+        "/" +
+        encodeURIComponent(city) +
+        "/" +
+        encodeURIComponent(place) +
+        "/" +
+        encodeURIComponent(apartmentName) +
+        "/sale";
 
     }
   );
@@ -684,7 +719,7 @@ kakao.maps.event.addListener(
   function() {
 
     /*
-      Level 6 이상으로 축소하면
+      Level 5 이상으로 축소하면
       기존 말풍선을 즉시 제거
     */
 
@@ -708,7 +743,7 @@ kakao.maps.event.addListener(
 /*
   처음에는 전국 지도만 표시.
 
-  Level 5까지 확대되기 전에는
+  Level 4까지 확대되기 전에는
   전국 아파트 DB를 불러오지 않음.
 */
 
