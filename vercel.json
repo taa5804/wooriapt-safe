@@ -41,6 +41,10 @@
       "destination": "/api/mart-page?mode=mart-sitemap-index"
     },
     {
+      "source": "/map",
+      "destination": "/map.html"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
     }
