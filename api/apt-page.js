@@ -201,20 +201,108 @@ async function handleApartmentList(
       .slice(0, 5);
 
 
+  const isMapRequest =
+    String(
+      req.query.map || ""
+    ).trim() === "1";
+
+
+  const minLat =
+    Number(req.query.minLat);
+
+  const maxLat =
+    Number(req.query.maxLat);
+
+  const minLng =
+    Number(req.query.minLng);
+
+  const maxLng =
+    Number(req.query.maxLng);
+
+
+  const mapBoundsValid =
+    isMapRequest &&
+    Number.isFinite(minLat) &&
+    Number.isFinite(maxLat) &&
+    Number.isFinite(minLng) &&
+    Number.isFinite(maxLng) &&
+    minLat <= maxLat &&
+    minLng <= maxLng;
+
+
+  if (
+    isMapRequest &&
+    !mapBoundsValid
+  ) {
+    return res.status(400).json({
+      ok: false,
+      message:
+        "지도 영역 좌표가 올바르지 않습니다."
+    });
+  }
+
+
   const query =
     new URLSearchParams();
 
 
-  query.set(
-    "select",
-    "시도,시군구,읍면,동리,단지명"
-  );
+  if (mapBoundsValid) {
+
+    /*
+      지도 요청은 현재 화면 영역의
+      좌표가 있는 아파트만 조회한다.
+      전국 아파트 전체를 불러오지 않는다.
+    */
+
+    query.set(
+      "select",
+      "시도,시군구,읍면,동리,단지명,관리사무소 연락처 주소,latitude,longitude"
+    );
 
 
-  query.set(
-    "order",
-    "시도.asc,시군구.asc,읍면.asc,동리.asc,단지명.asc"
-  );
+    query.set(
+      "latitude",
+      "gte." + minLat
+    );
+
+
+    query.append(
+      "latitude",
+      "lte." + maxLat
+    );
+
+
+    query.set(
+      "longitude",
+      "gte." + minLng
+    );
+
+
+    query.append(
+      "longitude",
+      "lte." + maxLng
+    );
+
+
+    query.set(
+      "order",
+      "단지명.asc"
+    );
+
+  } else {
+
+    query.set(
+      "select",
+      "시도,시군구,읍면,동리,단지명"
+    );
+
+
+    query.set(
+      "order",
+      "시도.asc,시군구.asc,읍면.asc,동리.asc,단지명.asc"
+    );
+
+  }
 
 
   if (searchTokens.length === 1) {
@@ -428,7 +516,16 @@ async function handleApartmentList(
             detail:
               dongri ||
               eupmyeon ||
-              ""
+              "",
+
+            address:
+              item["관리사무소 연락처 주소"] || "",
+
+            latitude:
+              Number(item["latitude"]),
+
+            longitude:
+              Number(item["longitude"])
           };
         }
       );
