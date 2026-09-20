@@ -530,7 +530,8 @@ async function loadApartmentsInBounds() {
   }
 
 }
-  /* =========================================
+
+/* =========================================
    아파트 말풍선 생성
 ========================================= */
 
@@ -600,63 +601,14 @@ function createApartmentOverlay(
   overlay.setMap(map);
 
   /*
-    클릭하면 해당 아파트 자동검색 페이지로 이동
+    클릭하면 우리아파트 안심거래 메인으로 이동
   */
 
   content.addEventListener(
     "click",
     function() {
 
-      const region =
-        getValue(
-          row,
-          [
-            "region",
-            "시도"
-          ]
-        );
-
-      const city =
-        getValue(
-          row,
-          [
-            "city",
-            "시군구"
-          ]
-        );
-
-      const place =
-        getValue(
-          row,
-          [
-            "detail",
-            "동리",
-            "읍면",
-            "dong"
-          ]
-        );
-
-      if (
-        !region ||
-        !city ||
-        !place ||
-        !apartmentName
-      ) {
-
-        return;
-
-      }
-
-      window.location.href =
-        "/apt-search/" +
-        encodeURIComponent(region) +
-        "/" +
-        encodeURIComponent(city) +
-        "/" +
-        encodeURIComponent(place) +
-        "/" +
-        encodeURIComponent(apartmentName) +
-        "/sale";
+      window.location.href = "/apt.html";
 
     }
   );
