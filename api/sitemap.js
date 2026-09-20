@@ -23,8 +23,10 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    // SUPABASE_URL에 /rest/v1이 들어 있어도 정상 처리
     const baseUrl = SUPABASE_URL.replace(/\/rest\/v1\/?$/, "");
 
+    // PENDING 상태 1건 가져오기
     const selectUrl =
       `${baseUrl}/rest/v1/safe_apartments` +
       `?select=*` +
@@ -72,22 +74,33 @@ module.exports = async function handler(req, res) {
 
     const row = rows[0];
 
-    const id = row.id;
+    const apartmentName =
+      String(row["아파트명"] || "").trim();
 
     const address =
-      row["관리사무소 연락처 주소"] ||
-      row["도로명주소"] ||
-      row["주소"] ||
-      "";
+      String(
+        row["관리사무소 연락처 주소"] ||
+        row["도로명주소"] ||
+        row["주소"] ||
+        ""
+      ).trim();
+
+    if (!apartmentName) {
+      return res.status(200).json({
+        ok: false,
+        error: "아파트명 없음"
+      });
+    }
 
     if (!address) {
       return res.status(200).json({
         ok: false,
-        id: id,
+        apartmentName: apartmentName,
         error: "주소 없음"
       });
     }
 
+    // 카카오 주소검색
     const kakaoUrl =
       "https://dapi.kakao.com/v2/local/search/address.json?query=" +
       encodeURIComponent(address);
@@ -106,6 +119,7 @@ module.exports = async function handler(req, res) {
         ok: false,
         step: "kakao_geocode",
         status: kakaoResponse.status,
+        apartmentName: apartmentName,
         address: address,
         response: kakaoText
       });
@@ -129,7 +143,7 @@ module.exports = async function handler(req, res) {
     ) {
       return res.status(200).json({
         ok: false,
-        id: id,
+        apartmentName: apartmentName,
         address: address,
         error: "카카오 주소검색 결과 없음"
       });
@@ -141,8 +155,12 @@ module.exports = async function handler(req, res) {
     const longitude =
       Number(kakaoData.documents[0].x);
 
+    // 아파트명 + 관리사무소 연락처 주소
+    // 두 조건이 모두 일치하는 행만 업데이트
     const updateUrl =
-      `${baseUrl}/rest/v1/safe_apartments?id=eq.${encodeURIComponent(id)}`;
+      `${baseUrl}/rest/v1/safe_apartments` +
+      `?${encodeURIComponent("아파트명")}=eq.${encodeURIComponent(apartmentName)}` +
+      `&${encodeURIComponent("관리사무소 연락처 주소")}=eq.${encodeURIComponent(address)}`;
 
     const updateResponse = await fetch(updateUrl, {
       method: "PATCH",
@@ -166,18 +184,28 @@ module.exports = async function handler(req, res) {
         ok: false,
         step: "supabase_update",
         status: updateResponse.status,
+        apartmentName: apartmentName,
+        address: address,
         response: updateText
       });
     }
 
+    let updatedRows = [];
+
+    try {
+      updatedRows = JSON.parse(updateText);
+    } catch (e) {
+      updatedRows = [];
+    }
+
     return res.status(200).json({
       ok: true,
-      id: id,
+      apartmentName: apartmentName,
       address: address,
       latitude: latitude,
       longitude: longitude,
       geocode_status: "DONE",
-      updated: updateText
+      updatedCount: updatedRows.length
     });
 
   } catch (error) {
