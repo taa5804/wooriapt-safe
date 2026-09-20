@@ -74,21 +74,18 @@ module.exports = async function handler(req, res) {
 
     const row = rows[0];
 
+    // 실제 DB 컬럼명: 단지명
     const apartmentName =
-      String(row["아파트명"] || "").trim();
+      String(row["단지명"] || "").trim();
 
+    // 실제 DB 컬럼명: 관리사무소 주소
     const address =
-      String(
-        row["관리사무소 주소"] ||
-        row["도로명주소"] ||
-        row["주소"] ||
-        ""
-      ).trim();
+      String(row["관리사무소 주소"] || "").trim();
 
     if (!apartmentName) {
       return res.status(200).json({
         ok: false,
-        error: "아파트명 없음"
+        error: "단지명 없음"
       });
     }
 
@@ -155,11 +152,10 @@ module.exports = async function handler(req, res) {
     const longitude =
       Number(kakaoData.documents[0].x);
 
-    // 아파트명 + 관리사무소 주소
-    // 두 조건이 모두 일치하는 행만 업데이트
+    // 단지명 + 관리사무소 주소가 모두 일치하는 행만 업데이트
     const updateUrl =
       `${baseUrl}/rest/v1/safe_apartments` +
-      `?${encodeURIComponent("아파트명")}=eq.${encodeURIComponent(apartmentName)}` +
+      `?${encodeURIComponent("단지명")}=eq.${encodeURIComponent(apartmentName)}` +
       `&${encodeURIComponent("관리사무소 주소")}=eq.${encodeURIComponent(address)}`;
 
     const updateResponse = await fetch(updateUrl, {
