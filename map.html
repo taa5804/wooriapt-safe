@@ -1,1129 +1,828 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
+<title>전국 아파트 지도 | 우리아파트 안심거래</title>
 
-  <title>우리아파트 지도</title>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
-  <style>
-    * {
-      box-sizing: border-box;
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "Noto Sans KR",
+      "Malgun Gothic",
+      sans-serif;
+    background: #f5f7fa;
+  }
+
+  .page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px 16px;
+    position: relative;
+    z-index: 1000;
+  }
+
+  .topbar-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #111827;
+  }
+
+  .sub {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #6b7280;
+  }
+
+  .status {
+    margin-top: 7px;
+    font-size: 12px;
+    color: #2563eb;
+  }
+
+  #map {
+    flex: 1;
+    width: 100%;
+    min-height: 500px;
+  }
+
+  /* ================================
+     아파트 마커
+  ================================= */
+
+  .apt-marker-wrap {
+    background: transparent;
+    border: 0;
+  }
+
+  .apt-marker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transform: translate(-50%, -100%);
+    white-space: nowrap;
+  }
+
+  /* 아파트 모양 아이콘 */
+  .apt-icon {
+    width: 28px;
+    height: 32px;
+    position: relative;
+    background: #1769e0;
+    border: 2px solid #ffffff;
+    border-radius: 4px 4px 2px 2px;
+    box-shadow: 0 2px 7px rgba(0,0,0,.25);
+  }
+
+  .apt-icon::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 6px;
+    width: 4px;
+    height: 4px;
+    background: #ffffff;
+    box-shadow:
+      8px 0 #ffffff,
+      0 8px #ffffff,
+      8px 8px #ffffff,
+      0 16px #ffffff,
+      8px 16px #ffffff;
+  }
+
+  .apt-icon::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    bottom: -7px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 8px solid #1769e0;
+  }
+
+  /* 짧은 사각 말풍선 */
+  .apt-balloon {
+    position: relative;
+    display: inline-block;
+    padding: 6px 9px;
+    border-radius: 6px;
+    background: #ffffff;
+    border: 2px solid #1769e0;
+    color: #111827;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.2;
+    box-shadow: 0 3px 10px rgba(0,0,0,.18);
+  }
+
+  .apt-balloon::after {
+    content: "";
+    position: absolute;
+    left: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-right: 7px solid #1769e0;
+  }
+
+  .apt-balloon .message {
+    display: block;
+  }
+
+  .apt-popup {
+    min-width: 180px;
+    line-height: 1.5;
+  }
+
+  .apt-popup strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+
+  .apt-popup .address {
+    color: #6b7280;
+    font-size: 12px;
+  }
+
+  .apt-popup .cta {
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1769e0;
+  }
+
+  @media (max-width: 640px) {
+    .topbar {
+      padding: 10px 12px;
     }
 
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        "Noto Sans KR",
-        sans-serif;
+    .title {
+      font-size: 17px;
     }
 
-    #map {
-      width: 100%;
-      height: 100vh;
-      background: #f3f4f6;
+    .sub {
+      font-size: 12px;
     }
 
-    .price-marker {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-
-      min-width: 110px;
-      height: 40px;
-
-      padding: 0 13px;
-
-      background: #0b63ce;
-      color: #ffffff;
-
-      border-radius: 20px;
-
-      font-size: 14px;
-      font-weight: 700;
-
-      white-space: nowrap;
-
-      box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.25);
-
-      cursor: pointer;
+    .apt-icon {
+      width: 24px;
+      height: 28px;
     }
 
-    .price-marker::after {
-      content: "";
-
-      position: absolute;
-
-      left: 50%;
-      bottom: -8px;
-
-      transform: translateX(-50%);
-
-      width: 0;
-      height: 0;
-
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-top: 10px solid #0b63ce;
+    .apt-balloon {
+      padding: 5px 7px;
+      font-size: 10px;
     }
-
-    .loading {
-      position: fixed;
-
-      top: 15px;
-      left: 50%;
-
-      transform: translateX(-50%);
-
-      z-index: 9999;
-
-      padding: 10px 16px;
-
-      background: rgba(0, 0, 0, 0.78);
-      color: #ffffff;
-
-      border-radius: 20px;
-
-      font-size: 14px;
-      font-weight: 700;
-
-      white-space: nowrap;
-    }
-  </style>
+  }
+</style>
 </head>
 
 <body>
 
+<div class="page">
+
+  <header class="topbar">
+    <div class="topbar-inner">
+
+      <h1 class="title">
+        우리아파트 안심거래
+      </h1>
+
+      <div class="sub">
+        전국 아파트를 지도에서 확인하세요.
+      </div>
+
+      <div id="status" class="status">
+        전국 지도를 불러오는 중입니다.
+      </div>
+
+    </div>
+  </header>
+
   <div id="map"></div>
 
-  <div id="loading" class="loading">
-    아파트 단지를 불러오는 중...
-  </div>
+</div>
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<script>
+"use strict";
 
 
-  <!-- 카카오 지도 SDK -->
-  <script
-    type="text/javascript"
-    src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=afb1495e5138ed5d431f6203b02a7a29&libraries=services"
-  ></script>
+/* =========================================
+   기본 설정
+========================================= */
+
+const APT_LIST_API = "/api/apt-list";
+
+/*
+   줌 5부터 아파트 조회
+   카카오/지도 축척과 무관하게
+   현재 지도에서 사용하는 Leaflet zoom 기준
+*/
+const APARTMENT_MIN_ZOOM = 5;
+
+/*
+   한 번의 지도 영역 조회 최대 건수
+*/
+const MAP_LIMIT = 1000;
+
+const statusEl =
+  document.getElementById("status");
 
 
-  <script>
+/* =========================================
+   확정 풍선 문구 12개
+========================================= */
 
-    /*
-    ==================================================
-    지도 기본 설정
-    ==================================================
-    */
+const BALLOON_MESSAGES = [
 
-    const map =
-      new kakao.maps.Map(
-        document.getElementById("map"),
+  "거래비용 50%↓",
+  "매매비용 50%↓",
+  "전세비용 50%↓",
+  "월세비용 50%↓",
+  "아파트 안심거래",
+  "매수 전용",
+  "임차 전용",
+  "매수 희망등록",
+  "임차 희망등록",
+  "매물 제안받기",
+  "전자계약 안심",
+  "이용료 50%"
+
+];
+
+
+function getBalloonMessage(index) {
+
+  return BALLOON_MESSAGES[
+    index % BALLOON_MESSAGES.length
+  ];
+
+}
+
+
+/* =========================================
+   HTML 안전 처리
+========================================= */
+
+function esc(value) {
+
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+}
+
+
+/* =========================================
+   DB 필드 대응
+========================================= */
+
+function getValue(row, names) {
+
+  for (const name of names) {
+
+    if (
+      row &&
+      row[name] !== undefined &&
+      row[name] !== null &&
+      String(row[name]).trim() !== ""
+    ) {
+
+      return String(row[name]).trim();
+
+    }
+
+  }
+
+  return "";
+
+}
+
+
+function getApartmentName(row) {
+
+  return getValue(
+    row,
+    [
+      "kaptName",
+      "단지명",
+      "apartment",
+      "apartment_name",
+      "apt",
+      "apt_name",
+      "name",
+      "complex_name"
+    ]
+  ) || "아파트";
+
+}
+
+
+function getAddress(row) {
+
+  return getValue(
+    row,
+    [
+      "관리사무소 연락처 주소",
+      "address",
+      "road_address",
+      "road_address_name",
+      "jibun_address",
+      "jibun_address_name",
+      "full_address"
+    ]
+  );
+
+}
+
+
+/* =========================================
+   좌표 읽기
+========================================= */
+
+function getLatitude(row) {
+
+  return Number(
+    row &&
+    (
+      row.latitude ??
+      row.lat
+    )
+  );
+
+}
+
+
+function getLongitude(row) {
+
+  return Number(
+    row &&
+    (
+      row.longitude ??
+      row.lng ??
+      row.lon
+    )
+  );
+
+}
+
+
+/* =========================================
+   지도 생성
+========================================= */
+
+const map =
+  L.map("map", {
+    zoomControl: true
+  })
+  .setView(
+    [36.4, 127.8],
+    4
+  );
+
+
+L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom: 19,
+    attribution:
+      "&copy; OpenStreetMap contributors"
+  }
+).addTo(map);
+
+
+/* =========================================
+   현재 표시된 마커 관리
+========================================= */
+
+const markerLayer =
+  L.layerGroup().addTo(map);
+
+
+/* =========================================
+   중복 요청 방지
+========================================= */
+
+let loading = false;
+
+let requestSerial = 0;
+
+let moveTimer = null;
+
+
+/* =========================================
+   줌 5 이상 확대 여부
+========================================= */
+
+function canLoadApartments() {
+
+  return map.getZoom() <= APARTMENT_MIN_ZOOM;
+
+}
+
+
+/* =========================================
+   현재 지도 영역 조회
+========================================= */
+
+async function loadApartmentsInBounds() {
+
+  if (!canLoadApartments()) {
+
+    markerLayer.clearLayers();
+
+    statusEl.textContent =
+      "지도를 확대하면 아파트가 표시됩니다.";
+
+    return;
+
+  }
+
+
+  const bounds =
+    map.getBounds();
+
+
+  const south =
+    bounds.getSouth();
+
+  const west =
+    bounds.getWest();
+
+  const north =
+    bounds.getNorth();
+
+  const east =
+    bounds.getEast();
+
+
+  const serial =
+    ++requestSerial;
+
+
+  if (loading) {
+
+    return;
+
+  }
+
+
+  loading = true;
+
+
+  statusEl.textContent =
+    "현재 지도 영역의 아파트를 불러오는 중입니다.";
+
+
+  try {
+
+    const url =
+      APT_LIST_API +
+      "?map=1" +
+      "&minLat=" +
+      encodeURIComponent(south) +
+      "&maxLat=" +
+      encodeURIComponent(north) +
+      "&minLng=" +
+      encodeURIComponent(west) +
+      "&maxLng=" +
+      encodeURIComponent(east) +
+      "&limit=" +
+      encodeURIComponent(MAP_LIMIT);
+
+
+    const response =
+      await fetch(
+        url,
         {
-          center:
-            new kakao.maps.LatLng(
-              36.5,
-              127.8
-            ),
-
-          level: 13
-        }
-      );
-
-
-    /*
-    ==================================================
-    카카오 장소검색
-    ==================================================
-    */
-
-    const places =
-      new kakao.maps.services.Places();
-
-
-    /*
-    ==================================================
-    표시된 풍선
-    ==================================================
-    */
-
-    const overlays = [];
-
-
-    /*
-    ==================================================
-    중복 단지 방지
-    ==================================================
-    */
-
-    const apartmentKeys =
-      new Set();
-
-
-    /*
-    ==================================================
-    DB 값 읽기
-    ==================================================
-    */
-
-    function getValue(
-      item,
-      names
-    ) {
-
-      for (
-        const name of names
-      ) {
-
-        if (
-          item &&
-          item[name] !== undefined &&
-          item[name] !== null &&
-          String(item[name]).trim() !== ""
-        ) {
-
-          return String(
-            item[name]
-          ).trim();
-
-        }
-
-      }
-
-      return "";
-    }
-
-
-    /*
-    ==================================================
-    시도
-    ==================================================
-    */
-
-    function getRegion(item) {
-
-      return getValue(
-        item,
-        [
-          "region",
-          "시도",
-          "sido",
-          "do"
-        ]
-      );
-
-    }
-
-
-    /*
-    ==================================================
-    시군구
-    ==================================================
-    */
-
-    function getCity(item) {
-
-      return getValue(
-        item,
-        [
-          "city",
-          "시군구",
-          "sigungu"
-        ]
-      );
-
-    }
-
-
-    /*
-    ==================================================
-    읍면동
-    ==================================================
-    */
-
-    function getDong(item) {
-
-      return getValue(
-        item,
-        [
-          "dong",
-          "읍면동",
-          "읍면",
-          "동리",
-          "emd",
-          "legal_dong"
-        ]
-      );
-
-    }
-
-
-    /*
-    ==================================================
-    아파트 단지명
-    ==================================================
-    */
-
-    function getApartmentName(item) {
-
-      return getValue(
-        item,
-        [
-          "kaptName",
-          "단지명",
-          "아파트명",
-          "apt_name",
-          "apartment_name",
-          "apt",
-          "apartment"
-        ]
-      );
-
-    }
-
-
-    /*
-    ==================================================
-    주소
-    ==================================================
-    */
-
-    function getFullAddress(item) {
-
-      return getValue(
-        item,
-        [
-          "detail",
-          "도로명주소",
-          "도로명",
-          "road_address",
-          "roadAddress",
-          "주소",
-          "address",
-          "full_address",
-          "jibun_address",
-          "지번주소"
-        ]
-      );
-
-    }
-
-
-    /*
-    ==================================================
-    검색어 만들기
-    ==================================================
-    */
-
-    function makeSearchWords(item) {
-
-      const region =
-        getRegion(item);
-
-      const city =
-        getCity(item);
-
-      const dong =
-        getDong(item);
-
-      const apartmentName =
-        getApartmentName(item);
-
-      const fullAddress =
-        getFullAddress(item);
-
-
-      const words = [];
-
-
-      /*
-      1순위
-      주소 + 아파트명
-      */
-
-      if (
-        fullAddress &&
-        apartmentName
-      ) {
-
-        words.push(
-          fullAddress +
-          " " +
-          apartmentName
-        );
-
-      }
-
-
-      /*
-      2순위
-      시도 + 시군구 + 동 + 아파트명
-      */
-
-      if (
-        apartmentName
-      ) {
-
-        words.push(
-          [
-            region,
-            city,
-            dong,
-            apartmentName
-          ]
-          .filter(Boolean)
-          .join(" ")
-        );
-
-      }
-
-
-      /*
-      3순위
-      시군구 + 동 + 아파트명
-      */
-
-      if (
-        apartmentName
-      ) {
-
-        words.push(
-          [
-            city,
-            dong,
-            apartmentName
-          ]
-          .filter(Boolean)
-          .join(" ")
-        );
-
-      }
-
-
-      /*
-      4순위
-      동 + 아파트명
-      */
-
-      if (
-        apartmentName
-      ) {
-
-        words.push(
-          [
-            dong,
-            apartmentName
-          ]
-          .filter(Boolean)
-          .join(" ")
-        );
-
-      }
-
-
-      /*
-      중복 검색어 제거
-      */
-
-      return [
-        ...new Set(
-          words.filter(Boolean)
-        )
-      ];
-
-    }
-
-
-    /*
-    ==================================================
-    풍선 생성
-    ==================================================
-    */
-
-    function createApartmentOverlay(
-      item,
-      position
-    ) {
-
-      const apartmentName =
-        getApartmentName(item) ||
-        "아파트";
-
-
-      const content =
-        document.createElement(
-          "div"
-        );
-
-
-      content.className =
-        "price-marker";
-
-
-      content.innerText =
-        "거래비용 50%↓";
-
-
-      const overlay =
-        new kakao.maps.CustomOverlay({
-
-          position:
-            position,
-
-          content:
-            content,
-
-          yAnchor:
-            1.35
-
-        });
-
-
-      overlay.setMap(
-        map
-      );
-
-
-      overlays.push(
-        overlay
-      );
-
-
-      /*
-      풍선 클릭
-      */
-
-      content.addEventListener(
-        "click",
-        function () {
-
-          alert(
-            apartmentName +
-            "\n\n" +
-            "아파트 거래비용 50% 절약"
-          );
-
-        }
-      );
-
-    }
-
-
-    /*
-    ==================================================
-    카카오 장소검색
-    ==================================================
-    */
-
-    function keywordSearch(
-      keyword
-    ) {
-
-      return new Promise(
-        function(resolve) {
-
-          if (
-            !keyword
-          ) {
-
-            resolve(null);
-            return;
-
+          method: "GET",
+          cache: "no-store",
+          headers: {
+            Accept:
+              "application/json"
           }
-
-
-          places.keywordSearch(
-            keyword,
-
-            function(
-              result,
-              status
-            ) {
-
-              if (
-                status !==
-                kakao.maps.services.Status.OK
-              ) {
-
-                resolve(null);
-                return;
-
-              }
-
-
-              if (
-                !result ||
-                result.length === 0
-              ) {
-
-                resolve(null);
-                return;
-
-              }
-
-
-              resolve(
-                result
-              );
-
-            },
-
-            {
-              size: 15
-            }
-
-          );
-
         }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "아파트 영역 조회 오류: " +
+        response.status
       );
 
     }
 
 
+    const data =
+      await response.json();
+
+
     /*
-    ==================================================
-    검색 결과에서 해당 아파트 선택
-    ==================================================
+       더 최신 요청이 생겼으면
+       이전 결과는 표시하지 않음
     */
 
-    function findApartmentResult(
-      results,
-      apartmentName
-    ) {
+    if (serial !== requestSerial) {
 
-      if (
-        !results ||
-        results.length === 0
-      ) {
-
-        return null;
-
-      }
-
-
-      const cleanName =
-        String(
-          apartmentName || ""
-        )
-        .replace(
-          /\s+/g,
-          ""
-        )
-        .toLowerCase();
-
-
-      /*
-      아파트명이 결과에 포함된 결과 우선
-      */
-
-      for (
-        const result of results
-      ) {
-
-        const placeName =
-          String(
-            result.place_name || ""
-          )
-          .replace(
-            /\s+/g,
-            ""
-          )
-          .toLowerCase();
-
-
-        if (
-          cleanName &&
-          placeName.includes(
-            cleanName
-          )
-        ) {
-
-          return result;
-
-        }
-
-      }
-
-
-      /*
-      검색 결과가 있으면 첫 번째 결과
-      */
-
-      return results[0];
+      return;
 
     }
 
 
-    /*
-    ==================================================
-    단지 1개 좌표 찾기
-    ==================================================
-    */
-
-    async function findApartmentPosition(
-      item
-    ) {
-
-      const apartmentName =
-        getApartmentName(item);
+    const rows =
+      Array.isArray(data.apartments)
+      ? data.apartments
+      : [];
 
 
-      if (
-        !apartmentName
-      ) {
-
-        return null;
-
-      }
+    markerLayer.clearLayers();
 
 
-      const searchWords =
-        makeSearchWords(item);
+    let successCount = 0;
 
 
-      /*
-      검색어 순서대로 검색
-      */
+    rows.forEach(
+      function(row, index) {
 
-      for (
-        const keyword of searchWords
-      ) {
+        const lat =
+          getLatitude(row);
 
-        const results =
-          await keywordSearch(
-            keyword
-          );
-
-
-        const result =
-          findApartmentResult(
-            results,
-            apartmentName
-          );
+        const lng =
+          getLongitude(row);
 
 
         if (
-          result &&
-          result.y &&
-          result.x
+          !Number.isFinite(lat) ||
+          !Number.isFinite(lng)
         ) {
-
-          return {
-
-            lat:
-              Number(
-                result.y
-              ),
-
-            lng:
-              Number(
-                result.x
-              )
-
-          };
-
-        }
-
-      }
-
-
-      return null;
-
-    }
-
-
-    /*
-    ==================================================
-    아파트 1개 처리
-    ==================================================
-    */
-
-    async function processApartment(
-      item
-    ) {
-
-      const apartmentName =
-        getApartmentName(item);
-
-
-      if (
-        !apartmentName
-      ) {
-
-        return false;
-
-      }
-
-
-      /*
-      단지 중복 제거
-      */
-
-      const key =
-        [
-          getRegion(item),
-          getCity(item),
-          getDong(item),
-          apartmentName
-        ]
-        .filter(Boolean)
-        .join("|")
-        .replace(
-          /\s+/g,
-          ""
-        );
-
-
-      if (
-        apartmentKeys.has(key)
-      ) {
-
-        return false;
-
-      }
-
-
-      apartmentKeys.add(
-        key
-      );
-
-
-      /*
-      실제 아파트 단지 좌표 검색
-      */
-
-      const position =
-        await findApartmentPosition(
-          item
-        );
-
-
-      if (
-        !position
-      ) {
-
-        return false;
-
-      }
-
-
-      const latLng =
-        new kakao.maps.LatLng(
-          position.lat,
-          position.lng
-        );
-
-
-      /*
-      풍선 표시
-      */
-
-      createApartmentOverlay(
-        item,
-        latLng
-      );
-
-
-      return true;
-
-    }
-
-
-    /*
-    ==================================================
-    아파트 DB 불러오기
-    ==================================================
-    */
-
-    async function loadApartments() {
-
-      const loading =
-        document.getElementById(
-          "loading"
-        );
-
-
-      try {
-
-        loading.innerText =
-          "전국 아파트 DB를 불러오는 중...";
-
-
-        /*
-        기존 API 사용
-        */
-
-        const response =
-          await fetch(
-            "/api/apt-list",
-            {
-              cache:
-                "no-store"
-            }
-          );
-
-
-        if (
-          !response.ok
-        ) {
-
-          throw new Error(
-            "아파트 DB 호출 실패"
-          );
-
-        }
-
-
-        const data =
-          await response.json();
-
-
-        /*
-        API 응답 형태 대응
-        */
-
-        let apartments =
-          [];
-
-
-        if (
-          Array.isArray(data)
-        ) {
-
-          apartments =
-            data;
-
-        }
-
-        else if (
-          Array.isArray(
-            data.apartments
-          )
-        ) {
-
-          apartments =
-            data.apartments;
-
-        }
-
-        else if (
-          Array.isArray(
-            data.items
-          )
-        ) {
-
-          apartments =
-            data.items;
-
-        }
-
-        else if (
-          Array.isArray(
-            data.data
-          )
-        ) {
-
-          apartments =
-            data.data;
-
-        }
-
-
-        if (
-          apartments.length === 0
-        ) {
-
-          loading.innerText =
-            "아파트 데이터가 없습니다.";
 
           return;
 
         }
 
 
-        loading.innerText =
-          "아파트 단지 위치를 찾는 중...";
-
-
-        let completed =
-          0;
-
-        let found =
-          0;
-
-
-        const total =
-          apartments.length;
-
-
-        /*
-        DB의 각 아파트 단지별 처리
-        */
-
-        for (
-          let i = 0;
-          i < total;
-          i++
-        ) {
-
-          const result =
-            await processApartment(
-              apartments[i]
-            );
-
-
-          completed++;
-
-
-          if (
-            result
-          ) {
-
-            found++;
-
-          }
-
-
-          loading.innerText =
-            "아파트 단지 위치 확인 " +
-            completed +
-            " / " +
-            total +
-            " · 표시 " +
-            found;
-
-
-          /*
-          카카오 검색 요청 간격
-          */
-
-          await new Promise(
-            function(resolve) {
-
-              setTimeout(
-                resolve,
-                80
-              );
-
-            }
-          );
-
-        }
-
-
-        /*
-        ==================================================
-        결과
-        ==================================================
-        */
-
-        if (
-          overlays.length > 0
-        ) {
-
-          loading.innerText =
-            "아파트 지도 표시 완료 · " +
-            overlays.length +
-            "개";
-
-
-          /*
-          첫 번째 실제 아파트 위치로 이동
-          */
-
-          const firstOverlay =
-            overlays[0];
-
-
-          if (
-            firstOverlay
-          ) {
-
-            const position =
-              firstOverlay.getPosition();
-
-
-            if (
-              position
-            ) {
-
-              map.setCenter(
-                position
-              );
-
-              map.setLevel(
-                7
-              );
-
-            }
-
-          }
-
-
-          /*
-          3초 후 안내창 제거
-          */
-
-          setTimeout(
-            function() {
-
-              loading.style.display =
-                "none";
-
-            },
-            3000
-          );
-
-        }
-
-        else {
-
-          loading.innerText =
-            "아파트 단지 좌표를 찾지 못했습니다.";
-
-        }
-
-
-      }
-      catch (
-        error
-      ) {
-
-        console.error(
-          error
+        createApartmentMarker(
+          row,
+          lat,
+          lng,
+          index
         );
 
 
-        loading.innerText =
-          "아파트 정보를 불러오지 못했습니다.";
+        successCount++;
 
       }
+    );
 
-    }
+
+    statusEl.textContent =
+      "현재 영역 아파트 " +
+      successCount +
+      "개 표시";
 
 
-    /*
-    ==================================================
-    시작
-    ==================================================
-    */
+  } catch (error) {
 
-    loadApartments();
+    console.error(
+      "지도 아파트 조회 오류:",
+      error
+    );
 
-  </script>
+
+    markerLayer.clearLayers();
+
+
+    statusEl.textContent =
+      "현재 지도 영역의 아파트를 불러오지 못했습니다.";
+
+  } finally {
+
+    loading = false;
+
+  }
+
+}
+
+
+/* =========================================
+   아파트 마커 생성
+========================================= */
+
+function createApartmentMarker(
+  row,
+  lat,
+  lng,
+  index
+) {
+
+  const apartmentName =
+    getApartmentName(row);
+
+
+  const address =
+    getAddress(row);
+
+
+  const message =
+    getBalloonMessage(index);
+
+
+  const html =
+
+    '<div class="apt-marker">' +
+
+      '<div class="apt-icon"></div>' +
+
+      '<div class="apt-balloon">' +
+
+        '<span class="message">' +
+
+          esc(message) +
+
+        '</span>' +
+
+      '</div>' +
+
+    '</div>';
+
+
+  const icon =
+    L.divIcon({
+
+      className:
+        "apt-marker-wrap",
+
+      html:
+        html,
+
+      iconSize:
+        [0, 0],
+
+      iconAnchor:
+        [0, 0]
+
+    });
+
+
+  const marker =
+    L.marker(
+      [lat, lng],
+      {
+        icon: icon
+      }
+    );
+
+
+  const popup =
+
+    '<div class="apt-popup">' +
+
+      '<strong>' +
+
+        esc(apartmentName) +
+
+      '</strong>' +
+
+      (
+        address
+        ? '<div class="address">' +
+            esc(address) +
+          '</div>'
+        : ""
+      ) +
+
+      '<div class="cta">' +
+
+        "아파트 안심거래 확인 →" +
+
+      '</div>' +
+
+    '</div>';
+
+
+  marker.bindPopup(
+    popup
+  );
+
+
+  markerLayer.addLayer(
+    marker
+  );
+
+
+  return marker;
+
+}
+
+
+/* =========================================
+   지도 이동 / 확대·축소
+========================================= */
+
+function scheduleMapLoad() {
+
+  clearTimeout(
+    moveTimer
+  );
+
+
+  moveTimer =
+    setTimeout(
+      function() {
+
+        loadApartmentsInBounds();
+
+      },
+      350
+    );
+
+}
+
+
+map.on(
+  "moveend",
+  scheduleMapLoad
+);
+
+
+map.on(
+  "zoomend",
+  scheduleMapLoad
+);
+
+
+/* =========================================
+   최초 실행
+========================================= */
+
+/*
+   처음에는 전국 지도만 표시.
+   줌 5보다 확대된 상태가 아니므로
+   DB를 조회하지 않음.
+*/
+
+statusEl.textContent =
+  "지도를 확대하면 아파트가 표시됩니다.";
+
+
+/*
+   사용자가 이미 줌 5 이하로 들어간 경우에만
+   첫 조회
+*/
+
+if (canLoadApartments()) {
+
+  scheduleMapLoad();
+
+}
+
+</script>
 
 </body>
 </html>
