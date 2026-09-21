@@ -12,13 +12,14 @@ const SUPABASE_KEY =
 
 const BASE_URL = "https://www.wooriapt.app";
 
-const PAGE_SIZE = 5000;
-
 /*
-  mart_directory 현재 약 26,255개
-  5,000개씩 나누면 6개 사이트맵 필요
+  Supabase Data API 기본 최대 반환량에 맞춰
+  사이트맵은 1,000개 단위로 분할한다.
+
+  mart_directory의 전체 건수를 읽어서
+  사이트맵 개수는 자동으로 계산한다.
 */
-const TOTAL_SITEMAPS = 6;
+const PAGE_SIZE = 1000;
 
 
 /* =========================================
@@ -766,37 +767,145 @@ async function handleMartDbTest(req, res) {
       });
   }
 }
+
+
 /* =========================================
-   3. 마트 사이트맵 INDEX
+   3. 마트 전체 개수 확인
 ========================================= */
 
-function handleMartSitemapIndex(
+async function getMartTotalCount() {
+
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+
+    throw new Error(
+      "Mart Supabase environment variable missing"
+    );
+  }
+
+
+  const params =
+    new URLSearchParams();
+
+
+  params.set(
+    "select",
+    "상호명"
+  );
+
+
+  params.set(
+    "limit",
+    "1"
+  );
+
+
+  const url =
+    `${SUPABASE_URL}/rest/v1/mart_directory?${params.toString()}`;
+
+
+  const response =
+    await fetch(
+      url,
+      {
+        method: "GET",
+
+        headers: {
+          apikey:
+            SUPABASE_KEY,
+
+          Authorization:
+            `Bearer ${SUPABASE_KEY}`,
+
+          Accept:
+            "application/json",
+
+          Range:
+            "0-0",
+
+          Prefer:
+            "count=exact"
+        }
+      }
+    );
+
+
+  if (!response.ok) {
+
+    const errorText =
+      await response.text();
+
+    throw new Error(
+      `Mart count DB error (${response.status}): ${errorText}`
+    );
+  }
+
+
+  const contentRange =
+    response.headers.get("content-range") || "";
+
+
+  const match =
+    contentRange.match(/\/(\d+)$/);
+
+
+  if (!match) {
+
+    throw new Error(
+      `Mart count parse error: content-range=${contentRange || "missing"}`
+    );
+  }
+
+
+  return Number(match[1]);
+}
+
+
+/* =========================================
+   4. 마트 사이트맵 INDEX
+========================================= */
+
+async function handleMartSitemapIndex(
   req,
   res
 ) {
 
-  let items = "";
+  try {
+
+    const totalCount =
+      await getMartTotalCount();
 
 
-  for (
-    let page = 1;
-    page <= TOTAL_SITEMAPS;
-    page++
-  ) {
+    const totalSitemaps =
+      Math.max(
+        1,
+        Math.ceil(
+          totalCount / PAGE_SIZE
+        )
+      );
 
-    const loc =
-      `${BASE_URL}/sitemaps/marts-${page}.xml`;
+
+    let items = "";
 
 
-    items +=
+    for (
+      let page = 1;
+      page <= totalSitemaps;
+      page++
+    ) {
+
+      const loc =
+        `${BASE_URL}/sitemaps/marts-${page}.xml`;
+
+
+      items +=
 `
   <sitemap>
     <loc>${xmlEscape(loc)}</loc>
   </sitemap>`;
-  }
+    }
 
 
-  const xml =
+    const xml =
 `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -804,27 +913,47 @@ ${items}
 </sitemapindex>`;
 
 
-  res.statusCode = 200;
+    res.statusCode = 200;
 
 
-  res.setHeader(
-    "Content-Type",
-    "application/xml; charset=utf-8"
-  );
+    res.setHeader(
+      "Content-Type",
+      "application/xml; charset=utf-8"
+    );
 
 
-  res.setHeader(
-    "Cache-Control",
-    "s-maxage=3600, stale-while-revalidate=86400"
-  );
+    res.setHeader(
+      "Cache-Control",
+      "s-maxage=3600, stale-while-revalidate=86400"
+    );
 
 
-  return res.end(xml);
+    return res.end(xml);
+
+
+  } catch (error) {
+
+    res.statusCode = 500;
+
+    res.setHeader(
+      "Content-Type",
+      "text/plain; charset=utf-8"
+    );
+
+    res.setHeader(
+      "Cache-Control",
+      "no-store"
+    );
+
+    return res.end(
+      `Mart sitemap index error: ${String(error.message || error)}`
+    );
+  }
 }
 
 
 /* =========================================
-   4. 개별 마트 사이트맵
+   5. 개별 마트 사이트맵
 ========================================= */
 
 async function handleMartSitemap(
@@ -872,9 +1001,14 @@ async function handleMartSitemap(
     );
 
 
+    /*
+      페이지를 나눠 가져올 때
+      가능한 한 동일한 정렬 순서를 유지하도록
+      주소와 전화번호까지 정렬 기준에 포함한다.
+    */
     params.set(
       "order",
-      "시도.asc,시군구.asc,읍면동.asc,상호명.asc"
+      "시도.asc,시군구.asc,읍면동.asc,상호명.asc,주소.asc,전화번호.asc"
     );
 
 
@@ -916,6 +1050,16 @@ async function handleMartSitemap(
 
       res.statusCode =
         response.status;
+
+      res.setHeader(
+        "Content-Type",
+        "text/plain; charset=utf-8"
+      );
+
+      res.setHeader(
+        "Cache-Control",
+        "no-store"
+      );
 
 
       return res.end(
@@ -1010,10 +1154,22 @@ ${urls}
 
     res.statusCode = 500;
 
+    res.setHeader(
+      "Content-Type",
+      "text/plain; charset=utf-8"
+    );
+
+    res.setHeader(
+      "Cache-Control",
+      "no-store"
+    );
+
+
     const cause =
       error && error.cause
         ? JSON.stringify(error.cause)
         : "no cause";
+
 
     return res.end(
       `Mart sitemap error: ${String(error.message || error)} | cause: ${cause}`
