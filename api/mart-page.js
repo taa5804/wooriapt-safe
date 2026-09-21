@@ -10,16 +10,21 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   process.env.SUPABASE_SECRET_KEY;
 
-const BASE_URL = "https://www.wooriapt.app";
+const BASE_URL =
+  "https://www.wooriapt.app";
 
 /*
-  Supabase Data API 기본 최대 반환량에 맞춰
-  사이트맵은 1,000개 단위로 분할한다.
-
-  mart_directory의 전체 건수를 읽어서
-  사이트맵 개수는 자동으로 계산한다.
+  마트 사이트맵:
+  사이트맵 1개당 최대 5,000개
+  Supabase 조회는 내부에서 1,000개씩 나누어 가져온다.
 */
-const PAGE_SIZE = 1000;
+const PAGE_SIZE = 5000;
+
+/*
+  mart_directory 현재 약 26,255개
+  5,000개씩 = 6개 사이트맵
+*/
+const TOTAL_SITEMAPS = 6;
 
 
 /* =========================================
@@ -35,6 +40,7 @@ function esc(value) {
     .replace(/'/g, "&#39;");
 }
 
+
 function xmlEscape(value) {
   return String(value || "")
     .replace(/&/g, "&amp;")
@@ -43,6 +49,7 @@ function xmlEscape(value) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&apos;");
 }
+
 
 function encodePart(value) {
   return encodeURIComponent(
@@ -57,22 +64,33 @@ function encodePart(value) {
 
 function handleMartPage(req, res) {
 
-  const q = req.query || {};
+  const q =
+    req.query || {};
 
   const region =
-    String(q.region || "").trim();
+    String(
+      q.region || ""
+    ).trim();
 
   const city =
-    String(q.city || "").trim();
+    String(
+      q.city || ""
+    ).trim();
 
   const place =
-    String(q.place || "").trim();
+    String(
+      q.place || ""
+    ).trim();
 
   const mart =
-    String(q.mart || "").trim();
+    String(
+      q.mart || ""
+    ).trim();
 
   const address =
-    String(q.address || "").trim();
+    String(
+      q.address || ""
+    ).trim();
 
 
   if (!mart) {
@@ -115,7 +133,11 @@ function handleMartPage(req, res) {
 
 
   const locationText =
-    [region, city, place]
+    [
+      region,
+      city,
+      place
+    ]
       .filter(Boolean)
       .join(" ");
 
@@ -129,11 +151,20 @@ function handleMartPage(req, res) {
 
 
   const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "GroceryStore",
-    "name": mart,
-    "address": address || locationText,
-    "url": canonical
+    "@context":
+      "https://schema.org",
+
+    "@type":
+      "GroceryStore",
+
+    "name":
+      mart,
+
+    "address":
+      address || locationText,
+
+    "url":
+      canonical
   };
 
 
@@ -514,7 +545,10 @@ h1{
    2. 마트 검색 API
 ========================================= */
 
-async function handleMartSearch(req, res) {
+async function handleMartSearch(
+  req,
+  res
+) {
 
   res.setHeader(
     "Content-Type",
@@ -527,27 +561,38 @@ async function handleMartSearch(req, res) {
   );
 
 
-  if (!SUPABASE_URL || !SUPABASE_KEY) {
+  if (
+    !SUPABASE_URL ||
+    !SUPABASE_KEY
+  ) {
 
-    return res.status(500).json({
-      ok: false,
-      message:
-        "마트 Supabase 환경변수가 설정되지 않았습니다."
-    });
+    return res
+      .status(500)
+      .json({
+        ok: false,
+
+        message:
+          "마트 Supabase 환경변수가 설정되지 않았습니다."
+      });
   }
 
 
   const q =
-    String(req.query.q || "").trim();
+    String(
+      req.query.q || ""
+    ).trim();
 
 
   if (!q) {
 
-    return res.status(400).json({
-      ok: false,
-      message:
-        "마트 검색어를 입력해주세요."
-    });
+    return res
+      .status(400)
+      .json({
+        ok: false,
+
+        message:
+          "마트 검색어를 입력해주세요."
+      });
   }
 
 
@@ -592,7 +637,9 @@ async function handleMartSearch(req, res) {
           method: "GET",
 
           headers: {
-            apikey: SUPABASE_KEY,
+
+            apikey:
+              SUPABASE_KEY,
 
             Authorization:
               `Bearer ${SUPABASE_KEY}`,
@@ -611,11 +658,15 @@ async function handleMartSearch(req, res) {
 
 
       return res
-        .status(response.status)
+        .status(
+          response.status
+        )
         .json({
           ok: false,
+
           message:
             "마트 DB 조회에 실패했습니다.",
+
           error:
             errorText
         });
@@ -630,9 +681,15 @@ async function handleMartSearch(req, res) {
       .status(200)
       .json({
         ok: true,
-        query: q,
-        count: rows.length,
-        marts: rows
+
+        query:
+          q,
+
+        count:
+          rows.length,
+
+        marts:
+          rows
       });
 
 
@@ -642,11 +699,14 @@ async function handleMartSearch(req, res) {
       .status(500)
       .json({
         ok: false,
+
         message:
           "마트 검색 중 오류가 발생했습니다.",
+
         error:
           String(
-            error.message || error
+            error.message ||
+            error
           )
       });
   }
@@ -657,7 +717,10 @@ async function handleMartSearch(req, res) {
    2-1. 마트 DB 직접 연결 테스트
 ========================================= */
 
-async function handleMartDbTest(req, res) {
+async function handleMartDbTest(
+  req,
+  res
+) {
 
   res.setHeader(
     "Content-Type",
@@ -670,14 +733,22 @@ async function handleMartDbTest(req, res) {
   );
 
 
-  if (!SUPABASE_URL || !SUPABASE_KEY) {
+  if (
+    !SUPABASE_URL ||
+    !SUPABASE_KEY
+  ) {
 
-    return res.status(500).json({
-      ok: false,
-      test: "mart-db-test",
-      message:
-        "마트 Supabase 환경변수가 설정되지 않았습니다."
-    });
+    return res
+      .status(500)
+      .json({
+        ok: false,
+
+        test:
+          "mart-db-test",
+
+        message:
+          "마트 Supabase 환경변수가 설정되지 않았습니다."
+      });
   }
 
 
@@ -710,7 +781,9 @@ async function handleMartDbTest(req, res) {
           method: "GET",
 
           headers: {
-            apikey: SUPABASE_KEY,
+
+            apikey:
+              SUPABASE_KEY,
 
             Authorization:
               `Bearer ${SUPABASE_KEY}`,
@@ -729,12 +802,20 @@ async function handleMartDbTest(req, res) {
 
 
       return res
-        .status(response.status)
+        .status(
+          response.status
+        )
         .json({
           ok: false,
-          test: "mart-db-test",
-          status: response.status,
-          error: errorText
+
+          test:
+            "mart-db-test",
+
+          status:
+            response.status,
+
+          error:
+            errorText
         });
     }
 
@@ -747,9 +828,15 @@ async function handleMartDbTest(req, res) {
       .status(200)
       .json({
         ok: true,
-        test: "mart-db-test",
-        count: rows.length,
-        rows: rows
+
+        test:
+          "mart-db-test",
+
+        count:
+          rows.length,
+
+        rows:
+          rows
       });
 
 
@@ -759,10 +846,14 @@ async function handleMartDbTest(req, res) {
       .status(500)
       .json({
         ok: false,
-        test: "mart-db-test",
+
+        test:
+          "mart-db-test",
+
         error:
           String(
-            error.message || error
+            error.message ||
+            error
           )
       });
   }
@@ -770,142 +861,36 @@ async function handleMartDbTest(req, res) {
 
 
 /* =========================================
-   3. 마트 전체 개수 확인
+   3. 마트 사이트맵 INDEX
 ========================================= */
 
-async function getMartTotalCount() {
-
-  if (!SUPABASE_URL || !SUPABASE_KEY) {
-
-    throw new Error(
-      "Mart Supabase environment variable missing"
-    );
-  }
-
-
-  const params =
-    new URLSearchParams();
-
-
-  params.set(
-    "select",
-    "상호명"
-  );
-
-
-  params.set(
-    "limit",
-    "1"
-  );
-
-
-  const url =
-    `${SUPABASE_URL}/rest/v1/mart_directory?${params.toString()}`;
-
-
-  const response =
-    await fetch(
-      url,
-      {
-        method: "GET",
-
-        headers: {
-          apikey:
-            SUPABASE_KEY,
-
-          Authorization:
-            `Bearer ${SUPABASE_KEY}`,
-
-          Accept:
-            "application/json",
-
-          Range:
-            "0-0",
-
-          Prefer:
-            "count=exact"
-        }
-      }
-    );
-
-
-  if (!response.ok) {
-
-    const errorText =
-      await response.text();
-
-    throw new Error(
-      `Mart count DB error (${response.status}): ${errorText}`
-    );
-  }
-
-
-  const contentRange =
-    response.headers.get("content-range") || "";
-
-
-  const match =
-    contentRange.match(/\/(\d+)$/);
-
-
-  if (!match) {
-
-    throw new Error(
-      `Mart count parse error: content-range=${contentRange || "missing"}`
-    );
-  }
-
-
-  return Number(match[1]);
-}
-
-
-/* =========================================
-   4. 마트 사이트맵 INDEX
-========================================= */
-
-async function handleMartSitemapIndex(
+function handleMartSitemapIndex(
   req,
   res
 ) {
 
-  try {
-
-    const totalCount =
-      await getMartTotalCount();
+  let items = "";
 
 
-    const totalSitemaps =
-      Math.max(
-        1,
-        Math.ceil(
-          totalCount / PAGE_SIZE
-        )
-      );
+  for (
+    let page = 1;
+    page <= TOTAL_SITEMAPS;
+    page++
+  ) {
+
+    const loc =
+      `${BASE_URL}/sitemaps/marts-${page}.xml`;
 
 
-    let items = "";
-
-
-    for (
-      let page = 1;
-      page <= totalSitemaps;
-      page++
-    ) {
-
-      const loc =
-        `${BASE_URL}/sitemaps/marts-${page}.xml`;
-
-
-      items +=
+    items +=
 `
   <sitemap>
     <loc>${xmlEscape(loc)}</loc>
   </sitemap>`;
-    }
+  }
 
 
-    const xml =
+  const xml =
 `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -913,47 +898,37 @@ ${items}
 </sitemapindex>`;
 
 
-    res.statusCode = 200;
+  res.statusCode = 200;
 
 
-    res.setHeader(
-      "Content-Type",
-      "application/xml; charset=utf-8"
-    );
+  res.setHeader(
+    "Content-Type",
+    "application/xml; charset=utf-8"
+  );
 
 
-    res.setHeader(
-      "Cache-Control",
-      "s-maxage=3600, stale-while-revalidate=86400"
-    );
+  res.setHeader(
+    "Cache-Control",
+    "s-maxage=3600, stale-while-revalidate=86400"
+  );
 
 
-    return res.end(xml);
-
-
-  } catch (error) {
-
-    res.statusCode = 500;
-
-    res.setHeader(
-      "Content-Type",
-      "text/plain; charset=utf-8"
-    );
-
-    res.setHeader(
-      "Cache-Control",
-      "no-store"
-    );
-
-    return res.end(
-      `Mart sitemap index error: ${String(error.message || error)}`
-    );
-  }
+  return res.end(xml);
 }
 
 
 /* =========================================
-   5. 개별 마트 사이트맵
+   4. 개별 마트 사이트맵
+
+   중요:
+   사이트맵 1개 = 최대 5,000개
+
+   그러나 Supabase에는
+   5,000개를 한 번에 요청하지 않는다.
+
+   정상 작동 중인 아파트 방식과 동일하게
+   1,000개씩 최대 5번 조회한 뒤
+   하나의 XML로 합친다.
 ========================================= */
 
 async function handleMartSitemap(
@@ -961,7 +936,21 @@ async function handleMartSitemap(
   res
 ) {
 
-  if (!SUPABASE_URL || !SUPABASE_KEY) {
+  res.setHeader(
+    "Content-Type",
+    "application/xml; charset=utf-8"
+  );
+
+  res.setHeader(
+    "Cache-Control",
+    "s-maxage=3600, stale-while-revalidate=86400"
+  );
+
+
+  if (
+    !SUPABASE_URL ||
+    !SUPABASE_KEY
+  ) {
 
     res.statusCode = 500;
 
@@ -981,12 +970,21 @@ async function handleMartSitemap(
     );
 
 
-  const from =
-    (page - 1) * PAGE_SIZE;
+  /*
+    예:
+    page 1 = 0 ~ 4999
+    page 2 = 5000 ~ 9999
+    page 3 = 10000 ~ 14999
+  */
+  const start =
+    (page - 1) *
+    PAGE_SIZE;
 
 
-  const to =
-    from + PAGE_SIZE - 1;
+  const end =
+    start +
+    PAGE_SIZE -
+    1;
 
 
   try {
@@ -1001,75 +999,98 @@ async function handleMartSitemap(
     );
 
 
-    /*
-      페이지를 나눠 가져올 때
-      가능한 한 동일한 정렬 순서를 유지하도록
-      주소와 전화번호까지 정렬 기준에 포함한다.
-    */
     params.set(
       "order",
-      "시도.asc,시군구.asc,읍면동.asc,상호명.asc,주소.asc,전화번호.asc"
+      "시도.asc,시군구.asc,읍면동.asc,상호명.asc"
     );
 
 
-    const url =
+    const apiUrl =
       `${SUPABASE_URL}/rest/v1/mart_directory?${params.toString()}`;
 
 
-    const response =
-      await fetch(
-        url,
-        {
-          method: "GET",
+    /*
+      ★ 핵심 수정 부분
 
-          headers: {
-            apikey:
-              SUPABASE_KEY,
+      한 번에 5,000개 요청하지 않고
+      1,000개씩 가져와 rows에 합친다.
+    */
+    const rows = [];
 
-            Authorization:
-              `Bearer ${SUPABASE_KEY}`,
 
-            Accept:
-              "application/json",
+    for (
+      let batchStart = start;
+      batchStart <= end;
+      batchStart += 1000
+    ) {
 
-            Range:
-              `${from}-${to}`,
+      const batchEnd =
+        Math.min(
+          batchStart + 999,
+          end
+        );
 
-            Prefer:
-              "count=exact"
+
+      const response =
+        await fetch(
+          apiUrl,
+          {
+            method:
+              "GET",
+
+            headers: {
+
+              apikey:
+                SUPABASE_KEY,
+
+              Authorization:
+                `Bearer ${SUPABASE_KEY}`,
+
+              Accept:
+                "application/json",
+
+              Range:
+                `${batchStart}-${batchEnd}`,
+
+              Prefer:
+                "count=exact"
+            }
           }
-        }
+        );
+
+
+      if (!response.ok) {
+
+        const errorText =
+          await response.text();
+
+
+        throw new Error(
+          `Supabase request failed: ${response.status} ${errorText}`
+        );
+      }
+
+
+      const batchRows =
+        await response.json();
+
+
+      rows.push(
+        ...batchRows
       );
 
 
-    if (!response.ok) {
+      /*
+        마지막 데이터 구간에 도착한 경우
+        더 이상 불필요한 요청을 하지 않는다.
+      */
+      if (
+        batchRows.length < 1000
+      ) {
 
-      const errorText =
-        await response.text();
-
-
-      res.statusCode =
-        response.status;
-
-      res.setHeader(
-        "Content-Type",
-        "text/plain; charset=utf-8"
-      );
-
-      res.setHeader(
-        "Cache-Control",
-        "no-store"
-      );
-
-
-      return res.end(
-        `Mart sitemap DB error: ${errorText}`
-      );
+        break;
+      }
     }
-
-
-    const rows =
-      await response.json();
 
 
     const urls =
@@ -1135,29 +1156,19 @@ ${urls}
     res.statusCode = 200;
 
 
-    res.setHeader(
-      "Content-Type",
-      "application/xml; charset=utf-8"
-    );
-
-
-    res.setHeader(
-      "Cache-Control",
-      "s-maxage=3600, stale-while-revalidate=86400"
-    );
-
-
     return res.end(xml);
 
 
   } catch (error) {
 
+    console.error(
+      "MART SITEMAP ERROR:",
+      error
+    );
+
+
     res.statusCode = 500;
 
-    res.setHeader(
-      "Content-Type",
-      "text/plain; charset=utf-8"
-    );
 
     res.setHeader(
       "Cache-Control",
@@ -1165,14 +1176,11 @@ ${urls}
     );
 
 
-    const cause =
-      error && error.cause
-        ? JSON.stringify(error.cause)
-        : "no cause";
-
-
     return res.end(
-      `Mart sitemap error: ${String(error.message || error)} | cause: ${cause}`
+      `Mart sitemap error: ${String(
+        error.message ||
+        error
+      )}`
     );
   }
 }
@@ -1188,7 +1196,9 @@ async function handler(
   res
 ) {
 
-  if (req.method !== "GET") {
+  if (
+    req.method !== "GET"
+  ) {
 
     res.statusCode = 405;
 
@@ -1200,12 +1210,14 @@ async function handler(
 
   const mode =
     String(
-      req.query.mode || "mart-page"
+      req.query.mode ||
+      "mart-page"
     ).trim();
 
 
   if (
-    mode === "mart-search"
+    mode ===
+    "mart-search"
   ) {
 
     return handleMartSearch(
@@ -1216,7 +1228,8 @@ async function handler(
 
 
   if (
-    mode === "mart-db-test"
+    mode ===
+    "mart-db-test"
   ) {
 
     return handleMartDbTest(
@@ -1227,7 +1240,8 @@ async function handler(
 
 
   if (
-    mode === "mart-sitemap"
+    mode ===
+    "mart-sitemap"
   ) {
 
     return handleMartSitemap(
@@ -1238,7 +1252,8 @@ async function handler(
 
 
   if (
-    mode === "mart-sitemap-index"
+    mode ===
+    "mart-sitemap-index"
   ) {
 
     return handleMartSitemapIndex(
