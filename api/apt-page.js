@@ -693,6 +693,8 @@ async function handleSitemapIndex(
       );
   }
 }
+
+
 /* =========================================
    아파트 개별 사이트맵
 ========================================= */
@@ -1169,9 +1171,9 @@ async function handleApartmentPage(
     const description =
       apartment
         ? subject +
-          " 정보를 확인하고 우리아파트 안심거래에서 공인중개사의 맞춤 매물 제안을 받아보세요."
+          " 정보를 확인하고 우리아파트 안심거래에서 희망조건을 등록해 공인중개사의 맞춤 매물 제안을 받아보세요. 플랫폼 서비스 이용료 50%로 아파트 거래비용을 절약할 수 있습니다."
         : subject +
-          "를 찾고 계신가요? 해당 지역의 아파트를 확인하고 안심거래 서비스를 알아보세요.";
+          "를 찾고 계신가요? 해당 지역의 아파트를 확인하고 희망조건을 등록해 맞춤 매물 제안을 받아보세요. 우리아파트 안심거래는 플랫폼 서비스 이용료 50%로 거래비용 절약을 지원합니다.";
 
 
     const apartmentNames =
@@ -1222,9 +1224,7 @@ async function handleApartmentPage(
           );
         })
         .join("");
-
-
-    res.setHeader(
+        res.setHeader(
       "Content-Type",
       "text/html; charset=utf-8"
     );
@@ -1242,6 +1242,7 @@ async function handleApartmentPage(
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+
 <meta
   name="viewport"
   content="width=device-width,initial-scale=1"
@@ -1361,6 +1362,52 @@ h1 {
   line-height: 1.8;
 }
 
+.info-box {
+  margin-top: 20px;
+  padding: 19px;
+  border: 1px solid #dce7f2;
+  border-radius: 14px;
+  background: #f8fbff;
+}
+
+.info-box h2 {
+  margin: 0 0 12px;
+  font-size: 19px;
+  color: #173a59;
+}
+
+.info-box p {
+  margin: 8px 0;
+  color: #536b7d;
+  line-height: 1.75;
+}
+
+.point {
+  font-weight: 900;
+  color: #0f5fcf;
+}
+
+.trade-links {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.trade-links a {
+  flex: 1;
+  min-width: 90px;
+  padding: 12px 8px;
+  border: 1px solid #d7e2eb;
+  border-radius: 10px;
+  background: #fff;
+  color: #173a59;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+}
+
 .cta {
   display: flex;
   align-items: center;
@@ -1381,6 +1428,16 @@ h1 {
   border: 1px solid #e0e8ee;
   border-radius: 13px;
   background: #fff;
+}
+
+.list h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+
+.list p {
+  color: #607487;
+  line-height: 1.7;
 }
 
 .list ul {
@@ -1417,6 +1474,10 @@ h1 {
 
   .body {
     padding: 21px 15px 24px;
+  }
+
+  .trade-links {
+    flex-direction: column;
   }
 }
 </style>
@@ -1459,7 +1520,8 @@ h1 {
       </h1>
 
       <p class="subtitle">
-        원하는 아파트, 직접 찾아다니지 마세요.
+        원하는 아파트, 직접 찾아다니지 마세요.<br>
+        희망조건만 등록하세요.
       </p>
 
     </section>
@@ -1480,6 +1542,114 @@ h1 {
         조건에 맞는 매물을 제안합니다.
       </p>
 
+
+      <div class="info-box">
+
+        <h2>
+          ${html(location)} 아파트 안심거래
+        </h2>
+
+        <p>
+          <span class="point">
+            플랫폼 서비스 이용료 50%
+          </span>
+          로 아파트 거래비용을 절약할 수 있습니다.
+        </p>
+
+        <p>
+          매수자·임차인이 원하는 지역, 아파트,
+          거래유형과 희망조건을 등록하면
+          공인중개사의 맞춤 매물 제안을
+          받아볼 수 있습니다.
+        </p>
+
+        <p>
+          우리아파트 안심거래는
+          매매·전세·월세 아파트를 찾는 과정부터
+          안전하고 편리한 거래 진행까지
+          지원합니다.
+        </p>
+
+      </div>
+
+
+      <div class="trade-links">
+
+        <a href="${
+          "/apt-search/" +
+          (
+            apartment
+              ? [
+                  region,
+                  city,
+                  place,
+                  apartment,
+                  "sale"
+                ]
+              : [
+                  region,
+                  city,
+                  place,
+                  "sale"
+                ]
+          )
+            .map(encodeURIComponent)
+            .join("/")
+        }">
+          ${html(apartment || place)} 매매
+        </a>
+
+        <a href="${
+          "/apt-search/" +
+          (
+            apartment
+              ? [
+                  region,
+                  city,
+                  place,
+                  apartment,
+                  "jeonse"
+                ]
+              : [
+                  region,
+                  city,
+                  place,
+                  "jeonse"
+                ]
+          )
+            .map(encodeURIComponent)
+            .join("/")
+        }">
+          ${html(apartment || place)} 전세
+        </a>
+
+        <a href="${
+          "/apt-search/" +
+          (
+            apartment
+              ? [
+                  region,
+                  city,
+                  place,
+                  apartment,
+                  "monthly"
+                ]
+              : [
+                  region,
+                  city,
+                  place,
+                  "monthly"
+                ]
+          )
+            .map(encodeURIComponent)
+            .join("/")
+        }">
+          ${html(apartment || place)} 월세
+        </a>
+
+      </div>
+
+
       <a
         class="cta"
         href="/apt.html"
@@ -1494,13 +1664,49 @@ h1 {
 
   ${
     apartment
-      ? ""
+      ? `
+        <section class="list">
+
+          <h2>
+            ${html(place)} 다른 아파트 보기
+          </h2>
+
+          <p>
+            ${html(place)} 지역의 다른 아파트도
+            함께 확인해 보세요.
+          </p>
+
+          <a
+            href="${
+              "/apt-search/" +
+              [
+                region,
+                city,
+                place,
+                type
+              ]
+                .map(encodeURIComponent)
+                .join("/")
+            }"
+          >
+            ${html(place)} 아파트 ${html(trade)} 목록 보기
+          </a>
+
+        </section>
+      `
       : `
         <section class="list">
 
           <h2>
             ${html(place)} 아파트 목록
           </h2>
+
+          <p>
+            ${html(location)} 지역에서
+            ${html(trade)} 아파트를 찾고 있다면
+            아래 단지를 선택해
+            단지별 정보를 확인할 수 있습니다.
+          </p>
 
           <ul>
             ${list}
