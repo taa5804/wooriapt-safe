@@ -891,39 +891,6 @@ async function getApartment(
 
   return data[0] || null;
 }
-            city:
-              item["시군구"] || "",
-
-            dong:
-              [
-                eupmyeon,
-                dongri
-              ]
-                .filter(Boolean)
-                .join(" "),
-
-            detail:
-              dongri ||
-              eupmyeon ||
-              "",
-
-            address:
-              item[
-                "관리사무소 연락처 주소"
-              ] || "",
-
-            latitude:
-              Number(
-                item["latitude"]
-              ),
-
-            longitude:
-              Number(
-                item["longitude"]
-              )
-          };
-        }
-      );
 
 
     return res
