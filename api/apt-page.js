@@ -1556,6 +1556,7 @@ async function handleApartmentPage(
 
     let title = "";
 
+
     if (apartment) {
       title =
         location +
@@ -1564,6 +1565,7 @@ async function handleApartmentPage(
         " " +
         trade;
 
+
       if (householdCount) {
         title +=
           " | " +
@@ -1571,8 +1573,10 @@ async function handleApartmentPage(
           "세대";
       }
 
+
       title +=
         " | 우리아파트";
+
     } else {
       title =
         location +
@@ -1717,6 +1721,7 @@ async function handleApartmentPage(
             clean(
               row["단지명"]
             );
+
 
           if (name) {
             apartmentSet.add(name);
@@ -1938,6 +1943,7 @@ async function handleApartmentPage(
     return res
       .status(200)
       .send(`<!doctype html>
+
 <html lang="ko">
 
 <head>
@@ -4017,47 +4023,32 @@ async function handleBrokerSitemap(
     "application/xml; charset=utf-8"
   );
 
-
   res.setHeader(
     "Cache-Control",
     "s-maxage=86400, stale-while-revalidate=604800"
   );
 
-
   try {
-
-    /*
-     기존 사이트맵 URL 구조를 변경하지 않는다.
-
-     아파트 DB의 전국 동 정보를 이용해
-     /broker-search/지역/시군구/동
-     URL을 계속 생성한다.
-    */
-
     const query =
       new URLSearchParams();
 
-
     query.set(
       "select",
-      "시도,시군구,읍면,동리"
+      "시도,시군구,읍면동"
     );
-
 
     query.set(
       "order",
-      "시도.asc,시군구.asc,읍면.asc,동리.asc"
+      "시도.asc,시군구.asc,읍면동.asc"
     );
-
 
     const apiUrl =
       SUPABASE_URL +
-      "/rest/v1/safe_apartments?" +
+      "/rest/v1/agent_directory?" +
       query.toString();
 
-
-    const rows = [];
-
+    const locationSet =
+      new Set();
 
     for (
       let start = 0;
@@ -4086,22 +4077,43 @@ async function handleBrokerSitemap(
           }
         );
 
-
       if (!response.ok) {
         throw new Error(
           "Broker sitemap DB error"
         );
       }
 
-
       const batch =
         await response.json();
 
+      for (
+        const row of batch
+      ) {
+        const region =
+          clean(row["시도"]);
 
-      rows.push(
-        ...batch
-      );
+        const city =
+          clean(row["시군구"]);
 
+        const place =
+          clean(row["읍면동"]);
+
+        if (
+          !region ||
+          !city ||
+          !place
+        ) {
+          continue;
+        }
+
+        locationSet.add(
+          [
+            region,
+            city,
+            place
+          ].join("|")
+        );
+      }
 
       if (
         batch.length < 1000
@@ -4110,60 +4122,12 @@ async function handleBrokerSitemap(
       }
     }
 
-
-    const locationSet =
-      new Set();
-
-
-    for (
-      const row of rows
-    ) {
-      const region =
-        clean(
-          row["시도"]
-        );
-
-
-      const city =
-        clean(
-          row["시군구"]
-        );
-
-
-      const place =
-        clean(
-          row["동리"] ||
-          row["읍면"]
-        );
-
-
-      if (
-        !region ||
-        !city ||
-        !place
-      ) {
-        continue;
-      }
-
-
-      locationSet.add(
-        [
-          region,
-          city,
-          place
-        ].join("|")
-      );
-    }
-
-
     const lastmod =
       new Date()
         .toISOString()
         .split("T")[0];
 
-
     const urls = [];
-
 
     urls.push(
       "  <url>" +
@@ -4181,7 +4145,6 @@ async function handleBrokerSitemap(
       "</url>"
     );
 
-
     for (
       const locationKey
       of locationSet
@@ -4189,14 +4152,12 @@ async function handleBrokerSitemap(
       const parts =
         locationKey.split("|");
 
-
       const url =
         SITE_ORIGIN +
         "/broker-search/" +
         parts
           .map(pathEncode)
           .join("/");
-
 
       urls.push(
         "  <url>" +
@@ -4212,7 +4173,6 @@ async function handleBrokerSitemap(
       );
     }
 
-
     return res
       .status(200)
       .send(
@@ -4222,14 +4182,11 @@ async function handleBrokerSitemap(
         "</urlset>"
       );
 
-
   } catch (error) {
-
     console.error(
       "BROKER SITEMAP ERROR:",
       error
     );
-
 
     return res
       .status(500)
