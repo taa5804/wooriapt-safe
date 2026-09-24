@@ -10,6 +10,85 @@ const SITE_ORIGIN =
 const SITEMAP_PAGE_SIZE = 5000;
 
 
+const INDEXNOW_KEY =
+  "fc1e3ad82010475381daf9846e627fdd";
+
+const INDEXNOW_HOST =
+  "www.wooriapt.app";
+
+const INDEXNOW_KEY_LOCATION =
+  "https://www.wooriapt.app/fc1e3ad82010475381daf9846e627fdd.txt";
+
+
+async function submitIndexNow(urls) {
+  if (typeof urls === "string") {
+    urls = [urls];
+  }
+
+  if (!Array.isArray(urls) || urls.length === 0) {
+    return {
+      ok: false,
+      error: "전송할 URL이 없습니다."
+    };
+  }
+
+  const validUrls = [...new Set(urls)]
+    .filter(function(url) {
+      try {
+        const u = new URL(url);
+
+        return (
+          u.protocol === "https:" &&
+          (
+            u.hostname === "wooriapt.app" ||
+            u.hostname === "www.wooriapt.app"
+          )
+        );
+      } catch (error) {
+        return false;
+      }
+    })
+    .slice(0, 10000);
+
+  if (validUrls.length === 0) {
+    return {
+      ok: false,
+      error: "유효한 wooriapt.app URL이 없습니다."
+    };
+  }
+
+  const response = await fetch(
+    "https://searchadvisor.naver.com/indexnow",
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type":
+          "application/json; charset=utf-8"
+      },
+
+      body: JSON.stringify({
+        host: INDEXNOW_HOST,
+        key: INDEXNOW_KEY,
+        keyLocation: INDEXNOW_KEY_LOCATION,
+        urlList: validUrls
+      })
+    }
+  );
+
+  const responseText =
+    await response.text();
+
+  return {
+    ok: response.ok,
+    naverStatus: response.status,
+    submitted: validUrls.length,
+    response:
+      responseText || "Success"
+  };
+}
+
+
 /* =========================================
    공통 함수
 ========================================= */
@@ -309,12 +388,6 @@ function apartmentDetails(row) {
         ) {
           return;
         }
-
-
-        /*
-         내부 시스템용 컬럼은
-         화면에 표시하지 않음
-        */
 
         if (
           /^uuid$/i.test(key) ||
@@ -1033,9 +1106,7 @@ async function handleSitemap(
       ) {
         continue;
       }
-
-
-      for (
+            for (
         const type
         of tradeTypes
       ) {
@@ -1141,6 +1212,8 @@ async function handleSitemap(
       );
   }
 }
+
+
 /* =========================================
    아파트 자동검색 페이지
 ========================================= */
@@ -3883,7 +3956,6 @@ h1 {
 
 </div>
 
-
 </section>
 
 </main>
@@ -4177,6 +4249,116 @@ export default async function handler(
   res
 ) {
 
+  const mode =
+    String(
+      req.query.mode ||
+      "page"
+    ).trim();
+
+
+  /* =========================================
+     네이버 IndexNow
+  ========================================= */
+
+  if (
+    mode === "indexnow"
+  ) {
+
+    if (
+      req.method === "GET"
+    ) {
+      return res
+        .status(200)
+        .json({
+          ok: true,
+
+          message:
+            "Naver IndexNow API ready",
+
+          host:
+            INDEXNOW_HOST,
+
+          keyLocation:
+            INDEXNOW_KEY_LOCATION
+        });
+    }
+
+
+    if (
+      req.method !== "POST"
+    ) {
+      return res
+        .status(405)
+        .json({
+          ok: false,
+
+          error:
+            "Method Not Allowed"
+        });
+    }
+
+
+    try {
+
+      const body =
+        req.body || {};
+
+
+      const urls =
+        body.urls ||
+        body.urlList ||
+        [];
+
+
+      const result =
+        await submitIndexNow(
+          urls
+        );
+
+
+      if (!result.ok) {
+
+        const status =
+          result.naverStatus ||
+          400;
+
+
+        return res
+          .status(status)
+          .json(result);
+      }
+
+
+      return res
+        .status(200)
+        .json(result);
+
+
+    } catch (error) {
+
+      console.error(
+        "INDEXNOW ERROR:",
+        error
+      );
+
+
+      return res
+        .status(500)
+        .json({
+          ok: false,
+
+          error:
+            error.message
+        });
+    }
+  }
+
+
+  /*
+   기존 기능은 GET만 허용.
+   IndexNow POST 처리는 위에서 먼저 처리한다.
+  */
+
   if (
     req.method !== "GET"
   ) {
@@ -4186,13 +4368,6 @@ export default async function handler(
         "Method Not Allowed"
       );
   }
-
-
-  const mode =
-    String(
-      req.query.mode ||
-      "page"
-    ).trim();
 
 
   /* 공인중개사 자동검색 */
