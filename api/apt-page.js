@@ -981,7 +981,6 @@ async function handleSitemapIndex(
       );
   }
 }
-      ];
 
 
     for (
