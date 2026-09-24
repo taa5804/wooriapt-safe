@@ -10,6 +10,10 @@ const SITE_ORIGIN =
 const SITEMAP_PAGE_SIZE = 5000;
 
 
+/* =========================================
+   NAVER INDEXNOW
+========================================= */
+
 const INDEXNOW_KEY =
   "fc1e3ad82010475381daf9846e627fdd";
 
@@ -21,70 +25,114 @@ const INDEXNOW_KEY_LOCATION =
 
 
 async function submitIndexNow(urls) {
-  if (typeof urls === "string") {
+
+  if (
+    typeof urls === "string"
+  ) {
     urls = [urls];
   }
 
-  if (!Array.isArray(urls) || urls.length === 0) {
+
+  if (
+    !Array.isArray(urls) ||
+    urls.length === 0
+  ) {
     return {
       ok: false,
-      error: "전송할 URL이 없습니다."
+      error:
+        "전송할 URL이 없습니다."
     };
   }
 
-  const validUrls = [...new Set(urls)]
-    .filter(function(url) {
-      try {
-        const u = new URL(url);
 
-        return (
-          u.protocol === "https:" &&
-          (
-            u.hostname === "wooriapt.app" ||
-            u.hostname === "www.wooriapt.app"
-          )
-        );
-      } catch (error) {
-        return false;
+  const validUrls =
+    [...new Set(urls)]
+      .filter(
+        function(url) {
+          try {
+            const u =
+              new URL(url);
+
+            return (
+              u.protocol ===
+                "https:" &&
+              (
+                u.hostname ===
+                  "wooriapt.app" ||
+                u.hostname ===
+                  "www.wooriapt.app"
+              )
+            );
+
+          } catch (error) {
+            return false;
+          }
+        }
+      )
+      .slice(
+        0,
+        10000
+      );
+
+
+  if (
+    validUrls.length === 0
+  ) {
+    return {
+      ok: false,
+      error:
+        "유효한 wooriapt.app URL이 없습니다."
+    };
+  }
+
+
+  const response =
+    await fetch(
+      "https://searchadvisor.naver.com/indexnow",
+      {
+        method:
+          "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json; charset=utf-8"
+        },
+
+        body:
+          JSON.stringify({
+            host:
+              INDEXNOW_HOST,
+
+            key:
+              INDEXNOW_KEY,
+
+            keyLocation:
+              INDEXNOW_KEY_LOCATION,
+
+            urlList:
+              validUrls
+          })
       }
-    })
-    .slice(0, 10000);
+    );
 
-  if (validUrls.length === 0) {
-    return {
-      ok: false,
-      error: "유효한 wooriapt.app URL이 없습니다."
-    };
-  }
-
-  const response = await fetch(
-    "https://searchadvisor.naver.com/indexnow",
-    {
-      method: "POST",
-
-      headers: {
-        "Content-Type":
-          "application/json; charset=utf-8"
-      },
-
-      body: JSON.stringify({
-        host: INDEXNOW_HOST,
-        key: INDEXNOW_KEY,
-        keyLocation: INDEXNOW_KEY_LOCATION,
-        urlList: validUrls
-      })
-    }
-  );
 
   const responseText =
     await response.text();
 
+
   return {
-    ok: response.ok,
-    naverStatus: response.status,
-    submitted: validUrls.length,
+    ok:
+      response.ok,
+
+    naverStatus:
+      response.status,
+
+    submitted:
+      validUrls.length,
+
     response:
-      responseText || "Success"
+      responseText ||
+      "Success"
   };
 }
 
@@ -388,6 +436,12 @@ function apartmentDetails(row) {
         ) {
           return;
         }
+
+
+        /*
+         내부 시스템용 컬럼은
+         화면에 표시하지 않음
+        */
 
         if (
           /^uuid$/i.test(key) ||
@@ -779,13 +833,17 @@ async function handleApartmentList(
         totalCount:
           totalCount,
 
+        count:
+          apartments.length,
+
         apartments:
           apartments
       });
 
+
   } catch (error) {
     console.error(
-      "APT LIST ERROR:",
+      "SAFE APARTMENTS API ERROR:",
       error
     );
 
@@ -796,103 +854,20 @@ async function handleApartmentList(
         ok: false,
 
         message:
-          "아파트 목록 처리 중 오류가 발생했습니다."
+          "아파트 데이터를 불러오는 중 오류가 발생했습니다."
       });
   }
 }
 
 
 /* =========================================
-   아파트 1개 조회
+   아파트 사이트맵 인덱스
 ========================================= */
 
-async function getApartment(
-  region,
-  city,
-  place,
-  apartment
+async function handleSitemapIndex(
+  req,
+  res
 ) {
-  const query =
-    new URLSearchParams();
-
-
-  query.set(
-    "select",
-    "*"
-  );
-
-
-  query.set(
-    "시도",
-    "eq." + region
-  );
-
-
-  query.set(
-    "시군구",
-    "eq." + city
-  );
-
-
-  addPlaceFilter(
-    query,
-    place
-  );
-
-
-  query.set(
-    "단지명",
-    "eq." + apartment
-  );
-
-
-  query.set(
-    "limit",
-    "1"
-  );
-
-
-  const apiUrl =
-    SUPABASE_URL +
-    "/rest/v1/safe_apartments?" +
-    query.toString();
-
-
-  const response =
-    await fetch(
-      apiUrl,
-      {
-        headers: {
-          apikey:
-            SUPABASE_KEY,
-
-          Authorization:
-            "Bearer " +
-            SUPABASE_KEY,
-
-          Accept:
-            "application/json"
-        }
-      }
-    );
-
-
-  if (!response.ok) {
-    throw new Error(
-      "Apartment DB error: " +
-      response.status
-    );
-  }
-
-
-  const data =
-    await response.json();
-
-
-  return data[0] || null;
-}
-
-
   try {
     const response =
       await fetch(
@@ -991,6 +966,7 @@ async function getApartment(
         "</sitemapindex>"
       );
 
+
   } catch (error) {
     console.error(
       "APT SITEMAP INDEX ERROR:",
@@ -1006,154 +982,7 @@ async function getApartment(
   }
 }
 
-
-/* =========================================
-   아파트 개별 사이트맵
-========================================= */
-
-async function handleSitemap(
-  req,
-  res
-) {
-  res.setHeader(
-    "Content-Type",
-    "application/xml; charset=utf-8"
-  );
-
-  res.setHeader(
-    "Cache-Control",
-    "s-maxage=3600, stale-while-revalidate=86400"
-  );
-
-
-  try {
-    const page =
-      Math.max(
-        1,
-        parseInt(
-          req.query.page || "1",
-          10
-        )
-      );
-
-
-    const start =
-      (page - 1) *
-      SITEMAP_PAGE_SIZE;
-
-
-    const end =
-      start +
-      SITEMAP_PAGE_SIZE -
-      1;
-
-
-    const query =
-      new URLSearchParams();
-
-
-    query.set(
-      "select",
-      "시도,시군구,읍면,동리,단지명"
-    );
-
-
-    query.set(
-      "order",
-      "시도.asc,시군구.asc,동리.asc,단지명.asc"
-    );
-
-
-    const apiUrl =
-      SUPABASE_URL +
-      "/rest/v1/safe_apartments?" +
-      query.toString();
-
-
-    const rows = [];
-
-
-    for (
-      let batchStart = start;
-      batchStart <= end;
-      batchStart += 1000
-    ) {
-      const batchEnd =
-        Math.min(
-          batchStart + 999,
-          end
-        );
-
-
-      const response =
-        await fetch(
-          apiUrl,
-          {
-            method: "GET",
-
-            headers: {
-              apikey:
-                SUPABASE_KEY,
-
-              Authorization:
-                "Bearer " +
-                SUPABASE_KEY,
-
-              Range:
-                batchStart +
-                "-" +
-                batchEnd,
-
-              Prefer:
-                "count=exact"
-            }
-          }
-        );
-
-
-      if (!response.ok) {
-        const message =
-          await response.text();
-
-
-        throw new Error(
-          "Supabase request failed: " +
-          response.status +
-          " " +
-          message
-        );
-      }
-
-
-      const batchRows =
-        await response.json();
-
-
-      rows.push(
-        ...batchRows
-      );
-
-
-      if (
-        batchRows.length < 1000
-      ) {
-        break;
-      }
-    }
-
-
-    const urlSet =
-      new Set();
-
-
-    const tradeTypes =
-      [
-        "sale",
-        "jeonse",
-        "monthly"
-      ];
-
-
+try {
     for (
       const row of rows
     ) {
@@ -1186,6 +1015,7 @@ async function handleSitemap(
       ) {
         continue;
       }
+
 
       for (
         const type
@@ -1339,14 +1169,6 @@ async function handleApartmentPage(
     new URLSearchParams();
 
 
-  /*
-   개별 아파트 페이지:
-   실제 DB의 모든 컬럼을 가져옴
-
-   지역 목록 페이지:
-   검색에 필요한 최소 컬럼만 가져옴
-  */
-
   if (apartment) {
     query.set(
       "select",
@@ -1499,10 +1321,6 @@ async function handleApartmentPage(
         : null;
 
 
-    /* =====================================
-       실제 아파트 DB 주요정보
-    ===================================== */
-
     const householdCount =
       firstValue(
         apartmentRow,
@@ -1543,7 +1361,7 @@ async function handleApartmentPage(
 
     const jibunAddress =
       firstValue(
-                apartmentRow,
+        apartmentRow,
         [
           "지번주소",
           "지번 주소",
@@ -1631,12 +1449,7 @@ async function handleApartmentPage(
       );
 
 
-    /* =====================================
-       검색 제목
-    ===================================== */
-
     let title = "";
-
 
     if (apartment) {
       title =
@@ -1646,14 +1459,12 @@ async function handleApartmentPage(
         " " +
         trade;
 
-
       if (householdCount) {
         title +=
           " | " +
           householdCount +
           "세대";
       }
-
 
       title +=
         " | 우리아파트";
@@ -1666,10 +1477,6 @@ async function handleApartmentPage(
         " | 우리아파트";
     }
 
-
-    /* =====================================
-       검색 설명
-    ===================================== */
 
     const descriptionParts = [];
 
@@ -1747,10 +1554,6 @@ async function handleApartmentPage(
         .slice(0, 300);
 
 
-    /* =====================================
-       단지 상세정보
-    ===================================== */
-
     let detailHtml = "";
 
 
@@ -1784,10 +1587,6 @@ async function handleApartmentPage(
     }
 
 
-    /* =====================================
-       지역 아파트 목록
-    ===================================== */
-
     let list = "";
 
 
@@ -1802,7 +1601,6 @@ async function handleApartmentPage(
             clean(
               row["단지명"]
             );
-
 
           if (name) {
             apartmentSet.add(name);
@@ -1852,10 +1650,6 @@ async function handleApartmentPage(
           .join("");
     }
 
-
-    /* =====================================
-       매매 / 전세 / 월세 내부링크
-    ===================================== */
 
     const tradeLinks =
       [
@@ -1913,10 +1707,6 @@ async function handleApartmentPage(
         )
         .join("");
 
-
-    /* =====================================
-       구조화 데이터
-    ===================================== */
 
     let structuredData = null;
 
@@ -2024,7 +1814,6 @@ async function handleApartmentPage(
     return res
       .status(200)
       .send(`<!doctype html>
-
 <html lang="ko">
 
 <head>
@@ -2158,8 +1947,6 @@ body {
     0 7px 22px
     rgba(22, 56, 42, .07);
 }
-
-
 .hero-top {
   padding: 30px 22px;
 
@@ -2691,27 +2478,10 @@ async function getBrokerRows(
     new URLSearchParams();
 
 
-  /*
-   agent_directory는 실제 DB 전체 컬럼을
-   가져온 뒤 존재하는 값만 사용한다.
-   홈페이지 컬럼도 여기서 함께 가져온다.
-  */
-
   query.set(
     "select",
     "*"
   );
-
-
-  /*
-   컬럼 이름 차이에 따른 DB 오류를 막기 위해
-   먼저 전체 데이터를 가져오는 것이 아니라
-   지역 검색은 아래 RPC 없이 REST 필터로 처리한다.
-
-   현재 agent_directory의 지역 필드가
-   기존 중개사 DB의 시도/시군구/읍면동 구조라는
-   기준으로 조회한다.
-  */
 
 
   if (region) {
@@ -2766,12 +2536,6 @@ async function getBrokerRows(
       }
     );
 
-
-  /*
-   읍면동 컬럼명이 다른 경우
-   페이지 전체를 죽이지 않고
-   두 번째 방식으로 검색
-  */
 
   if (!response.ok) {
     const fallback =
@@ -2847,11 +2611,6 @@ async function getBrokerRows(
     const fallbackRows =
       await fallbackResponse.json();
 
-
-    /*
-     주소나 동 관련 실제 컬럼에서
-     해당 지역명이 포함된 중개사만 남긴다.
-    */
 
     return fallbackRows
       .filter(
@@ -3079,12 +2838,12 @@ async function handleBrokerPage(
 
   const location =
     [
-          region,
-    city,
-    place
-  ]
-    .filter(Boolean)
-    .join(" ");
+      region,
+      city,
+      place
+    ]
+      .filter(Boolean)
+      .join(" ");
 
 
   const canonical =
@@ -3111,213 +2870,303 @@ async function handleBrokerPage(
     const brokers =
       Array.isArray(rows)
         ? rows
-            .map(
-              function(row) {
-                return {
-                  row:
-                    row,
-
-                  data:
-                    brokerData(row)
-                };
-              }
-            )
+            .map(brokerData)
             .filter(
               function(item) {
-                return (
-                  item.data.name ||
-                  item.data.roadAddress ||
-                  item.data.jibunAddress
-                );
+                return !!item.name;
               }
             )
         : [];
 
 
+    const brokerCount =
+      brokers.length;
+
+
+    const homepageCount =
+      brokers.filter(
+        function(item) {
+          return !!item.homepage;
+        }
+      ).length;
+
+
     const title =
       location +
-      " 공인중개사 부동산 중개사무소 | 우리아파트 안심거래";
+      " 공인중개사" +
+      (
+        brokerCount
+          ? " " +
+            brokerCount +
+            "곳"
+          : ""
+      ) +
+      " | 우리아파트 안심거래";
 
 
     const description =
       (
         location +
-        " 공인중개사와 부동산 중개사무소 정보를 확인하세요. " +
-        "매수자·임차인의 희망조건을 확인하고 맞춤 매물을 제안할 수 있는 " +
-        "우리아파트 안심거래 공인중개사 플랫폼입니다."
-      )
-        .slice(
-          0,
-          300
-        );
+        " 공인중개사 정보를 확인하세요. " +
+        (
+          brokerCount
+            ? "등록된 중개업소 " +
+              brokerCount +
+              "곳의 "
+            : ""
+        )
+      );
+            ) +
+        "상호명, 주소, 전화번호" +
+        (
+          homepageCount
+            ? ", 홈페이지"
+            : ""
+        ) +
+        " 정보를 확인할 수 있습니다. " +
+        "공인중개사는 매수자·임차인의 희망조건을 확인하고 맞춤 매물을 제안할 수 있습니다."
+      ).slice(
+        0,
+        300
+      );
 
 
-    const brokerListHtml =
-      brokers.length
-        ? brokers
-            .map(
-              function(item) {
-                const data =
-                  item.data;
+    let brokerListHtml = "";
 
 
-                const address =
-                  data.roadAddress ||
-                  data.jibunAddress;
+    if (brokers.length) {
+      brokerListHtml =
+        brokers
+          .map(
+            function(
+              broker,
+              index
+            ) {
+              const address =
+                broker.roadAddress ||
+                broker.jibunAddress;
 
 
-                return `
-                  <article class="broker-card">
+              let homepageHtml = "";
 
-                    <h2>
-                      ${
-                        html(
-                          data.name ||
-                          "공인중개사 사무소"
-                        )
-                      }
-                    </h2>
 
-                    ${
-                      address
-                        ? `
-                          <div class="broker-row">
-                            <strong>주소</strong>
-                            <span>
-                              ${html(address)}
-                            </span>
-                          </div>
-                        `
-                        : ""
-                    }
-
-                    ${
-                      data.zipcode
-                        ? `
-                          <div class="broker-row">
-                            <strong>우편번호</strong>
-                            <span>
-                              ${html(data.zipcode)}
-                            </span>
-                          </div>
-                        `
-                        : ""
-                    }
-
-                    ${
-                      data.phone1
-                        ? `
-                          <div class="broker-row">
-                            <strong>전화</strong>
-                            <span>
-                              ${html(data.phone1)}
-                            </span>
-                          </div>
-                        `
-                        : ""
-                    }
-
-                    ${
-                      data.phone2
-                        ? `
-                          <div class="broker-row">
-                            <strong>추가전화</strong>
-                            <span>
-                              ${html(data.phone2)}
-                            </span>
-                          </div>
-                        `
-                        : ""
-                    }
-
-                    ${
-                      data.representative
-                        ? `
-                          <div class="broker-row">
-                            <strong>대표자</strong>
-                            <span>
-                              ${html(data.representative)}
-                            </span>
-                          </div>
-                        `
-                        : ""
-                    }
-
-                    ${
-                      data.businessType
-                        ? `
-                          <div class="broker-row">
-                            <strong>업종</strong>
-                            <span>
-                              ${html(data.businessType)}
-                            </span>
-                          </div>
-                        `
-                        : ""
-                    }
-
-                    ${
-                      data.homepage
-                        ? `
-                          <div class="broker-row">
-                            <strong>홈페이지</strong>
-
-                            <a
-                              href="${html(data.homepage)}"
-                              target="_blank"
-                              rel="noopener noreferrer nofollow"
-                            >
-                              홈페이지 보기
-                            </a>
-                          </div>
-                        `
-                        : ""
-                    }
-
-                  </article>
+              if (broker.homepage) {
+                homepageHtml = `
+                  <a
+                    class="broker-homepage"
+                    href="${html(broker.homepage)}"
+                    target="_blank"
+                    rel="nofollow noopener noreferrer"
+                  >
+                    홈페이지·블로그 보기
+                  </a>
                 `;
               }
-            )
-            .join("")
-        : `
-          <div class="empty">
-            현재 표시할 공인중개사 정보가 없습니다.
-          </div>
-        `;
 
 
-    const structuredData =
+              let phoneHtml = "";
+
+
+              if (
+                broker.phone1 ||
+                broker.phone2
+              ) {
+                phoneHtml = `
+                  <div class="broker-row">
+
+                    <div class="broker-label">
+                      전화
+                    </div>
+
+                    <div class="broker-value">
+                      ${
+                        broker.phone1
+                          ? html(
+                              broker.phone1
+                            )
+                          : ""
+                      }
+
+                      ${
+                        broker.phone1 &&
+                        broker.phone2
+                          ? "<br>"
+                          : ""
+                      }
+
+                      ${
+                        broker.phone2
+                          ? html(
+                              broker.phone2
+                            )
+                          : ""
+                      }
+                    </div>
+
+                  </div>
+                `;
+              }
+
+
+              return `
+                <article class="broker-card">
+
+                  <div class="broker-number">
+                    ${index + 1}
+                  </div>
+
+
+                  <h3>
+                    ${html(broker.name)}
+                  </h3>
+
+
+                  ${
+                    broker.businessType
+                      ? `
+                        <div class="broker-type">
+                          ${html(
+                            broker.businessType
+                          )}
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                  ${
+                    address
+                      ? `
+                        <div class="broker-row">
+
+                          <div class="broker-label">
+                            주소
+                          </div>
+
+                          <div class="broker-value">
+                            ${html(address)}
+                          </div>
+
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                  ${
+                    broker.jibunAddress &&
+                    broker.roadAddress &&
+                    broker.jibunAddress !==
+                      broker.roadAddress
+                      ? `
+                        <div class="broker-row">
+
+                          <div class="broker-label">
+                            지번
+                          </div>
+
+                          <div class="broker-value">
+                            ${html(
+                              broker.jibunAddress
+                            )}
+                          </div>
+
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                  ${
+                    broker.zipcode
+                      ? `
+                        <div class="broker-row">
+
+                          <div class="broker-label">
+                            우편번호
+                          </div>
+
+                          <div class="broker-value">
+                            ${html(
+                              broker.zipcode
+                            )}
+                          </div>
+
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                  ${phoneHtml}
+
+
+                  ${
+                    broker.representative
+                      ? `
+                        <div class="broker-row">
+
+                          <div class="broker-label">
+                            대표자
+                          </div>
+
+                          <div class="broker-value">
+                            ${html(
+                              broker.representative
+                            )}
+                          </div>
+
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                  ${homepageHtml}
+
+                </article>
+              `;
+            }
+          )
+          .join("");
+
+    } else {
+      brokerListHtml = `
+        <div class="empty">
+
+          현재 ${html(location)}에서
+          표시할 수 있는 공인중개사 상세정보를
+          찾지 못했습니다.
+
+        </div>
+      `;
+    }
+
+
+    const itemList =
       brokers
-        .slice(
-          0,
-          50
-        )
+        .slice(0, 100)
         .map(
-          function(item) {
-            const data =
-              item.data;
-
-
-            const object = {
+          function(
+            broker,
+            index
+          ) {
+            const item = {
               "@type":
-                "RealEstateAgent",
+                "LocalBusiness",
 
               name:
-                data.name ||
-                (
-                  location +
-                  " 공인중개사"
-                )
+                broker.name
             };
 
 
             const address =
-              data.roadAddress ||
-              data.jibunAddress;
+              broker.roadAddress ||
+              broker.jibunAddress;
 
 
             if (address) {
-              object.address = {
+              item.address = {
                 "@type":
                   "PostalAddress",
 
@@ -3330,27 +3179,62 @@ async function handleBrokerPage(
                 addressRegion:
                   region,
 
+                postalCode:
+                  broker.zipcode || undefined,
+
                 addressCountry:
                   "KR"
               };
             }
 
 
-            if (data.phone1) {
-              object.telephone =
-                data.phone1;
+            if (broker.phone1) {
+              item.telephone =
+                broker.phone1;
             }
 
 
-            if (data.homepage) {
-              object.url =
-                data.homepage;
+            if (broker.homepage) {
+              item.sameAs = [
+                broker.homepage
+              ];
             }
 
 
-            return object;
+            return {
+              "@type":
+                "ListItem",
+
+              position:
+                index + 1,
+
+              item:
+                item
+            };
           }
         );
+
+
+    const structuredData = {
+      "@context":
+        "https://schema.org",
+
+      "@type":
+        "ItemList",
+
+      name:
+        location +
+        " 공인중개사",
+
+      url:
+        canonical,
+
+      numberOfItems:
+        brokerCount,
+
+      itemListElement:
+        itemList
+    };
 
 
     res.setHeader(
@@ -3397,6 +3281,7 @@ async function handleBrokerPage(
   href="${html(canonical)}"
 >
 
+
 <meta
   property="og:type"
   content="website"
@@ -3418,21 +3303,9 @@ async function handleBrokerPage(
 >
 
 
-${
-  structuredData.length
-    ? `
 <script type="application/ld+json">
-${JSON.stringify({
-  "@context":
-    "https://schema.org",
-
-  "@graph":
-    structuredData
-})}
+${JSON.stringify(structuredData)}
 </script>
-`
-    : ""
-}
 
 
 <style>
@@ -3444,12 +3317,8 @@ ${JSON.stringify({
 
 body {
   margin: 0;
-
-  background:
-    #f5f7f6;
-
-  color:
-    #172b3d;
+  background: #f4f7fa;
+  color: #172b3d;
 
   font-family:
     -apple-system,
@@ -3463,8 +3332,8 @@ body {
 
 .wrap {
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 850px;
+  margin: auto;
   padding: 18px 14px 60px;
 }
 
@@ -3474,7 +3343,6 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-
   margin-bottom: 18px;
 }
 
@@ -3488,403 +3356,298 @@ body {
 
 
 .brand strong {
-  color: #075b32;
+  color: #1165d7;
 }
 
 
 .home {
-  flex: 0 0 auto;
-
   padding: 9px 12px;
-
-  border:
-    1px solid #d8e1dc;
-
-  border-radius:
-    10px;
-
-  background:
-    #fff;
-
-  color:
-    #425d4e;
-
-  font-weight:
-    800;
-
-  text-decoration:
-    none;
+  border: 1px solid #d4e0e8;
+  border-radius: 10px;
+  background: #fff;
+  color: #456177;
+  font-weight: 800;
+  text-decoration: none;
 }
 
 
 .hero {
   overflow: hidden;
-
-  border:
-    1px solid #dce5df;
-
-  border-radius:
-    20px;
-
-  background:
-    #fff;
+  border: 1px solid #dce5ec;
+  border-radius: 20px;
+  background: #fff;
 
   box-shadow:
     0 7px 22px
-    rgba(22, 56, 42, .07);
+    rgba(22, 56, 83, .07);
 }
 
 
 .hero-top {
-  padding:
-    30px 22px;
+  padding: 30px 22px;
 
   background:
     linear-gradient(
       135deg,
-      #075b32,
-      #14824b
+      #0f5fcf,
+      #2381e7
     );
 
-  color:
-    #fff;
+  color: #fff;
 }
 
 
 .location {
-  margin-bottom:
-    8px;
-
-  font-size:
-    14px;
-
-  font-weight:
-    700;
-
-  opacity:
-    .9;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: .9;
 }
 
 
 h1 {
   margin: 0;
-
-  font-size:
-    29px;
-
-  line-height:
-    1.4;
+  font-size: 29px;
+  line-height: 1.4;
 }
 
 
 .subtitle {
-  margin:
-    14px 0 0;
-
-  font-size:
-    17px;
-
-  line-height:
-    1.75;
+  margin: 13px 0 0;
+  line-height: 1.75;
 }
 
 
 .body {
-  padding:
-    24px 20px 28px;
+  padding: 24px 20px 28px;
 }
 
 
-.guide {
-  margin-bottom:
-    22px;
-
-  padding:
-    18px;
-
-  border:
-    1px solid #dce8e1;
-
-  border-radius:
-    14px;
-
-  background:
-    #f7fbf8;
+.summary {
+  margin-bottom: 23px;
+  padding: 17px;
+  border: 1px solid #dce7ef;
+  border-radius: 13px;
+  background: #f7fafd;
 }
 
 
-.guide h2 {
-  margin:
-    0 0 10px;
-
-  font-size:
-    21px;
+.summary strong {
+  color: #1165d7;
 }
 
 
-.guide p {
-  margin:
-    7px 0;
-
-  color:
-    #52695d;
-
-  line-height:
-    1.75;
+.summary p {
+  margin: 5px 0;
+  color: #536b7d;
+  line-height: 1.7;
 }
 
 
-.point {
-  color:
-    #075b32;
-
-  font-weight:
-    900;
+.broker-section {
+  margin-top: 25px;
 }
 
 
-.broker-list {
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(
-      2,
-      minmax(0, 1fr)
-    );
-
-  gap:
-    13px;
+.broker-section h2 {
+  margin: 0 0 14px;
+  font-size: 22px;
 }
 
 
 .broker-card {
-  padding:
-    18px;
+  position: relative;
 
-  border:
-    1px solid #dfe7e2;
+  margin-bottom: 13px;
+  padding: 19px 17px;
 
-  border-radius:
-    14px;
+  border: 1px solid #dce5ec;
+  border-radius: 14px;
 
-  background:
-    #fff;
+  background: #fff;
 }
 
 
-.broker-card h2 {
-  margin:
-    0 0 14px;
+.broker-number {
+  position: absolute;
+  top: 18px;
+  right: 17px;
 
-  color:
-    #173a59;
+  min-width: 27px;
+  height: 27px;
 
-  font-size:
-    19px;
+  padding: 4px 7px;
 
-  line-height:
-    1.45;
+  border-radius: 50px;
+
+  background: #eef5fc;
+  color: #1165d7;
+
+  font-size: 12px;
+  font-weight: 900;
+  text-align: center;
+}
+
+
+.broker-card h3 {
+  margin: 0 45px 6px 0;
+  font-size: 19px;
+}
+
+
+.broker-type {
+  margin-bottom: 12px;
+  color: #738596;
+  font-size: 13px;
 }
 
 
 .broker-row {
-  display:
-    grid;
+  display: grid;
 
   grid-template-columns:
-    76px 1fr;
+    75px 1fr;
 
-  gap:
-    8px;
+  gap: 8px;
 
-  padding:
-    7px 0;
+  margin-top: 8px;
 
-  border-bottom:
-    1px solid #eef2f0;
-
-  font-size:
-    14px;
-
-  line-height:
-    1.55;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 
-.broker-row:last-child {
-  border-bottom:
-    0;
+.broker-label {
+  color: #748696;
+  font-weight: 800;
 }
 
 
-.broker-row strong {
-  color:
-    #52695d;
+.broker-value {
+  color: #334c60;
+  word-break: break-word;
 }
 
 
-.broker-row span,
-.broker-row a {
-  min-width:
-    0;
+.broker-homepage {
+  display: inline-flex;
 
-  color:
-    #24382d;
+  align-items: center;
+  justify-content: center;
 
-  word-break:
-    break-word;
+  margin-top: 15px;
+  padding: 10px 14px;
+
+  border: 1px solid #1165d7;
+  border-radius: 9px;
+
+  color: #1165d7;
+  background: #fff;
+
+  font-size: 14px;
+  font-weight: 900;
+
+  text-decoration: none;
 }
 
 
-.broker-row a {
-  color:
-    #075b32;
-
-  font-weight:
-    800;
+.broker-homepage:hover {
+  background: #f1f7fd;
 }
 
 
 .empty {
-  grid-column:
-    1 / -1;
+  padding: 25px 17px;
 
-  padding:
-    30px 18px;
+  border: 1px solid #dce5ec;
+  border-radius: 13px;
 
-  border:
-    1px solid #dfe7e2;
+  background: #f8fafc;
 
-  border-radius:
-    14px;
-
-  background:
-    #fff;
-
-  color:
-    #64766c;
-
-  text-align:
-    center;
+  color: #64788a;
+  line-height: 1.7;
 }
 
 
-.cta-box {
-  margin-top:
-    25px;
+.join-box {
+  margin-top: 28px;
+  padding: 22px 18px;
 
-  padding:
-    21px 18px;
+  border-radius: 15px;
 
-  border-radius:
-    15px;
-
-  background:
-    #f3f8f5;
+  background: #f1f7fd;
 }
 
 
-.cta-box h2 {
-  margin:
-    0 0 9px;
-
-  font-size:
-    21px;
+.join-box h2 {
+  margin: 0 0 10px;
+  font-size: 21px;
 }
 
 
-.cta-box p {
-  margin: 0;
+.join-box p {
+  margin: 7px 0;
 
-  color:
-    #52695d;
-
-  line-height:
-    1.8;
+  color: #536b7d;
+  line-height: 1.75;
 }
 
 
 .cta {
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
+  justify-content: center;
 
-  justify-content:
-    center;
+  min-height: 57px;
 
-  min-height:
-    57px;
+  margin-top: 18px;
+  padding: 13px;
 
-  margin-top:
-    18px;
+  border-radius: 12px;
 
-  padding:
-    13px;
+  background: #1165d7;
+  color: #fff;
 
-  border-radius:
-    12px;
+  font-size: 17px;
+  font-weight: 900;
 
-  background:
-    #075b32;
-
-  color:
-    #fff;
-
-  font-size:
-    17px;
-
-  font-weight:
-    900;
-
-  text-decoration:
-    none;
+  text-decoration: none;
 }
 
 
 .footer {
-  margin-top:
-    24px;
+  margin-top: 24px;
 
-  color:
-    #82928a;
+  color: #82929e;
 
-  font-size:
-    11px;
+  font-size: 11px;
+  line-height: 1.8;
 
-  line-height:
-    1.8;
-
-  text-align:
-    center;
+  text-align: center;
 }
 
 
-@media(max-width: 650px) {
+@media(max-width:520px) {
 
   h1 {
-    font-size:
-      25px;
+    font-size: 25px;
   }
 
 
   .hero-top {
-    padding:
-      25px 17px;
+    padding: 25px 17px;
   }
 
 
   .body {
-    padding:
-      21px 15px 25px;
+    padding: 21px 15px 25px;
   }
 
 
-  .broker-list {
+  .broker-row {
     grid-template-columns:
-      1fr;
+      65px 1fr;
   }
 }
 
@@ -3894,6 +3657,7 @@ h1 {
 
 
 <body>
+
 
 <div class="wrap">
 
@@ -3930,14 +3694,13 @@ h1 {
 
 
   <h1>
-    ${html(place)}
-    공인중개사
+    ${html(place)} 공인중개사
   </h1>
 
 
   <p class="subtitle">
     우리동네 공인중개사 정보를 확인하고<br>
-    매수·전세·월세 고객과 연결하세요.
+    매수자·임차인에게 맞춤 매물을 제안하세요.
   </p>
 
 </section>
@@ -3946,55 +3709,86 @@ h1 {
 <section class="body">
 
 
-<div class="guide">
-
-  <h2>
-    공인중개사 고객연결
-  </h2>
-
-
-  <p class="point">
-    회원 공인중개사는
-    매수자·임차인의 희망조건을
-    우선 확인할 수 있습니다.
-  </p>
-
+<div class="summary">
 
   <p>
-    매수고객·전세고객·월세고객에게
-    조건에 맞는 매물을 제안하고
-    새로운 거래고객과 연결할 수 있습니다.
+    <strong>
+      ${html(location)}
+    </strong>
+    공인중개사 정보를 확인할 수 있습니다.
   </p>
+
+
+  ${
+    brokerCount
+      ? `
+        <p>
+          현재 이 페이지에서
+          <strong>
+            ${brokerCount}개 중개업소
+          </strong>
+          정보를 확인할 수 있습니다.
+        </p>
+      `
+      : ""
+  }
+
+
+  ${
+    homepageCount
+      ? `
+        <p>
+          이 중
+          <strong>
+            ${homepageCount}개 중개업소
+          </strong>
+          는 등록된 홈페이지·블로그 등의
+          링크도 확인할 수 있습니다.
+        </p>
+      `
+      : ""
+  }
 
 </div>
 
 
-<section class="broker-list">
+<section class="broker-section">
+
+  <h2>
+    ${html(place)} 공인중개사 목록
+  </h2>
+
 
   ${brokerListHtml}
 
 </section>
 
 
-<div class="cta-box">
+<div class="join-box">
 
   <h2>
-    공인중개사 회원등록
+    공인중개사이신가요?
   </h2>
 
 
   <p>
-    우리동네 신규고객과 연결하고
-    매수·임차 희망조건에 맞는
-    매물을 제안하세요.
+    전국 매수자·임차인의
+    희망조건을 확인하고
+    조건에 맞는 매물을 제안할 수 있습니다.
+  </p>
+
+
+  <p>
+    회원 공인중개사는
+    고객 연결을 우선적으로 받을 수 있습니다.
   </p>
 
 
   <a
     class="cta"
-    href="/broker-guide.html"
+    href="/broker-landing.html"
   >
-    공인중개사 자세히 알아보기
+    공인중개사 플랫폼 알아보기
   </a>
 
 </div>
@@ -4024,10 +3818,14 @@ h1 {
 
 </div>
 
+
 </body>
+
 </html>`);
 
+
   } catch (error) {
+
     console.error(
       "BROKER PAGE ERROR:",
       error
@@ -4037,7 +3835,7 @@ h1 {
     return res
       .status(500)
       .send(
-        "페이지를 불러오는 중 오류가 발생했습니다."
+        "공인중개사 페이지를 불러오는 중 오류가 발생했습니다."
       );
   }
 }
@@ -4045,6 +3843,7 @@ h1 {
 
 /* =========================================
    공인중개사 사이트맵
+   기존 URL 구조 유지
 ========================================= */
 
 async function handleBrokerSitemap(
@@ -4056,50 +3855,51 @@ async function handleBrokerSitemap(
     "application/xml; charset=utf-8"
   );
 
+
   res.setHeader(
     "Cache-Control",
     "s-maxage=86400, stale-while-revalidate=604800"
   );
 
+
   try {
-    const locationSet =
-      new Set();
 
-    let offset = 0;
+    const query =
+      new URLSearchParams();
 
-    while (true) {
-      const query =
-        new URLSearchParams();
 
-      query.set(
-        "select",
-        "시도,시군구,읍면동"
-      );
+    query.set(
+      "select",
+      "시도,시군구,읍면,동리"
+    );
 
-      query.set(
-        "order",
-        "시도.asc,시군구.asc,읍면동.asc"
-      );
 
-      query.set(
-        "limit",
-        "1000"
-      );
+    query.set(
+      "order",
+      "시도.asc,시군구.asc,읍면.asc,동리.asc"
+    );
 
-      query.set(
-        "offset",
-        String(offset)
-      );
 
+    const apiUrl =
+      SUPABASE_URL +
+      "/rest/v1/safe_apartments?" +
+      query.toString();
+
+
+    const rows = [];
+
+
+    for (
+      let start = 0;
+      start < 100000;
+      start += 1000
+    ) {
       const response =
         await fetch(
-          SUPABASE_URL +
-          "/rest/v1/agent_directory?" +
-          query.toString(),
+          apiUrl,
           {
             method: "GET",
-
-            headers: {
+                        headers: {
               apikey:
                 SUPABASE_KEY,
 
@@ -4107,70 +3907,92 @@ async function handleBrokerSitemap(
                 "Bearer " +
                 SUPABASE_KEY,
 
-              Accept:
-                "application/json"
+              Range:
+                start +
+                "-" +
+                (start + 999)
             }
           }
         );
 
-      if (!response.ok) {
-        const errorText =
-          await response.text();
 
+      if (!response.ok) {
         throw new Error(
-          "Broker sitemap DB error: " +
-          response.status +
-          " " +
-          errorText
+          "Broker sitemap DB error"
         );
       }
+
 
       const batch =
         await response.json();
 
-      for (
-        const row of batch
-      ) {
-        const region =
-          clean(row["시도"]);
 
-        const city =
-          clean(row["시군구"]);
+      rows.push(
+        ...batch
+      );
 
-        const place =
-          clean(row["읍면동"]);
-
-        if (
-          !region ||
-          !city ||
-          !place
-        ) {
-          continue;
-        }
-
-        locationSet.add(
-          [
-            region,
-            city,
-            place
-          ].join("|")
-        );
-      }
 
       if (
         batch.length < 1000
       ) {
         break;
       }
-
-      offset += 1000;
     }
-        const lastmod =
+
+
+    const locationSet =
+      new Set();
+
+
+    for (
+      const row of rows
+    ) {
+      const region =
+        clean(
+          row["시도"]
+        );
+
+
+      const city =
+        clean(
+          row["시군구"]
+        );
+
+
+      const place =
+        clean(
+          row["동리"] ||
+          row["읍면"]
+        );
+
+
+      if (
+        !region ||
+        !city ||
+        !place
+      ) {
+        continue;
+      }
+
+
+      locationSet.add(
+        [
+          region,
+          city,
+          place
+        ].join("|")
+      );
+    }
+
+
+    const lastmod =
       new Date()
         .toISOString()
         .split("T")[0];
 
+
     const urls = [];
+
 
     urls.push(
       "  <url>" +
@@ -4188,6 +4010,7 @@ async function handleBrokerSitemap(
       "</url>"
     );
 
+
     for (
       const locationKey
       of locationSet
@@ -4195,12 +4018,14 @@ async function handleBrokerSitemap(
       const parts =
         locationKey.split("|");
 
+
       const url =
         SITE_ORIGIN +
         "/broker-search/" +
         parts
           .map(pathEncode)
           .join("/");
+
 
       urls.push(
         "  <url>" +
@@ -4216,6 +4041,7 @@ async function handleBrokerSitemap(
       );
     }
 
+
     return res
       .status(200)
       .send(
@@ -4225,11 +4051,14 @@ async function handleBrokerSitemap(
         "</urlset>"
       );
 
+
   } catch (error) {
+
     console.error(
       "BROKER SITEMAP ERROR:",
       error
     );
+
 
     return res
       .status(500)
@@ -4244,22 +4073,26 @@ async function handleBrokerSitemap(
    통합 진입점
 ========================================= */
 
-module.exports =
-async function handler(
+export default async function handler(
   req,
   res
 ) {
+
   const mode =
-    clean(
-      req.query.mode
-    );
+    String(
+      req.query.mode ||
+      "page"
+    ).trim();
 
 
-  /* IndexNow */
+  /* =========================================
+     네이버 IndexNow
+  ========================================= */
 
   if (
     mode === "indexnow"
   ) {
+
     if (
       req.method !== "POST"
     ) {
@@ -4267,30 +4100,23 @@ async function handler(
         .status(405)
         .json({
           ok: false,
-          error:
-            "POST 요청만 허용됩니다."
+          error: "Method Not Allowed"
         });
     }
 
 
     try {
+
       let urls =
-        req.body &&
-        req.body.urls;
+        req.body?.urls ||
+        req.body?.urlList ||
+        [];
 
 
       if (
-        !Array.isArray(urls)
+        typeof urls === "string"
       ) {
-        const singleUrl =
-          req.body &&
-          req.body.url;
-
-
-        urls =
-          singleUrl
-            ? [singleUrl]
-            : [];
+        urls = [urls];
       }
 
 
@@ -4300,15 +4126,25 @@ async function handler(
         );
 
 
+      if (
+        !result.ok
+      ) {
+        return res
+          .status(
+            result.naverStatus ||
+            400
+          )
+          .json(result);
+      }
+
+
       return res
-        .status(
-          result.ok
-            ? 200
-            : 400
-        )
+        .status(200)
         .json(result);
 
+
     } catch (error) {
+
       console.error(
         "INDEXNOW ERROR:",
         error
@@ -4319,15 +4155,28 @@ async function handler(
         .status(500)
         .json({
           ok: false,
-
           error:
+            error.message ||
             "IndexNow 전송 중 오류가 발생했습니다."
         });
     }
   }
 
 
-  /* 공인중개사 자동검색 페이지 */
+  /* 기존 기능은 GET만 허용 */
+
+  if (
+    req.method !== "GET"
+  ) {
+    return res
+      .status(405)
+      .send(
+        "Method Not Allowed"
+      );
+  }
+
+
+  /* 공인중개사 자동검색 */
 
   if (
     mode === "broker-page"
@@ -4351,7 +4200,7 @@ async function handler(
   }
 
 
-  /* 아파트 목록 API */
+  /* 아파트 목록 */
 
   if (
     mode === "list"
@@ -4375,7 +4224,7 @@ async function handler(
   }
 
 
-  /* 아파트 개별 사이트맵 */
+  /* 아파트 분할 사이트맵 */
 
   if (
     mode === "sitemap"
@@ -4387,10 +4236,10 @@ async function handler(
   }
 
 
-  /* 기본: 아파트 자동검색 페이지 */
+  /* 기본 = 아파트 자동검색 페이지 */
 
   return handleApartmentPage(
     req,
     res
   );
-};
+}
