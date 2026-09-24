@@ -11,133 +11,6 @@ const SITEMAP_PAGE_SIZE = 5000;
 
 
 /* =========================================
-   NAVER INDEXNOW
-========================================= */
-
-const INDEXNOW_KEY =
-  "fc1e3ad82010475381daf9846e627fdd";
-
-const INDEXNOW_HOST =
-  "www.wooriapt.app";
-
-const INDEXNOW_KEY_LOCATION =
-  "https://www.wooriapt.app/fc1e3ad82010475381daf9846e627fdd.txt";
-
-
-async function submitIndexNow(urls) {
-
-  if (
-    typeof urls === "string"
-  ) {
-    urls = [urls];
-  }
-
-
-  if (
-    !Array.isArray(urls) ||
-    urls.length === 0
-  ) {
-    return {
-      ok: false,
-      error:
-        "전송할 URL이 없습니다."
-    };
-  }
-
-
-  const validUrls =
-    [...new Set(urls)]
-      .filter(
-        function(url) {
-          try {
-            const u =
-              new URL(url);
-
-            return (
-              u.protocol ===
-                "https:" &&
-              (
-                u.hostname ===
-                  "wooriapt.app" ||
-                u.hostname ===
-                  "www.wooriapt.app"
-              )
-            );
-
-          } catch (error) {
-            return false;
-          }
-        }
-      )
-      .slice(
-        0,
-        10000
-      );
-
-
-  if (
-    validUrls.length === 0
-  ) {
-    return {
-      ok: false,
-      error:
-        "유효한 wooriapt.app URL이 없습니다."
-    };
-  }
-
-
-  const response =
-    await fetch(
-      "https://searchadvisor.naver.com/indexnow",
-      {
-        method:
-          "POST",
-
-        headers: {
-          "Content-Type":
-            "application/json; charset=utf-8"
-        },
-
-        body:
-          JSON.stringify({
-            host:
-              INDEXNOW_HOST,
-
-            key:
-              INDEXNOW_KEY,
-
-            keyLocation:
-              INDEXNOW_KEY_LOCATION,
-
-            urlList:
-              validUrls
-          })
-      }
-    );
-
-
-  const responseText =
-    await response.text();
-
-
-  return {
-    ok:
-      response.ok,
-
-    naverStatus:
-      response.status,
-
-    submitted:
-      validUrls.length,
-
-    response:
-      responseText ||
-      "Success"
-  };
-}
-
-
-/* =========================================
    공통 함수
 ========================================= */
 
@@ -840,7 +713,6 @@ async function handleApartmentList(
           apartments
       });
 
-
   } catch (error) {
     console.error(
       "SAFE APARTMENTS API ERROR:",
@@ -966,7 +838,6 @@ async function handleSitemapIndex(
         "</sitemapindex>"
       );
 
-
   } catch (error) {
     console.error(
       "APT SITEMAP INDEX ERROR:",
@@ -982,7 +853,154 @@ async function handleSitemapIndex(
   }
 }
 
-try {
+
+/* =========================================
+   아파트 개별 사이트맵
+========================================= */
+
+async function handleSitemap(
+  req,
+  res
+) {
+  res.setHeader(
+    "Content-Type",
+    "application/xml; charset=utf-8"
+  );
+
+  res.setHeader(
+    "Cache-Control",
+    "s-maxage=3600, stale-while-revalidate=86400"
+  );
+
+
+  try {
+    const page =
+      Math.max(
+        1,
+        parseInt(
+          req.query.page || "1",
+          10
+        )
+      );
+
+
+    const start =
+      (page - 1) *
+      SITEMAP_PAGE_SIZE;
+
+
+    const end =
+      start +
+      SITEMAP_PAGE_SIZE -
+      1;
+
+
+    const query =
+      new URLSearchParams();
+
+
+    query.set(
+      "select",
+      "시도,시군구,읍면,동리,단지명"
+    );
+
+
+    query.set(
+      "order",
+      "시도.asc,시군구.asc,동리.asc,단지명.asc"
+    );
+
+
+    const apiUrl =
+      SUPABASE_URL +
+      "/rest/v1/safe_apartments?" +
+      query.toString();
+
+
+    const rows = [];
+
+
+    for (
+      let batchStart = start;
+      batchStart <= end;
+      batchStart += 1000
+    ) {
+      const batchEnd =
+        Math.min(
+          batchStart + 999,
+          end
+        );
+
+
+      const response =
+        await fetch(
+          apiUrl,
+          {
+            method: "GET",
+
+            headers: {
+              apikey:
+                SUPABASE_KEY,
+
+              Authorization:
+                "Bearer " +
+                SUPABASE_KEY,
+
+              Range:
+                batchStart +
+                "-" +
+                batchEnd,
+
+              Prefer:
+                "count=exact"
+            }
+          }
+        );
+
+
+      if (!response.ok) {
+        const message =
+          await response.text();
+
+
+        throw new Error(
+          "Supabase request failed: " +
+          response.status +
+          " " +
+          message
+        );
+      }
+
+
+      const batchRows =
+        await response.json();
+
+
+      rows.push(
+        ...batchRows
+      );
+
+
+      if (
+        batchRows.length < 1000
+      ) {
+        break;
+      }
+    }
+
+
+    const urlSet =
+      new Set();
+
+
+    const tradeTypes =
+      [
+        "sale",
+        "jeonse",
+        "monthly"
+      ];
+
+
     for (
       const row of rows
     ) {
@@ -1123,8 +1141,6 @@ try {
       );
   }
 }
-
-
 /* =========================================
    아파트 자동검색 페이지
 ========================================= */
@@ -1168,6 +1184,14 @@ async function handleApartmentPage(
   const query =
     new URLSearchParams();
 
+
+  /*
+   개별 아파트 페이지:
+   실제 DB의 모든 컬럼을 가져옴
+
+   지역 목록 페이지:
+   검색에 필요한 최소 컬럼만 가져옴
+  */
 
   if (apartment) {
     query.set(
@@ -1321,6 +1345,10 @@ async function handleApartmentPage(
         : null;
 
 
+    /* =====================================
+       실제 아파트 DB 주요정보
+    ===================================== */
+
     const householdCount =
       firstValue(
         apartmentRow,
@@ -1449,6 +1477,10 @@ async function handleApartmentPage(
       );
 
 
+    /* =====================================
+       검색 제목
+    ===================================== */
+
     let title = "";
 
     if (apartment) {
@@ -1468,7 +1500,6 @@ async function handleApartmentPage(
 
       title +=
         " | 우리아파트";
-
     } else {
       title =
         location +
@@ -1477,6 +1508,10 @@ async function handleApartmentPage(
         " | 우리아파트";
     }
 
+
+    /* =====================================
+       검색 설명
+    ===================================== */
 
     const descriptionParts = [];
 
@@ -1554,6 +1589,10 @@ async function handleApartmentPage(
         .slice(0, 300);
 
 
+    /* =====================================
+       단지 상세정보
+    ===================================== */
+
     let detailHtml = "";
 
 
@@ -1586,6 +1625,10 @@ async function handleApartmentPage(
       }
     }
 
+
+    /* =====================================
+       지역 아파트 목록
+    ===================================== */
 
     let list = "";
 
@@ -1651,6 +1694,10 @@ async function handleApartmentPage(
     }
 
 
+    /* =====================================
+       매매 / 전세 / 월세 내부링크
+    ===================================== */
+
     const tradeLinks =
       [
         {
@@ -1707,6 +1754,10 @@ async function handleApartmentPage(
         )
         .join("");
 
+
+    /* =====================================
+       구조화 데이터
+    ===================================== */
 
     let structuredData = null;
 
@@ -1947,6 +1998,8 @@ body {
     0 7px 22px
     rgba(22, 56, 42, .07);
 }
+
+
 .hero-top {
   padding: 30px 22px;
 
@@ -2478,10 +2531,27 @@ async function getBrokerRows(
     new URLSearchParams();
 
 
+  /*
+   agent_directory는 실제 DB 전체 컬럼을
+   가져온 뒤 존재하는 값만 사용한다.
+   홈페이지 컬럼도 여기서 함께 가져온다.
+  */
+
   query.set(
     "select",
     "*"
   );
+
+
+  /*
+   컬럼 이름 차이에 따른 DB 오류를 막기 위해
+   먼저 전체 데이터를 가져오는 것이 아니라
+   지역 검색은 아래 RPC 없이 REST 필터로 처리한다.
+
+   현재 agent_directory의 지역 필드가
+   기존 중개사 DB의 시도/시군구/읍면동 구조라는
+   기준으로 조회한다.
+  */
 
 
   if (region) {
@@ -2536,6 +2606,12 @@ async function getBrokerRows(
       }
     );
 
+
+  /*
+   읍면동 컬럼명이 다른 경우
+   페이지 전체를 죽이지 않고
+   두 번째 방식으로 검색
+  */
 
   if (!response.ok) {
     const fallback =
@@ -2611,6 +2687,11 @@ async function getBrokerRows(
     const fallbackRows =
       await fallbackResponse.json();
 
+
+    /*
+     주소나 동 관련 실제 컬럼에서
+     해당 지역명이 포함된 중개사만 남긴다.
+    */
 
     return fallbackRows
       .filter(
@@ -2802,8 +2883,6 @@ function brokerData(row) {
       representative
   };
 }
-
-
 /* =========================================
    공인중개사 자동검색 페이지
    agent_directory 실제 DB 사용
@@ -2859,6 +2938,11 @@ async function handleBrokerPage(
 
 
   try {
+
+    /* =====================================
+       agent_directory 실제 중개사 조회
+    ===================================== */
+
     const rows =
       await getBrokerRows(
         region,
@@ -2914,9 +2998,7 @@ async function handleBrokerPage(
               brokerCount +
               "곳의 "
             : ""
-        )
-      );
-            ) +
+        ) +
         "상호명, 주소, 전화번호" +
         (
           homepageCount
@@ -2930,6 +3012,10 @@ async function handleBrokerPage(
         300
       );
 
+
+    /* =====================================
+       중개사 목록 HTML
+    ===================================== */
 
     let brokerListHtml = "";
 
@@ -3142,6 +3228,10 @@ async function handleBrokerPage(
       `;
     }
 
+
+    /* =====================================
+       중개사 구조화 데이터
+    ===================================== */
 
     const itemList =
       brokers
@@ -3864,6 +3954,14 @@ async function handleBrokerSitemap(
 
   try {
 
+    /*
+     기존 사이트맵 URL 구조를 변경하지 않는다.
+
+     아파트 DB의 전국 동 정보를 이용해
+     /broker-search/지역/시군구/동
+     URL을 계속 생성한다.
+    */
+
     const query =
       new URLSearchParams();
 
@@ -3899,7 +3997,8 @@ async function handleBrokerSitemap(
           apiUrl,
           {
             method: "GET",
-                        headers: {
+
+            headers: {
               apikey:
                 SUPABASE_KEY,
 
@@ -4078,93 +4177,6 @@ export default async function handler(
   res
 ) {
 
-  const mode =
-    String(
-      req.query.mode ||
-      "page"
-    ).trim();
-
-
-  /* =========================================
-     네이버 IndexNow
-  ========================================= */
-
-  if (
-    mode === "indexnow"
-  ) {
-
-    if (
-      req.method !== "POST"
-    ) {
-      return res
-        .status(405)
-        .json({
-          ok: false,
-          error: "Method Not Allowed"
-        });
-    }
-
-
-    try {
-
-      let urls =
-        req.body?.urls ||
-        req.body?.urlList ||
-        [];
-
-
-      if (
-        typeof urls === "string"
-      ) {
-        urls = [urls];
-      }
-
-
-      const result =
-        await submitIndexNow(
-          urls
-        );
-
-
-      if (
-        !result.ok
-      ) {
-        return res
-          .status(
-            result.naverStatus ||
-            400
-          )
-          .json(result);
-      }
-
-
-      return res
-        .status(200)
-        .json(result);
-
-
-    } catch (error) {
-
-      console.error(
-        "INDEXNOW ERROR:",
-        error
-      );
-
-
-      return res
-        .status(500)
-        .json({
-          ok: false,
-          error:
-            error.message ||
-            "IndexNow 전송 중 오류가 발생했습니다."
-        });
-    }
-  }
-
-
-  /* 기존 기능은 GET만 허용 */
-
   if (
     req.method !== "GET"
   ) {
@@ -4174,6 +4186,13 @@ export default async function handler(
         "Method Not Allowed"
       );
   }
+
+
+  const mode =
+    String(
+      req.query.mode ||
+      "page"
+    ).trim();
 
 
   /* 공인중개사 자동검색 */
