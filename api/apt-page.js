@@ -982,7 +982,7 @@ async function handleSitemapIndex(
   }
 }
 
-
+try {
     for (
       const row of rows
     ) {
