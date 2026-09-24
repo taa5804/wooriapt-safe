@@ -893,54 +893,6 @@ async function getApartment(
 }
 
 
-    return res
-      .status(200)
-      .json({
-        ok: true,
-
-        pageNo:
-          pageNo,
-
-        numOfRows:
-          numOfRows,
-
-        totalCount:
-          totalCount,
-
-        count:
-          apartments.length,
-
-        apartments:
-          apartments
-      });
-
-  } catch (error) {
-    console.error(
-      "SAFE APARTMENTS API ERROR:",
-      error
-    );
-
-
-    return res
-      .status(500)
-      .json({
-        ok: false,
-
-        message:
-          "아파트 데이터를 불러오는 중 오류가 발생했습니다."
-      });
-  }
-}
-
-
-/* =========================================
-   아파트 사이트맵 인덱스
-========================================= */
-
-async function handleSitemapIndex(
-  req,
-  res
-) {
   try {
     const response =
       await fetch(
