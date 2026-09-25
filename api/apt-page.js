@@ -982,6 +982,69 @@ async function handleSitemapIndex(
   }
 }
 
+/* =========================================
+   아파트 분할 사이트맵
+========================================= */
+
+async function handleSitemap(
+  req,
+  res
+) {
+  const page =
+    Math.max(
+      1,
+      Number(req.query.page) || 1
+    );
+
+  const offset =
+    (page - 1) *
+    SITEMAP_PAGE_SIZE;
+
+  const end =
+    offset +
+    SITEMAP_PAGE_SIZE -
+    1;
+
+  const tradeTypes = [
+    "sale",
+    "jeonse",
+    "monthly"
+  ];
+
+  const urlSet =
+    new Set();
+
+  const response =
+    await fetch(
+      SUPABASE_URL +
+        "/rest/v1/safe_apartments?select=시도,시군구,읍면,동리,단지명",
+      {
+        headers: {
+          apikey:
+            SUPABASE_KEY,
+
+          Authorization:
+            "Bearer " +
+            SUPABASE_KEY,
+
+          Range:
+            offset +
+            "-" +
+            end
+        }
+      }
+    );
+
+  if (!response.ok) {
+    return res
+      .status(502)
+      .send(
+        "Sitemap data error"
+      );
+  }
+
+  const rows =
+    await response.json();
 try {
     for (
       const row of rows
