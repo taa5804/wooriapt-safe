@@ -3979,8 +3979,8 @@ async function handleBrokerSitemap(req, res) {
             "/rest/v1/agent_directory?select=시도,시군구,읍면동",
           {
             headers: {
-              apikey: SUPABASE_SECRET_KEY,
-              Authorization: `Bearer ${SUPABASE_SECRET_KEY}`,
+              apikey: SUPABASE_KEY,
+              Authorization: `Bearer ${SUPABASE_KEY}`,
               Range: `${from}-${to}`,
               Prefer: "count=exact"
             }
@@ -4038,8 +4038,8 @@ async function handleBrokerSitemap(req, res) {
             "/rest/v1/safe_apartments?select=시도,시군구,읍면,동리",
           {
             headers: {
-              apikey: SUPABASE_SECRET_KEY,
-              Authorization: `Bearer ${SUPABASE_SECRET_KEY}`,
+              apikey: SUPABASE_KEY,
+              Authorization: `Bearer ${SUPABASE_KEY}`,
               Range: `${from}-${to}`,
               Prefer: "count=exact"
             }
