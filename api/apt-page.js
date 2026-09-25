@@ -2884,7 +2884,8 @@ async function handleBrokerPage(
 
   const place =
     clean(req.query.place);
-
+const broker =
+  clean(req.query.broker);
 
   if (
     !region ||
