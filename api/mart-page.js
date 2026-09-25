@@ -62,7 +62,7 @@ function encodePart(value) {
    1. 마트 자동 검색 페이지
 ========================================= */
 
-function handleMartPage(req, res) {
+async function handleMartPage(req, res) {
 
   const q =
     req.query || {};
@@ -85,11 +85,6 @@ function handleMartPage(req, res) {
   const mart =
     String(
       q.mart || ""
-    ).trim();
-
-  const address =
-    String(
-      q.address || ""
     ).trim();
 
 
@@ -118,57 +113,240 @@ function handleMartPage(req, res) {
   }
 
 
-  const pathParts = [
-    region,
-    city,
-    place,
-    mart
-  ]
-    .filter(Boolean)
-    .map(encodePart);
+  if (
+    !SUPABASE_URL ||
+    !SUPABASE_KEY
+  ) {
+
+    res.statusCode = 500;
+
+    res.setHeader(
+      "Content-Type",
+      "text/html; charset=utf-8"
+    );
+
+    return res.end(
+      "마트 Supabase 환경변수가 설정되지 않았습니다."
+    );
+  }
 
 
-  const canonical =
-    `${BASE_URL}/mart-search/${pathParts.join("/")}`;
+  try {
+
+    const params =
+      new URLSearchParams();
 
 
-  const locationText =
-    [
-      region,
-      city,
-      place
+    params.set(
+      "select",
+      "시도,시군구,읍면동,상호명,주소,전화번호"
+    );
+
+
+    params.set(
+      "시도",
+      `eq.${region}`
+    );
+
+
+    params.set(
+      "시군구",
+      `eq.${city}`
+    );
+
+
+    params.set(
+      "읍면동",
+      `eq.${place}`
+    );
+
+
+    params.set(
+      "상호명",
+      `eq.${mart}`
+    );
+
+
+    params.set(
+      "limit",
+      "1"
+    );
+
+
+    const dbUrl =
+      `${SUPABASE_URL}/rest/v1/mart_directory?${params.toString()}`;
+
+
+    const response =
+      await fetch(
+        dbUrl,
+        {
+          method: "GET",
+
+          headers: {
+
+            apikey:
+              SUPABASE_KEY,
+
+            Authorization:
+              `Bearer ${SUPABASE_KEY}`,
+
+            Accept:
+              "application/json"
+          }
+        }
+      );
+
+
+    if (!response.ok) {
+
+      const errorText =
+        await response.text();
+
+
+      console.error(
+        "MART PAGE DB ERROR:",
+        errorText
+      );
+
+
+      res.statusCode = 502;
+
+      res.setHeader(
+        "Content-Type",
+        "text/html; charset=utf-8"
+      );
+
+      return res.end(
+        "마트 정보를 불러오지 못했습니다."
+      );
+    }
+
+
+    const rows =
+      await response.json();
+
+
+    if (
+      !Array.isArray(rows) ||
+      rows.length === 0
+    ) {
+
+      res.statusCode = 404;
+
+      res.setHeader(
+        "Content-Type",
+        "text/html; charset=utf-8"
+      );
+
+      return res.end(
+`<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>마트 정보를 찾을 수 없습니다</title>
+</head>
+<body>
+<h1>등록된 마트 정보를 찾을 수 없습니다.</h1>
+</body>
+</html>`
+      );
+    }
+
+
+    const row =
+      rows[0];
+
+
+    const dbRegion =
+      String(
+        row["시도"] || region
+      ).trim();
+
+    const dbCity =
+      String(
+        row["시군구"] || city
+      ).trim();
+
+    const dbPlace =
+      String(
+        row["읍면동"] || place
+      ).trim();
+
+    const dbMart =
+      String(
+        row["상호명"] || mart
+      ).trim();
+
+    const dbAddress =
+      String(
+        row["주소"] || ""
+      ).trim();
+
+    const dbPhone =
+      String(
+        row["전화번호"] || ""
+      ).trim();
+
+
+    const pathParts = [
+      dbRegion,
+      dbCity,
+      dbPlace,
+      dbMart
     ]
       .filter(Boolean)
-      .join(" ");
+      .map(encodePart);
 
 
-  const title =
-    `${locationText ? locationText + " " : ""}${mart} | 마트 고객유치·온라인 주문 | 우리아파트`;
+    const canonical =
+      `${BASE_URL}/mart-search/${pathParts.join("/")}`;
 
 
-  const description =
-    `${locationText ? locationText + " " : ""}${mart} 정보와 우리아파트 마트 플랫폼을 확인하세요. 신규고객 유치, 온라인 주문, 배달주문, QR 고객유치, 문자비용 0원으로 매장 디지털 전환을 지원합니다.`;
+    const locationText =
+      [
+        dbRegion,
+        dbCity,
+        dbPlace
+      ]
+        .filter(Boolean)
+        .join(" ");
 
 
-  const structuredData = {
-    "@context":
-      "https://schema.org",
-
-    "@type":
-      "GroceryStore",
-
-    "name":
-      mart,
-
-    "address":
-      address || locationText,
-
-    "url":
-      canonical
-  };
+    const title =
+      `${locationText ? locationText + " " : ""}${dbMart} | 마트 고객유치·온라인 주문 | 우리아파트`;
 
 
-  const html =
+    const description =
+      `${locationText ? locationText + " " : ""}${dbMart} 정보와 우리아파트 마트 플랫폼을 확인하세요. 신규고객 유치, 온라인 주문, 배달주문, QR 고객유치, 문자비용 0원으로 매장 디지털 전환을 지원합니다.`;
+
+
+    const structuredData = {
+      "@context":
+        "https://schema.org",
+
+      "@type":
+        "GroceryStore",
+
+      "name":
+        dbMart,
+
+      "address":
+        dbAddress || locationText,
+
+      "url":
+        canonical
+    };
+
+
+    if (dbPhone) {
+      structuredData.telephone =
+        dbPhone;
+    }
+
+
+    const html =
 `<!doctype html>
 <html lang="ko">
 <head>
@@ -255,9 +433,15 @@ h1{
 }
 
 .address{
-  margin-bottom:24px;
+  margin-bottom:10px;
   font-size:15px;
   color:#777;
+}
+
+.phone{
+  margin-bottom:24px;
+  font-size:15px;
+  color:#555;
 }
 
 .desc{
@@ -372,7 +556,6 @@ h1{
 }
 
 </style>
-
 </head>
 
 <body>
@@ -386,7 +569,7 @@ h1{
     </div>
 
     <h1>
-      ${esc(mart)}
+      ${esc(dbMart)}
     </h1>
 
     ${
@@ -396,14 +579,20 @@ h1{
     }
 
     ${
-      address
-        ? `<div class="address">${esc(address)}</div>`
+      dbAddress
+        ? `<div class="address">주소: ${esc(dbAddress)}</div>`
+        : ""
+    }
+
+    ${
+      dbPhone
+        ? `<div class="phone">전화번호: ${esc(dbPhone)}</div>`
         : ""
     }
 
 
     <div class="desc">
-      ${esc(mart)}을 찾고 계신가요?<br>
+      ${esc(dbMart)}을 찾고 계신가요?<br>
       우리동네 마트 정보와
       마트 고객유치 플랫폼을 확인해보세요.
     </div>
@@ -412,7 +601,7 @@ h1{
     <div class="info-box">
 
       <h2>
-        ${esc(mart)} 고객유치
+        ${esc(dbMart)} 고객유치
       </h2>
 
       <p>
@@ -486,7 +675,7 @@ h1{
     <div class="owner-box">
 
       <h2>
-        ${esc(mart)} 사장님이신가요?
+        ${esc(dbMart)} 사장님이신가요?
       </h2>
 
       <p>
@@ -525,19 +714,45 @@ h1{
 </html>`;
 
 
-  res.statusCode = 200;
+    res.statusCode = 200;
 
-  res.setHeader(
-    "Content-Type",
-    "text/html; charset=utf-8"
-  );
+    res.setHeader(
+      "Content-Type",
+      "text/html; charset=utf-8"
+    );
 
-  res.setHeader(
-    "Cache-Control",
-    "s-maxage=3600, stale-while-revalidate=86400"
-  );
+    res.setHeader(
+      "Cache-Control",
+      "s-maxage=3600, stale-while-revalidate=86400"
+    );
 
-  return res.end(html);
+    return res.end(html);
+
+
+  } catch (error) {
+
+    console.error(
+      "MART PAGE ERROR:",
+      error
+    );
+
+
+    res.statusCode = 500;
+
+    res.setHeader(
+      "Content-Type",
+      "text/html; charset=utf-8"
+    );
+
+    res.setHeader(
+      "Cache-Control",
+      "no-store"
+    );
+
+    return res.end(
+      "마트 정보를 불러오는 중 오류가 발생했습니다."
+    );
+  }
 }
 
 
@@ -915,8 +1130,6 @@ ${items}
 
   return res.end(xml);
 }
-
-
 /* =========================================
    4. 개별 마트 사이트맵
 
