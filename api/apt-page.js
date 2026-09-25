@@ -4348,10 +4348,5 @@ async function handler(
     res
   );
 }
-  return handleApartmentPage(
-    req,
-    res
-  );
-}
 
 module.exports = handler;
