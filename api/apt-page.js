@@ -3955,159 +3955,170 @@ h1 {
 ========================================= */
 
 async function handleBrokerSitemap(req, res) {
+  res.setHeader("Content-Type", "application/xml; charset=utf-8");
+  res.setHeader(
+    "Cache-Control",
+    "s-maxage=86400, stale-while-revalidate=604800"
+  );
+
+  const lastmod = new Date().toISOString().split("T")[0];
+  const locationSet = new Set();
+
   try {
-    const locationSet = new Set();
+    let hasBrokerData = false;
 
-    /*
-      공인중개사 사이트맵
-      - agent_directory 사용
-      - 시도 / 시군구 / 읍면동만 조회
-      - 같은 동은 1개 URL만 생성
-    */
+    try {
+      let from = 0;
+      const pageSize = 1000;
 
-    for (
-      let offset = 0;
-      offset < 100000;
-      offset += 1000
-    ) {
-      const query =
-        new URLSearchParams();
+      while (true) {
+        const to = from + pageSize - 1;
 
-      query.set(
-        "select",
-        "시도,시군구,읍면동"
-      );
-
-      query.set(
-        "offset",
-        String(offset)
-      );
-
-      query.set(
-        "limit",
-        "1000"
-      );
-
-      const response =
-        await fetch(
-          `${SUPABASE_URL}/rest/v1/agent_directory?${query.toString()}`,
+        const response = await fetch(
+          SUPABASE_URL +
+            "/rest/v1/agent_directory?select=시도,시군구,읍면동",
           {
             headers: {
-              apikey:
-                SUPABASE_KEY,
-
-              Authorization:
-                `Bearer ${SUPABASE_KEY}`
+              apikey: SUPABASE_SECRET_KEY,
+              Authorization: `Bearer ${SUPABASE_SECRET_KEY}`,
+              Range: `${from}-${to}`,
+              Prefer: "count=exact"
             }
           }
         );
 
-      if (!response.ok) {
-        const text =
-          await response.text();
-
-        throw new Error(
-          `agent_directory fetch failed: ${response.status} ${text}`
-        );
-      }
-
-      const batch =
-        await response.json();
-
-      if (
-        !Array.isArray(batch) ||
-        batch.length === 0
-      ) {
-        break;
-      }
-
-      /*
-        읽는 즉시 동 단위로 중복 제거
-        전체 중개사 데이터를 rows에 쌓지 않음
-      */
-
-      for (const row of batch) {
-        const region =
-          clean(row["시도"]);
-
-        const city =
-          clean(row["시군구"]);
-
-        const place =
-          clean(row["읍면동"]);
-
-        if (
-          !region ||
-          !city ||
-          !place
-        ) {
-          continue;
+        if (!response.ok) {
+          throw new Error(
+            `agent_directory 조회 실패: ${response.status}`
+          );
         }
 
-        locationSet.add(
-          `${region}|${city}|${place}`
-        );
-      }
+        const rows = await response.json();
 
-      if (batch.length < 1000) {
-        break;
+        if (!Array.isArray(rows) || rows.length === 0) {
+          break;
+        }
+
+        for (const row of rows) {
+          const region = clean(row["시도"]);
+          const city = clean(row["시군구"]);
+          const place = clean(row["읍면동"]);
+
+          if (!region || !city || !place) continue;
+
+          locationSet.add(
+            [region, city, place].join("|")
+          );
+        }
+
+        hasBrokerData = true;
+
+        if (rows.length < pageSize) {
+          break;
+        }
+
+        from += pageSize;
+      }
+    } catch (error) {
+      console.error(
+        "agent_directory sitemap error:",
+        error
+      );
+    }
+
+    if (!hasBrokerData || locationSet.size === 0) {
+      let from = 0;
+      const pageSize = 1000;
+
+      while (true) {
+        const to = from + pageSize - 1;
+
+        const response = await fetch(
+          SUPABASE_URL +
+            "/rest/v1/safe_apartments?select=시도,시군구,읍면,동리",
+          {
+            headers: {
+              apikey: SUPABASE_SECRET_KEY,
+              Authorization: `Bearer ${SUPABASE_SECRET_KEY}`,
+              Range: `${from}-${to}`,
+              Prefer: "count=exact"
+            }
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `safe_apartments 조회 실패: ${response.status}`
+          );
+        }
+
+        const rows = await response.json();
+
+        if (!Array.isArray(rows) || rows.length === 0) {
+          break;
+        }
+
+        for (const row of rows) {
+          const region = clean(row["시도"]);
+          const city = clean(row["시군구"]);
+          const place = clean(
+            row["동리"] || row["읍면"]
+          );
+
+          if (!region || !city || !place) continue;
+
+          locationSet.add(
+            [region, city, place].join("|")
+          );
+        }
+
+        if (rows.length < pageSize) {
+          break;
+        }
+
+        from += pageSize;
       }
     }
 
-    /*
-      동별 URL 생성
-    */
+    const urls = [];
 
-    const locations =
-      Array.from(locationSet)
-        .map((item) => {
-          const [
-            region,
-            city,
-            place
-          ] = item.split("|");
+    urls.push(
+      [
+        "<url>",
+        `<loc>${xmlEscape(
+          SITE_ORIGIN + "/broker-landing.html"
+        )}</loc>`,
+        `<lastmod>${lastmod}</lastmod>`,
+        "<changefreq>weekly</changefreq>",
+        "<priority>0.9</priority>",
+        "</url>"
+      ].join("")
+    );
 
-          return {
-            region,
-            city,
-            place
-          };
-        })
-        .sort((a, b) =>
-          `${a.region} ${a.city} ${a.place}`
-            .localeCompare(
-              `${b.region} ${b.city} ${b.place}`,
-              "ko"
-            )
-        );
+    for (const locationKey of locationSet) {
+      const [region, city, place] =
+        locationKey.split("|");
 
-    const urls =
-      locations.map(
-        ({
-          region,
-          city,
-          place
-        }) => {
-          const loc =
-            SITE_ORIGIN +
-            "/broker-search/" +
-            [
-              region,
-              city,
-              place
-            ]
-              .map(pathEncode)
-              .join("/");
+      const loc =
+        SITE_ORIGIN +
+        "/broker-search/" +
+        pathEncode(region) +
+        "/" +
+        pathEncode(city) +
+        "/" +
+        pathEncode(place);
 
-          return (
-            "<url>" +
-            "<loc>" +
-            xmlEscape(loc) +
-            "</loc>" +
-            "</url>"
-          );
-        }
+      urls.push(
+        [
+          "<url>",
+          `<loc>${xmlEscape(loc)}</loc>`,
+          `<lastmod>${lastmod}</lastmod>`,
+          "<changefreq>weekly</changefreq>",
+          "<priority>0.8</priority>",
+          "</url>"
+        ].join("")
       );
+    }
 
     const xml =
       '<?xml version="1.0" encoding="UTF-8"?>' +
@@ -4115,31 +4126,17 @@ async function handleBrokerSitemap(req, res) {
       urls.join("") +
       "</urlset>";
 
-    res.setHeader(
-      "Content-Type",
-      "application/xml; charset=utf-8"
-    );
-
-    res.setHeader(
-      "Cache-Control",
-      "public, s-maxage=86400, stale-while-revalidate=604800"
-    );
-
-    return res
-      .status(200)
-      .send(xml);
-
+    return res.status(200).send(xml);
   } catch (error) {
     console.error(
-      "BROKER SITEMAP ERROR:",
+      "broker sitemap error:",
       error
     );
 
-    return res
-      .status(500)
-      .send(
-        "Broker sitemap generation failed."
-      );
+    return res.status(500).send(
+      '<?xml version="1.0" encoding="UTF-8"?>' +
+        "<error>broker sitemap generation failed</error>"
+    );
   }
 }
 /* =========================================
