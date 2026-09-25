@@ -1141,7 +1141,8 @@ async function handleApartmentPage(
 
   const place =
     clean(req.query.place);
-
+  const broker =
+    clean(req.query.broker);
   const apartment =
     clean(req.query.apartment);
 
@@ -2846,14 +2847,16 @@ async function handleBrokerPage(
       .join(" ");
 
 
-  const canonical =
+    const canonical =
     SITE_ORIGIN +
     "/broker-search/" +
     [
       region,
       city,
-      place
+      place,
+      broker
     ]
+      .filter(Boolean)
       .map(pathEncode)
       .join("/");
 
@@ -2868,17 +2871,33 @@ async function handleBrokerPage(
 
 
     const brokers =
-      Array.isArray(rows)
-        ? rows
-            .map(brokerData)
-            .filter(
-              function(item) {
-                return !!item.name;
-              }
-            )
-        : [];
+  Array.isArray(rows)
+    ? rows
+        .map(brokerData)
+        .filter(
+          function(item) {
+            return (
+              !!item.name &&
+              (
+                !broker ||
+                item.name === broker
+              )
+            );
+          }
+        )
+    : [];
 
 
+        if (
+      broker &&
+      brokers.length === 0
+    ) {
+      return res
+        .status(404)
+        .send(
+          "해당 공인중개사를 찾을 수 없습니다."
+        );
+    }
     const brokerCount =
       brokers.length;
 
@@ -2892,8 +2911,21 @@ async function handleBrokerPage(
 
 
     const title =
+  broker
+    ? broker +
+      " | " +
       location +
+      " 공인중개사 | 우리아파트 안심거래"
+    : location +
       " 공인중개사" +
+      (
+        brokerCount
+          ? " " +
+            brokerCount +
+            "곳"
+          : ""
+      ) +
+      " | 우리아파트 안심거래";
       (
         brokerCount
           ? " " +
@@ -2904,27 +2936,30 @@ async function handleBrokerPage(
       " | 우리아파트 안심거래";
 
 
-    const description =
+        const description =
       (
-        location +
-        " 공인중개사 정보를 확인하세요. " +
-        (
-          brokerCount
-            ? "등록된 중개업소 " +
-              brokerCount +
-              "곳의 "
-            : ""
-        )
-      );
+        broker
+          ? broker +
+            "의 주소, 전화번호, 홈페이지 등 중개업소 정보를 확인하세요. " +
+            location +
+            " 아파트 매매·전세·월세 및 우리아파트 안심거래 정보를 확인할 수 있습니다."
+          : location +
+            " 공인중개사 정보를 확인하세요. " +
+            (
+              brokerCount
+                ? "등록된 중개업소 " +
+                  brokerCount +
+                  "곳의 "
+                : ""
             ) +
-        "상호명, 주소, 전화번호" +
-        (
-          homepageCount
-            ? ", 홈페이지"
-            : ""
-        ) +
-        " 정보를 확인할 수 있습니다. " +
-        "공인중개사는 매수자·임차인의 희망조건을 확인하고 맞춤 매물을 제안할 수 있습니다."
+            "상호명, 주소, 전화번호" +
+            (
+              homepageCount
+                ? ", 홈페이지"
+                : ""
+            ) +
+            " 정보를 확인할 수 있습니다. " +
+            "공인중개사는 매수자·임차인의 희망조건을 확인하고 맞춤 매물을 제안할 수 있습니다."
       ).slice(
         0,
         300
@@ -3017,8 +3052,19 @@ async function handleBrokerPage(
 
 
                   <h3>
-                    ${html(broker.name)}
-                  </h3>
+  <a
+    href="/broker-search/${[
+      region,
+      city,
+      place,
+      broker.name
+    ]
+      .map(pathEncode)
+      .join("/")}"
+  >
+    ${html(broker.name)}
+  </a>
+</h3>
 
 
                   ${
@@ -3855,57 +3901,49 @@ async function handleBrokerSitemap(
     "application/xml; charset=utf-8"
   );
 
-
   res.setHeader(
     "Cache-Control",
     "s-maxage=86400, stale-while-revalidate=604800"
   );
 
-
   try {
-
-    const query =
-      new URLSearchParams();
-
-
-    query.set(
-      "select",
-      "시도,시군구,읍면,동리"
-    );
-
-
-    query.set(
-      "order",
-      "시도.asc,시군구.asc,읍면.asc,동리.asc"
-    );
-
-
-    const apiUrl =
-      SUPABASE_URL +
-      "/rest/v1/safe_apartments?" +
-      query.toString();
-
-
     const rows = [];
 
-
+    /*
+      agent_directory 실제 중개사 DB 전체 조회
+      한 번에 1000개씩 나누어 가져옴
+    */
     for (
       let start = 0;
       start < 100000;
       start += 1000
     ) {
+      const query =
+        new URLSearchParams();
+
+      query.set(
+        "select",
+        "*"
+      );
+
       const response =
         await fetch(
-          apiUrl,
+          SUPABASE_URL +
+            "/rest/v1/agent_directory?" +
+            query.toString(),
           {
             method: "GET",
-                        headers: {
+
+            headers: {
               apikey:
                 SUPABASE_KEY,
 
               Authorization:
                 "Bearer " +
                 SUPABASE_KEY,
+
+              Accept:
+                "application/json",
 
               Range:
                 start +
@@ -3915,22 +3953,26 @@ async function handleBrokerSitemap(
           }
         );
 
-
       if (!response.ok) {
+        const errorText =
+          await response.text();
+
+        console.error(
+          "BROKER SITEMAP DB ERROR:",
+          errorText
+        );
+
         throw new Error(
           "Broker sitemap DB error"
         );
       }
 
-
       const batch =
         await response.json();
-
 
       rows.push(
         ...batch
       );
-
 
       if (
         batch.length < 1000
@@ -3940,30 +3982,88 @@ async function handleBrokerSitemap(
     }
 
 
+    /*
+      동별 URL과
+      개별 중개사 URL 생성
+    */
     const locationSet =
+      new Set();
+
+    const brokerUrlSet =
       new Set();
 
 
     for (
       const row of rows
     ) {
+      const broker =
+        brokerData(row);
+
+      if (!broker.name) {
+        continue;
+      }
+
+
       const region =
-        clean(
-          row["시도"]
+        firstValue(
+          row,
+          [
+            "시도",
+            "시도명"
+          ]
         );
 
 
       const city =
-        clean(
-          row["시군구"]
+        firstValue(
+          row,
+          [
+            "시군구",
+            "시군구명"
+          ]
         );
 
 
-      const place =
-        clean(
-          row["동리"] ||
-          row["읍면"]
+      let place =
+        firstValue(
+          row,
+          [
+            "읍면동",
+            "동리",
+            "읍면",
+            "동",
+            "법정동"
+          ]
         );
+
+
+      /*
+        읍면동 컬럼이 없는 데이터는
+        주소에서 마지막으로 보완
+      */
+      if (!place) {
+        const address =
+          broker.roadAddress ||
+          broker.jibunAddress ||
+          "";
+
+        const addressParts =
+          clean(address)
+            .split(/\s+/)
+            .filter(Boolean);
+
+        place =
+          addressParts.find(
+            function(part) {
+              return (
+                /동$/.test(part) ||
+                /읍$/.test(part) ||
+                /면$/.test(part) ||
+                /리$/.test(part)
+              );
+            }
+          ) || "";
+      }
 
 
       if (
@@ -3975,12 +4075,34 @@ async function handleBrokerSitemap(
       }
 
 
-      locationSet.add(
+      const locationKey =
         [
           region,
           city,
           place
-        ].join("|")
+        ].join("|");
+
+
+      locationSet.add(
+        locationKey
+      );
+
+
+      const brokerUrl =
+        SITE_ORIGIN +
+        "/broker-search/" +
+        [
+          region,
+          city,
+          place,
+          broker.name
+        ]
+          .map(pathEncode)
+          .join("/");
+
+
+      brokerUrlSet.add(
+        brokerUrl
       );
     }
 
@@ -3994,6 +4116,9 @@ async function handleBrokerSitemap(
     const urls = [];
 
 
+    /*
+      중개사 랜딩페이지
+    */
     urls.push(
       "  <url>" +
         "<loc>" +
@@ -4011,6 +4136,10 @@ async function handleBrokerSitemap(
     );
 
 
+    /*
+      기존 동별 중개사 페이지
+      그대로 유지
+    */
     for (
       const locationKey
       of locationSet
@@ -4042,6 +4171,28 @@ async function handleBrokerSitemap(
     }
 
 
+    /*
+      개별 중개사 페이지
+    */
+    for (
+      const url
+      of brokerUrlSet
+    ) {
+      urls.push(
+        "  <url>" +
+          "<loc>" +
+            xmlEscape(url) +
+          "</loc>" +
+          "<lastmod>" +
+            lastmod +
+          "</lastmod>" +
+          "<changefreq>weekly</changefreq>" +
+          "<priority>0.8</priority>" +
+        "</url>"
+      );
+    }
+
+
     return res
       .status(200)
       .send(
@@ -4053,7 +4204,6 @@ async function handleBrokerSitemap(
 
 
   } catch (error) {
-
     console.error(
       "BROKER SITEMAP ERROR:",
       error
@@ -4067,8 +4217,6 @@ async function handleBrokerSitemap(
       );
   }
 }
-
-
 /* =========================================
    통합 진입점
 ========================================= */
