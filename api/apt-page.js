@@ -1,8 +1,8 @@
 const SUPABASE_URL =
-  "https://dcysjuxyjqtvkihdsjvv.supabase.co";
+  "https://wpshlmijsscmlasqtapa.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
+  process.env.SUPABASE_SECRET_KEY;
 
 const SITE_ORIGIN =
   "https://www.wooriapt.app";
