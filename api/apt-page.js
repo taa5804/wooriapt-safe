@@ -2886,7 +2886,6 @@ async function handleBrokerPage(
     clean(req.query.place);
 const broker =
   clean(req.query.broker);
-
   if (
     !region ||
     !city ||
@@ -3955,27 +3954,17 @@ h1 {
    기존 URL 구조 유지
 ========================================= */
 
-async function handleBrokerSitemap(
-  req,
-  res
-) {
-  res.setHeader(
-    "Content-Type",
-    "application/xml; charset=utf-8"
-  );
-
-  res.setHeader(
-    "Cache-Control",
-    "s-maxage=86400, stale-while-revalidate=604800"
-  );
-
+async function handleBrokerSitemap(req, res) {
   try {
-    const rows = [];
+    const locationSet = new Set();
 
     /*
-      중개사 DB를 1000개씩 나누어 조회
-      사이트맵에는 동별 주소만 사용
+      공인중개사 사이트맵
+      - agent_directory 사용
+      - 시도 / 시군구 / 읍면동만 조회
+      - 같은 동은 1개 URL만 생성
     */
+
     for (
       let offset = 0;
       offset < 100000;
@@ -3990,47 +3979,35 @@ async function handleBrokerSitemap(
       );
 
       query.set(
-        "limit",
-        "1000"
-      );
-
-      query.set(
         "offset",
         String(offset)
       );
 
+      query.set(
+        "limit",
+        "1000"
+      );
+
       const response =
         await fetch(
-          SUPABASE_URL +
-            "/rest/v1/agent_directory?" +
-            query.toString(),
+          `${SUPABASE_URL}/rest/v1/agent_directory?${query.toString()}`,
           {
-            method: "GET",
             headers: {
               apikey:
                 SUPABASE_KEY,
 
               Authorization:
-                "Bearer " +
-                SUPABASE_KEY,
-
-              Accept:
-                "application/json"
+                `Bearer ${SUPABASE_KEY}`
             }
           }
         );
 
       if (!response.ok) {
-        const errorText =
+        const text =
           await response.text();
 
-        console.error(
-          "BROKER SITEMAP DB ERROR:",
-          errorText
-        );
-
         throw new Error(
-          "Broker sitemap DB error"
+          `agent_directory fetch failed: ${response.status} ${text}`
         );
       }
 
@@ -4044,123 +4021,113 @@ async function handleBrokerSitemap(
         break;
       }
 
-      rows.push(
-        ...batch
-      );
+      /*
+        읽는 즉시 동 단위로 중복 제거
+        전체 중개사 데이터를 rows에 쌓지 않음
+      */
 
-      if (
-        batch.length < 1000
-      ) {
+      for (const row of batch) {
+        const region =
+          clean(row["시도"]);
+
+        const city =
+          clean(row["시군구"]);
+
+        const place =
+          clean(row["읍면동"]);
+
+        if (
+          !region ||
+          !city ||
+          !place
+        ) {
+          continue;
+        }
+
+        locationSet.add(
+          `${region}|${city}|${place}`
+        );
+      }
+
+      if (batch.length < 1000) {
         break;
       }
     }
 
     /*
-      같은 동 중복 제거
+      동별 URL 생성
     */
-    const locationSet =
-      new Set();
 
-    for (
-      const row of rows
-    ) {
-      const region =
-        clean(
-          row["시도"]
+    const locations =
+      Array.from(locationSet)
+        .map((item) => {
+          const [
+            region,
+            city,
+            place
+          ] = item.split("|");
+
+          return {
+            region,
+            city,
+            place
+          };
+        })
+        .sort((a, b) =>
+          `${a.region} ${a.city} ${a.place}`
+            .localeCompare(
+              `${b.region} ${b.city} ${b.place}`,
+              "ko"
+            )
         );
 
-      const city =
-        clean(
-          row["시군구"]
-        );
-
-      const place =
-        clean(
-          row["읍면동"]
-        );
-
-      if (
-        !region ||
-        !city ||
-        !place
-      ) {
-        continue;
-      }
-
-      locationSet.add(
-        [
+    const urls =
+      locations.map(
+        ({
           region,
           city,
           place
-        ].join("|")
-      );
-    }
-
-    const lastmod =
-      new Date()
-        .toISOString()
-        .split("T")[0];
-
-    const urls = [];
-
-    /*
-      중개사 안내 페이지
-    */
-    urls.push(
-      "  <url>" +
-        "<loc>" +
-          xmlEscape(
+        }) => {
+          const loc =
             SITE_ORIGIN +
-            "/broker-landing.html"
-          ) +
-        "</loc>" +
-        "<lastmod>" +
-          lastmod +
-        "</lastmod>" +
-        "<changefreq>weekly</changefreq>" +
-        "<priority>0.9</priority>" +
-      "</url>"
+            "/broker-search/" +
+            [
+              region,
+              city,
+              place
+            ]
+              .map(pathEncode)
+              .join("/");
+
+          return (
+            "<url>" +
+            "<loc>" +
+            xmlEscape(loc) +
+            "</loc>" +
+            "</url>"
+          );
+        }
+      );
+
+    const xml =
+      '<?xml version="1.0" encoding="UTF-8"?>' +
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+      urls.join("") +
+      "</urlset>";
+
+    res.setHeader(
+      "Content-Type",
+      "application/xml; charset=utf-8"
     );
 
-    /*
-      동별 중개사 검색페이지
-    */
-    for (
-      const locationKey
-      of locationSet
-    ) {
-      const parts =
-        locationKey.split("|");
-
-      const url =
-        SITE_ORIGIN +
-        "/broker-search/" +
-        parts
-          .map(pathEncode)
-          .join("/");
-
-      urls.push(
-        "  <url>" +
-          "<loc>" +
-            xmlEscape(url) +
-          "</loc>" +
-          "<lastmod>" +
-            lastmod +
-          "</lastmod>" +
-          "<changefreq>weekly</changefreq>" +
-          "<priority>0.8</priority>" +
-        "</url>"
-      );
-    }
+    res.setHeader(
+      "Cache-Control",
+      "public, s-maxage=86400, stale-while-revalidate=604800"
+    );
 
     return res
       .status(200)
-      .send(
-        '<?xml version="1.0" encoding="UTF-8"?>' +
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-        urls.join("") +
-        "</urlset>"
-      );
+      .send(xml);
 
   } catch (error) {
     console.error(
