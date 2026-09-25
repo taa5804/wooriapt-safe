@@ -4115,7 +4115,7 @@ async function handleBrokerSitemap(
    통합 진입점
 ========================================= */
 
-export default async function handler(
+async function handler(
   req,
   res
 ) {
