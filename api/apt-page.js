@@ -2549,7 +2549,7 @@ async function getBrokerRows(
 
   if (region) {
     query.set(
-      "시도",
+      "지역명",
       "eq." + region
     );
   }
@@ -2565,7 +2565,7 @@ async function getBrokerRows(
 
   if (place) {
     query.set(
-      "읍면동",
+      "동",
       "eq." + place
     );
   }
@@ -2573,7 +2573,7 @@ async function getBrokerRows(
 
   query.set(
     "limit",
-    "100"
+    "300"
   );
 
 
@@ -2601,122 +2601,31 @@ async function getBrokerRows(
 
 
   if (!response.ok) {
-    const fallback =
-      new URLSearchParams();
+    const errorText =
+      await response.text();
 
 
-    fallback.set(
-      "select",
-      "*"
+    console.error(
+      "AGENT DIRECTORY ERROR:",
+      response.status,
+      errorText
     );
 
 
-    if (region) {
-      fallback.set(
-        "시도",
-        "eq." + region
-      );
-    }
-
-
-    if (city) {
-      fallback.set(
-        "시군구",
-        "eq." + city
-      );
-    }
-
-
-    fallback.set(
-      "limit",
-      "300"
-    );
-
-
-    const fallbackResponse =
-      await fetch(
-        SUPABASE_URL +
-        "/rest/v1/agent_directory?" +
-        fallback.toString(),
-        {
-          method: "GET",
-
-          headers: {
-            apikey:
-              SUPABASE_KEY,
-
-            Authorization:
-              "Bearer " +
-              SUPABASE_KEY,
-
-            Accept:
-              "application/json"
-          }
-        }
-      );
-
-
-    if (!fallbackResponse.ok) {
-      const errorText =
-        await fallbackResponse.text();
-
-
-      console.error(
-        "AGENT DIRECTORY ERROR:",
-        errorText
-      );
-
-
-      return [];
-    }
-
-
-    const fallbackRows =
-      await fallbackResponse.json();
-
-
-    return fallbackRows
-      .filter(
-        function(row) {
-          const locationText =
-            [
-              firstValue(
-                row,
-                [
-                  "읍면동",
-                  "동리",
-                  "읍면",
-                  "동",
-                  "법정동"
-                ]
-              ),
-
-              firstValue(
-                row,
-                [
-                  "도로명주소",
-                  "도로명 주소",
-                  "지번주소",
-                  "지번 주소",
-                  "주소"
-                ]
-              )
-            ]
-              .filter(Boolean)
-              .join(" ");
-
-
-          return (
-            !place ||
-            locationText.includes(place)
-          );
-        }
-      )
-      .slice(0, 100);
+    return [];
   }
 
 
-  return await response.json();
+  const rows =
+    await response.json();
+
+
+  if (!Array.isArray(rows)) {
+    return [];
+  }
+
+
+  return rows;
 }
 
 
