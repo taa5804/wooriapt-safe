@@ -3965,119 +3965,58 @@ async function handleBrokerSitemap(req, res) {
   const locationSet = new Set();
 
   try {
-    let hasBrokerData = false;
+    let from = 0;
+    const pageSize = 1000;
 
-    try {
-      let from = 0;
-      const pageSize = 1000;
+    while (true) {
+      const to = from + pageSize - 1;
 
-      while (true) {
-        const to = from + pageSize - 1;
-
-        const response = await fetch(
-          SUPABASE_URL +
-            "/rest/v1/agent_directory?select=시도,시군구,읍면동",
-          {
-            headers: {
-              apikey: SUPABASE_KEY,
-              Authorization: `Bearer ${SUPABASE_KEY}`,
-              Range: `${from}-${to}`,
-              Prefer: "count=exact"
-            }
+      const response = await fetch(
+        SUPABASE_URL +
+          "/rest/v1/agent_directory?select=지역명,시군구,동",
+        {
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+            Range: `${from}-${to}`,
+            Prefer: "count=exact"
           }
-        );
-
-        if (!response.ok) {
-          throw new Error(
-            `agent_directory 조회 실패: ${response.status}`
-          );
         }
-
-        const rows = await response.json();
-
-        if (!Array.isArray(rows) || rows.length === 0) {
-          break;
-        }
-
-        for (const row of rows) {
-          const region = clean(row["시도"]);
-          const city = clean(row["시군구"]);
-          const place = clean(row["읍면동"]);
-
-          if (!region || !city || !place) continue;
-
-          locationSet.add(
-            [region, city, place].join("|")
-          );
-        }
-
-        hasBrokerData = true;
-
-        if (rows.length < pageSize) {
-          break;
-        }
-
-        from += pageSize;
-      }
-    } catch (error) {
-      console.error(
-        "agent_directory sitemap error:",
-        error
       );
-    }
 
-    if (!hasBrokerData || locationSet.size === 0) {
-      let from = 0;
-      const pageSize = 1000;
+      if (!response.ok) {
+        const errorText = await response.text();
 
-      while (true) {
-        const to = from + pageSize - 1;
-
-        const response = await fetch(
-          SUPABASE_URL +
-            "/rest/v1/safe_apartments?select=시도,시군구,읍면,동리",
-          {
-            headers: {
-              apikey: SUPABASE_KEY,
-              Authorization: `Bearer ${SUPABASE_KEY}`,
-              Range: `${from}-${to}`,
-              Prefer: "count=exact"
-            }
-          }
+        throw new Error(
+          `agent_directory 조회 실패: ${response.status} ${errorText}`
         );
-
-        if (!response.ok) {
-          throw new Error(
-            `safe_apartments 조회 실패: ${response.status}`
-          );
-        }
-
-        const rows = await response.json();
-
-        if (!Array.isArray(rows) || rows.length === 0) {
-          break;
-        }
-
-        for (const row of rows) {
-          const region = clean(row["시도"]);
-          const city = clean(row["시군구"]);
-          const place = clean(
-            row["동리"] || row["읍면"]
-          );
-
-          if (!region || !city || !place) continue;
-
-          locationSet.add(
-            [region, city, place].join("|")
-          );
-        }
-
-        if (rows.length < pageSize) {
-          break;
-        }
-
-        from += pageSize;
       }
+
+      const rows = await response.json();
+
+      if (!Array.isArray(rows) || rows.length === 0) {
+        break;
+      }
+
+      for (const row of rows) {
+        const region = clean(row["지역명"]);
+        const city = clean(row["시군구"]);
+        const place = clean(row["동"]);
+
+        if (!region || !city || !place) {
+          continue;
+        }
+
+        locationSet.add(
+          [region, city, place].join("|")
+        );
+      }
+
+      if (rows.length < pageSize) {
+        break;
+      }
+
+      from += pageSize;
     }
 
     const urls = [];
@@ -4127,6 +4066,7 @@ async function handleBrokerSitemap(req, res) {
       "</urlset>";
 
     return res.status(200).send(xml);
+
   } catch (error) {
     console.error(
       "broker sitemap error:",
@@ -4135,7 +4075,7 @@ async function handleBrokerSitemap(req, res) {
 
     return res.status(500).send(
       '<?xml version="1.0" encoding="UTF-8"?>' +
-        "<error>broker sitemap generation failed</error>"
+      "<error>broker sitemap generation failed</error>"
     );
   }
 }
