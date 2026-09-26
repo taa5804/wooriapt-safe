@@ -472,7 +472,121 @@ function apartmentDetails(row) {
    아파트 목록 API
 ========================================= */
 
-async function handleApartmentList(
+
+/* =========================================
+   안심거래 2026-09-18 기준 Supabase
+========================================= */
+
+const APT_SUPABASE_URL =
+  "https://dcysjuxyjqtvkihdsjvv.supabase.co";
+
+const APT_SUPABASE_KEY =
+  "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
+
+
+function aptClean(value) {
+  return String(value || "")
+    .trim()
+    .slice(0, 100);
+}
+
+
+function aptHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+
+function aptXmlEscape(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+
+function aptPathEncode(value) {
+  return encodeURIComponent(
+    String(value || "").trim()
+  );
+}
+
+
+function aptTypeName(type) {
+  if (type === "jeonse") {
+    return "전세";
+  }
+
+  if (type === "monthly") {
+    return "월세";
+  }
+
+  return "매매";
+}
+
+
+function aptAddPlaceFilter(query, place) {
+  const tokens =
+    aptClean(place)
+      .split(/\s+/)
+      .map(function(token) {
+        return token.replace(
+          /[(),.*]/g,
+          ""
+        );
+      })
+      .filter(Boolean)
+      .slice(0, 3);
+
+
+  if (tokens.length === 1) {
+    query.set(
+      "or",
+      "(" +
+      "읍면.eq." +
+      tokens[0] +
+      "," +
+      "동리.eq." +
+      tokens[0] +
+      ")"
+    );
+  }
+
+
+  if (tokens.length > 1) {
+    query.set(
+      "and",
+      "(" +
+      tokens
+        .map(function(token) {
+          return (
+            "or(" +
+            "읍면.eq." +
+            token +
+            "," +
+            "동리.eq." +
+            token +
+            ")"
+          );
+        })
+        .join(",") +
+      ")"
+    );
+  }
+}
+
+
+/* =========================================
+   아파트 목록 API
+========================================= */
+
+async function aptHandleApartmentList(
   req,
   res
 ) {
@@ -567,7 +681,7 @@ async function handleApartmentList(
 
   query.set(
     "select",
-    "시도,시군구,읍면,동리,단지명,관리사무소 연락처 주소,latitude,longitude"
+    "시도,시군구,읍면,동리,단지명"
   );
 
 
@@ -577,9 +691,7 @@ async function handleApartmentList(
   );
 
 
-  if (
-    searchTokens.length === 1
-  ) {
+  if (searchTokens.length === 1) {
     const token =
       searchTokens[0];
 
@@ -587,55 +699,51 @@ async function handleApartmentList(
     query.set(
       "or",
       "(" +
-        [
-          "시도",
-          "시군구",
-          "읍면",
-          "동리",
-          "단지명"
-        ]
-          .map(
-            function(column) {
-              return (
-                column +
-                ".ilike.*" +
-                token +
-                "*"
-              );
-            }
-          )
-          .join(",") +
+      [
+        "시도",
+        "시군구",
+        "읍면",
+        "동리",
+        "단지명"
+      ]
+        .map(function(column) {
+          return (
+            column +
+            ".ilike.*" +
+            token +
+            "*"
+          );
+        })
+        .join(",") +
       ")"
     );
   }
 
 
-  if (
-    searchTokens.length > 1
-  ) {
+  if (searchTokens.length > 1) {
     const tokenFilters =
       searchTokens.map(
         function(token) {
           return (
             "or(" +
-              [
-                "시도",
-                "시군구",
-                "읍면",
-                "동리",
-                "단지명"
-              ]
-                .map(
-                  function(column) {
-                    return (
-                      column +
-                      ".ilike.*" +
-                      token +
-                      "*"
-                    );
-                  }
-                )
-                .join(",") +
+            [
+              "시도",
+              "시군구",
+              "읍면",
+              "동리",
+              "단지명"
+            ]
+              .map(
+                function(column) {
+                  return (
+                    column +
+                    ".ilike.*" +
+                    token +
+                    "*"
+                  );
+                }
+              )
+              .join(",") +
             ")"
           );
         }
@@ -645,14 +753,14 @@ async function handleApartmentList(
     query.set(
       "and",
       "(" +
-        tokenFilters.join(",") +
+      tokenFilters.join(",") +
       ")"
     );
   }
 
 
   const apiUrl =
-    SUPABASE_URL +
+    APT_SUPABASE_URL +
     "/rest/v1/safe_apartments?" +
     query.toString();
 
@@ -666,11 +774,11 @@ async function handleApartmentList(
 
           headers: {
             apikey:
-              SUPABASE_KEY,
+              APT_SUPABASE_KEY,
 
             Authorization:
               "Bearer " +
-              SUPABASE_KEY,
+              APT_SUPABASE_KEY,
 
             Accept:
               "application/json",
@@ -698,17 +806,15 @@ async function handleApartmentList(
       );
 
 
-      return res
-        .status(502)
-        .json({
-          ok: false,
+      return res.status(502).json({
+        ok: false,
 
-          message:
-            "아파트 목록을 불러오지 못했습니다.",
+        message:
+          "아파트 목록을 불러오지 못했습니다.",
 
-          status:
-            response.status
-        });
+        status:
+          response.status
+      });
     }
 
 
@@ -756,10 +862,8 @@ async function handleApartmentList(
 
     const apartments =
       data.map(
-        function(
-          item,
-          index
-        ) {
+        function(item, index) {
+
           const eupmyeon =
             item["읍면"] || "";
 
@@ -798,22 +902,7 @@ async function handleApartmentList(
             detail:
               dongri ||
               eupmyeon ||
-              "",
-
-            address:
-              item[
-                "관리사무소 연락처 주소"
-              ] || "",
-
-            latitude:
-              Number(
-                item["latitude"]
-              ),
-
-            longitude:
-              Number(
-                item["longitude"]
-              )
+              ""
           };
         }
       );
@@ -825,7 +914,7 @@ async function handleApartmentList(
         ok: true,
 
         pageNo:
-          pageNo,
+              pageNo,
 
         numOfRows:
           numOfRows,
@@ -840,8 +929,8 @@ async function handleApartmentList(
           apartments
       });
 
-
   } catch (error) {
+
     console.error(
       "SAFE APARTMENTS API ERROR:",
       error
@@ -864,23 +953,23 @@ async function handleApartmentList(
    아파트 사이트맵 인덱스
 ========================================= */
 
-async function handleSitemapIndex(
+async function aptHandleSitemapIndex(
   req,
   res
 ) {
   try {
     const response =
       await fetch(
-        SUPABASE_URL +
+        APT_SUPABASE_URL +
         "/rest/v1/safe_apartments?select=단지명",
         {
           headers: {
             apikey:
-              SUPABASE_KEY,
+              APT_SUPABASE_KEY,
 
             Authorization:
               "Bearer " +
-              SUPABASE_KEY,
+              APT_SUPABASE_KEY,
 
             Prefer:
               "count=exact",
@@ -966,8 +1055,8 @@ async function handleSitemapIndex(
         "</sitemapindex>"
       );
 
-
   } catch (error) {
+
     console.error(
       "APT SITEMAP INDEX ERROR:",
       error
@@ -982,93 +1071,151 @@ async function handleSitemapIndex(
   }
 }
 
+
 /* =========================================
-   아파트 분할 사이트맵
+   아파트 개별 사이트맵
 ========================================= */
 
-async function handleSitemap(
+async function aptHandleSitemap(
   req,
   res
 ) {
-  const page =
-    Math.max(
-      1,
-      Number(req.query.page) || 1
-    );
+  res.setHeader(
+    "Content-Type",
+    "application/xml; charset=utf-8"
+  );
 
-  const offset =
-    (page - 1) *
-    SITEMAP_PAGE_SIZE;
+  res.setHeader(
+    "Cache-Control",
+    "s-maxage=3600, stale-while-revalidate=86400"
+  );
 
-  const end =
-    offset +
-    SITEMAP_PAGE_SIZE -
-    1;
 
-  const tradeTypes = [
-    "sale",
-    "jeonse",
-    "monthly"
-  ];
-
-  const urlSet =
-    new Set();
-
-  const response =
-    await fetch(
-      SUPABASE_URL +
-        "/rest/v1/safe_apartments?select=시도,시군구,읍면,동리,단지명",
-      {
-        headers: {
-          apikey:
-            SUPABASE_KEY,
-
-          Authorization:
-            "Bearer " +
-            SUPABASE_KEY,
-
-          Range:
-            offset +
-            "-" +
-            end
-        }
-      }
-    );
-
-  if (!response.ok) {
-    return res
-      .status(502)
-      .send(
-        "Sitemap data error"
+  try {
+    const page =
+      Math.max(
+        1,
+        parseInt(
+          req.query.page || "1",
+          10
+        )
       );
-  }
 
-  const rows =
-    await response.json();
-try {
-    for (
-      const row of rows
-    ) {
+
+    const start =
+      (page - 1) *
+      SITEMAP_PAGE_SIZE;
+
+
+    const end =
+      start +
+      SITEMAP_PAGE_SIZE -
+      1;
+
+
+    const query =
+      new URLSearchParams();
+
+
+    query.set(
+      "select",
+      "시도,시군구,읍면,동리,단지명"
+    );
+
+
+    query.set(
+      "order",
+      "시도.asc,시군구.asc,동리.asc,단지명.asc"
+    );
+
+
+    const apiUrl =
+      APT_SUPABASE_URL +
+      "/rest/v1/safe_apartments?" +
+      query.toString();
+
+
+    const response =
+      await fetch(
+        apiUrl,
+        {
+          method: "GET",
+
+          headers: {
+            apikey:
+              APT_SUPABASE_KEY,
+
+            Authorization:
+              "Bearer " +
+              APT_SUPABASE_KEY,
+
+            Range:
+              start +
+              "-" +
+              end,
+
+            Prefer:
+              "count=exact"
+          }
+        }
+      );
+
+
+    if (!response.ok) {
+      const message =
+        await response.text();
+
+
+      throw new Error(
+        "Supabase request failed: " +
+        response.status +
+        " " +
+        message
+      );
+    }
+
+
+    const rows =
+      await response.json();
+
+
+    const urlSet =
+      new Set();
+
+
+    const tradeTypes =
+      [
+        "sale",
+        "jeonse",
+        "monthly"
+      ];
+
+
+    for (const row of rows) {
       const region =
-        clean(
-          row["시도"]
-        );
+        String(
+          row["시도"] || ""
+        ).trim();
+
 
       const city =
-        clean(
-          row["시군구"]
-        );
+        String(
+          row["시군구"] || ""
+        ).trim();
+
 
       const place =
-        clean(
+        String(
           row["동리"] ||
-          row["읍면"]
-        );
+          row["읍면"] ||
+          ""
+        ).trim();
+
 
       const apartment =
-        clean(
-          row["단지명"]
-        );
+        String(
+          row["단지명"] || ""
+        ).trim();
 
 
       if (
@@ -1080,17 +1227,14 @@ try {
       }
 
 
-      for (
-        const type
-        of tradeTypes
-      ) {
+      for (const type of tradeTypes) {
         const regionPath =
           "/apt-search/" +
-          pathEncode(region) +
+          aptPathEncode(region) +
           "/" +
-          pathEncode(city) +
+          aptPathEncode(city) +
           "/" +
-          pathEncode(place) +
+          aptPathEncode(place) +
           "/" +
           type;
 
@@ -1104,13 +1248,13 @@ try {
         if (apartment) {
           const apartmentPath =
             "/apt-search/" +
-            pathEncode(region) +
+            aptPathEncode(region) +
             "/" +
-            pathEncode(city) +
+            aptPathEncode(city) +
             "/" +
-            pathEncode(place) +
+            aptPathEncode(place) +
             "/" +
-            pathEncode(apartment) +
+            aptPathEncode(apartment) +
             "/" +
             type;
 
@@ -1132,27 +1276,20 @@ try {
 
     const urls =
       Array.from(urlSet)
-        .map(
-          function(url) {
-            return [
-              "  <url>",
-
-              "    <loc>" +
-                xmlEscape(url) +
-                "</loc>",
-
-              "    <lastmod>" +
-                lastmod +
-                "</lastmod>",
-
-              "    <changefreq>weekly</changefreq>",
-
-              "    <priority>0.8</priority>",
-
-              "  </url>"
-            ].join("\n");
-          }
-        )
+        .map(function(url) {
+          return [
+            "  <url>",
+            "    <loc>" +
+              aptXmlEscape(url) +
+              "</loc>",
+            "    <lastmod>" +
+              lastmod +
+              "</lastmod>",
+            "    <changefreq>weekly</changefreq>",
+            "    <priority>0.8</priority>",
+            "  </url>"
+          ].join("\n");
+        })
         .join("\n");
 
 
@@ -1173,6 +1310,7 @@ try {
       .send(xml);
 
   } catch (error) {
+
     console.error(
       "APT SITEMAP ERROR:",
       error
@@ -1187,26 +1325,26 @@ try {
   }
 }
 
+
 /* =========================================
-   아파트 자동검색 페이지
+   아파트 자동 검색페이지
 ========================================= */
 
-async function handleApartmentPage(
+async function aptHandleApartmentPage(
   req,
   res
 ) {
   const region =
-    clean(req.query.region);
+    aptClean(req.query.region);
 
   const city =
-    clean(req.query.city);
+    aptClean(req.query.city);
 
   const place =
-    clean(req.query.place);
-  const broker =
-    clean(req.query.broker);
+    aptClean(req.query.place);
+
   const apartment =
-    clean(req.query.apartment);
+    aptClean(req.query.apartment);
 
 
   const type =
@@ -1232,17 +1370,10 @@ async function handleApartmentPage(
     new URLSearchParams();
 
 
-  if (apartment) {
-    query.set(
-      "select",
-      "*"
-    );
-  } else {
-    query.set(
-      "select",
-      "시도,시군구,읍면,동리,단지명"
-    );
-  }
+  query.set(
+    "select",
+    "시도,시군구,읍면,동리,단지명"
+  );
 
 
   query.set(
@@ -1275,7 +1406,7 @@ async function handleApartmentPage(
   }
 
 
-  addPlaceFilter(
+  aptAddPlaceFilter(
     query,
     place
   );
@@ -1284,39 +1415,29 @@ async function handleApartmentPage(
   try {
     const response =
       await fetch(
-        SUPABASE_URL +
+        APT_SUPABASE_URL +
         "/rest/v1/safe_apartments?" +
         query.toString(),
         {
           headers: {
             apikey:
-              SUPABASE_KEY,
+              APT_SUPABASE_KEY,
 
             Authorization:
               "Bearer " +
-              SUPABASE_KEY,
+              APT_SUPABASE_KEY,
 
             Accept:
               "application/json",
 
             Range:
-              apartment
-                ? "0-20"
-                : "0-999"
+              "0-999"
           }
         }
       );
 
 
     if (!response.ok) {
-      const errorText =
-        await response.text();
-
-      console.error(
-        "APT PAGE DB ERROR:",
-        errorText
-      );
-
       return res
         .status(502)
         .send(
@@ -1342,7 +1463,7 @@ async function handleApartmentPage(
 
 
     const trade =
-      typeName(type);
+      aptTypeName(type);
 
 
     const location =
@@ -1350,6 +1471,16 @@ async function handleApartmentPage(
         region,
         city,
         place
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+
+    const subject =
+      [
+        location,
+        apartment || "아파트",
+        trade
       ]
         .filter(Boolean)
         .join(" ");
@@ -1374,580 +1505,117 @@ async function handleApartmentPage(
               type
             ]
       )
-        .map(pathEncode)
+        .map(encodeURIComponent)
         .join("/");
 
 
-    const apartmentRow =
-      apartment
-        ? rows[0]
-        : null;
-
-
-    const householdCount =
-      firstValue(
-        apartmentRow,
-        [
-          "세대수",
-          "총세대수",
-          "총 세대수"
-        ]
-      );
-
-
-    const completionDate =
-      firstValue(
-        apartmentRow,
-        [
-          "준공년월",
-          "준공일",
-          "사용승인일",
-          "사용검사일",
-          "건축년도",
-          "건축연도"
-        ]
-      );
-
-
-    const roadAddress =
-      firstValue(
-        apartmentRow,
-        [
-          "도로명주소",
-          "도로명 주소",
-          "관리사무소 연락처 주소",
-          "관리사무소주소",
-          "주소"
-        ]
-      );
-
-
-    const jibunAddress =
-      firstValue(
-        apartmentRow,
-        [
-          "지번주소",
-          "지번 주소",
-          "법정동주소"
-        ]
-      );
-
-
-    const totalBuilding =
-      firstValue(
-        apartmentRow,
-        [
-          "동수",
-          "총동수",
-          "총 동수"
-        ]
-      );
-
-
-    const parking =
-      firstValue(
-        apartmentRow,
-        [
-          "주차대수",
-          "총주차대수",
-          "총 주차대수"
-        ]
-      );
-
-
-    const heating =
-      firstValue(
-        apartmentRow,
-        [
-          "난방방식",
-          "난방 방식",
-          "난방"
-        ]
-      );
-
-
-    const constructor =
-      firstValue(
-        apartmentRow,
-        [
-          "시공사",
-          "건설사"
-        ]
-      );
-
-
-    const managementPhone =
-      firstValue(
-        apartmentRow,
-        [
-          "관리사무소 연락처",
-          "관리사무소전화번호",
-          "관리사무소 전화번호",
-          "관리사무소전화"
-        ]
-      );
-
-
-    const latitude =
-      Number(
-        firstValue(
-          apartmentRow,
-          [
-            "latitude",
-            "위도"
-          ]
-        )
-      );
-
-
-    const longitude =
-      Number(
-        firstValue(
-          apartmentRow,
-          [
-            "longitude",
-            "경도"
-          ]
-        )
-      );
-
-
-    let title = "";
-
-    if (apartment) {
-      title =
-        location +
-        " " +
-        apartment +
-        " " +
-        trade;
-
-      if (householdCount) {
-        title +=
-          " | " +
-          householdCount +
-          "세대";
-      }
-
-      title +=
-        " | 우리아파트";
-
-    } else {
-      title =
-        location +
-        " 아파트 " +
-        trade +
-        " | 우리아파트";
-    }
-
-
-    const descriptionParts = [];
-
-
-    if (apartment) {
-      descriptionParts.push(
-        location +
-        " " +
-        apartment +
-        " " +
-        trade +
-        " 정보."
-      );
-
-
-      if (householdCount) {
-        descriptionParts.push(
-          "총 " +
-          householdCount +
-          "세대."
-        );
-      }
-
-
-      if (completionDate) {
-        descriptionParts.push(
-          "준공 " +
-          completionDate +
-          "."
-        );
-      }
-
-
-      if (roadAddress) {
-        descriptionParts.push(
-          "주소 " +
-          roadAddress +
-          "."
-        );
-      }
-
-
-      descriptionParts.push(
-        "희망조건을 등록하면 공인중개사의 맞춤 매물 제안을 받을 수 있습니다."
-      );
-
-
-      descriptionParts.push(
-        "플랫폼 서비스 이용료 50%로 아파트 거래비용을 절약할 수 있습니다."
-      );
-
-    } else {
-      descriptionParts.push(
-        location +
-        " 아파트 " +
-        trade +
-        " 정보를 확인하세요."
-      );
-
-
-      descriptionParts.push(
-        "원하는 아파트와 희망조건을 등록하면 공인중개사의 맞춤 매물 제안을 받을 수 있습니다."
-      );
-
-
-      descriptionParts.push(
-        "플랫폼 서비스 이용료 50%로 아파트 거래비용을 절약할 수 있습니다."
-      );
-    }
-
-
     const description =
-      descriptionParts
-        .join(" ")
-        .slice(0, 300);
+      apartment
+        ? subject +
+          " 정보를 확인하고 우리아파트 안심거래에서 공인중개사의 맞춤 매물 제안을 받아보세요."
+        : subject +
+          "를 찾고 계신가요? 해당 지역의 아파트를 확인하고 안심거래 서비스를 알아보세요.";
 
 
-    let detailHtml = "";
-
-
-    if (apartmentRow) {
-      const details =
-        apartmentDetails(
-          apartmentRow
-        );
-
-
-      if (details.length) {
-        detailHtml =
-          details
-            .map(
-              function(item) {
-                return `
-                  <div class="detail-row">
-                    <div class="detail-label">
-                      ${html(item.key)}
-                    </div>
-
-                    <div class="detail-value">
-                      ${html(item.value)}
-                    </div>
-                  </div>
-                `;
-              }
-            )
-            .join("");
-      }
-    }
-
-
-    let list = "";
-
-
-    if (!apartment) {
-      const apartmentSet =
-        new Set();
-
-
-      rows.forEach(
-        function(row) {
-          const name =
-            clean(
-              row["단지명"]
-            );
-
-          if (name) {
-            apartmentSet.add(name);
-          }
-        }
+    const apartmentNames =
+      Array.from(
+        new Set(
+          rows
+            .map(function(row) {
+              return aptClean(
+                row["단지명"]
+              );
+            })
+            .filter(Boolean)
+        )
       );
 
 
-      list =
-        Array.from(
-          apartmentSet
-        )
-          .sort(
-            function(a, b) {
-              return a.localeCompare(
-                b,
-                "ko"
-              );
-            }
-          )
-          .map(
-            function(name) {
-              const url =
-                SITE_ORIGIN +
-                "/apt-search/" +
-                [
-                  region,
-                  city,
-                  place,
-                  name,
-                  type
-                ]
-                  .map(pathEncode)
-                  .join("/");
-
-
-              return `
-                <li>
-                  <a href="${html(url)}">
-                    ${html(name)}
-                    ${html(trade)}
-                  </a>
-                </li>
-              `;
-            }
-          )
-          .join("");
-    }
-
-
-    const tradeLinks =
-      [
-        {
-          type: "sale",
-          name: "매매"
-        },
-        {
-          type: "jeonse",
-          name: "전세"
-        },
-        {
-          type: "monthly",
-          name: "월세"
-        }
-      ]
-        .map(
-          function(item) {
-            const url =
-              SITE_ORIGIN +
-              "/apt-search/" +
-              (
-                apartment
-                  ? [
-                      region,
-                      city,
-                      place,
-                      apartment,
-                      item.type
-                    ]
-                  : [
-                      region,
-                      city,
-                      place,
-                      item.type
-                    ]
+    const list =
+      apartmentNames
+        .slice(0, 100)
+        .map(function(name) {
+          const url =
+            "/apt-search/" +
+            [
+              region,
+              city,
+              place,
+              name,
+              type
+            ]
+              .map(
+                encodeURIComponent
               )
-                .map(pathEncode)
-                .join("/");
+              .join("/");
 
 
-            return `
-              <a
-                class="${
-                  type === item.type
-                    ? "active"
-                    : ""
-                }"
-                href="${html(url)}"
-              >
-                ${html(item.name)}
-              </a>
-            `;
-          }
-        )
-        .join("");
-
-
-    let structuredData = null;
-
-
-    if (apartment) {
-      structuredData = {
-        "@context":
-          "https://schema.org",
-
-        "@type":
-          "Place",
-
-        name:
-          apartment,
-
-        url:
-          canonical
-      };
-
-
-      if (roadAddress) {
-        structuredData.address = {
-          "@type":
-            "PostalAddress",
-
-          streetAddress:
-            roadAddress,
-
-          addressLocality:
-            city,
-
-          addressRegion:
-            region,
-
-          addressCountry:
-            "KR"
-        };
-      }
-
-
-      if (
-        Number.isFinite(latitude) &&
-        Number.isFinite(longitude) &&
-        latitude !== 0 &&
-        longitude !== 0
-      ) {
-        structuredData.geo = {
-          "@type":
-            "GeoCoordinates",
-
-          latitude:
-            latitude,
-
-          longitude:
-            longitude
-        };
-      }
-
-
-      if (managementPhone) {
-        structuredData.telephone =
-          managementPhone;
-      }
-
-
-      const properties =
-        apartmentDetails(
-          apartmentRow
-        )
-          .map(
-            function(item) {
-              return {
-                "@type":
-                  "PropertyValue",
-
-                name:
-                  item.key,
-
-                value:
-                  item.value
-              };
-            }
+          return (
+            '<li><a href="' +
+            url +
+            '">' +
+            aptHtml(
+              place +
+              " " +
+              name +
+              " " +
+              trade
+            ) +
+            "</a></li>"
           );
-
-
-      if (properties.length) {
-        structuredData.additionalProperty =
-          properties;
-      }
-    }
+        })
+        .join("");
 
 
     res.setHeader(
       "Content-Type",
-      "text/html; charset=utf-8"
+      "text/aptHtml; charset=utf-8"
     );
 
 
     res.setHeader(
       "Cache-Control",
-      "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400"
+      "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800"
     );
 
 
     return res
       .status(200)
-      .send(`<!doctype html>
-<html lang="ko">
-
+      .send(`<!doctype aptHtml>
+<aptHtml lang="ko">
 <head>
-
 <meta charset="utf-8">
-
 <meta
   name="viewport"
-  content="width=device-width,initial-scale=1,viewport-fit=cover"
+  content="width=device-width,initial-scale=1"
 >
 
-<title>${html(title)}</title>
+<title>${aptHtml(subject)} | 우리아파트 안심거래</title>
 
 <meta
   name="description"
-  content="${html(description)}"
+  content="${aptHtml(description)}"
 >
 
 <meta
   name="robots"
-  content="index,follow,max-image-preview:large"
+  content="index,follow"
 >
 
 <link
   rel="canonical"
-  href="${html(canonical)}"
+  href="${aptHtml(canonical)}"
 >
-
-<meta
-  property="og:type"
-  content="website"
->
-
-<meta
-  property="og:title"
-  content="${html(title)}"
->
-
-<meta
-  property="og:description"
-  content="${html(description)}"
->
-
-<meta
-  property="og:url"
-  content="${html(canonical)}"
->
-
-
-${
-  structuredData
-    ? `
-<script type="application/ld+json">
-${JSON.stringify(structuredData)}
-</script>
-`
-    : ""
-}
-
 
 <style>
-
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background: #f5f7f6;
+  background: #f4f7fa;
   color: #172b3d;
-
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -1957,23 +1625,18 @@ body {
     sans-serif;
 }
 
-
 .wrap {
-  width: 100%;
-  max-width: 820px;
-  margin: 0 auto;
-  padding: 18px 14px 60px;
+  max-width: 760px;
+  margin: auto;
+  padding: 18px 14px 55px;
 }
-
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
   margin-bottom: 18px;
 }
-
 
 .brand {
   color: #173a59;
@@ -1982,542 +1645,241 @@ body {
   text-decoration: none;
 }
 
-
 .brand strong {
-  color: #075b32;
+  color: #1165d7;
 }
 
-
 .home {
-  flex: 0 0 auto;
   padding: 9px 12px;
-  border: 1px solid #d8e1dc;
+  border: 1px solid #d4e0e8;
   border-radius: 10px;
   background: #fff;
-  color: #425d4e;
+  color: #456177;
   font-weight: 800;
   text-decoration: none;
 }
-
 
 .hero {
   overflow: hidden;
-  border: 1px solid #dce5df;
+  border: 1px solid #dce5ec;
   border-radius: 20px;
   background: #fff;
-
   box-shadow:
     0 7px 22px
-    rgba(22, 56, 42, .07);
+    rgba(22, 56, 83, .07);
 }
+
 .hero-top {
   padding: 30px 22px;
-
   background:
     linear-gradient(
       135deg,
-      #075b32,
-      #14824b
+      #0f5fcf,
+      #2381e7
     );
-
   color: #fff;
 }
-
-
-.location {
-  margin-bottom: 8px;
-  font-size: 14px;
-  font-weight: 700;
-  opacity: .9;
-}
-
 
 h1 {
   margin: 0;
-  font-size: 29px;
+  font-size: 30px;
   line-height: 1.4;
 }
 
-
 .subtitle {
-  margin: 14px 0 0;
-  font-size: 17px;
-  line-height: 1.75;
+  margin: 13px 0 0;
+  line-height: 1.7;
 }
-
 
 .body {
-  padding: 24px 20px 28px;
+  padding: 25px 20px 28px;
 }
 
-
-.trade-links {
-  display: grid;
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 8px;
-  margin-bottom: 24px;
-}
-
-
-.trade-links a {
-  padding: 12px 8px;
-  border: 1px solid #d9e4de;
-  border-radius: 10px;
-  background: #fff;
-  color: #456052;
-  font-weight: 800;
-  text-align: center;
-  text-decoration: none;
-}
-
-
-.trade-links a.active {
-  border-color: #075b32;
-  background: #075b32;
-  color: #fff;
-}
-
-
-.info-box {
-  margin-bottom: 22px;
-  padding: 18px;
-  border: 1px solid #dce8e1;
-  border-radius: 14px;
-  background: #f7fbf8;
-}
-
-
-.info-box h2 {
-  margin: 0 0 10px;
+.body h2 {
   font-size: 20px;
 }
 
-
-.info-box p {
-  margin: 7px 0;
-  color: #52695d;
-  line-height: 1.75;
-}
-
-
-.point {
-  color: #075b32;
-  font-weight: 900;
-}
-
-
-.details {
-  margin-top: 26px;
-}
-
-
-.details h2 {
-  margin: 0 0 14px;
-  font-size: 22px;
-}
-
-
-.detail-table {
-  overflow: hidden;
-  border: 1px solid #dfe6e2;
-  border-radius: 13px;
-}
-
-
-.detail-row {
-  display: grid;
-
-  grid-template-columns:
-    minmax(110px, 34%)
-    1fr;
-
-  border-bottom:
-    1px solid #edf1ef;
-}
-
-
-.detail-row:last-child {
-  border-bottom: 0;
-}
-
-
-.detail-label {
-  padding: 13px 12px;
-  background: #f7f9f8;
-  color: #53675c;
-  font-size: 14px;
-  font-weight: 800;
-}
-
-
-.detail-value {
-  padding: 13px 12px;
-  background: #fff;
-  color: #24382d;
-  font-size: 14px;
-  line-height: 1.6;
-  word-break: break-word;
-}
-
-
-.cta-box {
-  margin-top: 27px;
-  padding: 21px 18px;
-  border-radius: 15px;
-  background: #f3f8f5;
-}
-
-
-.cta-box h2 {
-  margin: 0 0 9px;
-  font-size: 21px;
-}
-
-
-.cta-box p {
-  margin: 0;
-  color: #52695d;
+.body p {
+  color: #536b7d;
   line-height: 1.8;
 }
-
 
 .cta {
   display: flex;
   align-items: center;
   justify-content: center;
-
   min-height: 57px;
-  margin-top: 18px;
-  padding: 13px;
-
+  margin-top: 20px;
   border-radius: 12px;
-  background: #075b32;
+  background: #1165d7;
   color: #fff;
-
   font-size: 17px;
   font-weight: 900;
   text-decoration: none;
 }
 
-
 .list {
-  margin-top: 20px;
-  padding: 22px 18px;
-  border: 1px solid #dce5df;
-  border-radius: 18px;
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid #e0e8ee;
+  border-radius: 13px;
   background: #fff;
 }
 
-
-.list h2 {
-  margin: 0 0 16px;
-  font-size: 21px;
-}
-
-
 .list ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  margin: 10px 0 0;
+  padding-left: 20px;
 }
-
 
 .list li {
-  border-bottom:
-    1px solid #edf1ef;
+  margin: 9px 0;
 }
-
-
-.list li:last-child {
-  border-bottom: 0;
-}
-
 
 .list a {
-  display: block;
-  padding: 13px 5px;
-  color: #264c37;
+  color: #0b58bd;
   font-weight: 700;
   text-decoration: none;
 }
 
-
 .footer {
-  margin-top: 24px;
-  color: #82928a;
+  margin-top: 22px;
+  color: #82929e;
   font-size: 11px;
-  line-height: 1.8;
+  line-height: 1.7;
   text-align: center;
 }
 
-
-@media(max-width: 520px) {
-
+@media(max-width: 480px) {
   h1 {
     font-size: 25px;
   }
-
 
   .hero-top {
     padding: 25px 17px;
   }
 
-
   .body {
-    padding: 21px 15px 25px;
-  }
-
-
-  .detail-row {
-    grid-template-columns:
-      115px 1fr;
-  }
-
-
-  .detail-label,
-  .detail-value {
-    padding: 12px 9px;
+    padding: 21px 15px 24px;
   }
 }
-
 </style>
-
 </head>
-
 
 <body>
 
 <div class="wrap">
 
+  <header class="header">
 
-<header class="header">
+    <a
+      class="brand"
+      href="/"
+    >
+      🏠 우리아파트
+      <strong>안심거래</strong>
+    </a>
 
-  <a
-    class="brand"
-    href="/"
-  >
-    🏠 우리아파트
-    <strong>안심거래</strong>
-  </a>
+    <a
+      class="home"
+      href="/"
+    >
+      홈으로
+    </a>
 
-
-  <a
-    class="home"
-    href="/"
-  >
-    홈으로
-  </a>
-
-</header>
+  </header>
 
 
-<main class="hero">
+  <main class="hero">
+
+    <section class="hero-top">
+
+      <div>
+        ${aptHtml(location)}
+      </div>
+
+      <h1>
+        ${aptHtml(subject)}
+      </h1>
+
+      <p class="subtitle">
+        원하는 아파트, 직접 찾아다니지 마세요.
+      </p>
+
+    </section>
 
 
-<section class="hero-top">
+    <section class="body">
 
-  <div class="location">
-    ${html(location)}
-  </div>
+      <h2>
+        ${aptHtml(subject)} 찾기
+      </h2>
 
+      <p>
+        ${aptHtml(description)}
+      </p>
 
-  <h1>
-    ${
-      apartment
-        ? html(
-            apartment +
-            " " +
-            trade
-          )
-        : html(
-            place +
-            " 아파트 " +
-            trade
-          )
-    }
-  </h1>
+      <p>
+        희망조건을 등록하면 해당 지역 공인중개사가
+        조건에 맞는 매물을 제안합니다.
+      </p>
 
+      <a
+        class="cta"
+        href="/apt.aptHtml"
+      >
+        매수 아파트 등록하기
+      </a>
+    </section>
 
-  <p class="subtitle">
-    원하는 아파트, 직접 찾아다니지 마세요.<br>
-    희망조건만 등록하세요.
-  </p>
-
-</section>
+  </main>
 
 
-<section class="body">
+  ${
+    apartment
+      ? ""
+      : `
+        <section class="list">
+
+          <h2>
+            ${aptHtml(place)} 아파트 목록
+          </h2>
+
+          <ul>
+            ${list}
+          </ul>
+
+        </section>
+      `
+  }
 
 
-<div class="trade-links">
-  ${tradeLinks}
-</div>
+  <footer class="footer">
 
+    <div>
+      업체명: 에너젠51　|　대표자: 장수용
+    </div>
 
-<div class="info-box">
+    <div>
+      사업자등록번호: 410-27-88141
+    </div>
 
-  <h2>
-    ${
-      apartment
-        ? html(apartment) +
-          " 안심거래"
-        : html(location) +
-          " 아파트 안심거래"
-    }
-  </h2>
+    <div>
+      © 우리아파트 안심거래
+    </div>
 
-
-  <p class="point">
-    플랫폼 서비스 이용료 50%로
-    아파트 거래비용을 절약할 수 있습니다.
-  </p>
-
-
-  <p>
-    매수자·임차인이 원하는 지역,
-    아파트, 거래유형과 희망조건을 등록하면
-    공인중개사가 조건에 맞는 매물을 제안합니다.
-  </p>
-
-
-  <p>
-    매매·전세·월세 모두 이용할 수 있으며
-    전자계약을 통한 안전하고 편리한
-    거래를 지원합니다.
-  </p>
-
-</div>
-
-
-${
-  apartment && detailHtml
-    ? `
-      <section class="details">
-
-        <h2>
-          ${html(apartment)} 단지정보
-        </h2>
-
-        <div class="detail-table">
-          ${detailHtml}
-        </div>
-
-      </section>
-    `
-    : ""
-}
-
-
-<div class="cta-box">
-
-  <h2>
-    원하는 조건의 매물을 제안받으세요
-  </h2>
-
-
-  <p>
-    희망조건을 등록하면
-    지역 공인중개사가
-    조건에 맞는 매물을 제안합니다.
-  </p>
-
-
-  <a
-    class="cta"
-    href="/apt.html"
-  >
-    매수 아파트 등록하기
-  </a>
-
-</div>
-
-
-</section>
-
-</main>
-
-
-${
-  apartment
-    ? `
-      <section class="list">
-
-        <h2>
-          ${html(place)}
-          다른 아파트도 확인하세요
-        </h2>
-
-        <a
-          href="${
-            html(
-              SITE_ORIGIN +
-              "/apt-search/" +
-              [
-                region,
-                city,
-                place,
-                type
-              ]
-                .map(pathEncode)
-                .join("/")
-            )
-          }"
-        >
-          ${html(place)}
-          아파트
-          ${html(trade)}
-          전체보기
-        </a>
-
-      </section>
-    `
-    : `
-      <section class="list">
-
-        <h2>
-          ${html(place)}
-          아파트 목록
-        </h2>
-
-        <ul>
-          ${list}
-        </ul>
-
-      </section>
-    `
-}
-
-
-<footer class="footer">
-
-  <div>
-    업체명: 에너젠51　|　대표자: 장수용
-  </div>
-
-  <div>
-    사업자등록번호: 410-27-88141
-  </div>
-
-  <div>
-    © 우리아파트 안심거래
-  </div>
-
-</footer>
-
+  </footer>
 
 </div>
 
 </body>
-</html>`);
+</aptHtml>`);
 
   } catch (error) {
+
     console.error(
       "APT PAGE ERROR:",
       error
     );
-
 
     return res
       .status(500)
@@ -2549,7 +1911,7 @@ async function getBrokerRows(
 
   if (region) {
     query.set(
-      "지역명",
+      "시도",
       "eq." + region
     );
   }
@@ -2565,7 +1927,7 @@ async function getBrokerRows(
 
   if (place) {
     query.set(
-      "동",
+      "읍면동",
       "eq." + place
     );
   }
@@ -2573,7 +1935,7 @@ async function getBrokerRows(
 
   query.set(
     "limit",
-    "300"
+    "100"
   );
 
 
@@ -2601,31 +1963,122 @@ async function getBrokerRows(
 
 
   if (!response.ok) {
-    const errorText =
-      await response.text();
+    const fallback =
+      new URLSearchParams();
 
 
-    console.error(
-      "AGENT DIRECTORY ERROR:",
-      response.status,
-      errorText
+    fallback.set(
+      "select",
+      "*"
     );
 
 
-    return [];
+    if (region) {
+      fallback.set(
+        "시도",
+        "eq." + region
+      );
+    }
+
+
+    if (city) {
+      fallback.set(
+        "시군구",
+        "eq." + city
+      );
+    }
+
+
+    fallback.set(
+      "limit",
+      "300"
+    );
+
+
+    const fallbackResponse =
+      await fetch(
+        SUPABASE_URL +
+        "/rest/v1/agent_directory?" +
+        fallback.toString(),
+        {
+          method: "GET",
+
+          headers: {
+            apikey:
+              SUPABASE_KEY,
+
+            Authorization:
+              "Bearer " +
+              SUPABASE_KEY,
+
+            Accept:
+              "application/json"
+          }
+        }
+      );
+
+
+    if (!fallbackResponse.ok) {
+      const errorText =
+        await fallbackResponse.text();
+
+
+      console.error(
+        "AGENT DIRECTORY ERROR:",
+        errorText
+      );
+
+
+      return [];
+    }
+
+
+    const fallbackRows =
+      await fallbackResponse.json();
+
+
+    return fallbackRows
+      .filter(
+        function(row) {
+          const locationText =
+            [
+              firstValue(
+                row,
+                [
+                  "읍면동",
+                  "동리",
+                  "읍면",
+                  "동",
+                  "법정동"
+                ]
+              ),
+
+              firstValue(
+                row,
+                [
+                  "도로명주소",
+                  "도로명 주소",
+                  "지번주소",
+                  "지번 주소",
+                  "주소"
+                ]
+              )
+            ]
+              .filter(Boolean)
+              .join(" ");
+
+
+          return (
+            !place ||
+            locationText.includes(place)
+          );
+        }
+      )
+      .slice(0, 100);
   }
 
 
-  const rows =
-    await response.json();
-
-
-  if (!Array.isArray(rows)) {
-    return [];
-  }
-
-
-  return rows;
+  return await response.json();
 }
 
 
@@ -4031,6 +3484,8 @@ async function handleBrokerSitemap(req, res) {
    통합 진입점
 ========================================= */
 
+
+
 async function handler(
   req,
   res
@@ -4163,7 +3618,7 @@ async function handler(
   if (
     mode === "list"
   ) {
-    return handleApartmentList(
+    return aptHandleApartmentList(
       req,
       res
     );
@@ -4175,7 +3630,7 @@ async function handler(
   if (
     mode === "sitemap-index"
   ) {
-    return handleSitemapIndex(
+    return aptHandleSitemapIndex(
       req,
       res
     );
@@ -4187,7 +3642,7 @@ async function handler(
   if (
     mode === "sitemap"
   ) {
-    return handleSitemap(
+    return aptHandleSitemap(
       req,
       res
     );
@@ -4196,7 +3651,7 @@ async function handler(
 
   /* 기본 = 아파트 자동검색 페이지 */
 
-  return handleApartmentPage(
+  return aptHandleApartmentPage(
     req,
     res
   );
