@@ -3954,130 +3954,107 @@ h1 {
    기존 URL 구조 유지
 ========================================= */
 
-async function handleBrokerSitemap(req, res) {
-  res.setHeader("Content-Type", "application/xml; charset=utf-8");
-  res.setHeader(
-    "Cache-Control",
-    "s-maxage=86400, stale-while-revalidate=604800"
+/* =========================================
+   공인중개사 agent_directory 조회
+   지역명 + 시군구 + 동 단위 조회
+========================================= */
+
+async function getBrokerRows(
+  region,
+  city,
+  place
+) {
+  const query =
+    new URLSearchParams();
+
+  /*
+    필요한 동의 중개사만 조회한다.
+
+    예:
+    서울 / 강동구 / 성내동
+
+    성내동에 중개사가 30개 있으면
+    그 30개만 가져온다.
+
+    전국 중개사 전체를 조회하지 않는다.
+  */
+
+  query.set(
+    "select",
+    "*"
   );
 
-  const lastmod = new Date().toISOString().split("T")[0];
-  const locationSet = new Set();
+  query.set(
+    "지역명",
+    "eq." + region
+  );
 
-  try {
-    let from = 0;
-    const pageSize = 1000;
+  query.set(
+    "시군구",
+    "eq." + city
+  );
 
-    while (true) {
-      const to = from + pageSize - 1;
+  query.set(
+    "동",
+    "eq." + place
+  );
 
-      const response = await fetch(
-        SUPABASE_URL +
-          "/rest/v1/agent_directory?select=지역명,시군구,동",
-        {
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${SUPABASE_KEY}`,
-            Range: `${from}-${to}`,
-            Prefer: "count=exact"
-          }
+  /*
+    한 동에 중개사가 여러 곳 있을 수 있으므로
+    해당 동의 중개사는 모두 가져온다.
+
+    최대 4000은 전국 동 개수에 대한 기준이며
+    여기서 4000명을 불러오는 것이 아니다.
+  */
+
+  query.set(
+    "limit",
+    "300"
+  );
+
+  const response =
+    await fetch(
+      SUPABASE_URL +
+      "/rest/v1/agent_directory?" +
+      query.toString(),
+      {
+        method: "GET",
+
+        headers: {
+          apikey:
+            SUPABASE_KEY,
+
+          Authorization:
+            "Bearer " +
+            SUPABASE_KEY,
+
+          Accept:
+            "application/json"
         }
-      );
-
-      if (!response.ok) {
-        const errorText = await response.text();
-
-        throw new Error(
-          `agent_directory 조회 실패: ${response.status} ${errorText}`
-        );
       }
-
-      const rows = await response.json();
-
-      if (!Array.isArray(rows) || rows.length === 0) {
-        break;
-      }
-
-      for (const row of rows) {
-        const region = clean(row["지역명"]);
-        const city = clean(row["시군구"]);
-        const place = clean(row["동"]);
-
-        if (!region || !city || !place) {
-          continue;
-        }
-
-        locationSet.add(
-          [region, city, place].join("|")
-        );
-      }
-
-      if (rows.length < pageSize) {
-        break;
-      }
-
-      from += pageSize;
-    }
-
-    const urls = [];
-
-    urls.push(
-      [
-        "<url>",
-        `<loc>${xmlEscape(
-          SITE_ORIGIN + "/broker-landing.html"
-        )}</loc>`,
-        `<lastmod>${lastmod}</lastmod>`,
-        "<changefreq>weekly</changefreq>",
-        "<priority>0.9</priority>",
-        "</url>"
-      ].join("")
     );
 
-    for (const locationKey of locationSet) {
-      const [region, city, place] =
-        locationKey.split("|");
+  if (!response.ok) {
+    const errorText =
+      await response.text();
 
-      const loc =
-        SITE_ORIGIN +
-        "/broker-search/" +
-        pathEncode(region) +
-        "/" +
-        pathEncode(city) +
-        "/" +
-        pathEncode(place);
-
-      urls.push(
-        [
-          "<url>",
-          `<loc>${xmlEscape(loc)}</loc>`,
-          `<lastmod>${lastmod}</lastmod>`,
-          "<changefreq>weekly</changefreq>",
-          "<priority>0.8</priority>",
-          "</url>"
-        ].join("")
-      );
-    }
-
-    const xml =
-      '<?xml version="1.0" encoding="UTF-8"?>' +
-      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-      urls.join("") +
-      "</urlset>";
-
-    return res.status(200).send(xml);
-
-  } catch (error) {
     console.error(
-      "broker sitemap error:",
-      error
+      "AGENT DIRECTORY ERROR:",
+      response.status,
+      errorText
     );
 
-    return res.status(500).send(
-      '<?xml version="1.0" encoding="UTF-8"?>' +
-      "<error>broker sitemap generation failed</error>"
-    );
+    return [];
   }
+
+  const rows =
+    await response.json();
+
+  if (!Array.isArray(rows)) {
+    return [];
+  }
+
+  return rows;
 }
 /* =========================================
    통합 진입점
