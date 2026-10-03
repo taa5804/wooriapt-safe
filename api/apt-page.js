@@ -2025,7 +2025,7 @@ li a:hover {
   <div class="matcher-container">
     <div class="m-top-header" id="m-header-box">
       <div class="m-badge-bar">
-        📊 국토교통부 실거래가 팩트 연동 | 수수료 50% 절약
+        📊 국토교통부 실거래가 팩트 연동 | 중개사 표준의 절반 수수료
       </div>
       <h1 id="m-header-title">전남광주통합특별시 ${aptHtml(city || "북구")} - 안심거래 매칭기</h1>
       <p id="m-header-desc">시·구·동을 자유롭게 선택하고 국토부 실거래 아파트를 실시간으로 비교하세요</p>
@@ -2038,28 +2038,63 @@ li a:hover {
     </div>
 
     <div class="m-filter-area">
-      <!-- 3-Tier Selectable Row -->
+      <!-- 1. 3단 시·구·동 자유 선택 (물리적 option 태그 완비) -->
       <div class="m-field-group">
         <div class="m-field-header">
           <label class="m-field-label">희망 지역 (시·구·동 자유 선택)</label>
           <span class="m-field-sublabel" id="m-region-display-txt">전남광주통합특별시 ${aptHtml(city || "북구")} ${aptHtml(place)}</span>
         </div>
         <div class="m-region-select-row">
-          <select id="m-sel-sido" class="m-select-box" onchange="mHandleSidoChange()"></select>
-          <select id="m-sel-sigungu" class="m-select-box" onchange="mHandleSigunguChange()"></select>
+          <select id="m-sel-sido" class="m-select-box" onchange="mHandleSidoChange()">
+            <option value="전남광주통합특별시" selected>전남광주통합특별시</option>
+            <option value="서울특별시">서울특별시</option>
+            <option value="경기도">경기도</option>
+            <option value="인천광역시">인천광역시</option>
+            <option value="부산광역시">부산광역시</option>
+            <option value="대구광역시">대구광역시</option>
+            <option value="대전광역시">대전광역시</option>
+            <option value="세종특별자치시">세종특별자치시</option>
+          </select>
+          <select id="m-sel-sigungu" class="m-select-box" onchange="mHandleSigunguChange()">
+            <option value="북구" selected>북구</option>
+            <option value="광산구">광산구</option>
+            <option value="서구">서구</option>
+            <option value="남구">남구</option>
+            <option value="동구">동구</option>
+            <option value="순천시">순천시</option>
+            <option value="여수시">여수시</option>
+            <option value="목포시">목포시</option>
+            <option value="나주시">나주시</option>
+            <option value="담양군">담양군</option>
+            <option value="화순군">화순군</option>
+          </select>
           <input type="text" id="m-target-dong" class="m-dong-input" value="${aptHtml(place)}" placeholder="동 입력/선택" oninput="mHandleDongChange()">
         </div>
       </div>
 
+      <!-- 2. 예산 직접 입력: 매매/전세는 단일, 월세는 [보증금 + 월세] 2개 분리 -->
       <div class="m-field-group">
         <div class="m-field-header">
-          <label class="m-field-label" for="m-target-budget-num" id="m-budget-label-txt">희망 예산 (숫자 직접 입력)</label>
+          <label class="m-field-label" id="m-budget-label-txt">희망 매매 예산</label>
           <span class="m-field-sublabel" id="m-budget-korean-txt">2억 원</span>
         </div>
-        <div class="m-input-wrapper">
+
+        <div id="m-budget-single-box" class="m-input-wrapper">
           <input type="number" id="m-target-budget-num" class="m-input-box" value="20000" step="500" min="0" oninput="mHandleBudgetNumChange()">
           <span class="m-input-unit" id="m-budget-unit-txt">만 원</span>
         </div>
+
+        <div id="m-budget-rent-box" style="display:none; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div class="m-input-wrapper">
+            <input type="number" id="m-target-rent-deposit" class="m-input-box" value="2000" step="500" min="0" oninput="mHandleRentChange()">
+            <span class="m-input-unit">보증금(만)</span>
+          </div>
+          <div class="m-input-wrapper">
+            <input type="number" id="m-target-rent-monthly" class="m-input-box" value="65" step="5" min="0" oninput="mHandleRentChange()">
+            <span class="m-input-unit">월세(만)</span>
+          </div>
+        </div>
+
         <div class="m-preset-row" id="m-preset-container"></div>
       </div>
     </div>
@@ -2330,6 +2365,305 @@ li a:hover {
     }, 50);
   </script>
   
+<script>
+    const M_REGIONS = {"전남광주통합특별시":["북구","광산구","서구","남구","동구","순천시","여수시","목포시","나주시","광양시","담양군","화순군"],"서울특별시":["강남구","서초구","송파구","강동구","마포구","용산구","성동구","영등포구","노원구","강북구"],"경기도":["수원시","성남시","용인시","고양시","화성시","오산시","평택시","안양시","부천시","남양주시"],"인천광역시":["연수구","남동구","서구","부평구","미추홀구","중구"],"부산광역시":["해운대구","수영구","부산진구","동래구","남구","북구","사하구"],"대구광역시":["수성구","달서구","중구","동구","북구"],"대전광역시":["유성구","서구","중구","동구","대덕구"],"세종특별자치시":["세종시"]};
+    const M_APTS_DB = [{"gu":"북구","dong":"양산동","name":"양산 호반리젠시빌 1차","spec":"24평 / 59㎡","type":"sale","price":21000,"floor":"11층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 GS자이","spec":"24평 / 59㎡","type":"sale","price":19500,"floor":"15층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 일신아파트","spec":"24평 / 59㎡","type":"sale","price":18200,"floor":"9층","date":"2026.08"},{"gu":"북구","dong":"양산동","name":"양산 해태아파트","spec":"32평 / 84㎡","type":"sale","price":21500,"floor":"10층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산타운","spec":"24평 / 59㎡","type":"sale","price":17500,"floor":"7층","date":"2026.08"},{"gu":"북구","dong":"양산동","name":"양산 호반리젠시빌 1차","spec":"34평 / 84㎡","type":"sale","price":29800,"floor":"14층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 GS자이","spec":"34평 / 84㎡","type":"sale","price":28500,"floor":"12층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 GS자이","spec":"24평 / 59㎡","type":"jeonse","price":16000,"floor":"12층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 호반리젠시빌 1차","spec":"24평 / 59㎡","type":"jeonse","price":14500,"floor":"7층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 GS자이","spec":"24평 / 59㎡","type":"rent","price":2000,"monthly":65,"floor":"11층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 호반리젠시빌 1차","spec":"24평 / 59㎡","type":"rent","price":2000,"monthly":60,"floor":"6층","date":"2026.09"},{"gu":"광산구","dong":"수완동","name":"수완지구 우미린 1차","spec":"34평 / 84㎡","type":"sale","price":42000,"floor":"12층","date":"2026.09"},{"gu":"광산구","dong":"수완동","name":"수완 대방노블랜드 2차","spec":"34평 / 84㎡","type":"sale","price":46000,"floor":"15층","date":"2026.09"},{"gu":"광산구","dong":"수완동","name":"수완 호반베르디움 1차","spec":"33평 / 84㎡","type":"sale","price":39500,"floor":"8층","date":"2026.09"},{"gu":"광산구","dong":"수완동","name":"수완지구 아름마을 우미린","spec":"34평 / 84㎡","type":"jeonse","price":28000,"floor":"10층","date":"2026.09"},{"gu":"광산구","dong":"수완동","name":"수완 대방노블랜드","spec":"34평 / 84㎡","type":"rent","price":3000,"monthly":90,"floor":"9층","date":"2026.09"},{"gu":"서구","dong":"치평동","name":"상무 현대아파트","spec":"32평 / 84㎡","type":"sale","price":31000,"floor":"14층","date":"2026.09"},{"gu":"서구","dong":"치평동","name":"상무 금호타운 3차","spec":"24평 / 59㎡","type":"sale","price":23500,"floor":"11층","date":"2026.09"},{"gu":"서구","dong":"치평동","name":"상무 중흥S클래스","spec":"34평 / 84㎡","type":"sale","price":38000,"floor":"16층","date":"2026.09"},{"gu":"서구","dong":"치평동","name":"상무 현대아파트","spec":"32평 / 84㎡","type":"jeonse","price":21000,"floor":"7층","date":"2026.09"},{"gu":"서구","dong":"치평동","name":"상무 금호타운","spec":"24평 / 59㎡","type":"rent","price":2000,"monthly":70,"floor":"8층","date":"2026.09"},{"gu":"남구","dong":"봉선동","name":"봉선 포스코더샵","spec":"34평 / 84㎡","type":"sale","price":65000,"floor":"15층","date":"2026.09"},{"gu":"남구","dong":"봉선동","name":"봉선 한국아델리움 1차","spec":"43평 / 115㎡","type":"sale","price":82000,"floor":"12층","date":"2026.09"},{"gu":"남구","dong":"봉선동","name":"봉선 라인하이츠","spec":"24평 / 59㎡","type":"sale","price":22000,"floor":"8층","date":"2026.09"},{"gu":"남구","dong":"봉선동","name":"봉선 포스코더샵","spec":"34평 / 84㎡","type":"jeonse","price":41000,"floor":"10층","date":"2026.09"},{"gu":"남구","dong":"봉선동","name":"봉선 삼익아파트","spec":"32평 / 84㎡","type":"rent","price":3000,"monthly":85,"floor":"12층","date":"2026.09"},{"gu":"동구","dong":"학동","name":"무등산 아이파크","spec":"34평 / 84㎡","type":"sale","price":54000,"floor":"18층","date":"2026.09"},{"gu":"동구","dong":"학동","name":"학동 평화맨션","spec":"24평 / 59㎡","type":"sale","price":16000,"floor":"5층","date":"2026.08"}];
+
+    let mCurSido = '전남광주통합특별시';
+    let mCurSigungu = '${aptHtml(city || "북구")}';
+    let mCurDong = '${aptHtml(place || "양산동")}';
+    let mCurType = '${type || "sale"}';
+    let mCurBudget = mCurType === 'sale' ? 20000 : (mCurType === 'jeonse' ? 15000 : 2000);
+    let mCurRentDeposit = 2000;
+    let mCurRentMonthly = 65;
+
+    function mPopulateSigungu(sido) {
+      const sigunguSel = document.getElementById('m-sel-sigungu');
+      if (!sigunguSel) return;
+      const list = M_REGIONS[sido] || ['전체'];
+      sigunguSel.innerHTML = list.map(function(g) {
+        return '<option value="' + g + '" ' + (g === mCurSigungu ? 'selected' : '') + '>' + g + '</option>';
+      }).join('');
+      if (!list.includes(mCurSigungu)) {
+        mCurSigungu = list[0];
+        sigunguSel.value = mCurSigungu;
+      }
+    }
+
+    function mHandleSidoChange() {
+      mCurSido = document.getElementById('m-sel-sido').value;
+      mPopulateSigungu(mCurSido);
+      mHandleSigunguChange();
+    }
+
+    function mHandleSigunguChange() {
+      mCurSigungu = document.getElementById('m-sel-sigungu').value;
+      if (mCurSigungu === '북구') mCurDong = '양산동';
+      else if (mCurSigungu === '광산구') mCurDong = '수완동';
+      else if (mCurSigungu === '서구') mCurDong = '치평동';
+      else if (mCurSigungu === '남구') mCurDong = '봉선동';
+      else if (mCurSigungu === '동구') mCurDong = '학동';
+      else mCurDong = mCurSigungu + ' 중심가';
+
+      const dInput = document.getElementById('m-target-dong');
+      if (dInput) dInput.value = mCurDong;
+      mUpdateLabels();
+      mRenderList();
+    }
+
+    function mHandleDongChange() {
+      const dInput = document.getElementById('m-target-dong');
+      mCurDong = (dInput ? dInput.value : '').trim() || '중심가';
+      mUpdateLabels();
+      mRenderList();
+    }
+
+    function mUpdateLabels() {
+      const full = mCurSido + ' ' + mCurSigungu + ' ' + mCurDong;
+      const el = document.getElementById('m-region-display-txt');
+      if (el) el.textContent = full;
+      const hTitle = document.getElementById('m-header-title');
+      if (hTitle) hTitle.textContent = mCurSido + ' ' + mCurSigungu + ' - 안심거래 매칭기';
+    }
+
+    function mSwitchMode(t) {
+      mCurType = t;
+      const hb = document.getElementById('m-header-box');
+      if (hb) hb.className = 'm-top-header' + (t === 'jeonse' ? ' theme-jeonse' : (t === 'rent' ? ' theme-rent' : ''));
+      ['sale', 'jeonse', 'rent'].forEach(function(x) {
+        const btn = document.getElementById('m-tab-' + x);
+        if (btn) btn.classList.toggle('active', x === t);
+      });
+
+      const lbl = document.getElementById('m-budget-label-txt');
+      const singleBox = document.getElementById('m-budget-single-box');
+      const rentBox = document.getElementById('m-budget-rent-box');
+
+      if (t === 'sale') {
+        if (lbl) lbl.textContent = '희망 매매 예산';
+        mCurBudget = 20000;
+        if (singleBox) singleBox.style.display = 'flex';
+        if (rentBox) rentBox.style.display = 'none';
+        const numInput = document.getElementById('m-target-budget-num');
+        if (numInput) numInput.value = mCurBudget;
+      } else if (t === 'jeonse') {
+        if (lbl) lbl.textContent = '희망 전세 보증금';
+        mCurBudget = 15000;
+        if (singleBox) singleBox.style.display = 'flex';
+        if (rentBox) rentBox.style.display = 'none';
+        const numInput = document.getElementById('m-target-budget-num');
+        if (numInput) numInput.value = mCurBudget;
+      } else {
+        if (lbl) lbl.textContent = '희망 월세 조건 (보증금 + 월세)';
+        if (singleBox) singleBox.style.display = 'none';
+        if (rentBox) rentBox.style.display = 'grid';
+        const depInput = document.getElementById('m-target-rent-deposit');
+        if (depInput) depInput.value = mCurRentDeposit;
+        const monInput = document.getElementById('m-target-rent-monthly');
+        if (monInput) monInput.value = mCurRentMonthly;
+      }
+
+      mUpdateKorean();
+      mRenderPresets();
+      mRenderList();
+    }
+
+    function mHandleBudgetNumChange() {
+      mCurBudget = parseFloat(document.getElementById('m-target-budget-num').value) || 0;
+      mUpdateKorean();
+      mRenderPresets();
+      mRenderList();
+    }
+
+    function mHandleRentChange() {
+      mCurRentDeposit = parseFloat(document.getElementById('m-target-rent-deposit').value) || 0;
+      mCurRentMonthly = parseFloat(document.getElementById('m-target-rent-monthly').value) || 0;
+      mUpdateKorean();
+      mRenderList();
+    }
+
+    function mUpdateKorean() {
+      const el = document.getElementById('m-budget-korean-txt');
+      if (!el) return;
+      if (mCurType === 'rent') {
+        el.textContent = '보증금 ' + mFmt(mCurRentDeposit) + ' / 월 ' + mCurRentMonthly + '만';
+      } else {
+        el.textContent = mFmt(mCurBudget);
+      }
+    }
+
+    function mSelectPreset(val) {
+      if (mCurType === 'rent') {
+        mCurRentDeposit = val.deposit;
+        mCurRentMonthly = val.monthly;
+        const depInput = document.getElementById('m-target-rent-deposit');
+        if (depInput) depInput.value = mCurRentDeposit;
+        const monInput = document.getElementById('m-target-rent-monthly');
+        if (monInput) monInput.value = mCurRentMonthly;
+      } else {
+        mCurBudget = val;
+        const numInput = document.getElementById('m-target-budget-num');
+        if (numInput) numInput.value = val;
+      }
+      mUpdateKorean();
+      mRenderPresets();
+      mRenderList();
+    }
+
+    function mRenderPresets() {
+      const box = document.getElementById('m-preset-container');
+      if (!box) return;
+      if (mCurType === 'sale') {
+        var presets = [15000, 20000, 25000, 30000, 40000];
+        box.innerHTML = presets.map(function(p) {
+          return '<button class="m-preset-btn ' + (p === mCurBudget ? 'active' : '') + '" onclick="mSelectPreset(' + p + ')">' + mFmt(p) + '</button>';
+        }).join('');
+      } else if (mCurType === 'jeonse') {
+        var presets = [10000, 15000, 20000, 25000];
+        box.innerHTML = presets.map(function(p) {
+          return '<button class="m-preset-btn ' + (p === mCurBudget ? 'active' : '') + '" onclick="mSelectPreset(' + p + ')">' + mFmt(p) + '</button>';
+        }).join('');
+      } else {
+        var presets = [
+          { label: '1천 / 50', deposit: 1000, monthly: 50 },
+          { label: '2천 / 65', deposit: 2000, monthly: 65 },
+          { label: '3천 / 80', deposit: 3000, monthly: 80 }
+        ];
+        box.innerHTML = presets.map(function(p) {
+          return '<button class="m-preset-btn ' + (p.deposit === mCurRentDeposit && p.monthly === mCurRentMonthly ? 'active' : '') + '" onclick="mSelectPreset({deposit:' + p.deposit + ',monthly:' + p.monthly + '})">' + p.label + '</button>';
+        }).join('');
+      }
+    }
+
+    function mFmt(val) {
+      if (val <= 0) return '0원';
+      if (val >= 10000) {
+        var eok = Math.floor(val / 10000);
+        var man = val % 10000;
+        return man > 0 ? (eok + '억 ' + man.toLocaleString() + '만 원') : (eok + '억 원');
+      }
+      return val.toLocaleString() + '만 원';
+    }
+
+    // 중개사 법정 표준 요율의 정확한 절반(50% 절약) 계산식
+    function mCalcSavedFee(price, type, rentDeposit, monthly) {
+      if (type === 'sale') {
+        var std = 0;
+        if (price < 5000) std = Math.min(price * 0.006, 25);
+        else if (price < 20000) std = Math.min(price * 0.005, 80);
+        else std = Math.round(price * 0.004);
+        return Math.round(std / 2);
+      } else if (type === 'jeonse') {
+        var std = 0;
+        if (price < 5000) std = Math.min(price * 0.005, 20);
+        else if (price < 10000) std = Math.min(price * 0.004, 30);
+        else std = Math.round(price * 0.003);
+        return Math.round(std / 2);
+      } else {
+        var conv = rentDeposit + (monthly * 100);
+        if (conv < 5000) conv = rentDeposit + (monthly * 70);
+        var std = 0;
+        if (conv < 5000) std = Math.min(conv * 0.005, 20);
+        else if (conv < 10000) std = Math.min(conv * 0.004, 30);
+        else std = Math.round(conv * 0.003);
+        return Math.round(std / 2);
+      }
+    }
+
+    function mRenderList() {
+      const container = document.getElementById('m-apt-container');
+      if (!container) return;
+
+      var filtered = M_APTS_DB.filter(function(a) {
+        return a.type === mCurType && (a.gu === mCurSigungu || a.dong === mCurDong);
+      });
+      if (filtered.length === 0) {
+        filtered = M_APTS_DB.filter(function(a) { return a.type === mCurType; });
+      }
+
+      if (mCurType === 'rent') {
+        filtered = filtered.filter(function(a) {
+          return a.price <= mCurRentDeposit * 1.5 && a.monthly <= mCurRentMonthly * 1.35;
+        });
+      } else {
+        var minB = mCurBudget * 0.7;
+        var maxB = mCurBudget * 1.35;
+        filtered = filtered.filter(function(a) { return a.price >= minB && a.price <= maxB; });
+      }
+
+      var typeKo = mCurType === 'sale' ? '매매' : (mCurType === 'jeonse' ? '전세' : '월세');
+      var sumTxt = mCurType === 'rent'
+        ? ('🔍 ' + mCurSido + ' ' + mCurSigungu + ' ' + mCurDong + ' 보증금 ' + mFmt(mCurRentDeposit) + '/월 ' + mCurRentMonthly + '만 국토부 실거래')
+        : ('🔍 ' + mCurSido + ' ' + mCurSigungu + ' ' + mCurDong + ' ' + mFmt(mCurBudget) + ' 국토부 ' + typeKo);
+
+      var sumEl = document.getElementById('m-results-summary');
+      if (sumEl) sumEl.textContent = sumTxt;
+      var cntEl = document.getElementById('m-results-count');
+      if (cntEl) cntEl.textContent = filtered.length + '개 단지 발견';
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:30px 15px; color:#64748b; background:#fff; border-radius:10px;">' +
+          '<div style="font-size:18px; margin-bottom:4px;">🔎</div>' +
+          '<div style="font-size:13px; font-weight:800; color:#1e293b;">해당 예산 범위의 실거래 아파트가 없습니다.</div>' +
+          '<div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">예산 숫자를 조절해 보세요.</div>' +
+          '</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(function(apt) {
+        var badgeCls = 'm-badge-sale';
+        var benCls = 'm-benefit-sale';
+        var pTxt = '';
+        var benTxt = '';
+
+        if (mCurType === 'sale') {
+          badgeCls = 'm-badge-sale';
+          benCls = 'm-benefit-sale';
+          pTxt = '실거래 ' + mFmt(apt.price);
+          var save = mCalcSavedFee(apt.price, 'sale');
+          benTxt = '<span>중개사 표준 수수료의 절반</span><span class="m-benefit-save">➔ ' + save + '만 원 절약</span>';
+        } else if (mCurType === 'jeonse') {
+          badgeCls = 'm-badge-jeonse';
+          benCls = 'm-benefit-jeonse';
+          pTxt = '전세 ' + mFmt(apt.price);
+          var save2 = mCalcSavedFee(apt.price, 'jeonse');
+          benTxt = '<span>🛡️ HUG 126% 보증보험 안전</span><span class="m-benefit-save">➔ 수수료 ' + save2 + '만 원 절약</span>';
+        } else {
+          badgeCls = 'm-badge-rent';
+          benCls = 'm-benefit-rent';
+          pTxt = '보증금 ' + apt.price.toLocaleString() + '만 / 월 ' + apt.monthly + '만';
+          var save3 = mCalcSavedFee(0, 'rent', apt.price, apt.monthly);
+          benTxt = '<span>🔒 최우선변제 100% 전액보호</span><span class="m-benefit-save">➔ 수수료 ' + save3 + '만 원 절약</span>';
+        }
+
+        return '<div class="m-apt-card">' +
+          '<div class="m-apt-name"><span>' + apt.name + ' (' + apt.spec + ')</span><span class="m-apt-floor">' + apt.floor + '</span></div>' +
+          '<div class="m-price-row"><span class="m-price-badge ' + badgeCls + '">' + pTxt + '</span><span class="m-price-date">' + apt.date + ' 국토부 신고</span></div>' +
+          '<div class="m-benefit-box ' + benCls + '">' + benTxt + '</div>' +
+          '</div>';
+      }).join('');
+    }
+
+    function mShareLink() {
+      var u = location.href;
+      var t = '전남광주통합특별시 안심거래 매칭기';
+      var txt = mCurSido + ' ' + mCurSigungu + ' ' + mCurDong + ' 국토부 실거래 아파트 안심거래 매칭기입니다. 중개사 표준 절반 수수료 혜택도 확인해 보세요.';
+      if (navigator.share) {
+        navigator.share({ title: t, text: txt, url: u }).catch(function() {});
+      } else {
+        navigator.clipboard.writeText(u).then(function() {
+          alert('안심거래 매칭기 주소가 복사되었습니다! 카카오톡이나 밴드에 붙여넣어 보세요: ' + u);
+        }).catch(function() {
+          prompt('주소를 복사하세요:', u);
+        });
+      }
+    }
+
+    // Auto-init
+    setTimeout(function() {
+      mSwitchMode('${type || "sale"}');
+    }, 50);
+  </script>
 </body>
 </html>`);
 
