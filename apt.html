@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   
-  <title>내 예산 맞춤 아파트 국토부 실거래 자동 매칭 | 우리아파트 안심거래</title>
+  <title>안심거래 매칭기 | 우리아파트</title>
   <meta name="description" content="동네와 예산만 넣으면 국토교통부 실거래가를 1초 만에 자동 매칭! 수수료 50% 절약 및 HUG 안심보증금까지 실시간 분석합니다.">
   <link rel="canonical" href="https://www.wooriapt.app/apt">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="[국토부 실거래] 내 예산 맞춤 아파트 자동 매칭 & 수수료 50% 절약">
+  <meta property="og:title" content="[국토부 실거래] 안심거래 매칭기 (수수료 50% 절약)">
   <meta property="og:description" content="예산만 입력하면 살 수 있는 실거래 아파트 단지 즉시 비교! 수수료 절약 견적 및 안심 보증선 실시간 진단.">
   <meta property="og:url" content="https://www.wooriapt.app/apt">
   <meta property="og:image" content="https://www.wooriapt.app/apartment.jpg">
@@ -357,7 +357,7 @@
       <div class="badge-bar">
         📊 국토교통부 실거래가 팩트 연동 | 수수료 50% 절약
       </div>
-      <h1 id="header-title">내 예산 맞춤 아파트 자동 매칭</h1>
+      <h1 id="header-title">안심거래 매칭기</h1>
       <p id="header-desc">지역과 숫자를 입력하면 국토부 실거래 아파트를 실시간으로 찾아드립니다</p>
 
       <!-- 3 Tabs (매매, 전세, 월세) -->
@@ -414,14 +414,13 @@
 
     <!-- Bottom Action (Direct link to wooriapt.app) -->
     
-    <!-- Fast 1-Click Share & Copy -->
-    <div style="padding: 10px 18px 0; background: #ffffff;">
-      <button onclick="shareLink()" style="width:100%; background:#fee500; color:#191919; border:none; border-radius:12px; padding:12px; font-size:14px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 2px 6px rgba(0,0,0,0.06);">
-        <span>💬</span> <span>카카오톡 / 지인에게 이 시세표 1초 공유하기</span>
-      </button>
-    </div>
-    <div class="bottom-action">
-  
+      <div style="padding: 10px 18px 0; background: #ffffff;">
+        <button onclick="shareLink()" style="width:100%; background:#fee500; color:#191919; border:none; border-radius:12px; padding:12px; font-size:14px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <span>💬</span> <span>카카오톡 / 지인에게 이 시세표 1초 공유하기</span>
+        </button>
+      </div>
+      <div class="bottom-action">
+    
       <a href="https://www.wooriapt.app" target="_blank" class="cta-btn">
         [ 우리아파트에서 50% 반값 안심거래 알아보기 &gt; ]
       </a>
@@ -622,21 +621,21 @@
     // Initial run
     switchMode('sale');
   
-    function shareLink() {
-      const url = 'https://www.wooriapt.app/apt';
-      const title = '내 예산 맞춤 아파트 국토부 실거래 자동 매칭기';
-      const text = '동네와 예산만 넣으면 살 수 있는 실거래 아파트가 1초 만에 자동 매칭됩니다! 수수료 50% 절약 혜택도 확인해 보세요.';
-      if (navigator.share) {
-        navigator.share({ title, text, url }).catch(() => {});
-      } else {
-        navigator.clipboard.writeText(url).then(() => {
-          alert('우리동네 아파트 자동 매칭기 링크가 복사되었습니다! 카카오톡이나 밴드에 붙여넣어 보세요: ' + url);
-        }).catch(() => {
-          prompt('아래 링크를 복사하여 공유하세요:', url);
-        });
+      function shareLink() {
+        const url = 'https://www.wooriapt.app/apt';
+        const title = '안심거래 매칭기';
+        const text = '동네와 예산만 넣으면 살 수 있는 실거래 아파트가 1초 만에 자동 매칭됩니다! 수수료 50% 절약 혜택도 확인해 보세요.';
+        if (navigator.share) {
+          navigator.share({ title, text, url }).catch(() => {});
+        } else {
+          navigator.clipboard.writeText(url).then(() => {
+            alert('안심거래 매칭기 링크가 복사되었습니다! 카카오톡이나 밴드에 붙여넣어 보세요: ' + url);
+          }).catch(() => {
+            prompt('아래 링크를 복사하여 공유하세요:', url);
+          });
+        }
       }
-    }
-  </script>
-  
+    </script>
+    
 </body>
 </html>
