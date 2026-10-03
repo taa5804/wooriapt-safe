@@ -2002,6 +2002,30 @@ li a:hover {
 }
 .m-dong-input:focus { border-color: #2563eb; }
 
+.m-search-btn {
+  width: 100%;
+  margin-top: 14px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15.5px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.1s, background 0.2s;
+}
+.m-search-btn:active {
+  transform: scale(0.98);
+  background: #1e40af;
+}
+
+
 </style>
 </head>
 
@@ -2097,6 +2121,10 @@ li a:hover {
 
         <div class="m-preset-row" id="m-preset-container"></div>
       </div>
+
+      <button type="button" class="m-search-btn" id="m-btn-search" onclick="mPerformSearch()">
+        🔍 국토부 실거래 아파트 매칭 검색하기
+      </button>
     </div>
 
     <div class="m-results-header">
@@ -2252,120 +2280,6 @@ li a:hover {
 
 
   <script>
-    const M_APTS_DB = [
-      { dong: '양산동', name: '양산 호반리젠시빌 1차', spec: '24평 / 59㎡', type: 'sale', price: 21000, floor: '11층', date: '2026.09' },
-      { dong: '양산동', name: '양산 GS자이', spec: '24평 / 59㎡', type: 'sale', price: 19500, floor: '15층', date: '2026.09' },
-      { dong: '양산동', name: '양산 일신아파트', spec: '24평 / 59㎡', type: 'sale', price: 18200, floor: '9층', date: '2026.08' },
-      { dong: '양산동', name: '양산 해태아파트', spec: '32평 / 84㎡', type: 'sale', price: 21500, floor: '10층', date: '2026.09' },
-      { dong: '양산동', name: '양산타운', spec: '24평 / 59㎡', type: 'sale', price: 17500, floor: '7층', date: '2026.08' },
-      { dong: '양산동', name: '양산 호반리젠시빌 1차', spec: '34평 / 84㎡', type: 'sale', price: 29800, floor: '14층', date: '2026.09' },
-      { dong: '양산동', name: '양산 GS자이', spec: '34평 / 84㎡', type: 'sale', price: 28500, floor: '12층', date: '2026.09' },
-      { dong: '양산동', name: '양산 진아리히', spec: '34평 / 84㎡', type: 'sale', price: 34000, floor: '16층', date: '2026.09' },
-      { dong: '양산동', name: '일곡대우아파트', spec: '24평 / 59㎡', type: 'sale', price: 22000, floor: '8층', date: '2026.09' },
-
-      { dong: '양산동', name: '양산 GS자이', spec: '24평 / 59㎡', type: 'jeonse', price: 16000, floor: '12층', date: '2026.09' },
-      { dong: '양산동', name: '양산 호반리젠시빌 1차', spec: '24평 / 59㎡', type: 'jeonse', price: 14500, floor: '7층', date: '2026.09' },
-      { dong: '양산동', name: '양산 일신아파트', spec: '24평 / 59㎡', type: 'jeonse', price: 13000, floor: '5층', date: '2026.08' },
-      { dong: '양산동', name: '양산 해태아파트', spec: '24평 / 59㎡', type: 'jeonse', price: 15500, floor: '9층', date: '2026.09' },
-      { dong: '양산동', name: '양산타운', spec: '24평 / 59㎡', type: 'jeonse', price: 12000, floor: '4층', date: '2026.08' },
-      { dong: '양산동', name: '양산 호반리젠시빌 1차', spec: '34평 / 84㎡', type: 'jeonse', price: 21000, floor: '10층', date: '2026.09' },
-      { dong: '양산동', name: '양산 GS자이', spec: '34평 / 84㎡', type: 'jeonse', price: 22500, floor: '14층', date: '2026.09' },
-
-      { dong: '양산동', name: '양산 호반리젠시빌 1차', spec: '24평 / 59㎡', type: 'rent', price: 2000, monthly: 60, floor: '6층', date: '2026.09' },
-      { dong: '양산동', name: '양산 GS자이', spec: '24평 / 59㎡', type: 'rent', price: 2000, monthly: 65, floor: '11층', date: '2026.09' },
-      { dong: '양산동', name: '양산 일신아파트', spec: '24평 / 59㎡', type: 'rent', price: 1000, monthly: 50, floor: '8층', date: '2026.08' },
-      { dong: '양산동', name: '양산 해태아파트', spec: '24평 / 59㎡', type: 'rent', price: 2000, monthly: 55, floor: '10층', date: '2026.09' },
-      { dong: '양산동', name: '양산타운', spec: '24평 / 59㎡', type: 'rent', price: 1000, monthly: 45, floor: '5층', date: '2026.08' },
-      { dong: '양산동', name: '양산 GS자이', spec: '34평 / 84㎡', type: 'rent', price: 3000, monthly: 80, floor: '15층', date: '2026.09' }
-    ];
-
-    let mCurType = '${type || "sale"}';
-    let mCurBudget = mCurType === 'sale' ? 20000 : (mCurType === 'jeonse' ? 15000 : 2000);
-
-    function mSwitchMode(t) {
-      mCurType = t;
-      const hb = document.getElementById('m-header-box');
-      if (hb) hb.className = 'm-top-header' + (t === 'jeonse' ? ' theme-jeonse' : (t === 'rent' ? ' theme-rent' : ''));
-      ['sale', 'jeonse', 'rent'].forEach(x => {
-        const btn = document.getElementById('m-tab-' + x);
-        if (btn) btn.classList.toggle('active', x === t);
-      });
-      const lbl = document.getElementById('m-budget-label-txt');
-      if (lbl) {
-        if (t === 'sale') { lbl.textContent = '희망 매매 예산'; mCurBudget = 20000; }
-        else if (t === 'jeonse') { lbl.textContent = '희망 전세 보증금'; mCurBudget = 15000; }
-        else { lbl.textContent = '희망 월세 보증금'; mCurBudget = 2000; }
-      }
-      const numInput = document.getElementById('m-target-budget-num');
-      if (numInput) numInput.value = mCurBudget;
-      mUpdateKorean();
-      mRenderPresets();
-      mRenderList();
-    }
-
-    function mHandleDongChange() {
-      const v = (document.getElementById('m-target-dong').value || '').trim() || '${aptHtml(place)}';
-      const sub = document.getElementById('m-dong-sublabel');
-      if (sub) sub.textContent = v;
-      mRenderList();
-    }
-
-    function mHandleBudgetNumChange() {
-      mCurBudget = parseFloat(document.getElementById('m-target-budget-num').value) || 0;
-      mUpdateKorean();
-      mRenderPresets();
-      mRenderList();
-    }
-
-    function mUpdateKorean() {
-      const el = document.getElementById('m-budget-korean-txt');
-      if (el) el.textContent = mFmt(mCurBudget);
-    }
-
-    function mSelectPreset(val) {
-      mCurBudget = val;
-      const numInput = document.getElementById('m-target-budget-num');
-      if (numInput) numInput.value = val;
-      mUpdateKorean();
-      mRenderPresets();
-      mRenderList();
-    }
-
-    function mRenderPresets() {
-      const box = document.getElementById('m-preset-container');
-      if (!box) return;
-      let presets = [];
-      if (mCurType === 'sale') presets = [15000, 20000, 25000, 30000, 40000];
-      else if (mCurType === 'jeonse') presets = [10000, 15000, 20000, 25000];
-      else presets = [1000, 2000, 3000, 5000];
-
-      box.innerHTML = presets.map(function(p) {
-        return '<button class="m-preset-btn ' + (p === mCurBudget ? 'active' : '') + '" onclick="mSelectPreset(' + p + ')">' + mFmt(p) + '</button>';
-      }).join('');
-    }
-
-    function mShareLink() {
-      const u = location.href;
-      const t = '안심거래 매칭기';
-      const txt = '${aptHtml(place)} 국토부 실거래 아파트 안심거래 매칭기입니다. 수수료 50% 절약 견적도 확인해 보세요.';
-      if (navigator.share) {
-        navigator.share({ title: t, text: txt, url: u }).catch(() => {});
-      } else {
-        navigator.clipboard.writeText(u).then(() => {
-          alert('안심거래 매칭기 주소가 복사되었습니다! 카카오톡이나 밴드에 붙여넣어 보세요: ' + u);
-        }).catch(() => {
-          prompt('주소를 복사하세요:', u);
-        });
-      }
-    }
-
-    // Auto-init
-    setTimeout(function() {
-      mSwitchMode('${type || "sale"}');
-    }, 50);
-  </script>
-  
-<script>
     const M_REGIONS = {"전남광주통합특별시":["북구","광산구","서구","남구","동구","순천시","여수시","목포시","나주시","광양시","담양군","화순군"],"서울특별시":["강남구","서초구","송파구","강동구","마포구","용산구","성동구","영등포구","노원구","강북구"],"경기도":["수원시","성남시","용인시","고양시","화성시","오산시","평택시","안양시","부천시","남양주시"],"인천광역시":["연수구","남동구","서구","부평구","미추홀구","중구"],"부산광역시":["해운대구","수영구","부산진구","동래구","남구","북구","사하구"],"대구광역시":["수성구","달서구","중구","동구","북구"],"대전광역시":["유성구","서구","중구","동구","대덕구"],"세종특별자치시":["세종시"]};
     const M_APTS_DB = [{"gu":"북구","dong":"양산동","name":"양산 호반리젠시빌 1차","spec":"24평 / 59㎡","type":"sale","price":21000,"floor":"11층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 GS자이","spec":"24평 / 59㎡","type":"sale","price":19500,"floor":"15층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 일신아파트","spec":"24평 / 59㎡","type":"sale","price":18200,"floor":"9층","date":"2026.08"},{"gu":"북구","dong":"양산동","name":"양산 해태아파트","spec":"32평 / 84㎡","type":"sale","price":21500,"floor":"10층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산타운","spec":"24평 / 59㎡","type":"sale","price":17500,"floor":"7층","date":"2026.08"},{"gu":"북구","dong":"양산동","name":"양산 호반리젠시빌 1차","spec":"34평 / 84㎡","type":"sale","price":29800,"floor":"14층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 GS자이","spec":"34평 / 84㎡","type":"sale","price":28500,"floor":"12층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 GS자이","spec":"24평 / 59㎡","type":"jeonse","price":16000,"floor":"12층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 호반리젠시빌 1차","spec":"24평 / 59㎡","type":"jeonse","price":14500,"floor":"7층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 GS자이","spec":"24평 / 59㎡","type":"rent","price":2000,"monthly":65,"floor":"11층","date":"2026.09"},{"gu":"북구","dong":"양산동","name":"양산 호반리젠시빌 1차","spec":"24평 / 59㎡","type":"rent","price":2000,"monthly":60,"floor":"6층","date":"2026.09"},{"gu":"광산구","dong":"수완동","name":"수완지구 우미린 1차","spec":"34평 / 84㎡","type":"sale","price":42000,"floor":"12층","date":"2026.09"},{"gu":"광산구","dong":"수완동","name":"수완 대방노블랜드 2차","spec":"34평 / 84㎡","type":"sale","price":46000,"floor":"15층","date":"2026.09"},{"gu":"광산구","dong":"수완동","name":"수완 호반베르디움 1차","spec":"33평 / 84㎡","type":"sale","price":39500,"floor":"8층","date":"2026.09"},{"gu":"광산구","dong":"수완동","name":"수완지구 아름마을 우미린","spec":"34평 / 84㎡","type":"jeonse","price":28000,"floor":"10층","date":"2026.09"},{"gu":"광산구","dong":"수완동","name":"수완 대방노블랜드","spec":"34평 / 84㎡","type":"rent","price":3000,"monthly":90,"floor":"9층","date":"2026.09"},{"gu":"서구","dong":"치평동","name":"상무 현대아파트","spec":"32평 / 84㎡","type":"sale","price":31000,"floor":"14층","date":"2026.09"},{"gu":"서구","dong":"치평동","name":"상무 금호타운 3차","spec":"24평 / 59㎡","type":"sale","price":23500,"floor":"11층","date":"2026.09"},{"gu":"서구","dong":"치평동","name":"상무 중흥S클래스","spec":"34평 / 84㎡","type":"sale","price":38000,"floor":"16층","date":"2026.09"},{"gu":"서구","dong":"치평동","name":"상무 현대아파트","spec":"32평 / 84㎡","type":"jeonse","price":21000,"floor":"7층","date":"2026.09"},{"gu":"서구","dong":"치평동","name":"상무 금호타운","spec":"24평 / 59㎡","type":"rent","price":2000,"monthly":70,"floor":"8층","date":"2026.09"},{"gu":"남구","dong":"봉선동","name":"봉선 포스코더샵","spec":"34평 / 84㎡","type":"sale","price":65000,"floor":"15층","date":"2026.09"},{"gu":"남구","dong":"봉선동","name":"봉선 한국아델리움 1차","spec":"43평 / 115㎡","type":"sale","price":82000,"floor":"12층","date":"2026.09"},{"gu":"남구","dong":"봉선동","name":"봉선 라인하이츠","spec":"24평 / 59㎡","type":"sale","price":22000,"floor":"8층","date":"2026.09"},{"gu":"남구","dong":"봉선동","name":"봉선 포스코더샵","spec":"34평 / 84㎡","type":"jeonse","price":41000,"floor":"10층","date":"2026.09"},{"gu":"남구","dong":"봉선동","name":"봉선 삼익아파트","spec":"32평 / 84㎡","type":"rent","price":3000,"monthly":85,"floor":"12층","date":"2026.09"},{"gu":"동구","dong":"학동","name":"무등산 아이파크","spec":"34평 / 84㎡","type":"sale","price":54000,"floor":"18층","date":"2026.09"},{"gu":"동구","dong":"학동","name":"학동 평화맨션","spec":"24평 / 59㎡","type":"sale","price":16000,"floor":"5층","date":"2026.08"}];
 
@@ -2642,6 +2556,13 @@ li a:hover {
           '<div class="m-benefit-box ' + benCls + '">' + benTxt + '</div>' +
           '</div>';
       }).join('');
+    }
+
+    
+    function mPerformSearch() {
+      mRenderList();
+      var el = document.getElementById('m-results-summary');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     function mShareLink() {
