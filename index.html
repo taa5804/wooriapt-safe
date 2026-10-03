@@ -3054,55 +3054,45 @@ let deferredPrompt = null;
 
 
 /* 앱 설치 */
-
 window.addEventListener(
   "beforeinstallprompt",
   e => {
-
     e.preventDefault();
     deferredPrompt = e;
-
   }
 );
 
-
-document
-.getElementById("installBtn")
-.addEventListener(
-  "click",
-  async () => {
-
-    if(deferredPrompt){
-
+async function handleAppInstallClick() {
+  if (deferredPrompt) {
+    try {
       deferredPrompt.prompt();
-
-      await deferredPrompt.userChoice;
-
-      deferredPrompt = null;
-
-      return;
+      const choice = await deferredPrompt.userChoice;
+      if (choice && choice.outcome === "accepted") {
+        deferredPrompt = null;
+        return;
+      }
+    } catch(err) {
+      console.warn("Install prompt error:", err);
     }
-
-    if(
-      /iphone|ipad|ipod/i.test(
-        navigator.userAgent
-      )
-    ){
-
-      alert(
-        "Safari의 공유 버튼을 누른 뒤 ‘홈 화면에 추가’를 선택해 주세요."
-      );
-
-    }else{
-
-      alert(
-        "브라우저 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택해 주세요."
-      );
-
-    }
-
   }
-);
+  // Native prompt not ready, iOS Safari, or in-app browser -> guided 1-touch install page
+  location.href = "/app-install";
+}
+
+const installBtn = document.getElementById("installBtn");
+if (installBtn) {
+  installBtn.addEventListener("click", handleAppInstallClick);
+}
+
+const installWrap = document.querySelector(".install-wrap");
+if (installWrap) {
+  installWrap.style.cursor = "pointer";
+  installWrap.addEventListener("click", (e) => {
+    if (e.target !== installBtn && !installBtn.contains(e.target)) {
+      handleAppInstallClick();
+    }
+  });
+}
 
 
 /* 햄버거 메뉴 */
