@@ -62,17 +62,43 @@ module.exports = async function handler(req, res) {
 
     let sitemapItems = "";
 
+    // 1. 주요 서비스 랜딩페이지 (메인 안심거래, 공인중개사 랜딩, 마트 랜딩, 지도)
+    sitemapItems +=
+      "<sitemap><loc>" +
+      SITE_ORIGIN +
+      "/pages-sitemap.xml</loc></sitemap>";
+
+    // 2. 안심거래 아파트 자동검색 (총 21,437건 분할)
     for (
       let page = 1;
       page <= pages;
       page += 1
     ) {
-
       sitemapItems +=
         "<sitemap><loc>" +
         SITE_ORIGIN +
         "/sitemaps/apartments-" +
         page +
+        ".xml</loc></sitemap>";
+    }
+
+    // 3. 공인중개사 자동검색
+    sitemapItems +=
+      "<sitemap><loc>" +
+      SITE_ORIGIN +
+      "/broker-sitemap.xml</loc></sitemap>";
+
+    // 4. 마트 자동검색 (총 6개 분할)
+    for (
+      let m = 1;
+      m <= 6;
+      m += 1
+    ) {
+      sitemapItems +=
+        "<sitemap><loc>" +
+        SITE_ORIGIN +
+        "/sitemaps/marts-" +
+        m +
         ".xml</loc></sitemap>";
     }
 

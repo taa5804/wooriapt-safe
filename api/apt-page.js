@@ -2091,59 +2091,31 @@ async function handleBrokerPage(
   }
 
 
-  const query =
-    new URLSearchParams();
-
-
-  query.set(
-    "select",
-    "*"
-  );
-
-
-  if (region) {
-    query.set(
-      "시도",
-      "eq." + region
-    );
+  function buildBrokerQuery(rCol, cCol, pCol) {
+    const q = new URLSearchParams();
+    q.set("select", "*");
+    if (region) {
+      q.set(rCol, "eq." + region);
+    }
+    if (city) {
+      q.set(cCol, "eq." + city);
+    }
+    if (place) {
+      q.set(pCol, "eq." + place);
+    }
+    if (broker) {
+      q.set("상호명", "eq." + broker);
+    }
+    return q.toString();
   }
-
-
-  if (city) {
-    query.set(
-      "시군구",
-      "eq." + city
-    );
-  }
-
-
-  if (place) {
-    query.set(
-      "동리",
-      "eq." + place
-    );
-  }
-
-
-  if (broker) {
-    query.set(
-      "상호명",
-      "eq." + broker
-    );
-  }
-
-
-  const apiUrl =
-    SUPABASE_URL +
-    "/rest/v1/agent_directory?" +
-    query.toString();
-
 
   try {
 
-    const response =
+    let response =
       await fetch(
-        apiUrl,
+        SUPABASE_URL +
+          "/rest/v1/agent_directory?" +
+          buildBrokerQuery("지역명", "시군구", "동"),
         {
           method:
             "GET",
@@ -2164,6 +2136,38 @@ async function handleBrokerPage(
           }
         }
       );
+
+    if (!response.ok && response.status === 400) {
+      const fallbackRes =
+        await fetch(
+          SUPABASE_URL +
+            "/rest/v1/agent_directory?" +
+            buildBrokerQuery("시도", "시군구", "동리"),
+          {
+            method:
+              "GET",
+
+            headers: {
+              apikey:
+                SUPABASE_KEY,
+
+              Authorization:
+                "Bearer " +
+                SUPABASE_KEY,
+
+              Accept:
+                "application/json",
+
+              Range:
+                "0-999"
+            }
+          }
+        );
+
+      if (fallbackRes.ok) {
+        response = fallbackRes;
+      }
+    }
 
 
     if (!response.ok) {
