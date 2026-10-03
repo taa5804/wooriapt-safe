@@ -474,6 +474,14 @@ select:focus{
 
 </div>
 
+<div style="margin:16px 0 24px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:15px 18px; font-size:14px; color:#1e40af; line-height:1.65;">
+  <div style="font-weight:800; font-size:15px; margin-bottom:5px; display:flex; align-items:center; gap:6px;">
+    <span>💳</span> <span>공인중개사 월 회원비 안내</span>
+  </div>
+  • <strong>월 이용료</strong>: <strong>30,000원</strong> (VAT 별도 / 실결제 33,000원)<br>
+  • <strong>전자세금계산서 100% 발행</strong>: 가입 시 입력하신 사업자번호로 전자세금계산서가 발행되어 <strong>부가세 3,000원은 매입세액으로 100% 공제(환급)</strong>되며 전액 비용 인정됩니다.
+</div>
+
 
 <form id="signupForm" novalidate>
 
@@ -723,16 +731,27 @@ select:focus{
     아래 계좌로 월 회원비를 입금해 주세요.
   </p>
 
-  <div class="payment-amount">
+  <div class="payment-bill" style="background:#fff; border:1px solid #dce9f5; border-radius:14px; padding:18px 20px; margin:16px 0; box-shadow:0 2px 8px rgba(37,99,235,0.06);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:14px; color:#475569;">
+      <span>월 이용료 (공급가액)</span>
+      <strong id="baseMonthlyFee" style="color:#1e293b; font-size:16px;">30,000원</strong>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:14px; color:#64748b;">
+      <span>부가가치세 (VAT 10%)</span>
+      <span id="vatMonthlyFee" style="color:#64748b; font-weight:600;">3,000원</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; padding-top:12px; border-top:1px dashed #cbd5e1;">
+      <span style="font-weight:800; font-size:15px; color:#0f172a;">실제 입금하실 금액</span>
+      <strong id="monthlyFee" style="color:#1d4ed8; font-size:22px; font-weight:900;">33,000원</strong>
+    </div>
+  </div>
 
-    <span>
-      월 회원비
-    </span>
-
-    <strong id="monthlyFee">
-      30,000원
-    </strong>
-
+  <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; margin-bottom:16px; font-size:13px; line-height:1.65; color:#334155;">
+    <div style="font-weight:800; color:#1e40af; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+      <span>🧾</span> <span>전자세금계산서 100% 자동 발행 안내</span>
+    </div>
+    • 가입 시 제출하신 사업자등록증 정보로 <strong>월 33,000원(공급가 30,000원 + VAT 3,000원)에 대한 전자세금계산서가 발행</strong>됩니다.<br>
+    • 부가세 3,000원은 부가가치세 확정신고 시 <strong>매입세액으로 전액 공제(환급)</strong>되어 실제 순부담 비용은 30,000원입니다.
   </div>
 
 
@@ -1051,10 +1070,17 @@ async function loadPaymentSettings(){
       rows[0];
 
 
-    monthlyFee.textContent =
-      won(
-        settings.broker_monthly_fee || 30000
-      );
+    const baseFee = Number(settings.broker_monthly_fee) || 30000;
+    const vatFee = Math.floor(baseFee * 0.1);
+    const totalFee = baseFee + vatFee;
+
+    const baseEl = document.getElementById("baseMonthlyFee");
+    if (baseEl) baseEl.textContent = won(baseFee);
+
+    const vatEl = document.getElementById("vatMonthlyFee");
+    if (vatEl) vatEl.textContent = won(vatFee);
+
+    monthlyFee.textContent = won(totalFee);
 
 
     bankName.textContent =
