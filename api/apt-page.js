@@ -1607,6 +1607,8 @@ async function aptHandleApartmentPage(
   rel="canonical"
   href="${aptHtml(canonical)}"
 >
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#1165d7">
 
 <style>
 * {
@@ -2051,6 +2053,15 @@ li a:hover {
   <!-- 안심거래 매칭기 (1단계 완전 제거 통합) -->
   <div class="matcher-container">
     <div class="m-top-header" id="m-header-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; width:100%;">
+        <a href="/" style="text-decoration:none; display:inline-flex; align-items:center; gap:5px; color:#ffffff; font-weight:800; font-size:13.5px; opacity:0.95;">
+          <span style="font-size:16px;">🏠</span> 우리아파트 홈
+        </a>
+        <div id="mInstallBtn" style="display:inline-flex; align-items:center; gap:6px; cursor:pointer; background:rgba(255,255,255,0.2); border:1.5px solid rgba(255,255,255,0.4); padding:6px 14px; border-radius:20px; transition:all 0.2s;" title="스마트폰 홈화면에 앱 설치">
+          <span style="font-size:15px; line-height:1;">📲</span>
+          <span style="font-size:12.5px; font-weight:800; color:#ffffff;">앱설치</span>
+        </div>
+      </div>
       <div class="m-badge-bar">
         📊 국토교통부 실거래가 팩트 연동 | 중개사 표준의 절반 수수료
       </div>
@@ -2639,6 +2650,37 @@ li a:hover {
   }
 
   setTimeout(mInit, 10);
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    });
+  }
+
+  let mDeferredPrompt = null;
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    mDeferredPrompt = e;
+  });
+
+  const mInstallBtn = document.getElementById("mInstallBtn");
+  if (mInstallBtn) {
+    mInstallBtn.addEventListener("click", async () => {
+      if (mDeferredPrompt) {
+        try {
+          mDeferredPrompt.prompt();
+          const choice = await mDeferredPrompt.userChoice;
+          if (choice && choice.outcome === "accepted") {
+            mDeferredPrompt = null;
+            return;
+          }
+        } catch (err) {
+          console.warn("Install prompt error:", err);
+        }
+      }
+      location.href = "/app-install";
+    });
+  }
 </script>
 </body>
 </html>`);
