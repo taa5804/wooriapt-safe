@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/apt",
+      "destination": "/apt.html"
+    },
+    {
+      "source": "/match",
+      "destination": "/apt.html"
+    },
+    {
       "source": "/apt-search/:region/:city/:place/:apartment/:type",
       "destination": "/api/apt-page?region=:region&city=:city&place=:place&apartment=:apartment&type=:type"
     },
