@@ -6,6 +6,8 @@
   <title>우리가게 마트 팩트 경영 계산기 | 포스(POS) 우회 디지털 전환</title>
   <meta name="description" content="포스(POS) 기계 교체 없이 대행사 문자비 1,512만 원 절감! 자동차 QR 신규고객 유치 및 분양사 연동 매출 상승 계산기.">
   <link rel="canonical" href="https://www.wooriapt.app/mart">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#1165d7">
   <meta property="og:type" content="website">
   <meta property="og:title" content="[마트 사장님 필수] 우리가게 마트 팩트 경영 계산기">
   <meta property="og:description" content="기존 포스 고객 5,000명 기준 연간 1,512만 원 순이익 절감 확정! 지금 바로 우리 마트 비용을 실시간 비교해보세요.">
@@ -362,6 +364,17 @@
 <body>
 
   <div class="container">
+    <!-- Top Action Bar -->
+    <div style="display:flex; justify-content:space-between; align-items:center; padding: 2px 4px 6px;">
+      <a href="/" style="text-decoration:none; display:inline-flex; align-items:center; gap:5px; color:#334155; font-weight:800; font-size:13.5px;">
+        <span style="font-size:16px;">🏠</span> 우리아파트 홈
+      </a>
+      <div id="martInstallBtn" style="display:inline-flex; align-items:center; gap:6px; cursor:pointer; background:#eff6ff; border:1.5px solid #93c5fd; padding:6px 14px; border-radius:20px; transition:all 0.2s;" title="스마트폰 홈화면에 앱 설치">
+        <span style="font-size:15px; line-height:1;">📲</span>
+        <span style="font-size:12.5px; font-weight:800; color:#1d4ed8;">앱설치</span>
+      </div>
+    </div>
+
     <!-- Top Badge -->
     <div class="badge-bar">
       ✨ 대행사 문자비 거품 제거 | 포스(POS) 기계 교체 NO
@@ -614,6 +627,37 @@
 
     // Initial run
     recalculate();
-  </script>
+    // Service Worker & PWA Install
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    });
+  }
+
+  let martDeferredPrompt = null;
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    martDeferredPrompt = e;
+  });
+
+  const martInstallBtn = document.getElementById("martInstallBtn");
+  if (martInstallBtn) {
+    martInstallBtn.addEventListener("click", async () => {
+      if (martDeferredPrompt) {
+        try {
+          martDeferredPrompt.prompt();
+          const choice = await martDeferredPrompt.userChoice;
+          if (choice && choice.outcome === "accepted") {
+            martDeferredPrompt = null;
+            return;
+          }
+        } catch (err) {
+          console.warn("Install prompt error:", err);
+        }
+      }
+      location.href = "/app-install";
+    });
+  }
+</script>
 </body>
 </html>
