@@ -41,6 +41,30 @@
     .select-box:focus { border-color: #2563eb; }
     .dong-input-box { width: 100%; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 9px 10px; font-size: 13.5px; font-weight: 800; color: #0f172a; outline: none; }
     .dong-input-box:focus { border-color: #2563eb; }
+
+    .search-btn {
+      width: 100%;
+      margin-top: 14px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15.5px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.1s, background 0.2s;
+    }
+    .search-btn:active {
+      transform: scale(0.98);
+      background: #1e40af;
+    }
+
     .input-wrapper { position: relative; display: flex; align-items: center; }
     .budget-input-box { width: 100%; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 10px 12px; font-size: 15px; font-weight: 800; color: #0f172a; outline: none; }
     .budget-input-box:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15); }
@@ -150,6 +174,10 @@
 
         <div class="preset-row" id="preset-container"></div>
       </div>
+
+      <button type="button" class="search-btn" id="btn-search" onclick="performSearch()">
+        🔍 국토부 실거래 아파트 매칭 검색하기
+      </button>
     </div>
 
     <div class="results-header">
@@ -435,6 +463,13 @@
           '<div class="benefit-box ' + benefitClass + '">' + benefitText + '</div>' +
           '</div>';
       }).join('');
+    }
+
+    
+    function performSearch() {
+      renderAptList();
+      const el = document.getElementById('results-summary');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     function shareLink() {
