@@ -6,6 +6,8 @@
   <title>전남광주통합특별시 안심거래 매칭기 | 우리아파트</title>
   <meta name="description" content="전남광주통합특별시 국토교통부 실거래가를 1초 만에 자동 매칭! 중개사 표준요율의 절반(50% 절약) 및 HUG 안심보증금까지 실시간 분석합니다.">
   <link rel="canonical" href="https://www.wooriapt.app/apt">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#1165d7">
   <meta property="og:type" content="website">
   <meta property="og:title" content="[국토부 실거래] 전남광주통합특별시 안심거래 매칭기 (수수료 50% 절약)">
   <meta property="og:description" content="시·구·동 자유 선택! 매매·전세 및 월세(보증금+월세) 실거래 비교 & 중개사 표준의 절반 수수료 혜택.">
@@ -102,6 +104,15 @@
 <body>
   <div class="container">
     <div class="top-header" id="header-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; width:100%;">
+        <a href="/" style="text-decoration:none; display:inline-flex; align-items:center; gap:5px; color:#334155; font-weight:800; font-size:13.5px;">
+          <span style="font-size:16px;">🏠</span> 우리아파트 홈
+        </a>
+        <div id="aptInstallBtn" style="display:inline-flex; align-items:center; gap:6px; cursor:pointer; background:#eff6ff; border:1.5px solid #93c5fd; padding:6px 14px; border-radius:20px; transition:all 0.2s;" title="스마트폰 홈화면에 앱 설치">
+          <span style="font-size:15px; line-height:1;">📲</span>
+          <span style="font-size:12.5px; font-weight:800; color:#1d4ed8;">앱설치</span>
+        </div>
+      </div>
       <div class="badge-bar">📊 국토교통부 실거래가 팩트 연동 | 중개사 표준의 절반 수수료</div>
       <h1 id="header-title">전남광주통합특별시 안심거래 매칭기</h1>
       <p id="header-desc">원하는 시·구·동을 자유롭게 선택하고 실거래가를 비교하세요</p>
@@ -558,6 +569,37 @@
   }
 
   setTimeout(init, 10);
+  // Service Worker & PWA Install
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    });
+  }
+
+  let aptDeferredPrompt = null;
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    aptDeferredPrompt = e;
+  });
+
+  const aptInstallBtn = document.getElementById("aptInstallBtn");
+  if (aptInstallBtn) {
+    aptInstallBtn.addEventListener("click", async () => {
+      if (aptDeferredPrompt) {
+        try {
+          aptDeferredPrompt.prompt();
+          const choice = await aptDeferredPrompt.userChoice;
+          if (choice && choice.outcome === "accepted") {
+            aptDeferredPrompt = null;
+            return;
+          }
+        } catch (err) {
+          console.warn("Install prompt error:", err);
+        }
+      }
+      location.href = "/app-install";
+    });
+  }
 </script>
 </body>
 </html>
