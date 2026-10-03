@@ -1995,8 +1995,8 @@ li a:hover {
       <div class="m-badge-bar">
         📊 국토교통부 실거래가 팩트 연동 | 수수료 50% 절약
       </div>
-      <h1 id="m-header-title">안심거래 매칭기</h1>
-      <p id="m-header-desc">${aptHtml(place)} 예산에 맞는 국토부 실거래 아파트를 실시간으로 찾아드립니다</p>
+      <h1 id="m-header-title">전남광주통합특별시 ${aptHtml(city || "북구")} ${aptHtml(place)} - 안심거래 매칭기</h1>
+      <p id="m-header-desc">전남광주통합특별시 ${aptHtml(city || "북구")} ${aptHtml(place)} 예산에 맞는 국토부 실거래 아파트를 찾아드립니다</p>
 
       <div class="m-tab-bar">
         <button class="m-tab-btn" id="m-tab-sale" onclick="mSwitchMode('sale')">🏠 매매</button>
@@ -2009,7 +2009,7 @@ li a:hover {
       <div class="m-field-group">
         <div class="m-field-header">
           <label class="m-field-label" for="m-target-dong">희망 지역 (동 직접 입력)</label>
-          <span class="m-field-sublabel" id="m-dong-sublabel">${aptHtml(place)}</span>
+          <span class="m-field-sublabel" id="m-dong-sublabel">전남광주통합특별시 ${aptHtml(city || "북구")} ${aptHtml(place)}</span>
         </div>
         <div class="m-input-wrapper">
           <input type="text" id="m-target-dong" class="m-input-box" value="${aptHtml(place)}" placeholder="동 이름을 입력하세요" oninput="mHandleDongChange()">
