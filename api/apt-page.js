@@ -1970,6 +1970,38 @@ li a:hover {
 }
 .m-footer-note { text-align: center; font-size: 11px; color: #94a3b8; margin-top: 6px; }
 
+
+.m-region-select-row {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1fr;
+  gap: 6px;
+}
+.m-select-box {
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 9px 8px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  outline: none;
+  cursor: pointer;
+}
+.m-select-box:focus { border-color: #2563eb; }
+.m-dong-input {
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 9px 10px;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0f172a;
+  outline: none;
+}
+.m-dong-input:focus { border-color: #2563eb; }
+
 </style>
 </head>
 
@@ -1995,8 +2027,8 @@ li a:hover {
       <div class="m-badge-bar">
         📊 국토교통부 실거래가 팩트 연동 | 수수료 50% 절약
       </div>
-      <h1 id="m-header-title">전남광주통합특별시 ${aptHtml(city || "북구")} ${aptHtml(place)} - 안심거래 매칭기</h1>
-      <p id="m-header-desc">전남광주통합특별시 ${aptHtml(city || "북구")} ${aptHtml(place)} 예산에 맞는 국토부 실거래 아파트를 찾아드립니다</p>
+      <h1 id="m-header-title">전남광주통합특별시 ${aptHtml(city || "북구")} - 안심거래 매칭기</h1>
+      <p id="m-header-desc">시·구·동을 자유롭게 선택하고 국토부 실거래 아파트를 실시간으로 비교하세요</p>
 
       <div class="m-tab-bar">
         <button class="m-tab-btn" id="m-tab-sale" onclick="mSwitchMode('sale')">🏠 매매</button>
@@ -2006,13 +2038,16 @@ li a:hover {
     </div>
 
     <div class="m-filter-area">
+      <!-- 3-Tier Selectable Row -->
       <div class="m-field-group">
         <div class="m-field-header">
-          <label class="m-field-label" for="m-target-dong">희망 지역 (동 직접 입력)</label>
-          <span class="m-field-sublabel" id="m-dong-sublabel">전남광주통합특별시 ${aptHtml(city || "북구")} ${aptHtml(place)}</span>
+          <label class="m-field-label">희망 지역 (시·구·동 자유 선택)</label>
+          <span class="m-field-sublabel" id="m-region-display-txt">전남광주통합특별시 ${aptHtml(city || "북구")} ${aptHtml(place)}</span>
         </div>
-        <div class="m-input-wrapper">
-          <input type="text" id="m-target-dong" class="m-input-box" value="${aptHtml(place)}" placeholder="동 이름을 입력하세요" oninput="mHandleDongChange()">
+        <div class="m-region-select-row">
+          <select id="m-sel-sido" class="m-select-box" onchange="mHandleSidoChange()"></select>
+          <select id="m-sel-sigungu" class="m-select-box" onchange="mHandleSigunguChange()"></select>
+          <input type="text" id="m-target-dong" class="m-dong-input" value="${aptHtml(place)}" placeholder="동 입력/선택" oninput="mHandleDongChange()">
         </div>
       </div>
 
@@ -2030,7 +2065,7 @@ li a:hover {
     </div>
 
     <div class="m-results-header">
-      <div class="m-results-title" id="m-results-summary">🔍 ${aptHtml(place)} 실거래 매물</div>
+      <div class="m-results-title" id="m-results-summary">🔍 전남광주통합특별시 ${aptHtml(city || "북구")} ${aptHtml(place)} 실거래 매물</div>
       <div class="m-results-count" id="m-results-count">5개 단지 발견</div>
     </div>
 
@@ -2049,8 +2084,7 @@ li a:hover {
       <div class="m-footer-note">* 국토교통부 실거래가 공공데이터 기준 (자동 서브밋 없이 즉시 조회)</div>
     </div>
   </div>
-  
-
+  <!-- /안심거래 매칭기 -->
 
   <section class="card">
 
