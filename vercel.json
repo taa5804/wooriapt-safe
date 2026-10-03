@@ -121,5 +121,6 @@
       "path": "/api/sitemap",
       "schedule": "0 0 * * *"
     }
-  ]
+  ],
+  "cleanUrls": true
 }
