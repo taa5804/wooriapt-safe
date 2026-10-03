@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/mart",
+      "destination": "/mart.html"
+    },
+    {
+      "source": "/mart-calculator",
+      "destination": "/mart.html"
+    },
+    {
       "source": "/apt",
       "destination": "/apt.html"
     },
