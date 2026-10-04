@@ -109,10 +109,15 @@ export default async function handler(req, res) {
   }
 
 
-  function selectNonMembers(
+  /*
+    비회원 중개사 선별 헬퍼 (대표님 지정 룰):
+    1순위: 휴대폰 번호(010)를 가진 비회원 우선 배정
+    2순위: 10개(필요수량)에 미달하면 일반 유선전화(062, 02 등)를 채워 맞춤
+  */
+  function pickTenNonMembers(
     nonMembers,
     alreadySentPhones,
-    count
+    countNeeded = 10
   ) {
 
     const sent =
@@ -124,72 +129,90 @@ export default async function handler(req, res) {
 
 
     const eligible =
-      nonMembers
-
-        .filter(
-          item => {
-
-            const phone =
-              normalizePhone(
-                item.phone
-              );
-
-
-            return (
-              phone &&
-              !sent.has(phone) &&
-              item.receive_blocked !== true
-            );
-          }
+      (
+        Array.isArray(
+          nonMembers
         )
+          ? nonMembers
+          : []
+      )
+      .filter(
+        item => {
 
-        .sort(
-          (a, b) => {
-
-            const aDate =
-              new Date(
-                a.phone_registered_at ||
-                a.created_at ||
-                0
-              ).getTime();
-
-
-            const bDate =
-              new Date(
-                b.phone_registered_at ||
-                b.created_at ||
-                0
-              ).getTime();
-
-
-            return (
-              aDate -
-              bDate
+          const phone =
+            normalizePhone(
+              item.phone
             );
-          }
-        );
 
 
-    const candidateSize =
-      Math.min(
-        eligible.length,
-        Math.max(
-          count * 3,
-          count
+          return (
+            phone &&
+            !sent.has(phone) &&
+            item.receive_blocked !== true
+          );
+        }
+      );
+
+
+    // 1) 휴대폰 번호 보유 비회원
+    const mobiles =
+      shuffle(
+        eligible.filter(
+          item =>
+            isMobilePhone(
+              item.phone
+            )
         )
       );
 
 
-    return shuffle(
-      eligible.slice(
-        0,
-        candidateSize
-      )
-    )
-    .slice(
-      0,
-      count
-    );
+    // 2) 일반 유선전화 보유 비회원
+    const landlines =
+      shuffle(
+        eligible.filter(
+          item =>
+            !isMobilePhone(
+              item.phone
+            )
+        )
+      );
+
+
+    const picked = [];
+
+
+    // 먼저 휴대폰 번호 우선 추가
+    for (const m of mobiles) {
+
+      if (
+        picked.length >= countNeeded
+      ) {
+        break;
+      }
+
+      picked.push(m);
+    }
+
+
+    // 휴대폰 번호가 부족하면 일반 유선전화로 countNeeded(10개)까지 채움
+    if (
+      picked.length < countNeeded
+    ) {
+
+      for (const l of landlines) {
+
+        if (
+          picked.length >= countNeeded
+        ) {
+          break;
+        }
+
+        picked.push(l);
+      }
+    }
+
+
+    return picked;
   }
 
 
@@ -674,6 +697,9 @@ export default async function handler(req, res) {
   }
 
 
+  /*
+    기존 LMS 문자 발송 문구 (100% 보존 - 변경 금지)
+  */
   function buildLmsContent(
     request
   ) {
@@ -831,6 +857,9 @@ export default async function handler(req, res) {
   }
 
 
+  /*
+    기존 ClawOps ARS 음성전화 배치 (100% 보존 - 변경 금지)
+  */
   async function createClawOpsBatch(
     brokers,
     request
@@ -1023,8 +1052,7 @@ export default async function handler(req, res) {
 
 
     /*
-      같은 차수 재실행 방지
-      순서대로만 실행
+      같은 차수 재실행 방지 및 순서 확인
     */
 
     if (
@@ -1050,6 +1078,46 @@ export default async function handler(req, res) {
         message:
           "이전 요청이 완료된 후 실행해 주세요."
       });
+    }
+
+
+    /*
+      [대표님 핵심 지시 룰 1: 서로 다른 물건 3개 이상 확인]
+      2차 및 3차 발송 시, 접수된 '서로 다른 물건'이 이미 3개 이상이면
+      더 이상 문자를 보낼 필요가 없으므로 즉시 발송 중단(종료)합니다.
+    */
+    if (round > 1) {
+
+      const proposals =
+        await supabaseGet(
+          "property_proposals" +
+          `?request_number=eq.${encodeURIComponent(requestNumber)}` +
+          "&status=eq.PROPOSED&select=id,apartment,amount,floor,area"
+        ).catch(() => []);
+
+      const distinctSet = new Set();
+
+      (Array.isArray(proposals) ? proposals : []).forEach(p => {
+        const apt = cleanText(p.apartment);
+        const fl = cleanText(p.floor);
+        const ar = cleanText(p.area);
+        const key = (apt + "_" + fl + "_" + ar).replace(/\s/g, "").toLowerCase();
+        distinctSet.add(key || String(p.id));
+      });
+
+      const distinctCount = distinctSet.size;
+
+      if (distinctCount >= 3) {
+
+        return res.status(200).json({
+          ok: true,
+          action: "STOP",
+          reason: "DISTINCT_PROPOSALS_SATISFIED",
+          message: "이미 서로 다른 물건이 3개 이상 접수되어 추가 발송을 진행하지 않습니다.",
+          round: round,
+          distinctCount: distinctCount
+        });
+      }
     }
 
 
@@ -1123,11 +1191,17 @@ export default async function handler(req, res) {
 
 
     /*
-      1차:
-      회원 공인중개사만 자동 알림
+      [대표님 핵심 지시 룰 2 & 3: 발송 대상 선별]
+      1차 (Round 1):
+      - 회원수가 10명 이상(예: 20명)이면 무조건 20명 전원에게 문자 발송!
+      - 현재 초기 단계(회원이 0명이거나 10명 미만):
+        1) 회원 전원 우선 배정
+        2) 10개에 부족한 수량은 비회원 DB(그 동)에서 휴대폰(010) 우선 배정!
+        3) 그래도 부족하면 일반 유선전화 비회원으로 채워 딱 10개 완성!
 
-      2차 / 3차:
-      비회원 최대 30명
+      2차 & 3차 (Round 2 & 3):
+      - 서로 다른 물건이 3개 미만일 때만 다음 미발송 비회원 10군데로 발송!
+        (마찬가지로 휴대폰 우선 선별 ➔ 부족 시 일반전화 ARS로 10개 충원)
     */
 
     if (
@@ -1144,10 +1218,11 @@ export default async function handler(req, res) {
           "&membership_status=eq.ACTIVE&is_active=eq.true" +
 
           "&select=id,mobile_phone,office_name,membership_status,is_active,created_at"
-        );
+        )
+        .catch(() => []);
 
 
-      selectedMembers =
+      const eligibleMembers =
         (
           Array.isArray(
             members
@@ -1173,21 +1248,69 @@ export default async function handler(req, res) {
           }
         )
 
-        .slice(
-          0,
-          10
-        )
-
         .map(
           item => ({
             ...item,
             phone:
-              item.mobile_phone
+              item.mobile_phone,
+            broker_type:
+              "MEMBER"
           })
         );
 
+
+      if (
+        eligibleMembers.length >= 10
+      ) {
+
+        // 회원수가 10명 이상이면 무조건 전원(예: 20명이면 20명 전원)에게 발송!
+        selectedMembers =
+          eligibleMembers;
+
+        selectedNonMembers =
+          [];
+
+      } else {
+
+        // 현재 초기 단계: 회원이 0명이거나 10명 미만인 경우
+        selectedMembers =
+          eligibleMembers;
+
+        const needed =
+          10 - selectedMembers.length;
+
+
+        const nonMembers =
+          await supabaseGet(
+
+            "agent_nonmembers" +
+
+            `?dong=eq.${encodeURIComponent(request.dong)}` +
+
+            "&select=id,phone,office_name,phone_registered_at,created_at,receive_blocked"
+          )
+          .catch(() => []);
+
+
+        // 부족분을 휴대폰 우선 + 일반전화 충원으로 딱 채움
+        selectedNonMembers =
+          pickTenNonMembers(
+            nonMembers,
+            alreadySentPhones,
+            needed
+          )
+          .map(
+            item => ({
+              ...item,
+              broker_type:
+                "NONMEMBER"
+            })
+          );
+      }
+
     } else {
 
+      // 2차 및 3차: 비회원 풀에서 10군데 선별 (휴대폰 우선 ➔ 부족 시 일반전화)
       const nonMembers =
         await supabaseGet(
 
@@ -1196,67 +1319,37 @@ export default async function handler(req, res) {
           `?dong=eq.${encodeURIComponent(request.dong)}` +
 
           "&select=id,phone,office_name,phone_registered_at,created_at,receive_blocked"
-        );
-
-
-      const eligible =
-        (
-          Array.isArray(
-            nonMembers
-          )
-            ? nonMembers
-            : []
         )
-
-        .filter(
-          item => {
-
-            const phone =
-              normalizePhone(
-                item.phone
-              );
-
-
-            return (
-              phone &&
-              !blockedPhones.has(phone)
-            );
-          }
-        );
+        .catch(() => []);
 
 
       selectedNonMembers =
-        selectNonMembers(
-          eligible,
+        pickTenNonMembers(
+          nonMembers,
           alreadySentPhones,
-          30
+          10 // 10군데 단위
+        )
+        .map(
+          item => ({
+            ...item,
+            broker_type:
+              "NONMEMBER"
+          })
         );
     }
 
 
     const selected = [
 
-      ...selectedMembers.map(
-        item => ({
-          ...item,
-          broker_type:
-            "MEMBER"
-        })
-      ),
+      ...selectedMembers,
 
-      ...selectedNonMembers.map(
-        item => ({
-          ...item,
-          broker_type:
-            "NONMEMBER"
-        })
-      )
+      ...selectedNonMembers
     ];
 
 
     /*
-      해당 차수에 발송할 중개사가 없어도
-      차수는 완료 처리
+      해당 차수에 발송할 중개사가 DB에 없어도
+      차수는 완료 처리하고 2시간 후 다음 차수로 연결
     */
 
     if (
@@ -1309,6 +1402,12 @@ export default async function handler(req, res) {
       });
     }
 
+
+    /*
+      [대표님 핵심 지시 룰 4: 휴대폰은 문자, 일반전화는 ARS]
+      - 휴대폰(010 등) ➔ sendLms (문자 발송)
+      - 일반 유선전화(062, 02 등) ➔ createClawOpsBatch (ARS 자동음성)
+    */
 
     const mobileRecipients =
       selected.filter(
