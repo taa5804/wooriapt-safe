@@ -1,6 +1,22 @@
 {
   "rewrites": [
     {
+      "source": "/aura",
+      "destination": "/aura.html"
+    },
+    {
+      "source": "/pension",
+      "destination": "/aura.html"
+    },
+    {
+      "source": "/aurapension",
+      "destination": "/aura.html"
+    },
+    {
+      "source": "/aura-search",
+      "destination": "/aura.html"
+    },
+    {
       "source": "/check",
       "destination": "/check.html"
     },
