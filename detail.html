@@ -588,6 +588,238 @@ body.detail-page{
   }
 
 }
+
+/* =========================================
+   매매 셀프등기 안내 전용 스타일
+========================================= */
+.registry-page {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Arial, sans-serif;
+  color: #1a2a3a;
+  line-height: 1.7;
+}
+
+.registry-header {
+  margin-bottom: 24px;
+}
+
+.reg-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  background: #e8f4fd;
+  color: #1971c2;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.reg-title {
+  margin: 0 0 10px;
+  font-size: 28px;
+  font-weight: 900;
+  color: #0f2b48;
+  line-height: 1.35;
+}
+
+.reg-subtitle {
+  margin: 0;
+  font-size: 15px;
+  color: #556980;
+  line-height: 1.6;
+}
+
+.reg-alert-box {
+  margin: 20px 0 28px;
+  padding: 20px 22px;
+  background: #fff9db;
+  border: 1.5px solid #f59f00;
+  border-radius: 14px;
+}
+
+.reg-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #d9480f;
+  margin-bottom: 12px;
+}
+
+.reg-alert-icon {
+  font-size: 20px;
+}
+
+.reg-alert-list {
+  margin: 0;
+  padding-left: 20px;
+  color: #495057;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.reg-alert-list li {
+  margin-bottom: 6px;
+}
+
+.reg-alert-list u {
+  text-decoration-color: #d9480f;
+  font-weight: 700;
+}
+
+.reg-sec-title {
+  margin: 32px 0 16px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #183b56;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 8px;
+}
+
+.reg-steps-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 30px;
+}
+
+.reg-step-card {
+  padding: 18px 20px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.reg-step-num {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  color: #2563eb;
+  background: #dbeafe;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+.reg-step-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.reg-step-place {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.reg-step-desc {
+  margin: 0;
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.7;
+}
+
+.reg-docs-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 30px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.reg-docs-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  font-size: 14px;
+}
+
+.reg-docs-table th {
+  background: #f1f5f9;
+  color: #1e293b;
+  font-weight: 700;
+  padding: 12px 14px;
+  border-bottom: 1px solid #cbd5e1;
+  text-align: left;
+}
+
+.reg-docs-table td {
+  padding: 14px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: top;
+  line-height: 1.65;
+  color: #334155;
+}
+
+.reg-doc-who {
+  font-weight: 800;
+  color: #0f2b48;
+  background: #f8fafc;
+}
+
+.reg-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 30px;
+}
+
+.reg-link-item {
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.reg-link-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0284c7;
+  margin-bottom: 4px;
+}
+
+.reg-link-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.reg-link-desc {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.reg-warning-box {
+  padding: 20px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+}
+
+.reg-warning-box h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #b91c1c;
+}
+
+.reg-warning-box ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  color: #450a0a;
+  line-height: 1.7;
+}
+
+.reg-warning-box li {
+  margin-bottom: 8px;
+}
+
 </style>
 </head>
 
@@ -746,65 +978,188 @@ escrow: `
 </div>
 `,
   registry: `
-<h1>매매 셀프등기 지원</h1>
+<div class="registry-page">
 
-<p class="intro">
-<b>
-법무사 비용 부담은 줄이고,
-소유권이전등기는 직접 할 수 있도록 도와드립니다.
-</b>
-</p>
+  <div class="registry-header">
+    <span class="reg-badge">100% 무료 정보성 가이드</span>
+    <h1 class="reg-title">매매 소유권이전 셀프등기 절차 안내</h1>
+    <p class="reg-subtitle">
+      법무사 수수료 부담 없이 매수인이 직접 등기소를 방문하여 소유권이전등기를 마칠 수 있도록<br>
+      필요 서류와 잔금 당일 진행 절차를 알기 쉽게 안내해 드립니다.
+    </p>
+  </div>
 
-<p>
-아파트 매매가 완료되면 필요한 소유권이전등기를
-법무사에게 반드시 맡기는 방식이 아니라,
-<b>
-매수자가 직접 진행할 수 있도록 필요한 양식과 절차를 안내
-</b>
-합니다.
-플랫폼의 셀프등기 지원 수수료는
-<b>0원</b>으로 확정한 구조입니다.
-</p>
+  <!-- 핵심 법적 공지 및 직접 납부 원칙 알림 -->
+  <div class="reg-alert-box">
+    <div class="reg-alert-title">
+      <span class="reg-alert-icon">⚠️</span>
+      <strong>필독: 세금·공과금 직접 납부 및 등기 대행 불가 안내</strong>
+    </div>
+    <ul class="reg-alert-list">
+      <li><strong>플랫폼 내 결제/수납 절대 불가:</strong> 본 플랫폼은 취득세, 국민주택채권 매입액, 인지세, 등기신청수수료 등 <u>어떠한 세금이나 공과금도 대신 수납하거나 결제받지 않습니다.</u></li>
+      <li><strong>본인 직접 납부 원칙:</strong> 모든 세금 및 공과금은 매수인이 관할 지자체 세무과(위택스), 시중은행, 대법원 인터넷등기소에 <u>직접 납부</u>하셔야 합니다.</li>
+      <li><strong>순수 절차 무료 안내:</strong> 본 플랫폼은 법무사법 및 변호사법을 엄격히 준수하며, 일체의 등기 대리·대행 행위를 하지 않고 순수 절차 및 서류 체크리스트 정보만을 <strong>100% 무료</strong>로 제공합니다.</li>
+    </ul>
+  </div>
 
-<h2>① 셀프등기 절차를 순서대로 안내</h2>
-<p>
-처음 하는 사람도 따라갈 수 있도록 소유권이전등기에 필요한
-<b>
-준비 → 작성 → 신청 → 접수 → 완료 확인
-</b>
-과정을 순서대로 안내합니다.
-</p>
+  <!-- 잔금 당일 5단계 원스톱 동선 로드맵 -->
+  <h2 class="reg-sec-title">📍 잔금 당일 5단계 완벽 동선 로드맵</h2>
+  <div class="reg-steps-grid">
+    <div class="reg-step-card">
+      <div class="reg-step-num">STEP 1</div>
+      <div class="reg-step-name">사전 서류 준비</div>
+      <div class="reg-step-place">잔금일 전 (온라인 정부24 / 주민센터)</div>
+      <p class="reg-step-desc">
+        • 매수인 주민등록초본 (과거 5년 또는 주소변동 이력 포함) 발급<br>
+        • 정부24에서 건축물대장(전유부), 토지대장(대지권등록부) 발급<br>
+        • 매수인 신분증, 도장(일반 막도장도 가능) 준비
+      </p>
+    </div>
 
-<h2>② 필요한 서류를 한눈에 확인</h2>
-<p>
-매수자와 매도자가 준비해야 할 서류를 체크리스트로 제공하여
-어떤 서류가 필요한지 쉽게 확인할 수 있도록 합니다.
-확정 로직에도 체크리스트·양식·작성예시를 제공하도록 되어 있습니다.
-</p>
+    <div class="reg-step-card">
+      <div class="reg-step-num">STEP 2</div>
+      <div class="reg-step-name">잔금 지급 & 서류 인수</div>
+      <div class="reg-step-place">잔금 당일 오전 (중개사무소)</div>
+      <p class="reg-step-desc">
+        • 매도인에게 잔금 송금 후 영수증 수령<br>
+        • <strong>매도인 서류 4종 필수 수령</strong>:<br>
+        &nbsp;&nbsp;① 등기필정보 (등기권리증 보안스티커 부착 원본)<br>
+        &nbsp;&nbsp;② 매도용 인감증명서 (매수인 성명·주민번호·주소 정확히 기재)<br>
+        &nbsp;&nbsp;③ 매도인 주민등록초본 (주소변동 이력 포함)<br>
+        &nbsp;&nbsp;④ 위임장 (매도인 인감도장 날인)<br>
+        • <strong>중개사 서류 수령</strong>: 부동산거래계약신고필증, 매매계약서 원본
+      </p>
+    </div>
 
-<h2>③ 작성 양식과 예시 제공</h2>
-<p>
-등기신청에 필요한
-<b>양식·작성방법·작성예시</b>를 제공하여
-이용자가 직접 작성하고 신청할 수 있도록 지원합니다.
-</p>
+    <div class="reg-step-card">
+      <div class="reg-step-num">STEP 3</div>
+      <div class="reg-step-name">시·군·구청 세무과 방문</div>
+      <div class="reg-step-place">관할 시·군·구청 세무과 (또는 인터넷 위택스)</div>
+      <p class="reg-step-desc">
+        • 매매계약서 사본, 부동산거래계약신고필증 지참<br>
+        • 취득세 신고서 작성 및 제출 후 <strong>취득세 납부고지서</strong> 발급받기<br>
+        ※ 위택스(Wetax) 전자신고 이용 시 온라인으로 즉시 발급 가능
+      </p>
+    </div>
 
-<h2>④ 진행상태를 단계별로 확인</h2>
-<p>
-서류 준비부터 등기 접수, 소유권이전 완료까지 진행단계를 확인할 수 있도록 하여
-현재 어디까지 진행됐는지 쉽게 알 수 있게 합니다.
-</p>
+    <div class="reg-step-card">
+      <div class="reg-step-num">STEP 4</div>
+      <div class="reg-step-name">은행 방문 (공과금 본인 직접 납부)</div>
+      <div class="reg-step-place">시중은행 창구 (또는 인터넷 뱅킹/ATM)</div>
+      <p class="reg-step-desc">
+        • <strong>취득세 납부</strong>: 고지서 납부 후 영수필확인서 수령<br>
+        • <strong>국민주택채권 매입</strong>: 주택도시기금 시가표준액 기준 매입 후 즉시할인 (채권발행번호 영수증 수령)<br>
+        • <strong>정부수입인지 구매</strong>: 전자수입인지 또는 은행 창구 구매 (매매가액별 인지세 납부)<br>
+        • <strong>등기신청수수료 납부</strong>: 법원 등기수수료 납부 후 영수필확인서 수령
+      </p>
+    </div>
 
-<h2>⑤ 셀프등기 지원 수수료 0원</h2>
-<p>
-우리아파트 안심거래에서 제공하는
-<b>
-셀프등기 안내·양식·체크리스트·작성예시 등의 지원 수수료는 0원
-</b>
-입니다.
-다만 취득세, 국민주택채권, 등기신청수수료 등
-<b>법정·외부 실비는 이용자가 부담</b>합니다.
-</p>
+    <div class="reg-step-card">
+      <div class="reg-step-num">STEP 5</div>
+      <div class="reg-step-name">관할 등기소 접수</div>
+      <div class="reg-step-place">부동산 관할 등기국/등기소</div>
+      <p class="reg-step-desc">
+        • 소유권이전등기 신청서 작성 및 법정 편철 순서대로 서류 편철<br>
+        • 등기소 접수계에 신분증 제시 후 최종 서류 제출<br>
+        • 등기 접수증 수령 (우편 수령 신청 시 등기권리증 우편 발송)<br>
+        • 접수 후 약 3~7일 이내 등기 완료 및 새로운 등기필정보 수령
+      </p>
+    </div>
+  </div>
+
+  <!-- 준비 서류 완벽 체크리스트 -->
+  <h2 class="reg-sec-title">📑 소유권이전등기 필수 준비서류 체크리스트</h2>
+  <div class="reg-docs-table-wrap">
+    <table class="reg-docs-table">
+      <thead>
+        <tr>
+          <th style="width:25%;">구분</th>
+          <th style="width:45%;">준비 서류</th>
+          <th style="width:30%;">발급처 / 확인사항</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="reg-doc-who">매도인에게<br>받을 서류</td>
+          <td>
+            1. <strong>등기필정보 (등기권리증)</strong> 원본<br>
+            2. <strong>부동산 매도용 인감증명서</strong> 1통 (매수인 성명·주민번호·주소 정확히 기재)<br>
+            3. <strong>주민등록초본</strong> 1통 (과거 주소변동이력 전체 포함)<br>
+            4. <strong>위임장</strong> 1부 (매도인 인감도장 날인)
+          </td>
+          <td>
+            잔금 지급 시 인수<br>
+            (인감증명서 발급 3개월 이내)
+          </td>
+        </tr>
+        <tr>
+          <td class="reg-doc-who">매수인이<br>준비할 서류</td>
+          <td>
+            1. <strong>매매계약서</strong> 원본 및 사본<br>
+            2. <strong>부동산거래계약신고필증</strong> 원본 (중개사무소 수령)<br>
+            3. <strong>주민등록초본</strong> 1통 (주소변동 포함)<br>
+            4. <strong>토지대장 (대지권등록부 포함)</strong> 1부<br>
+            5. <strong>건축물대장 (전유부)</strong> 1부<br>
+            6. 매수인 신분증 및 도장 (일반 막도장 가능)
+          </td>
+          <td>
+            정부24 및 주민센터<br>
+            (발급 3개월 이내)
+          </td>
+        </tr>
+        <tr>
+          <td class="reg-doc-who">본인 직접 납부<br>영수증 (4종)</td>
+          <td>
+            1. <strong>취득세 납부 영수필확인서</strong><br>
+            2. <strong>국민주택채권 매입 영수증</strong> (채권발행번호 확인)<br>
+            3. <strong>정부수입인지</strong> (전자수입인지 출력본)<br>
+            4. <strong>등기신청수수료 납부 영수필확인서</strong>
+          </td>
+          <td>
+            위택스/구청, 은행,<br>
+            대법원 인터넷등기소
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 공과금 및 세금 직접 납부 공식 기관 바로가기 -->
+  <h2 class="reg-sec-title">🏛️ 공과금 본인 직접 납부 공식 안내처</h2>
+  <div class="reg-links-grid">
+    <div class="reg-link-item">
+      <div class="reg-link-badge">취득세 신고·납부</div>
+      <div class="reg-link-name">위택스 (Wetax) / 이택스 (서울)</div>
+      <p class="reg-link-desc">부동산 취득세 온라인 신고 및 신용카드/계좌이체 직접 납부 (wetax.go.kr / etax.seoul.go.kr)</p>
+    </div>
+    <div class="reg-link-item">
+      <div class="reg-link-badge">국민주택채권 매입</div>
+      <div class="reg-link-name">주택도시기금 & 시중은행</div>
+      <p class="reg-link-desc">주택도시기금 사이트에서 시가표준액별 채권매입액 계산 후, 국민·신한·우리·하나·농협 창구에서 즉시할인 매입</p>
+    </div>
+    <div class="reg-link-item">
+      <div class="reg-link-badge">정부수입인지 (인지세)</div>
+      <div class="reg-link-name">전자수입인지 사이트</div>
+      <p class="reg-link-desc">기획재정부 전자수입인지(e-revenuestamp.or.kr)에서 종이문서용 전자수입인지 직접 결제 후 출력</p>
+    </div>
+    <div class="reg-link-item">
+      <div class="reg-link-badge">등기신청수수료 (증지)</div>
+      <div class="reg-link-name">대법원 인터넷등기소</div>
+      <p class="reg-link-desc">인터넷등기소(iros.go.kr) 전자납부시스템에서 등기신청수수료 납부 후 영수필확인서 출력 또는 등기소 현장 납부</p>
+    </div>
+  </div>
+
+  <!-- 셀프등기 전 필수 확인사항 (주의점) -->
+  <div class="reg-warning-box">
+    <h3>🚨 셀프등기 진행 전 반드시 체크하세요!</h3>
+    <ul>
+      <li><strong>은행 주택담보대출이 있는 경우:</strong> 매수인이 은행 주택담보대출을 받는 경우, 대출 은행의 근저당권 설정 법무사가 등기 절차를 함께 진행하는 것이 일반적이므로 셀프등기가 제한될 수 있습니다. 대출 은행에 셀프등기 가능 여부를 반드시 사전에 확인하세요.</li>
+      <li><strong>매도인 서류 오탈자 검수:</strong> 매도용 인감증명서에 기재된 매수인 인적사항(성명, 주민등록번호, 주소)이 주민등록초본과 글자 하나라도 다르면 등기가 각하될 수 있습니다. 잔금 당일 현장에서 철저히 대조 확인하세요.</li>
+      <li><strong>등기 신청 기한:</strong> 소유권이전등기는 잔금 지급일(소유권 이전의 효력이 발생한 날)로부터 60일 이내에 신청해야 과태료가 발생하지 않습니다. (통상 잔금 당일 바로 신청합니다.)</li>
+    </ul>
+  </div>
+
+</div>
 `
 
 };
