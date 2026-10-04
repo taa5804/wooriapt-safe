@@ -1,6 +1,18 @@
 {
   "rewrites": [
     {
+      "source": "/mart-price",
+      "destination": "/price.html"
+    },
+    {
+      "source": "/today",
+      "destination": "/price.html"
+    },
+    {
+      "source": "/price",
+      "destination": "/price.html"
+    },
+    {
       "source": "/aura",
       "destination": "/aura.html"
     },
