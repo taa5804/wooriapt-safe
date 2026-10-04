@@ -2111,15 +2111,15 @@ body.menu-open{
     </a>
 
     <a class="card" href="/detail.html?topic=contract">
-      <div class="ci">📝</div>
-      <h3>전자계약</h3>
+      <div class="ci">🏛️</div>
+      <h3>국토부 표준<br>전자계약 혜택</h3>
       <p>
-        별도 방문 없이<br>
-        전자계약으로<br>
-        간편하고 안전하게<br>
-        진행합니다.
+        대출 우대금리 감면!<br>
+        확정일자 자동 발급,<br>
+        책상에서 1초 만에<br>
+        비대면 모바일 서명.
       </p>
-      <span class="more">자세히 보기 ›</span>
+      <span class="more">혜택 자세히 보기 ›</span>
     </a>
 
     <a class="card" href="/detail.html?topic=escrow">
@@ -3054,45 +3054,55 @@ let deferredPrompt = null;
 
 
 /* 앱 설치 */
+
 window.addEventListener(
   "beforeinstallprompt",
   e => {
+
     e.preventDefault();
     deferredPrompt = e;
+
   }
 );
 
-async function handleAppInstallClick() {
-  if (deferredPrompt) {
-    try {
+
+document
+.getElementById("installBtn")
+.addEventListener(
+  "click",
+  async () => {
+
+    if(deferredPrompt){
+
       deferredPrompt.prompt();
-      const choice = await deferredPrompt.userChoice;
-      if (choice && choice.outcome === "accepted") {
-        deferredPrompt = null;
-        return;
-      }
-    } catch(err) {
-      console.warn("Install prompt error:", err);
+
+      await deferredPrompt.userChoice;
+
+      deferredPrompt = null;
+
+      return;
     }
+
+    if(
+      /iphone|ipad|ipod/i.test(
+        navigator.userAgent
+      )
+    ){
+
+      alert(
+        "Safari의 공유 버튼을 누른 뒤 ‘홈 화면에 추가’를 선택해 주세요."
+      );
+
+    }else{
+
+      alert(
+        "브라우저 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택해 주세요."
+      );
+
+    }
+
   }
-  // Native prompt not ready, iOS Safari, or in-app browser -> guided 1-touch install page
-  location.href = "/app-install";
-}
-
-const installBtn = document.getElementById("installBtn");
-if (installBtn) {
-  installBtn.addEventListener("click", handleAppInstallClick);
-}
-
-const installWrap = document.querySelector(".install-wrap");
-if (installWrap) {
-  installWrap.style.cursor = "pointer";
-  installWrap.addEventListener("click", (e) => {
-    if (e.target !== installBtn && !installBtn.contains(e.target)) {
-      handleAppInstallClick();
-    }
-  });
-}
+);
 
 
 /* 햄버거 메뉴 */
