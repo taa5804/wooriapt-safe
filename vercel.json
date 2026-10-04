@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/check",
+      "destination": "/check.html"
+    },
+    {
+      "source": "/factcheck",
+      "destination": "/check.html"
+    },
+    {
       "source": "/mart",
       "destination": "/mart.html"
     },
