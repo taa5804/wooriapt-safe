@@ -197,7 +197,7 @@
       </div>
       
       <div class="flex items-baseline justify-between">
-        <h2 id="sheetAptName" class="text-lg sm:text-xl font-black text-slate-900 leading-tight">양산 호반베르디움 1차</h2>
+        <h2 id="sheetAptName" onclick="goToMain('info')" class="text-lg sm:text-xl font-black text-slate-900 leading-tight cursor-pointer hover:text-emerald-700 hover:underline">양산 호반베르디움 1차</h2>
         <span id="sheetPyeongBadge" class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">국평 84㎡ 기준</span>
       </div>
       
@@ -233,13 +233,13 @@
     <!-- 1초 원터치 시그니처 3대 액션 버튼 (엄지손가락 터치 존) -->
     <div class="grid grid-cols-2 gap-2">
       <!-- 🟡 집 구할래요 -->
-      <button onclick="openBuyModal()" class="w-full py-3 px-3 bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-slate-900 font-black text-sm rounded-2xl shadow-md flex items-center justify-center gap-1.5 transition active:scale-[0.98]">
+      <button onclick="goToMain('buy')" class="w-full py-3 px-3 bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-slate-900 font-black text-sm rounded-2xl shadow-md flex items-center justify-center gap-1.5 transition active:scale-[0.98]">
         <span>🤝</span>
         <span>집 구할래요 (신뢰 검증 ➔)</span>
       </button>
 
       <!-- 🔵 집 내놓을래요 -->
-      <button onclick="openSellModal()" class="w-full py-3 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-sm rounded-2xl shadow-md flex items-center justify-center gap-1.5 transition active:scale-[0.98]">
+      <button onclick="goToMain('sell')" class="w-full py-3 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-sm rounded-2xl shadow-md flex items-center justify-center gap-1.5 transition active:scale-[0.98]">
         <span>🏠</span>
         <span>집 내놓을래요 (신뢰 검증 ➔)</span>
       </button>
@@ -691,6 +691,20 @@
       document.querySelectorAll('.apt-pin').forEach(p => p.classList.remove('active'));
     }
 
+    
+    // 대표님 원칙: 손님이 플랫폼의 신뢰도와 50% 절감 혜택, 안심 절차를 먼저 확인해야 믿고 매수/매도 신청을 하므로 메인화면으로 즉시 이동
+    function goToMain(mode) {
+      const aptName = activeApt ? activeApt.name : '';
+      const aptAddr = activeApt ? activeApt.addr : '';
+      let target = '/';
+      if (aptName) {
+        target += '?apt=' + encodeURIComponent(aptName) + '&mode=' + encodeURIComponent(mode || 'buy') + '&addr=' + encodeURIComponent(aptAddr);
+      } else {
+        target += '?mode=' + encodeURIComponent(mode || 'buy');
+      }
+      window.location.href = target;
+    }
+  
     function openBuyModal() {
       if (!activeApt) return;
       // 대표님 철학: 억 단위 거래이므로 메인화면에서 플랫폼의 신뢰도(특허, 50% 절감, 절차)를 먼저 확인 후 신청
