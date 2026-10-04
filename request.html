@@ -2272,7 +2272,19 @@ function setOptions(
    시도 불러오기
 ========================================= */
 
-async function loadSido(){
+async function 
+/* =========================================
+   URL 파라미터 기반 아파트명 자동 채움
+========================================= */
+const initialApt = params.get("apt");
+if (initialApt) {
+  const aptInput = document.getElementById("apt");
+  if (aptInput) {
+    aptInput.value = decodeURIComponent(initialApt);
+  }
+}
+
+loadSido(){
 
   const data =
   await api(
