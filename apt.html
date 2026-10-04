@@ -99,6 +99,32 @@
     .bottom-action { padding: 14px 18px 18px; background: #ffffff; border-top: 1px solid #e2e8f0; }
     .cta-btn { display: block; width: 100%; background: #17387d; color: #ffffff; text-decoration: none; text-align: center; font-size: 15px; font-weight: 800; padding: 15px 12px; border-radius: 28px; box-shadow: 0 6px 16px rgba(23, 56, 125, 0.25); }
     .footer-note { text-align: center; font-size: 11px; color: #94a3b8; margin-top: 6px; }
+  
+    .apt-apply-btn {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: #ffffff !important;
+      text-align: center;
+      padding: 10px 0;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(29, 78, 216, 0.25);
+      transition: transform 0.15s, background 0.15s;
+    }
+    .apt-apply-btn:active {
+      transform: scale(0.98);
+    }
+    .theme-jeonse .apt-apply-btn {
+      background: linear-gradient(135deg, #4338ca, #4f46e5);
+    }
+    .theme-rent .apt-apply-btn {
+      background: linear-gradient(135deg, #0f766e, #0d9488);
+    }
+
   </style>
 </head>
 <body>
@@ -526,10 +552,12 @@
         benTxt = '<span>🔒 최우선변제 100% 전액보호</span><span class="benefit-save">➔ 수수료 ' + save3 + '만 원 절약</span>';
       }
 
+      var applyUrl = '/request.html?type=' + encodeURIComponent(curType) + '&dong=' + encodeURIComponent(dong) + '&apt=' + encodeURIComponent(name);
       return '<div class="apt-card">' +
         '<div class="apt-name"><span>[' + dong + '] ' + name + '</span><span class="apt-floor">' + specTxt + '</span></div>' +
         '<div class="price-row"><span class="price-badge ' + badgeCls + '">' + pTxt + '</span><span class="price-date">2026.09 국토부 신고</span></div>' +
         '<div class="benefit-box ' + benCls + '">' + benTxt + '</div>' +
+        '<a href="' + applyUrl + '" class="apt-apply-btn">🤝 이 아파트 안심거래 신청하기 (수수료 50% 절약) ›</a>' +
         '</div>';
     }).join('');
   }
