@@ -3687,6 +3687,44 @@ if(
 
 }
 
+
+/* 지도에서 넘어온 경우 아파트 신뢰도 검증 배너 */
+(function() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const aptName = params.get('apt');
+    const mode = params.get('mode');
+    if (aptName) {
+      const actionText = mode === 'sell' ? '내 집 내놓기' : '집 구하기';
+      const banner = document.createElement('div');
+      banner.id = 'mapAptWelcomeBanner';
+      banner.style.cssText = 'background: linear-gradient(135deg, #059669, #047857); color: white; padding: 14px 18px; margin: 12px 16px; border-radius: 14px; box-shadow: 0 4px 15px rgba(5,150,105,0.25); display: flex; align-items: center; justify-content: space-between; gap: 12px; z-index: 99; position: relative;';
+      banner.innerHTML = '<div style="flex: 1;">' +
+        '<div style="font-size: 11px; font-weight: 700; opacity: 0.9; display: flex; align-items: center; gap: 4px;">' +
+          '<span>📍 지도에서 선택하신 단지:</span>' +
+          '<strong style="color: #fef08a; font-size: 13px;">' + aptName + ' (' + actionText + ')</strong>' +
+        '</div>' +
+        '<div style="font-size: 14px; font-weight: 900; margin-top: 3px;">' +
+          '플랫폼의 특허 안심거래 시스템과 50% 절감 혜택을 먼저 확인하세요!' +
+        '</div>' +
+        '<div style="font-size: 11px; opacity: 0.92; margin-top: 2px;">' +
+          '✓ 국토부 표준 전자계약 · 선택형 에스크로 · 공인중개사 안심 역제안 팩트 검증' +
+        '</div>' +
+      '</div>' +
+      '<a href="#tradeSection" style="padding: 9px 14px; background: #fef08a; color: #0f172a; font-size: 12px; font-weight: 900; border-radius: 10px; text-decoration: none; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">' +
+        '안심절차 확인 ↓' +
+      '</a>';
+
+      const header = document.querySelector('.header');
+      if (header && header.parentNode) {
+        header.parentNode.insertBefore(banner, header.nextSibling);
+      }
+    }
+  } catch(e) {
+    console.warn(e);
+  }
+})();
+
 </script>
 
 </body>
