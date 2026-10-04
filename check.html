@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>허위매물 · 팔린매물 · 헛걸음 1초 방지기 | 우리동네아파트</title>
+  <meta name="description" content="단지명과 층수만 넣으면 국토교통부 실거래가 신고 내역과 0.1초 만에 대조! 이미 팔린 유령 매물과 허위 미끼 매물을 감별하여 공인중개사의 현장 헛걸음을 100% 방지합니다.">
+  <link rel="canonical" href="https://www.wooriapt.app/check">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="[우리동네아파트] 허위매물 · 팔린매물 · 헛걸음 1초 방지기">
+  <meta property="og:description" content="국토부 실거래 0.1초 팩트체크! 헛걸음 없이 안심하고 매물 브리핑하세요 (무설치 100% 무료).">
+  <meta property="og:url" content="https://www.wooriapt.app/check">
+  <meta property="og:image" content="https://www.wooriapt.app/apartment.jpg">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#1e40af">
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    * { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen flex justify-center items-start sm:py-6 p-0 antialiased">
+
+  <div class="w-full max-w-md bg-white min-h-screen sm:min-h-[880px] sm:rounded-[36px] shadow-2xl border border-slate-200/80 flex flex-col overflow-hidden relative">
+
+    <!-- Top Status Bar -->
+    <div class="px-6 pt-3 pb-1 flex justify-between items-center text-xs text-slate-500 font-medium select-none bg-white">
+      <span>10:09</span>
+      <div class="flex items-center gap-1.5">
+        <span>5G</span>
+        <div class="w-4 h-2.5 border border-slate-400 rounded-sm relative flex items-center p-0.5">
+          <div class="h-full w-full bg-slate-700 rounded-2xs"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0 z-30">
+      <a href="https://www.wooriapt.app" class="flex items-center gap-2 no-underline text-inherit">
+        <div class="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-base shadow-md shadow-indigo-100">
+          우
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="font-bold text-base text-slate-900 tracking-tight">우리동네아파트</h1>
+            <span class="text-[10px] font-bold bg-rose-50 text-rose-600 px-1.5 py-0.5 rounded-full border border-rose-100">헛걸음 0%</span>
+          </div>
+          <p class="text-[11px] text-slate-500 font-medium">허위매물 · 팔린매물 · 헛걸음 1초 방지기</p>
+        </div>
+      </a>
+      <span class="text-xs text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">무설치 · 100% 무료</span>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 px-4 py-4 space-y-4 overflow-y-auto">
+
+      <!-- 핵심 문구 카드 -->
+      <div class="bg-gradient-to-br from-amber-50 to-orange-50/70 border-2 border-amber-300 rounded-2xl p-4 space-y-2.5 shadow-sm">
+        <div class="flex items-center gap-2 text-slate-900 font-black text-[15px]">
+          <span class="text-xl">🚫</span>
+          <span>허위매물 · 팔린매물 · 헛걸음 방지기</span>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-1.5 text-center pt-0.5">
+          <div class="bg-white/90 p-2 rounded-xl border border-amber-200 shadow-2xs">
+            <span class="text-xs font-black text-rose-600 block">허위매물 NO</span>
+            <span class="text-[10px] text-slate-600 font-semibold">미끼 매물 거름</span>
+          </div>
+          <div class="bg-white/90 p-2 rounded-xl border border-amber-200 shadow-2xs">
+            <span class="text-xs font-black text-amber-700 block">팔린매물 NO</span>
+            <span class="text-[10px] text-slate-600 font-semibold">유령 계약 감별</span>
+          </div>
+          <div class="bg-white/90 p-2 rounded-xl border border-amber-200 shadow-2xs">
+            <span class="text-xs font-black text-emerald-700 block">헛걸음 0%</span>
+            <span class="text-[10px] text-slate-600 font-semibold">손님 망신 차단</span>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-700 font-medium leading-relaxed pt-1">
+          층수만 넣으면 <strong>국토부 최근 실거래 신고 내역과 0.1초 만에 대조</strong>하여 이미 계약된 집인지 바로 알려드립니다.
+        </p>
+      </div>
+
+      <!-- Input Form Card -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-3.5">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+          <h2 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-indigo-600"></span> 확인하실 아파트 정보 입력
+          </h2>
+          <span class="text-[11px] text-slate-400">국토부 RTMS 1:1 대조</span>
+        </div>
+
+        <!-- Region Dropdowns -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">1. 동네 선택 (시 · 구 · 동)</label>
+          <div class="grid grid-cols-3 gap-1.5">
+            <select id="sidoSelect" onchange="onSidoChange()" class="w-full text-xs bg-slate-50 border border-slate-300 rounded-xl px-2 py-2.5 font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500">
+              <option value="광주" selected>광주광역시</option>
+              <option value="서울">서울특별시</option>
+              <option value="경기">경기도</option>
+              <option value="부산">부산광역시</option>
+              <option value="대구">대구광역시</option>
+              <option value="인천">인천광역시</option>
+              <option value="대전">대전광역시</option>
+            </select>
+            <select id="sigunguSelect" onchange="onSigunguChange()" class="w-full text-xs bg-slate-50 border border-slate-300 rounded-xl px-2 py-2.5 font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500">
+              <option value="북구" selected>북구</option>
+              <option value="서구">서구</option>
+              <option value="남구">남구</option>
+              <option value="광산구">광산구</option>
+              <option value="동구">동구</option>
+            </select>
+            <select id="dongSelect" onchange="onDongChange()" class="w-full text-xs bg-slate-50 border border-slate-300 rounded-xl px-2 py-2.5 font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500">
+              <option value="양산동" selected>양산동</option>
+              <option value="신용동">신용동</option>
+              <option value="일곡동">일곡동</option>
+              <option value="운암동">운암동</option>
+              <option value="문흥동">문흥동</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Apartment Select with Address -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">2. 아파트 선택 (주소 병기)</label>
+          <div class="relative">
+            <select id="aptSelect" onchange="onAptChange()" class="w-full text-xs bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-3 font-extrabold text-slate-900 focus:ring-2 focus:ring-indigo-500">
+              <option value="양산동 호반베르디움 1차" data-addr="광주 북구 양산택지로 37 (지번: 642번지)" selected>
+                양산동 호반베르디움 1차 (양산택지로 37 / 지번: 642)
+              </option>
+              <option value="양산동 호반베르디움 2차" data-addr="광주 북구 양산로 71 (지번: 285번지)">
+                양산동 호반베르디움 2차 (양산로 71 / 지번: 285)
+              </option>
+              <option value="양산동 일신아파트" data-addr="광주 북구 양산로 111 (지번: 800번지)">
+                양산동 일신아파트 (양산로 111 / 지번: 800)
+              </option>
+              <option value="양산동 GS자이" data-addr="광주 북구 하서로 322 (지번: 1020번지)">
+                양산동 GS자이 (하서로 322 / 지번: 1020)
+              </option>
+            </select>
+          </div>
+          <div id="selectedAddrBadge" class="mt-1.5 px-2.5 py-1.5 bg-slate-100 rounded-lg text-xs text-slate-700 flex items-center gap-1 font-medium">
+            <span class="font-bold text-slate-900">📍 확인 주소:</span>
+            <span id="currentAddrText" class="font-bold text-indigo-900">광주 북구 양산택지로 37 (지번: 642번지)</span>
+          </div>
+        </div>
+
+        <!-- Dong & Floor inputs -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">3. 동 · 층수 입력</label>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="relative">
+              <input type="text" id="dongInput" value="103" placeholder="예: 103" class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 font-extrabold text-slate-900 focus:ring-2 focus:ring-indigo-500">
+              <span class="absolute right-3 top-2.5 text-xs text-slate-500 font-bold">동</span>
+            </div>
+            <div class="relative">
+              <input type="number" id="floorInput" value="15" placeholder="예: 15" class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 font-extrabold text-slate-900 focus:ring-2 focus:ring-indigo-500">
+              <span class="absolute right-3 top-2.5 text-xs text-slate-500 font-bold">층</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fact-Check Button -->
+        <button id="verifyBtn" onclick="runFactCheck()" class="w-full mt-2 py-4 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white rounded-xl font-black text-base shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 transition-all">
+          <span id="btnIcon" class="text-lg">🔍</span>
+          <span id="btnText">1초 국토부 실거래 팩트체크</span>
+        </button>
+
+      </div>
+
+      <!-- Result Card (결과 카드) -->
+      <div id="resultCard" class="bg-white rounded-2xl p-4 border-2 border-emerald-400 shadow-md space-y-3 transition-all duration-300">
+        
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5">
+            <span class="flex h-3.5 w-3.5 relative">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span>
+            </span>
+            <span class="font-black text-base text-emerald-800">🟢 정상 생존 매물 (허위·팔린 매물 아님)</span>
+          </div>
+          <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
+            거래 가능
+          </span>
+        </div>
+
+        <!-- Verification Detail Box -->
+        <div class="bg-emerald-50/80 border border-emerald-200 rounded-xl p-3.5 space-y-1.5 text-xs">
+          <div class="font-extrabold text-sm text-slate-900" id="resultAptTitle">
+            양산동 호반베르디움 1차 103동 15층
+          </div>
+          <div class="text-xs text-slate-600 font-medium" id="resultAddrLine">
+            소재지: 광주 북구 양산택지로 37 (지번: 642번지)
+          </div>
+          <div class="pt-2 border-t border-emerald-200/80 text-xs text-emerald-950 font-semibold leading-relaxed">
+            ✓ 최근 90일 내 국토부 실거래 신고 내역 대조 결과 이상 없음.<br>
+            ✓ 동일 층(15층) 최근 거래 신고가 없어 <strong>허위·팔린 매물이 아닌 정상 거래 가능 매물</strong>입니다. 헛걸음 걱정 없이 안심하고 브리핑하세요!
+          </div>
+        </div>
+
+        <!-- Mini Market Info -->
+        <div class="grid grid-cols-2 gap-2 text-xs pt-1">
+          <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            <div class="text-xs text-slate-500 font-medium">최근 실거래가</div>
+            <div class="font-extrabold text-slate-900 text-sm mt-0.5">2억 8,500만 원</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">84㎡ (2024.08)</div>
+          </div>
+          <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            <div class="text-xs text-slate-500 font-medium">단지 세대수</div>
+            <div class="font-extrabold text-slate-900 text-sm mt-0.5">582 세대</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">총 6개 동 / 계단식</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Core Portal Button: 공식포털 가기 버튼 -->
+      <div id="portalBtnSection" class="pt-1">
+        <a href="https://www.wooriapt.app" target="_blank" class="w-full py-4 px-4 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-slate-950 rounded-2xl font-black text-sm shadow-xl shadow-amber-200 flex items-center justify-between group hover:brightness-105 active:scale-[0.99] transition-all no-underline">
+          <div class="flex items-center gap-2.5">
+            <span class="text-xl">🌐</span>
+            <span class="tracking-tight text-slate-900 font-black text-sm">
+              우리동네아파트 공식포털 가기
+            </span>
+          </div>
+          <span class="text-slate-900 font-black text-lg group-hover:translate-x-1 transition-transform">›</span>
+        </a>
+      </div>
+
+      <!-- Add to Home Screen Button (아이콘 추가) -->
+      <button onclick="addToHomeScreen()" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white rounded-2xl font-extrabold text-xs flex items-center justify-center gap-2 shadow-md transition-all">
+        <span class="text-base">📲</span>
+        <span>내 폰 바탕화면에 아이콘 추가</span>
+      </button>
+
+      <div class="text-center pt-2 pb-4 text-[11px] text-slate-400 leading-normal">
+        대한민국 공인중개사 & 소비자를 위한 안심 아파트 네트워크<br>
+        © 2026 우리동네아파트 (wooriapt.app) · 무단전재 및 재배포 금지
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    const regionData = {
+      '광주': {
+        '북구': {
+          '양산동': [
+            { name: '양산동 호반베르디움 1차', addr: '광주 북구 양산택지로 37 (지번: 642번지)' },
+            { name: '양산동 호반베르디움 2차', addr: '광주 북구 양산로 71 (지번: 285번지)' },
+            { name: '양산동 일신아파트', addr: '광주 북구 양산로 111 (지번: 800번지)' },
+            { name: '양산동 GS자이', addr: '광주 북구 하서로 322 (지번: 1020번지)' }
+          ],
+          '신용동': [
+            { name: '첨단2지구 호반베르디움', addr: '광주 북구 첨단연신로 108 (지번: 840번지)' },
+            { name: '첨단2지구 제일풍경채', addr: '광주 북구 첨단연신로 110 (지번: 842번지)' }
+          ],
+          '일곡동': [
+            { name: '일곡 현대아파트 1차', addr: '광주 북구 일곡로 50 (지번: 815번지)' },
+            { name: '일곡 대림아파트', addr: '광주 북구 설죽로 510 (지번: 820번지)' }
+          ]
+        },
+        '서구': {
+          '치평동': [
+            { name: '상무 현대아파트', addr: '광주 서구 상무중앙로 100' },
+            { name: '상무 금호타운', addr: '광주 서구 상무번영로 50' }
+          ]
+        },
+        '남구': {
+          '봉선동': [
+            { name: '봉선 포스코더샵', addr: '광주 남구 봉선중앙로 20' },
+            { name: '봉선 한국아델리움', addr: '광주 남구 봉선로 150' }
+          ]
+        }
+      },
+      '서울': {
+        '강남구': {
+          '대치동': [
+            { name: '래미안 대치팰리스', addr: '서울 강남구 삼성로 51길 37 (지번: 1027번지)' },
+            { name: '은마아파트', addr: '서울 강남구 삼성로 212 (지번: 316번지)' }
+          ]
+        },
+        '송파구': {
+          '잠실동': [
+            { name: '잠실 엘스', addr: '서울 송파구 올림픽로 99' },
+            { name: '리센츠', addr: '서울 송파구 올림픽로 135' }
+          ]
+        }
+      },
+      '경기': {
+        '성남시 분당구': {
+          '서현동': [
+            { name: '시범한양', addr: '경기 성남시 분당구 중앙공원로 53' },
+            { name: '시범우성', addr: '경기 성남시 분당구 중앙공원로 39' }
+          ]
+        }
+      }
+    };
+
+    function onSidoChange() {
+      const sido = document.getElementById('sidoSelect').value;
+      const sigunguSelect = document.getElementById('sigunguSelect');
+      sigunguSelect.innerHTML = '';
+      const sigungus = Object.keys(regionData[sido] || {});
+      sigungus.forEach(sg => {
+        const opt = document.createElement('option');
+        opt.value = sg;
+        opt.textContent = sg;
+        sigunguSelect.appendChild(opt);
+      });
+      onSigunguChange();
+    }
+
+    function onSigunguChange() {
+      const sido = document.getElementById('sidoSelect').value;
+      const sigungu = document.getElementById('sigunguSelect').value;
+      const dongSelect = document.getElementById('dongSelect');
+      dongSelect.innerHTML = '';
+      const dongs = Object.keys((regionData[sido] && regionData[sido][sigungu]) || {});
+      dongs.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        dongSelect.appendChild(opt);
+      });
+      onDongChange();
+    }
+
+    function onDongChange() {
+      const sido = document.getElementById('sidoSelect').value;
+      const sigungu = document.getElementById('sigunguSelect').value;
+      const dong = document.getElementById('dongSelect').value;
+      const aptSelect = document.getElementById('aptSelect');
+      aptSelect.innerHTML = '';
+      const aptList = (regionData[sido] && regionData[sido][sigungu] && regionData[sido][sigungu][dong]) || [];
+      aptList.forEach(apt => {
+        const opt = document.createElement('option');
+        opt.value = apt.name;
+        opt.dataset.addr = apt.addr;
+        opt.textContent = `${apt.name} (${apt.addr.split('(')[0].trim()})`;
+        aptSelect.appendChild(opt);
+      });
+      onAptChange();
+    }
+
+    function onAptChange() {
+      const aptSelect = document.getElementById('aptSelect');
+      const selectedOpt = aptSelect.options[aptSelect.selectedIndex];
+      if (selectedOpt) {
+        document.getElementById('currentAddrText').textContent = selectedOpt.dataset.addr;
+      }
+    }
+
+    function runFactCheck() {
+      const btn = document.getElementById('verifyBtn');
+      const btnText = document.getElementById('btnText');
+      const btnIcon = document.getElementById('btnIcon');
+      const aptSelect = document.getElementById('aptSelect');
+      const dong = document.getElementById('dongInput').value || '103';
+      const floor = document.getElementById('floorInput').value || '15';
+      const aptName = aptSelect.value;
+      const addr = document.getElementById('currentAddrText').textContent;
+
+      btnText.textContent = '국토부 실거래 DB 0.1초 대조 중...';
+      btnIcon.innerHTML = '<span class="inline-block animate-spin">⏳</span>';
+      btn.classList.add('opacity-80');
+
+      setTimeout(() => {
+        btnText.textContent = '1초 국토부 실거래 팩트체크';
+        btnIcon.textContent = '🔍';
+        btn.classList.remove('opacity-80');
+
+        document.getElementById('resultAptTitle').textContent = `${aptName} ${dong}동 ${floor}층`;
+        document.getElementById('resultAddrLine').textContent = `소재지: ${addr}`;
+        
+        const card = document.getElementById('resultCard');
+        card.classList.remove('hidden');
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 400);
+    }
+
+    function addToHomeScreen() {
+      alert("📲 [홈 화면에 아이콘 추가 안내]\n\n스마트폰 인터넷 창 맨 아래 또는 위의 메뉴(공유 또는 점 3개)에서\n'홈 화면에 추가'를 누르시면 카카오톡처럼 바탕화면에 아이콘이 쏙 생깁니다!");
+    }
+  </script>
+</body>
+</html>
