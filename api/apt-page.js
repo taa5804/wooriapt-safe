@@ -2031,6 +2031,32 @@ li a:hover {
 }
 
 
+
+    .m-apt-apply-btn {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: #ffffff !important;
+      text-align: center;
+      padding: 10px 0;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(29, 78, 216, 0.25);
+      transition: transform 0.15s, background 0.15s;
+    }
+    .m-apt-apply-btn:active {
+      transform: scale(0.98);
+    }
+    .theme-jeonse .m-apt-apply-btn {
+      background: linear-gradient(135deg, #4338ca, #4f46e5);
+    }
+    .theme-rent .m-apt-apply-btn {
+      background: linear-gradient(135deg, #0f766e, #0d9488);
+    }
+
 </style>
 </head>
 
@@ -2607,10 +2633,12 @@ li a:hover {
         benTxt = '<span>🔒 최우선변제 100% 전액보호</span><span class="m-benefit-save">➔ 수수료 ' + save3 + '만 원 절약</span>';
       }
 
+      var mApplyUrl = '/request.html?type=' + encodeURIComponent(mCurType) + '&dong=' + encodeURIComponent(dong) + '&apt=' + encodeURIComponent(name);
       return '<div class="m-apt-card">' +
         '<div class="m-apt-name"><span>[' + dong + '] ' + name + '</span><span class="m-apt-floor">' + specTxt + '</span></div>' +
         '<div class="m-price-row"><span class="m-price-badge ' + badgeCls + '">' + pTxt + '</span><span class="m-price-date">2026.09 국토부 신고</span></div>' +
         '<div class="m-benefit-box ' + benCls + '">' + benTxt + '</div>' +
+        '<a href="' + mApplyUrl + '" class="m-apt-apply-btn">🤝 이 아파트 안심거래 신청하기 (수수료 50% 절약) ›</a>' +
         '</div>';
     }).join('');
   }
