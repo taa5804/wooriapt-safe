@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/mart-sales",
+      "destination": "/mart-sales.html"
+    },
+    {
       "source": "/mart-price",
       "destination": "/price.html"
     },
