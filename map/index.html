@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>우리동네아파트 [동네 핀셋형 말풍선 안심 지도] | 양산동 실거래 시세</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    * { font-family: 'Pretendard', sans-serif; }
+    #map { width: 100%; height: 100vh; }
+    .bubble-marker {
+      background: #1e3a8a;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      white-space: nowrap;
+      text-align: center;
+      border: 2px solid white;
+      cursor: pointer;
+    }
+    .bubble-price { color: #fde047; font-size: 12px; font-weight: 900; }
+  </style>
+</head>
+<body class="m-0 p-0 overflow-hidden relative">
+  <header class="absolute top-3 left-3 right-3 z-[1000] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-slate-200 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <a href="https://www.wooriapt.app" class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black text-base no-underline">우</a>
+      <div>
+        <h1 class="text-sm font-black text-slate-900 leading-tight">우리동네아파트 말풍선 안심 지도</h1>
+        <p class="text-[11px] text-slate-500 font-bold">광주 북구 양산동 실거래 핀셋 검증</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <a href="https://www.wooriapt.app/check" class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-1.5 rounded-xl font-bold no-underline">팩트체크</a>
+      <a href="https://www.wooriapt.app" class="text-xs bg-slate-900 text-white px-2.5 py-1.5 rounded-xl font-bold no-underline">홈으로</a>
+    </div>
+  </header>
+
+  <div id="map"></div>
+
+  <div class="absolute bottom-4 left-3 right-3 z-[1000] bg-white p-4 rounded-2xl shadow-2xl border border-slate-200">
+    <div class="flex items-center justify-between mb-2">
+      <div id="aptName" class="text-base font-black text-slate-900">양산동 호반베르디움 1차</div>
+      <span class="text-xs bg-emerald-100 text-emerald-800 font-black px-2 py-0.5 rounded-md">🟢 국토부 검증</span>
+    </div>
+    <div class="text-xs text-slate-500 mb-3" id="aptAddr">광주 북구 양산택지로 37 (지번: 642번지) · 최근 2억 8,500만</div>
+    <div class="grid grid-cols-2 gap-2">
+      <button onclick="alert('🤝 [살래요 역제안]
+
+동네 검증 공인중개사가 복비 50% 절감 제안을 보내드립니다!')" class="py-3 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-sm rounded-xl shadow cursor-pointer">
+        🤝 살래요 (역제안)
+      </button>
+      <button onclick="alert('🏠 [팔래요 실매물 내놓기]
+
+동네 공인중개사 네트워크에 1초 접수되고 갈아타기 연쇄 매칭이 시작됩니다!')" class="py-3 bg-blue-600 hover:bg-blue-700 text-white font-black text-sm rounded-xl shadow cursor-pointer">
+        🏠 팔래요 (집내놓기)
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const map = L.map('map').setView([35.2052, 126.8795], 16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    const apts = [
+      { name: '호반베르디움 1차', lat: 35.2052, lng: 126.8795, price: '2억 8,500만', addr: '광주 북구 양산택지로 37' },
+      { name: '호반베르디움 2차', lat: 35.2025, lng: 126.8820, price: '2억 6,000만', addr: '광주 북구 양산로 71' },
+      { name: '일신아파트', lat: 35.2070, lng: 126.8845, price: '2억 1,000만', addr: '광주 북구 양산로 111' },
+      { name: 'GS자이', lat: 35.2005, lng: 126.8760, price: '3억 2,000만', addr: '광주 북구 하서로 322' }
+    ];
+
+    apts.forEach(apt => {
+      const customIcon = L.divIcon({
+        className: 'custom-bubble',
+        html: '<div class="bubble-marker">' + apt.name + '<br><span class="bubble-price">' + apt.price + '</span></div>',
+        iconSize: [120, 40],
+        iconAnchor: [60, 20]
+      });
+      const m = L.marker([apt.lat, apt.lng], { icon: customIcon }).addTo(map);
+      m.on('click', () => {
+        document.getElementById('aptName').textContent = apt.name;
+        document.getElementById('aptAddr').textContent = apt.addr + ' · 최근 ' + apt.price;
+      });
+    });
+  </script>
+</body>
+</html>
