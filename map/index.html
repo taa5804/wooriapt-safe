@@ -9,85 +9,190 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
-    * { font-family: 'Pretendard', sans-serif; }
-    #map { width: 100%; height: 100vh; }
-    .bubble-marker {
-      background: #1e3a8a;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: 800;
-      font-size: 13px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      white-space: nowrap;
+    * { font-family: "Pretendard", -apple-system, sans-serif; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; background: #f8fafc; }
+    #map { width: 100%; height: 100%; z-index: 1; }
+
+    /* 호갱노노를 뛰어넘는 하얀색 실거래 말풍선 박스 */
+    .bubble-card {
+      background: #ffffff;
+      border: 2px solid #2563eb;
+      border-radius: 16px;
+      padding: 8px 12px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.22);
       text-align: center;
-      border: 2px solid white;
+      min-width: 140px;
+      position: relative;
       cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .bubble-price { color: #fde047; font-size: 12px; font-weight: 900; }
+    .bubble-card:hover, .bubble-card.selected {
+      transform: scale(1.08) translateY(-4px);
+      border-color: #e11d48;
+      box-shadow: 0 12px 30px rgba(225, 29, 72, 0.35);
+    }
+    .bubble-card::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid #2563eb;
+    }
+    .bubble-card.selected::after {
+      border-top-color: #e11d48;
+    }
+    .bubble-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: #dcfce7;
+      color: #15803d;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 6px;
+      margin-bottom: 2px;
+    }
+    .bubble-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+    .bubble-price {
+      font-size: 15px;
+      font-weight: 900;
+      color: #2563eb;
+      margin-top: 2px;
+      letter-spacing: -0.3px;
+    }
+    .bubble-card.selected .bubble-price {
+      color: #e11d48;
+    }
+    .bubble-sub {
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      margin-top: 2px;
+      border-top: 1px dashed #e2e8f0;
+      padding-top: 2px;
+    }
+
+    /* 하단 살래요 / 팔래요 슬라이드 카드 */
+    .bottom-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: #ffffff;
+      border-top-left-radius: 26px;
+      border-top-right-radius: 26px;
+      padding: 18px 20px 24px;
+      box-shadow: 0 -10px 40px rgba(15, 23, 42, 0.2);
+      border-top: 2px solid #3b82f6;
+      max-width: 600px;
+      margin: 0 auto;
+    }
   </style>
 </head>
-<body class="m-0 p-0 overflow-hidden relative">
-  <header class="absolute top-3 left-3 right-3 z-[1000] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-slate-200 flex items-center justify-between">
-    <div class="flex items-center gap-2">
-      <a href="https://www.wooriapt.app" class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black text-base no-underline">우</a>
+<body class="relative">
+
+  <!-- 상단 검색바 & 동네 선택 -->
+  <header class="absolute top-3.5 left-3.5 right-3.5 z-[1000] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-slate-200 flex items-center justify-between">
+    <div class="flex items-center gap-2.5">
+      <a href="https://www.wooriapt.app" class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black text-base no-underline shadow">🏠</a>
       <div>
-        <h1 class="text-sm font-black text-slate-900 leading-tight">우리동네아파트 말풍선 안심 지도</h1>
-        <p class="text-[11px] text-slate-500 font-bold">광주 북구 양산동 실거래 핀셋 검증</p>
+        <h1 class="text-sm sm:text-base font-black text-slate-900 leading-tight">우리동네아파트 말풍선 안심 지도</h1>
+        <p class="text-[11px] text-slate-500 font-bold">광주 북구 양산동 핀셋 실거래가 검증</p>
       </div>
     </div>
     <div class="flex items-center gap-1.5">
-      <a href="https://www.wooriapt.app/check" class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2.5 py-1.5 rounded-xl font-bold no-underline">팩트체크</a>
-      <a href="https://www.wooriapt.app" class="text-xs bg-slate-900 text-white px-2.5 py-1.5 rounded-xl font-bold no-underline">홈으로</a>
+      <a href="https://www.wooriapt.app/check" class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-xl font-bold no-underline">🔍 팩트체크</a>
+      <a href="https://www.wooriapt.app" class="text-xs bg-slate-900 text-white px-3 py-1.5 rounded-xl font-bold no-underline">홈으로</a>
     </div>
   </header>
 
+  <!-- 100% 국토부 팩트 배너 -->
+  <div class="absolute top-20 left-1/2 -translate-x-1/2 z-[1000] bg-slate-900/90 backdrop-blur-md text-white text-xs font-bold px-3.5 py-1.5 rounded-full shadow-lg border border-white/20 flex items-center gap-1.5 whitespace-nowrap">
+    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+    <span>양산동 최근 30일 국토부 실거래 14건 신고 완료 (허위매물 0%)</span>
+  </div>
+
   <div id="map"></div>
 
-  <div class="absolute bottom-4 left-3 right-3 z-[1000] bg-white p-4 rounded-2xl shadow-2xl border border-slate-200">
-    <div class="flex items-center justify-between mb-2">
-      <div id="aptName" class="text-base font-black text-slate-900">양산동 호반베르디움 1차</div>
-      <span class="text-xs bg-emerald-100 text-emerald-800 font-black px-2 py-0.5 rounded-md">🟢 국토부 검증</span>
+  <!-- 하단 대표님 2대 핵심 버튼 카드 (살래요 / 팔래요) -->
+  <div class="bottom-sheet" id="bottomSheet">
+    <div class="flex items-start justify-between mb-3 border-b border-slate-100 pb-2.5">
+      <div>
+        <div class="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-[11px] font-black px-2 py-0.5 rounded-md mb-1">
+          <span>📍</span> <span>선택된 아파트</span>
+        </div>
+        <h2 id="aptName" class="text-lg font-black text-slate-900 leading-tight">양산동 호반베르디움 1차</h2>
+        <p id="aptAddr" class="text-xs text-slate-500 font-medium mt-0.5">광주 북구 양산택지로 37 · 688세대 (2024.08 실거래)</p>
+      </div>
+      <div class="text-right">
+        <div id="aptPrice" class="text-xl font-black text-blue-600 tracking-tight">2억 8,500만</div>
+        <span class="text-[11px] text-emerald-600 font-bold">🟢 국토부 검증</span>
+      </div>
     </div>
-    <div class="text-xs text-slate-500 mb-3" id="aptAddr">광주 북구 양산택지로 37 (지번: 642번지) · 최근 2억 8,500만</div>
-    <div class="grid grid-cols-2 gap-2">
-      <button onclick="alert('🤝 [살래요 역제안]
 
-동네 검증 공인중개사가 복비 50% 절감 제안을 보내드립니다!')" class="py-3 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-sm rounded-xl shadow cursor-pointer">
-        🤝 살래요 (역제안)
+    <!-- 대표님 지정 2대 핵심 버튼 -->
+    <div class="grid grid-cols-2 gap-2.5">
+      <button onclick="alert('🤝 [살래요: 중개사 안심 역제안 신청]
+
+희망조건을 등록하시면 검증된 동네 공인중개사가 복비 50% 절감 안심 매물을 1:1로 제안합니다!')" class="py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-black text-base rounded-2xl shadow-lg transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer border border-amber-400">
+        <span>🤝</span> <span>살래요 (역제안)</span>
       </button>
-      <button onclick="alert('🏠 [팔래요 실매물 내놓기]
 
-동네 공인중개사 네트워크에 1초 접수되고 갈아타기 연쇄 매칭이 시작됩니다!')" class="py-3 bg-blue-600 hover:bg-blue-700 text-white font-black text-sm rounded-xl shadow cursor-pointer">
-        🏠 팔래요 (집내놓기)
+      <button onclick="alert('🏠 [팔래요: 내 집 정상 실매물 내놓기]
+
+동네 공인중개사 네트워크에 정식 접수되며, 집 팔고 이사 갈 새 집까지 갈아타기 연쇄 매칭해 드립니다!')" class="py-4 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black text-base rounded-2xl shadow-lg transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer border border-blue-400">
+        <span>🏠</span> <span>팔래요 (집내놓기)</span>
       </button>
     </div>
   </div>
 
   <script>
-    const map = L.map('map').setView([35.2052, 126.8795], 16);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+    const map = L.map('map', { zoomControl: false }).setView([35.2052, 126.8795], 16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+    L.control.zoom({ position: 'topright' }).addTo(map);
 
-    const apts = [
-      { name: '호반베르디움 1차', lat: 35.2052, lng: 126.8795, price: '2억 8,500만', addr: '광주 북구 양산택지로 37' },
-      { name: '호반베르디움 2차', lat: 35.2025, lng: 126.8820, price: '2억 6,000만', addr: '광주 북구 양산로 71' },
-      { name: '일신아파트', lat: 35.2070, lng: 126.8845, price: '2억 1,000만', addr: '광주 북구 양산로 111' },
-      { name: 'GS자이', lat: 35.2005, lng: 126.8760, price: '3억 2,000만', addr: '광주 북구 하서로 322' }
+    const apartments = [
+      { id: '1', name: '호반베르디움 1차', lat: 35.2052, lng: 126.8795, price: '2억 8,500만', addr: '광주 북구 양산택지로 37 · 688세대', sub: '25평 / 12층' },
+      { id: '2', name: '호반베르디움 2차', lat: 35.2025, lng: 126.8820, price: '2억 6,000만', addr: '광주 북구 양산로 71 · 546세대', sub: '25평 / 8층' },
+      { id: '3', name: '양산 일신아파트', lat: 35.2070, lng: 126.8845, price: '2억 1,000만', addr: '광주 북구 양산로 111 · 580세대', sub: '32평 / 9층' },
+      { id: '4', name: '양산 GS자이', lat: 35.2005, lng: 126.8760, price: '3억 2,000만', addr: '광주 북구 하서로 322 · 593세대', sub: '34평 / 15층' }
     ];
 
-    apts.forEach(apt => {
-      const customIcon = L.divIcon({
+    apartments.forEach((apt, idx) => {
+      const bubbleHtml = '<div class="bubble-card ' + (idx === 0 ? 'selected' : '') + '" id="card-' + apt.id + '">' +
+        '<div class="bubble-badge">🟢 국토부 검증</div>' +
+        '<div class="bubble-title">' + apt.name + '</div>' +
+        '<div class="bubble-price">' + apt.price + '</div>' +
+        '<div class="bubble-sub">' + apt.sub + ' · 살래요·팔래요</div>' +
+        '</div>';
+
+      const icon = L.divIcon({
         className: 'custom-bubble',
-        html: '<div class="bubble-marker">' + apt.name + '<br><span class="bubble-price">' + apt.price + '</span></div>',
-        iconSize: [120, 40],
-        iconAnchor: [60, 20]
+        html: bubbleHtml,
+        iconSize: [140, 75],
+        iconAnchor: [70, 75]
       });
-      const m = L.marker([apt.lat, apt.lng], { icon: customIcon }).addTo(map);
-      m.on('click', () => {
+
+      const marker = L.marker([apt.lat, apt.lng], { icon: icon }).addTo(map);
+      marker.on('click', () => {
+        document.querySelectorAll('.bubble-card').forEach(el => el.classList.remove('selected'));
+        const active = document.getElementById('card-' + apt.id);
+        if (active) active.classList.add('selected');
         document.getElementById('aptName').textContent = apt.name;
-        document.getElementById('aptAddr').textContent = apt.addr + ' · 최근 ' + apt.price;
+        document.getElementById('aptAddr').textContent = apt.addr;
+        document.getElementById('aptPrice').textContent = apt.price;
       });
     });
   </script>
