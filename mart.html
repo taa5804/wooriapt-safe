@@ -4,13 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>우리가게 마트 팩트 경영 계산기 | 포스(POS) 우회 디지털 전환</title>
-  <meta name="description" content="포스(POS) 기계 교체 없이 대행사 문자비 1,512만 원 절감! 자동차 QR 신규고객 유치 및 분양사 연동 매출 상승 계산기.">
+  <meta name="description" content="포스(POS) 기계 교체 없이 대행사 문자비 1,440만 원 절감! 자동차 QR 신규고객 유치 및 분양사 연동 매출 상승 계산기.">
   <link rel="canonical" href="https://www.wooriapt.app/mart">
-  <link rel="manifest" href="/manifest.webmanifest">
-  <meta name="theme-color" content="#1165d7">
   <meta property="og:type" content="website">
   <meta property="og:title" content="[마트 사장님 필수] 우리가게 마트 팩트 경영 계산기">
-  <meta property="og:description" content="기존 포스 고객 5,000명 기준 연간 1,512만 원 순이익 절감 확정! 지금 바로 우리 마트 비용을 실시간 비교해보세요.">
+  <meta property="og:description" content="기존 포스 고객 5,000명 기준 연간 1,440만 원 순이익 절감 확정! 지금 바로 우리 마트 비용을 실시간 비교해보세요.">
   <meta property="og:url" content="https://www.wooriapt.app/mart">
   <meta property="og:image" content="https://www.wooriapt.app/mart-landing-bg.png">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -35,11 +33,41 @@
       background: #ffffff;
       border-radius: 24px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      padding: 24px 18px;
+      padding: 22px 18px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
       border: 1px solid #e2e8f0;
+    }
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .top-nav-btn {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 7px 13px;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+    }
+    .top-nav-home {
+      color: #0f172a;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .top-nav-price {
+      color: #059669;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
     .badge-bar {
       display: inline-flex;
@@ -53,28 +81,26 @@
       padding: 5px 12px;
       font-size: 11.5px;
       font-weight: 800;
-      margin: 0 auto 6px;
+      margin: 0 auto;
       width: fit-content;
     }
     .header {
       text-align: center;
     }
     .header h1 {
-      font-size: 23px;
+      font-size: 22px;
       font-weight: 900;
       color: #0f172a;
       letter-spacing: -0.5px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       line-height: 1.3;
     }
     .header p {
-      font-size: 13.5px;
+      font-size: 13px;
       color: #64748b;
       font-weight: 600;
       line-height: 1.4;
     }
-
-    /* POS Bypass Notice Box */
     .pos-bypass-box {
       background: #eff6ff;
       border: 1.5px solid #bfdbfe;
@@ -98,8 +124,6 @@
       color: #1d4ed8;
       font-weight: 800;
     }
-
-    /* Comparison Grid */
     .compare-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -110,7 +134,7 @@
       padding: 14px 12px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 11px;
     }
     .card-agency {
       background: #f8fafc;
@@ -135,8 +159,6 @@
       color: #15803d;
       border-color: #22c55e;
     }
-
-    /* Form Fields */
     .input-group {
       display: flex;
       flex-direction: column;
@@ -152,11 +174,10 @@
       background: #ffffff;
       border: 1.5px solid #cbd5e1;
       border-radius: 10px;
-      padding: 7px 6px;
+      padding: 7px 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
       transition: all 0.2s;
     }
     .card-platform .input-box {
@@ -176,28 +197,6 @@
       color: #0f172a;
       background: transparent;
     }
-
-    /* Detail Breakdowns */
-    .fee-breakdown {
-      background: rgba(255, 255, 255, 0.85);
-      border: 1px solid #bbf7d0;
-      border-radius: 8px;
-      padding: 6px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      font-size: 11px;
-    }
-    .fee-breakdown-row {
-      display: flex;
-      justify-content: space-between;
-      color: #4b5563;
-    }
-    .fee-breakdown-row strong {
-      color: #15803d;
-      font-weight: 800;
-    }
-
     .card-subtotal {
       margin-top: auto;
       padding-top: 8px;
@@ -207,69 +206,63 @@
       font-weight: 700;
       color: #334155;
     }
-    .card-subtotal .subtotal-month {
-      font-size: 12px;
-      color: #64748b;
-      margin-bottom: 2px;
-    }
-    .card-subtotal .subtotal-year {
+    .card-subtotal span {
       display: block;
       font-size: 15px;
       font-weight: 900;
       color: #e11d48;
       margin-top: 2px;
     }
-    .card-platform .card-subtotal .subtotal-year {
+    .card-platform .card-subtotal span {
       color: #16a34a;
     }
-
-    /* Big Result Banner */
     .result-banner {
       background: linear-gradient(135deg, #059669 0%, #047857 100%);
       border-radius: 16px;
-      padding: 18px 14px;
+      padding: 16px 14px;
       text-align: center;
       color: #ffffff;
       box-shadow: 0 8px 20px rgba(5, 150, 105, 0.25);
     }
     .result-banner-label {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       color: rgba(255, 255, 255, 0.9);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .result-banner-value {
-      font-size: 26px;
+      font-size: 23px;
       font-weight: 900;
-      color: #ffffff;
       letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 4px;
     }
     .result-banner-sub {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.85);
-      margin-top: 4px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #d1fae5;
     }
-
-    /* Platform Engines */
     .engine-section {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px 12px;
     }
     .engine-title {
-      font-size: 14px;
-      font-weight: 900;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #334155;
       text-align: center;
-      color: #0f172a;
+      margin-bottom: 10px;
     }
     .engine-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
+      gap: 7px;
     }
     .engine-card {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
       border-radius: 12px;
       padding: 10px 6px;
       text-align: center;
@@ -278,6 +271,11 @@
       align-items: center;
       justify-content: center;
       gap: 4px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .engine-card:active {
+      transform: scale(0.97);
     }
     .engine-num {
       width: 20px;
@@ -292,24 +290,37 @@
       justify-content: center;
     }
     .engine-main {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
       color: #0f172a;
       line-height: 1.3;
     }
     .engine-desc {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 700;
       color: #059669;
-      margin-top: 2px;
+      margin-top: 1px;
     }
-
-    /* Share & CTA Buttons */
+    .sales-boost-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 15px;
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border: 1.5px solid #93c5fd;
+      border-radius: 14px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+      transition: all 0.2s ease;
+    }
+    .sales-boost-banner:active {
+      transform: scale(0.98);
+      background: #bfdbfe;
+    }
     .btn-group {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      margin-top: 4px;
     }
     .cta-btn {
       display: flex;
@@ -320,9 +331,9 @@
       color: #ffffff;
       text-decoration: none;
       text-align: center;
-      font-size: 17px;
+      font-size: 16.5px;
       font-weight: 900;
-      padding: 16px 12px;
+      padding: 15px 12px;
       border-radius: 30px;
       box-shadow: 0 8px 20px rgba(0, 170, 75, 0.3);
       transition: all 0.2s ease;
@@ -354,55 +365,68 @@
     }
     .footer-note {
       text-align: center;
-      font-size: 11.5px;
+      font-size: 11px;
       color: #94a3b8;
       line-height: 1.45;
-      margin-top: 2px;
+    }
+    .bottom-home-bar {
+      text-align: center;
+      padding-top: 10px;
+      border-top: 1px dashed #cbd5e1;
+    }
+    .bottom-home-btn {
+      color: #475569;
+      font-size: 12.5px;
+      font-weight: 800;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 15px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 20px;
+      transition: all 0.2s ease;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- Top Action Bar -->
-    <div style="display:flex; justify-content:space-between; align-items:center; padding: 2px 4px 6px;">
-      <a href="/" style="text-decoration:none; display:inline-flex; align-items:center; gap:5px; color:#334155; font-weight:800; font-size:13.5px;">
-        <span style="font-size:16px;">🏠</span> 우리아파트 홈
+    <div class="top-nav">
+      <a href="https://www.wooriapt.app" class="top-nav-btn top-nav-home">
+        <span style="font-size:16px;">🏠</span>
+        <span>우리아파트 안심거래 홈</span>
       </a>
-      <div id="martInstallBtn" style="display:inline-flex; align-items:center; gap:6px; cursor:pointer; background:#eff6ff; border:1.5px solid #93c5fd; padding:6px 14px; border-radius:20px; transition:all 0.2s;" title="스마트폰 홈화면에 앱 설치">
-        <span style="font-size:15px; line-height:1;">📲</span>
-        <span style="font-size:12.5px; font-weight:800; color:#1d4ed8;">앱설치</span>
-      </div>
+      <a href="https://www.wooriapt.app/price" class="top-nav-btn top-nav-price">
+        <span style="font-size:14px;">📊</span>
+        <span>오늘의 시세</span>
+      </a>
     </div>
 
-    <!-- Top Badge -->
     <div class="badge-bar">
-      ✨ 대행사 문자비 거품 제거 | 포스(POS) 기계 교체 NO
+      ✨ 대행사 문자비 0원 전환 | 포스(POS) 기계 교체 NO
     </div>
 
-    <!-- Header -->
     <div class="header">
       <h1>우리가게 마트 팩트 경영 계산기</h1>
-      <p>사장님 직접 입력 ➔ 월간·연간 순이익 실시간 자동 계산</p>
+      <p>사장님 직접 입력 ➔ 연간 순이익 즉시 비교 (0.1초 실시간 계산)</p>
     </div>
 
-    <!-- POS Bypass Box -->
     <div class="pos-bypass-box">
       <div class="pos-bypass-icon">💡</div>
       <div class="pos-bypass-text">
         <strong>포스(POS) 기계는 그대로 쓰시면 됩니다!</strong><br>
-        포스 고객 DB를 1초 만에 디지털 단골로 전환하고, 자동차 QR과 분양사 쿠폰으로 신규 고객을 매장으로 끌어옵니다.
+        포스 고객 DB(5,000명)를 1초 만에 디지털 단골로 전환하고, 자동차 QR과 분양사 쿠폰으로 신규 고객을 매장으로 끌어옵니다.
       </div>
     </div>
 
-    <!-- Comparison Grid -->
     <div class="compare-grid">
-      <!-- Left Card: Agency SMS -->
       <div class="card card-agency">
         <div class="card-title">대행사 문자 방식</div>
 
         <div class="input-group">
-          <label for="agency-customers">문자 고객수 (DB)</label>
+          <label for="agency-customers">문자 고객수</label>
           <div class="input-box">
             <input type="number" id="agency-customers" value="5000" step="500" min="0">
             <span style="font-size:12px; font-weight:800; color:#64748b; margin-left:3px;">명</span>
@@ -426,18 +450,16 @@
         </div>
 
         <div class="card-subtotal">
-          <div class="subtotal-month">월간 지출: <strong id="agency-monthly-total" style="color:#0f172a;">150만 원</strong></div>
           기존 연간 총지출
-          <span class="subtotal-year" id="agency-annual-total">1,800만 원</span>
+          <span id="agency-annual-total">1,800만 원</span>
         </div>
       </div>
 
-      <!-- Right Card: Platform Transition -->
       <div class="card card-platform">
         <div class="card-title">우리가게 플랫폼 전환</div>
 
         <div class="input-group">
-          <label for="platform-customers">고객 DB 수 (연동)</label>
+          <label for="platform-customers">문자 고객수</label>
           <div class="input-box">
             <input type="number" id="platform-customers" value="5000" step="500" min="0">
             <span style="font-size:12px; font-weight:800; color:#64748b; margin-left:3px;">명</span>
@@ -445,63 +467,66 @@
         </div>
 
         <div class="input-group">
-          <label for="platform-sales-eok">마트 월매출</label>
+          <label for="platform-monthly-sales">마트 월 매출</label>
           <div class="input-box">
-            <input type="number" id="platform-sales-eok" value="1.5" step="0.1" min="0">
-            <span style="font-size:12px; font-weight:800; color:#64748b; margin-left:3px;">억 원</span>
+            <input type="number" id="platform-monthly-sales" value="150000000" step="10000000" min="0">
+            <span style="font-size:12px; font-weight:800; color:#64748b; margin-left:3px;">원</span>
           </div>
         </div>
 
-        <!-- Official Fee Formula Breakdown -->
-        <div class="fee-breakdown">
-          <div class="fee-breakdown-row">
-            <span>DB 기준 (명×30원):</span>
-            <strong id="fee-db-result">15만 원</strong>
-          </div>
-          <div class="fee-breakdown-row">
-            <span>매출 기준 (억×6만원):</span>
-            <strong id="fee-sales-result">9만 원</strong>
+        <div class="input-group">
+          <label for="platform-fee">플랫폼 월 가맹비</label>
+          <div class="input-box">
+            <input type="number" id="platform-fee" value="300000" step="50000" min="0">
+            <span style="font-size:12px; font-weight:800; color:#64748b; margin-left:3px;">원</span>
           </div>
         </div>
 
         <div class="card-subtotal">
-          <div class="subtotal-month">예상 월 가맹비: <strong id="platform-monthly-total" style="color:#15803d;">24만 원</strong></div>
           플랫폼 연간 비용
-          <span class="subtotal-year" id="platform-annual-total">288만 원</span>
+          <span id="platform-annual-total">360만 원</span>
         </div>
       </div>
     </div>
 
-    <!-- Big Result Banner -->
     <div class="result-banner">
       <div class="result-banner-label">연간 확정 비용 절감액</div>
-      <div class="result-banner-value" id="saving-total">+1,512만 원 순이익 확정!</div>
+      <div class="result-banner-value" id="saving-total">+1,440만 원 순이익 확정!</div>
       <div class="result-banner-sub" id="saving-sub">문자비 낭비를 막고 고스란히 마트 마진으로 전환됩니다</div>
     </div>
 
-    <!-- 3 Engines -->
     <div class="engine-section">
       <div class="engine-title">우리가게 마트 3대 수익 성장 엔진</div>
       <div class="engine-grid">
-        <div class="engine-card">
+        <a href="https://wooriapt.ai.kr" target="_blank" class="engine-card" title="문자 고객 디지털 전환 공식 안내">
           <div class="engine-num">1</div>
           <div class="engine-main">문자 고객 ➔<br>디지털 고객</div>
-          <div class="engine-desc">(문자비 0원 영구 전환)</div>
-        </div>
-        <div class="engine-card">
+          <div class="engine-desc">(문자비 0원)</div>
+        </a>
+        <a href="https://wooriapt.ai.kr" target="_blank" class="engine-card" title="자동차 QR 신규 고객 확보 공식 안내">
           <div class="engine-num">2</div>
-          <div class="engine-main">자동차 QR ➔<br>신규 고객 확보</div>
-          <div class="engine-desc">(지역 아파트 주민 유입)</div>
-        </div>
-        <div class="engine-card">
-          <div class="engine-num">3</div>
-          <div class="engine-main">분양사 연동 ➔<br>마트 매출 상승</div>
-          <div class="engine-desc">(3천원 쿠폰 방문 촉진)</div>
-        </div>
+          <div class="engine-main">자동차 QR ➔<br>신규고객 확보</div>
+          <div class="engine-desc">(주민 유입)</div>
+        </a>
+        <a href="https://www.wooriapt.app/mart-sales.html" class="engine-card" style="background:#eff6ff; border:1.5px solid #93c5fd;" title="분양사 연동 마트 매출 올리기 안내">
+          <div class="engine-num" style="background:#2563eb; color:#fff;">3</div>
+          <div class="engine-main" style="color:#1d4ed8;">분양사 연동 ➔<br>마트 매출 올리기</div>
+          <div class="engine-desc" style="color:#2563eb;">(3천원 쿠폰 ➔)</div>
+        </a>
       </div>
     </div>
 
-    <!-- Buttons -->
+    <a href="https://www.wooriapt.app/mart-sales.html" class="sales-boost-banner">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:22px;">🚀</span>
+        <div>
+          <div style="font-size:13.5px; font-weight:900; color:#1e40af;">마트 매출 올리기 (분양사 3천원 쿠폰 연동)</div>
+          <div style="font-size:11.5px; font-weight:600; color:#2563eb;">인근 아파트 주민 장보기 유치 안내 보기 ➔</div>
+        </div>
+      </div>
+      <span style="font-size:12px; font-weight:900; color:#1d4ed8; padding:5px 10px; background:#ffffff; border:1px solid #bfdbfe; border-radius:8px; white-space:nowrap;">확인 ›</span>
+    </a>
+
     <div class="btn-group">
       <a href="https://wooriapt.ai.kr" target="_blank" class="cta-btn">
         [ 우리가게 가맹점 신청 알아보기 &gt; ]
@@ -512,8 +537,15 @@
     </div>
 
     <div class="footer-note">
-      * 버튼을 누르시면 마트 전용 공식 홈페이지(wooriapt.ai.kr)로 이동합니다.<br>
-      * 가맹비 산출 공식: (고객 DB 수 × 30원) + (월매출 억 원 × 60,000원) [VAT 별도]
+      * 가맹 신청 버튼을 누르시면 마트 전용 공식 홈페이지(wooriapt.ai.kr)로 이동합니다.<br>
+      * 중소형 식자재마트 실무 기준 (5,000명 DB / 월 6회 발송) 반영
+    </div>
+
+    <div class="bottom-home-bar">
+      <a href="https://www.wooriapt.app" class="bottom-home-btn">
+        <span>🏠</span>
+        <span>우리아파트 안심거래 메인화면 (www.wooriapt.app)</span>
+      </a>
     </div>
   </div>
 
@@ -521,23 +553,14 @@
     const agencyCust = document.getElementById('agency-customers');
     const agencyUnit = document.getElementById('agency-unit-cost');
     const agencyFee = document.getElementById('agency-manage-fee');
-    
     const platformCust = document.getElementById('platform-customers');
-    const platformSales = document.getElementById('platform-sales-eok');
+    const platformFee = document.getElementById('platform-fee');
 
-    const feeDbResultEl = document.getElementById('fee-db-result');
-    const feeSalesResultEl = document.getElementById('fee-sales-result');
-
-    const agencyMonthlyTotalEl = document.getElementById('agency-monthly-total');
-    const agencyAnnualTotalEl = document.getElementById('agency-annual-total');
-
-    const platformMonthlyTotalEl = document.getElementById('platform-monthly-total');
-    const platformAnnualTotalEl = document.getElementById('platform-annual-total');
-    
+    const agencyTotalEl = document.getElementById('agency-annual-total');
+    const platformTotalEl = document.getElementById('platform-annual-total');
     const savingTotalEl = document.getElementById('saving-total');
     const savingSubEl = document.getElementById('saving-sub');
 
-    // 양쪽 고객 DB 수 동기화
     agencyCust.addEventListener('input', () => {
       platformCust.value = agencyCust.value;
       recalculate();
@@ -547,7 +570,7 @@
       recalculate();
     });
 
-    [agencyUnit, agencyFee, platformSales].forEach(input => {
+    [agencyUnit, agencyFee, platformFee].forEach(input => {
       input.addEventListener('input', recalculate);
     });
 
@@ -562,41 +585,19 @@
       return man.toLocaleString() + '만 원';
     }
 
-    function formatWonExact(amount) {
-      return Math.round(amount).toLocaleString('ko-KR') + '원';
-    }
-
     function recalculate() {
-      const customers = Math.max(0, parseFloat(agencyCust.value) || 0);
-      const unitCost = Math.max(0, parseFloat(agencyUnit.value) || 0);
-      const mgtFee = Math.max(0, parseFloat(agencyFee.value) || 0);
-      const salesEok = Math.max(0, parseFloat(platformSales.value) || 0);
+      const customers = parseFloat(agencyCust.value) || 0;
+      const unitCost = parseFloat(agencyUnit.value) || 0;
+      const mgtFee = parseFloat(agencyFee.value) || 0;
+      const platFee = parseFloat(platformFee.value) || 0;
 
-      // 1. 대행사 문자 방식 (월 6회 발송 기준)
       const monthlySmsTimes = 6;
-      const agencyMonthly = (customers * unitCost * monthlySmsTimes) + mgtFee;
-      const agencyAnnual = agencyMonthly * 12;
-
-      // 2. 우리가게 공식 플랫폼 가맹비 공식 (wooriapt.ai.kr)
-      // DB 기준 금액 = DB수 * 30원
-      // 매출 기준 금액 = 월매출(억 원) * 60,000원
-      const dbFee = customers * 30;
-      const salesFee = salesEok * 60000;
-      const platformMonthly = dbFee + salesFee;
-      const platformAnnual = platformMonthly * 12;
-
-      // 3. 연간 확정 비용 절감액
+      const agencyAnnual = (customers * unitCost * monthlySmsTimes + mgtFee) * 12;
+      const platformAnnual = platFee * 12;
       const annualSaving = agencyAnnual - platformAnnual;
 
-      // UI 반영
-      feeDbResultEl.textContent = formatKoreanMoney(dbFee);
-      feeSalesResultEl.textContent = formatKoreanMoney(salesFee);
-
-      agencyMonthlyTotalEl.textContent = formatKoreanMoney(agencyMonthly);
-      agencyAnnualTotalEl.textContent = formatKoreanMoney(agencyAnnual);
-
-      platformMonthlyTotalEl.textContent = formatKoreanMoney(platformMonthly);
-      platformAnnualTotalEl.textContent = formatKoreanMoney(platformAnnual);
+      agencyTotalEl.textContent = formatKoreanMoney(agencyAnnual);
+      platformTotalEl.textContent = formatKoreanMoney(platformAnnual);
 
       if (annualSaving > 0) {
         savingTotalEl.textContent = '+' + formatKoreanMoney(annualSaving) + ' 순이익 확정!';
@@ -606,14 +607,14 @@
         savingSubEl.textContent = '기존 대행사 비용과 플랫폼 가맹비가 동일합니다';
       } else {
         savingTotalEl.textContent = '-' + formatKoreanMoney(Math.abs(annualSaving)) + ' 차이';
-        savingSubEl.textContent = '고객 수나 매출 조건을 조정해보세요';
+        savingSubEl.textContent = '가맹비 금액을 조정해보세요';
       }
     }
 
     function shareCalculator() {
       const u = location.href;
       const t = '우리가게 마트 팩트 경영 계산기';
-      const txt = '대행사 문자비 1,512만 원 아끼고 신규 고객 늘리는 마트 팩트 경영 계산기입니다. 우리 마트 비용도 지금 확인해보세요!';
+      const txt = '대행사 문자비 1,440만 원 아끼고 신규 고객 늘리는 마트 팩트 경영 계산기입니다. 우리 마트 비용도 지금 확인해보세요!';
       if (navigator.share) {
         navigator.share({ title: t, text: txt, url: u }).catch(() => {});
       } else {
@@ -625,39 +626,7 @@
       }
     }
 
-    // Initial run
     recalculate();
-    // Service Worker & PWA Install
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
-    });
-  }
-
-  let martDeferredPrompt = null;
-  window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    martDeferredPrompt = e;
-  });
-
-  const martInstallBtn = document.getElementById("martInstallBtn");
-  if (martInstallBtn) {
-    martInstallBtn.addEventListener("click", async () => {
-      if (martDeferredPrompt) {
-        try {
-          martDeferredPrompt.prompt();
-          const choice = await martDeferredPrompt.userChoice;
-          if (choice && choice.outcome === "accepted") {
-            martDeferredPrompt = null;
-            return;
-          }
-        } catch (err) {
-          console.warn("Install prompt error:", err);
-        }
-      }
-      location.href = "/app-install";
-    });
-  }
 </script>
 </body>
 </html>
