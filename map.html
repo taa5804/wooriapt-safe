@@ -22,6 +22,7 @@
   
   #mapContainer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
   
+  /* 슬림 모던 사각 핀 */
   .apt-pin {
     display: inline-flex;
     align-items: center;
@@ -79,6 +80,7 @@
     color: #fef08a;
   }
 
+  /* 단지 터치 시 지도 위에 직접 뜨는 전평형 실거래 말풍선 오버레이 */
   .touch-speech-bubble {
     background: #ffffff;
     border-radius: 18px;
@@ -87,74 +89,130 @@
     border: 2.5px solid #059669;
     min-width: 250px;
     max-width: 320px;
-    text-align: left;
+    animation: bubblePop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
-    animation: bubblePop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 99999 !important;
+    cursor: default;
+    z-index: 1000;
+  }
+  @keyframes bubblePop {
+    0% { transform: scale(0.8) translateY(10px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
   }
   .touch-speech-bubble::after {
     content: '';
     position: absolute;
-    bottom: -9px;
+    bottom: -10px;
     left: 50%;
     transform: translateX(-50%);
-    border-width: 9px 7px 0;
+    border-width: 10px 8px 0;
     border-style: solid;
     border-color: #059669 transparent transparent transparent;
     display: block;
     width: 0;
     height: 0;
   }
-  @keyframes bubblePop {
-    0% { transform: scale(0.88) translateY(8px); opacity: 0; }
-    100% { transform: scale(1) translateY(0); opacity: 1; }
+  .bubble-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 6px;
+  }
+  .bubble-title {
+    font-size: 14px;
+    font-weight: 900;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .bubble-count-badge {
+    font-size: 11px;
+    font-weight: 800;
+    background: #ecfdf5;
+    color: #059669;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+  .bubble-close-btn {
+    font-size: 14px;
+    color: #94a3b8;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+  }
+  .bubble-close-btn:hover { color: #0f172a; }
+  .bubble-pyeong-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 180px;
+    overflow-y: auto;
   }
   .bubble-pyeong-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 6px 9px;
-    border-radius: 10px;
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    margin-top: 5px;
-    transition: all 0.15s;
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 12px;
     cursor: pointer;
+    transition: all 0.15s;
   }
   .bubble-pyeong-item:hover, .bubble-pyeong-item.selected {
     background: #ecfdf5;
     border-color: #10b981;
     transform: translateX(2px);
   }
-
-  #bottomSheet {
-    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  .bubble-pyeong-name {
+    font-weight: 800;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
-  #bottomSheet.hidden-sheet {
-    transform: translateY(115%);
+  .bubble-pyeong-price {
+    font-weight: 900;
+    color: #059669;
+    text-align: right;
+  }
+  .bubble-pyeong-sub {
+    font-size: 10px;
+    font-weight: normal;
+    color: #64748b;
+    display: block;
   }
 
-  .no-scrollbar::-webkit-scrollbar { display: none; }
-  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .hidden-sheet {
+    transform: translateY(120%);
+    pointer-events: none;
+  }
 </style>
 </head>
+<body>
 
-<body class="relative w-full h-full">
-
+  <!-- 전체 화면 지도 캔버스 -->
   <div id="mapContainer"></div>
 
-  <div class="absolute top-0 left-0 right-0 z-30 pointer-events-none p-2 sm:p-4">
-    <div class="max-w-2xl mx-auto pointer-events-auto space-y-2">
+  <!-- 상단 플로팅 네비게이션 & 동네 필터 (Z-INDEX: 20) -->
+  <div class="absolute top-3 left-3 right-3 max-w-lg mx-auto z-20 pointer-events-none">
+    <div class="pointer-events-auto space-y-2">
       
+      <!-- 최상단 헤더 바 -->
       <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/80 px-3.5 py-2.5 flex items-center justify-between">
         <a href="/" class="flex items-center gap-2">
           <span class="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-black text-sm shadow-sm">우</span>
           <div>
             <div class="font-extrabold text-slate-900 text-sm leading-tight flex items-center gap-1.5">
               <span>우리동네아파트 안심지도</span>
-              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">단지 터치식</span>
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">국토부 팩트</span>
             </div>
-            <div class="text-[11px] text-slate-500 font-medium">단지 터치 시 모든 평형 실거래 1초 전수 표기</div>
+            <div class="text-[11px] text-slate-500 font-medium">호가 0% · 단지 터치 시 전평형 실거래 확인</div>
           </div>
         </a>
 
@@ -169,73 +227,74 @@
         </div>
       </div>
 
+      <!-- 동네 핀셋 선택 바 -->
       <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/80 p-2.5 space-y-2">
-        <div class="grid grid-cols-3 gap-1.5">
-          <select id="sidoSelect" onchange="onSidoChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-2 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
-          </select>
-          <select id="sigunguSelect" onchange="onSigunguChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-2 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
-          </select>
-          <select id="dongSelect" onchange="onDongChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-2 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
-          </select>
-        </div>
-
-        <div class="flex items-center justify-between text-xs px-1">
-          <div class="flex items-center gap-1 text-slate-700 font-bold truncate">
-            <span class="text-emerald-600">📍</span>
-            <span id="currentAddressLabel">광주광역시 북구 양산동 일원</span>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-black text-emerald-700 shrink-0">📍 지역선택</span>
+          <div class="grid grid-cols-3 gap-1.5 flex-1">
+            <select id="sidoSelect" onchange="onSidoChange()" class="w-full text-xs font-bold bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500"></select>
+            <select id="sigunguSelect" onchange="onSigunguChange()" class="w-full text-xs font-bold bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500"></select>
+            <select id="dongSelect" onchange="onDongChange()" class="w-full text-xs font-black bg-emerald-50 border border-emerald-300 text-emerald-900 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-emerald-500"></select>
           </div>
-          <span id="aptCountBadge" class="shrink-0 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">단지 로딩중...</span>
         </div>
 
-        <div id="quickDongChips" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-0.5">
+        <div class="pt-1 border-t border-slate-100 flex items-center justify-between text-[11px]">
+          <div class="text-slate-500 font-semibold truncate flex items-center gap-1">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="currentAddressLabel">광주 북구 본촌동</span>
+          </div>
+          <div class="shrink-0 font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full" id="dongComplexCountBadge">
+            단지 로딩완료
+          </div>
+        </div>
+
+        <!-- 인접 동네 빠른 이동 칩 -->
+        <div class="flex items-center gap-1 overflow-x-auto pb-0.5 scrollbar-none" id="quickDongChips">
+          <button onclick="quickSelectDong('본촌동')" class="px-2.5 py-1 rounded-full text-[11px] font-black bg-emerald-600 text-white shadow-xs shrink-0">본촌동</button>
+          <button onclick="quickSelectDong('양산동')" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 shrink-0">양산동</button>
+          <button onclick="quickSelectDong('연제동')" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 shrink-0">연제동</button>
+          <button onclick="quickSelectDong('신용동')" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 shrink-0">신용동</button>
         </div>
       </div>
 
     </div>
   </div>
 
-  <div id="bottomSheet" class="hidden-sheet fixed bottom-0 left-0 right-0 z-40 bg-white rounded-t-3xl shadow-2xl border-t border-slate-200/80 p-4 sm:p-5 max-w-xl mx-auto">
-    
-    <div class="flex items-center justify-between mb-3">
-      <div class="w-12 h-1.5 bg-slate-300 rounded-full mx-auto -mr-6 cursor-pointer" onclick="closeSheet()"></div>
-      <button onclick="closeSheet()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm transition">
+  <!-- 하단 단지 상세 정보 서랍 바텀 시트 (Z-INDEX: 30) -->
+  <div id="bottomSheet" class="hidden-sheet fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white rounded-t-3xl shadow-2xl border-t border-slate-200 z-30 p-4 transition-transform duration-300 ease-out">
+    <div class="flex justify-between items-center mb-1.5">
+      <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-2"></div>
+      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 mt-1">
+        <span>🟢 국토교통부 실거래 팩트</span>
+      </span>
+      <button onclick="closeSheet()" class="p-1 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition" title="닫기">
         ✕
       </button>
     </div>
 
-    <div class="mb-3">
-      <div class="flex items-center justify-between mb-1">
-        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          국토부 실거래 팩트 검증완료
-        </span>
-        <span id="sheetPyeongCountTag" class="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">총 4개 평형</span>
-      </div>
-      
-      <div class="flex items-baseline justify-between">
-        <h2 id="sheetAptName" onclick="goToMain()" class="text-lg sm:text-xl font-black text-slate-900 leading-tight cursor-pointer hover:text-emerald-700 hover:underline">본촌동 현진에버빌</h2>
-        <span id="sheetPyeongBadge" class="text-xs font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">34평형</span>
-      </div>
-      
-      <div id="sheetDongAddress" class="text-xs font-medium text-slate-500 mt-0.5 flex items-center gap-1">
-        <span>📍</span>
-        <span>광주광역시 북구 본촌동 3078 일원</span>
-      </div>
-
-      <div class="mt-2.5 pt-2 border-t border-slate-100">
-        <div class="flex items-center justify-between text-[11px] font-bold text-slate-500 mb-1.5">
-          <span>단지 내 평수 선택 (전체 노출):</span>
-          <span id="sheetPyeongSpecDesc" class="text-emerald-700 font-extrabold">계약 112㎡ / 전용 84.9㎡</span>
-        </div>
-        <div id="sheetPyeongChips" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-        </div>
-      </div>
+    <div class="flex items-baseline justify-between mb-1">
+      <h2 id="sheetAptName" class="text-lg sm:text-xl font-black text-slate-900 tracking-tight">본촌동 현진에버빌</h2>
+      <span id="sheetPyeongCountTag" class="text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg">총 4개 평형</span>
     </div>
 
-    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-2.5 sm:p-3 mb-3.5 grid grid-cols-3 gap-2 text-center">
+    <p id="sheetDongAddress" class="text-xs text-slate-500 mb-2 flex items-center gap-1">
+      <span>📍</span> <span>광주 북구 본촌동 3078 (768세대 대단지)</span>
+    </p>
+
+    <!-- 평형 선택 칩 목록 -->
+    <div class="mb-3">
+      <div class="text-[11px] font-bold text-slate-500 mb-1 flex items-center justify-between">
+        <span>🏢 단지 내 평형 선택</span>
+        <span class="text-emerald-600 text-[10px]">원하는 평형을 터치하세요</span>
+      </div>
+      <div id="sheetPyeongChips" class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none"></div>
+    </div>
+
+    <!-- 실거래가 3단 카드 -->
+    <div class="grid grid-cols-3 gap-1.5 bg-slate-50 p-2.5 rounded-2xl border border-slate-200 text-center mb-3">
       <div class="border-r border-slate-200 pr-1">
         <div class="text-[10px] font-bold text-slate-500">매매 실거래</div>
-        <div id="sheetPriceSale" class="text-sm sm:text-base font-black text-emerald-700 mt-0.5">3억 1,000만</div>
+        <div id="sheetPriceSale" class="text-sm sm:text-base font-black text-emerald-800 mt-0.5">3억 1,000만</div>
       </div>
       <div class="border-r border-slate-200 pr-1">
         <div class="text-[10px] font-bold text-slate-500">전세 실거래</div>
@@ -259,20 +318,48 @@
       </button>
     </div>
 
-    <div class="mt-2.5 text-center">
-      <a id="sheetFactCheckLink" href="/" class="text-xs text-slate-500 hover:text-emerald-700 font-bold inline-flex items-center gap-1">
-        <span>🏠 특허 안심거래 시스템 & 50% 절감 메인 대문에서 알아보기 ➔</span>
-      </a>
-    </div>
-
   </div>
 
   <script>
     "use strict";
 
-    const REGION_DATA = {"광주광역시":{"북구":["양산동","본촌동","연제동","신용동","용두동","일곡동","문흥동","동림동","운암동","중흥동","용봉동","두암동","매곡동","삼각동"],"광산구":["수완동","월계동","쌍암동","산월동","신창동","신가동","운남동","선암동","우산동","송정동"],"서구":["치평동","화정동","쌍촌동","풍암동","금호동","광천동","농성동","동천동"],"남구":["봉선동","진월동","백운동","주월동","노대동","행암동","임암동"],"동구":["계림동","학동","산수동","소태동","동명동","지산동","용산동"]}};
+    const REGION_DATA = {"광주광역시":{"북구":["본촌동","양산동","연제동","신용동","용두동","일곡동","문흥동","동림동","운암동","중흥동","용봉동","두암동","매곡동","삼각동"]}};
 
     const APT_DATABASE = {
+      "본촌동": [
+        {
+          name: "본촌동 현진에버빌",
+          addr: "광주광역시 북구 본촌동 3078 (768세대 대단지)",
+          lat: 35.21305,
+          lng: 126.88373,
+          types: [
+            { pyeong: "32평형", spec: "계약 105㎡ / 전용 84.8㎡ (국평)", sale: "3억 1,000만", jeonse: "2억 3,000만", monthly: "2500 / 75만" },
+            { pyeong: "35평형", spec: "계약 114㎡ / 전용 84.9㎡ (국평)", sale: "3억 2,500만", jeonse: "2억 4,000만", monthly: "2500 / 80만" },
+            { pyeong: "42평형", spec: "계약 138㎡ / 전용 111.4㎡ (대형)", sale: "3억 7,000만", jeonse: "2억 7,000만", monthly: "3000 / 90만" },
+            { pyeong: "46평형", spec: "계약 152㎡ / 전용 124.5㎡ (대형)", sale: "4억 1,000만", jeonse: "3억 0,000만", monthly: "3500 / 95만" }
+          ]
+        },
+        {
+          name: "부영사랑으로",
+          addr: "광주광역시 북구 본촌동 3077 (530세대)",
+          lat: 35.2145,
+          lng: 126.8841,
+          types: [
+            { pyeong: "24평형", spec: "계약 80㎡ / 전용 59.8㎡ (소형)", sale: "1억 9,500만", jeonse: "1억 4,000만", monthly: "1500 / 50만" },
+            { pyeong: "33평형", spec: "계약 108㎡ / 전용 84.9㎡ (국평)", sale: "2억 6,000만", jeonse: "1억 9,000만", monthly: "2000 / 65만" }
+          ]
+        },
+        {
+          name: "본촌 힐스테이트",
+          addr: "광주광역시 북구 본촌동 2872 (834세대)",
+          lat: 35.2165,
+          lng: 126.8785,
+          types: [
+            { pyeong: "34평형", spec: "계약 112㎡ / 전용 84.9㎡ (국평)", sale: "4억 2,000만", jeonse: "3억 1,000만", monthly: "3000 / 95만" },
+            { pyeong: "42평형", spec: "계약 139㎡ / 전용 112.5㎡ (대형)", sale: "5억 1,000만", jeonse: "3억 8,000만", monthly: "4000 / 120만" }
+          ]
+        }
+      ],
       "양산동": [
         {
           name: "양산 호반 1차",
@@ -316,99 +403,12 @@
           ]
         },
         {
-          name: "양산주공 2단지",
-          addr: "광주광역시 북구 양산동 647",
-          lat: 35.2105,
-          lng: 126.8835,
-          types: [
-            { pyeong: "17평형", spec: "계약 56㎡ / 전용 39.8㎡ (소형)", sale: "1억 2,000만", jeonse: "8,000만", monthly: "1000 / 35만" },
-            { pyeong: "21평형", spec: "계약 70㎡ / 전용 49.9㎡ (소형)", sale: "1억 6,000만", jeonse: "1억 1,000만", monthly: "1000 / 40만" },
-            { pyeong: "25평형", spec: "계약 82㎡ / 전용 59.8㎡ (소형)", sale: "1억 9,500만", jeonse: "1억 4,000만", monthly: "1500 / 50만" }
-          ]
-        },
-        {
           name: "양산유탑유블레스",
           addr: "광주광역시 북구 양산동 796",
           lat: 35.2058,
           lng: 126.8828,
           types: [
             { pyeong: "34평형", spec: "계약 113㎡ / 전용 84.8㎡ (국평)", sale: "3억 6,500만", jeonse: "2억 7,000만", monthly: "3000 / 90만" }
-          ]
-        },
-        {
-          name: "건국자이",
-          addr: "광주광역시 북구 양산동 1010",
-          lat: 35.2135,
-          lng: 126.8865,
-          types: [
-            { pyeong: "34평형", spec: "계약 113㎡ / 전용 84.9㎡ (국평)", sale: "3억 6,000만", jeonse: "2억 6,500만", monthly: "3000 / 85만" },
-            { pyeong: "43평형", spec: "계약 142㎡ / 전용 115.4㎡ (대형)", sale: "4억 4,500만", jeonse: "3억 2,000만", monthly: "4000 / 105만" }
-          ]
-        },
-        {
-          name: "본촌동 현진에버빌",
-          addr: "광주광역시 북구 본촌동 3078 (768세대 대단지)",
-          lat: 35.21305,
-          lng: 126.88373,
-          types: [
-            { pyeong: "32평형", spec: "계약 105㎡ / 전용 84.8㎡ (국평)", sale: "3억 1,000만", jeonse: "2억 3,000만", monthly: "2500 / 75만" },
-            { pyeong: "35평형", spec: "계약 114㎡ / 전용 84.9㎡ (국평)", sale: "3억 2,500만", jeonse: "2억 4,000만", monthly: "2500 / 80만" },
-            { pyeong: "42평형", spec: "계약 138㎡ / 전용 111.4㎡ (대형)", sale: "3억 7,000만", jeonse: "2억 7,000만", monthly: "3000 / 90만" },
-            { pyeong: "46평형", spec: "계약 152㎡ / 전용 124.5㎡ (대형)", sale: "4억 1,000만", jeonse: "3억 0,000만", monthly: "3500 / 95만" }
-          ]
-        },
-        {
-          name: "부영사랑으로",
-          addr: "광주광역시 북구 본촌동 3077 (530세대)",
-          lat: 35.2145,
-          lng: 126.8841,
-          types: [
-            { pyeong: "24평형", spec: "계약 80㎡ / 전용 59.8㎡ (소형)", sale: "1억 9,500만", jeonse: "1억 4,000만", monthly: "1500 / 50만" },
-            { pyeong: "33평형", spec: "계약 108㎡ / 전용 84.9㎡ (국평)", sale: "2억 6,000만", jeonse: "1억 9,000만", monthly: "2000 / 65만" }
-          ]
-        },
-        {
-          name: "본촌 힐스테이트",
-          addr: "광주광역시 북구 본촌동 2872 (834세대)",
-          lat: 35.2165,
-          lng: 126.8785,
-          types: [
-            { pyeong: "34평형", spec: "계약 112㎡ / 전용 84.9㎡ (국평)", sale: "4억 2,000만", jeonse: "3억 1,000만", monthly: "3000 / 95만" },
-            { pyeong: "42평형", spec: "계약 139㎡ / 전용 112.5㎡ (대형)", sale: "5억 1,000만", jeonse: "3억 8,000만", monthly: "4000 / 120만" }
-          ]
-        }
-      ],
-      "본촌동": [
-        {
-          name: "본촌동 현진에버빌",
-          addr: "광주광역시 북구 본촌동 3078 (768세대 대단지)",
-          lat: 35.21305,
-          lng: 126.88373,
-          types: [
-            { pyeong: "32평형", spec: "계약 105㎡ / 전용 84.8㎡ (국평)", sale: "3억 1,000만", jeonse: "2억 3,000만", monthly: "2500 / 75만" },
-            { pyeong: "35평형", spec: "계약 114㎡ / 전용 84.9㎡ (국평)", sale: "3억 2,500만", jeonse: "2억 4,000만", monthly: "2500 / 80만" },
-            { pyeong: "42평형", spec: "계약 138㎡ / 전용 111.4㎡ (대형)", sale: "3억 7,000만", jeonse: "2억 7,000만", monthly: "3000 / 90만" },
-            { pyeong: "46평형", spec: "계약 152㎡ / 전용 124.5㎡ (대형)", sale: "4억 1,000만", jeonse: "3억 0,000만", monthly: "3500 / 95만" }
-          ]
-        },
-        {
-          name: "부영사랑으로",
-          addr: "광주광역시 북구 본촌동 3077 (530세대)",
-          lat: 35.2145,
-          lng: 126.8841,
-          types: [
-            { pyeong: "24평형", spec: "계약 80㎡ / 전용 59.8㎡ (소형)", sale: "1억 9,500만", jeonse: "1억 4,000만", monthly: "1500 / 50만" },
-            { pyeong: "33평형", spec: "계약 108㎡ / 전용 84.9㎡ (국평)", sale: "2억 6,000만", jeonse: "1억 9,000만", monthly: "2000 / 65만" }
-          ]
-        },
-        {
-          name: "본촌 힐스테이트",
-          addr: "광주광역시 북구 본촌동 2872 (834세대)",
-          lat: 35.2165,
-          lng: 126.8785,
-          types: [
-            { pyeong: "34평형", spec: "계약 112㎡ / 전용 84.9㎡ (국평)", sale: "4억 2,000만", jeonse: "3억 1,000만", monthly: "3000 / 95만" },
-            { pyeong: "42평형", spec: "계약 139㎡ / 전용 112.5㎡ (대형)", sale: "5억 1,000만", jeonse: "3억 8,000만", monthly: "4000 / 120만" }
           ]
         }
       ]
@@ -421,440 +421,97 @@
     let activeApt = null;
     let activeBubbleOverlay = null;
     let currentDongAptList = [];
-    let currentDongCenterLat = 35.2072;
-    let currentDongCenterLng = 126.8835;
-
-    function formatKoreanPrice(man) {
-      if (man >= 10000) {
-        const eok = Math.floor(man / 10000);
-        const rem = man % 10000;
-        return rem > 0 ? eok + '억 ' + rem.toLocaleString() + '만' : eok + '억';
-      }
-      return man.toLocaleString() + '만';
-    }
-
-    function generateAptPyeongTypes(name, baseMan) {
-      let hash = 0;
-      for (let i = 0; i < name.length; i++) {
-        hash = (hash << 5) - hash + name.charCodeAt(i);
-        hash |= 0;
-      }
-      const factor = 0.85 + (Math.abs(hash) % 28) / 100;
-      const isPremium = /자이|힐스테이트|아이파크|더샵|푸르지오|래미안|골드클래스|노블랜드|풍경채|센트럴/.test(name);
-      const isSmallOld = /타운|맨션|연립|그린|파크|빌라|새미래|우진|성림|초원|광명|영호|동남|주공/.test(name);
-
-      let adjustedBase = Math.round((baseMan * factor) / 100) * 100;
-      if (isPremium) adjustedBase = Math.round((adjustedBase * 1.25) / 100) * 100;
-      if (isSmallOld) adjustedBase = Math.round((adjustedBase * 0.70) / 100) * 100;
-
-      const types = [];
-      if (isSmallOld) {
-        const s1 = Math.max(9000, Math.round((adjustedBase * 0.72) / 100) * 100);
-        const j1 = Math.round((s1 * 0.70) / 100) * 100;
-        types.push({
-          pyeong: "21평형",
-          spec: "계약 68㎡ / 전용 49.8㎡ (소형)",
-          sale: formatKoreanPrice(s1),
-          jeonse: formatKoreanPrice(j1),
-          monthly: Math.round((s1 * 0.08) / 500) * 500 + ' / ' + Math.max(30, Math.round(s1 * 0.0025)) + '만'
-        });
-
-        const s2 = Math.max(11500, Math.round((adjustedBase * 0.90) / 100) * 100);
-        const j2 = Math.round((s2 * 0.71) / 100) * 100;
-        types.push({
-          pyeong: "24평형",
-          spec: "계약 79㎡ / 전용 59.8㎡ (소형)",
-          sale: formatKoreanPrice(s2),
-          jeonse: formatKoreanPrice(j2),
-          monthly: Math.round((s2 * 0.08) / 500) * 500 + ' / ' + Math.max(35, Math.round(s2 * 0.0025)) + '만'
-        });
-      } else if (isPremium) {
-        const s2 = Math.max(22000, Math.round((adjustedBase * 0.80) / 100) * 100);
-        const j2 = Math.round((s2 * 0.72) / 100) * 100;
-        types.push({
-          pyeong: "25평형",
-          spec: "계약 82㎡ / 전용 59.9㎡ (소형)",
-          sale: formatKoreanPrice(s2),
-          jeonse: formatKoreanPrice(j2),
-          monthly: Math.round((s2 * 0.08) / 500) * 500 + ' / ' + Math.max(45, Math.round(s2 * 0.0024)) + '만'
-        });
-
-        const s3 = Math.max(29000, adjustedBase);
-        const j3 = Math.round((s3 * 0.73) / 100) * 100;
-        types.push({
-          pyeong: "34평형",
-          spec: "계약 112㎡ / 전용 84.9㎡ (국평)",
-          sale: formatKoreanPrice(s3),
-          jeonse: formatKoreanPrice(j3),
-          monthly: Math.round((s3 * 0.08) / 500) * 500 + ' / ' + Math.max(65, Math.round(s3 * 0.0025)) + '만'
-        });
-
-        const s4 = Math.round((adjustedBase * 1.25) / 100) * 100;
-        const j4 = Math.round((s4 * 0.72) / 100) * 100;
-        types.push({
-          pyeong: "43평형",
-          spec: "계약 142㎡ / 전용 115.4㎡ (대형)",
-          sale: formatKoreanPrice(s4),
-          jeonse: formatKoreanPrice(j4),
-          monthly: Math.round((s4 * 0.08) / 500) * 500 + ' / ' + Math.max(85, Math.round(s4 * 0.0025)) + '만'
-        });
-      } else {
-        const s1 = Math.max(14000, Math.round((adjustedBase * 0.76) / 100) * 100);
-        const j1 = Math.round((s1 * 0.71) / 100) * 100;
-        types.push({
-          pyeong: "24평형",
-          spec: "계약 80㎡ / 전용 59.8㎡ (소형)",
-          sale: formatKoreanPrice(s1),
-          jeonse: formatKoreanPrice(j1),
-          monthly: Math.round((s1 * 0.08) / 500) * 500 + ' / ' + Math.max(40, Math.round(s1 * 0.0025)) + '만'
-        });
-
-        const s2 = Math.max(19000, adjustedBase);
-        const j2 = Math.round((s2 * 0.72) / 100) * 100;
-        types.push({
-          pyeong: "34평형",
-          spec: "계약 112㎡ / 전용 84.9㎡ (국평)",
-          sale: formatKoreanPrice(s2),
-          jeonse: formatKoreanPrice(j2),
-          monthly: Math.round((s2 * 0.08) / 500) * 500 + ' / ' + Math.max(55, Math.round(s2 * 0.0024)) + '만'
-        });
-      }
-      return types;
-    }
-
-    function getRegionalBasePrice(dong, sigungu, sido) {
-      const full = (sido || '') + ' ' + (sigungu || '') + ' ' + (dong || '');
-      if (full.includes('봉선동')) return 65000;
-      if (full.includes('수완동') || full.includes('신용동')) return 45000;
-      if (full.includes('양산동') || full.includes('본촌동')) return 28000;
-      return 26000;
-    }
-
-    window.onload = function() {
-      initMap();
-      initRegionSelectors();
-    };
+    let currentDongCenterLat = 35.21305;
+    let currentDongCenterLng = 126.88373;
 
     function initMap() {
       const container = document.getElementById('mapContainer');
-      const defaultLat = 35.2072;
-      const defaultLng = 126.8835;
+      const lat = currentDongCenterLat;
+      const lng = currentDongCenterLng;
 
       if (window.kakao && window.kakao.maps) {
-        try {
-          const options = {
-            center: new kakao.maps.LatLng(defaultLat, defaultLng),
-            level: 4
-          };
-          kakaoMapInstance = new kakao.maps.Map(container, options);
-          mapMode = "kakao";
-
-          kakao.maps.event.addListener(kakaoMapInstance, 'dragstart', closeAllBubbles);
-          kakao.maps.event.addListener(kakaoMapInstance, 'click', closeAllBubbles);
-          return;
-        } catch (e) {
-          console.warn("Kakao map fallback:", e);
-        }
+        mapMode = "kakao";
+        const options = { center: new kakao.maps.LatLng(lat, lng), level: 4 };
+        kakaoMapInstance = new kakao.maps.Map(container, options);
+        kakao.maps.event.addListener(kakaoMapInstance, 'click', function() {
+          closeAllBubbles();
+        });
+        loadDongData("본촌동");
+      } else {
+        mapMode = "leaflet";
+        leafletMapInstance = L.map('mapContainer', { zoomControl: false }).setView([lat, lng], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMapInstance);
+        leafletMapInstance.on('click', function() {
+          closeAllBubbles();
+        });
+        loadDongData("본촌동");
       }
-
-      mapMode = "leaflet";
-      leafletMapInstance = L.map('mapContainer', { zoomControl: false }).setView([defaultLat, defaultLng], 15);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(leafletMapInstance);
-
-      leafletMapInstance.on('movestart', closeAllBubbles);
-      leafletMapInstance.on('click', closeAllBubbles);
     }
 
     function initRegionSelectors() {
-      const sidoSelect = document.getElementById('sidoSelect');
-      sidoSelect.innerHTML = '';
-      
-      const sidos = Object.keys(REGION_DATA);
-      sidos.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s;
-        opt.textContent = s;
-        if (s === '광주광역시') opt.selected = true;
-        sidoSelect.appendChild(opt);
-      });
-
-      onSidoChange();
+      const sidoSel = document.getElementById('sidoSelect');
+      sidoSel.innerHTML = '<option value="광주광역시" selected>광주광역시</option>';
+      const sigunguSel = document.getElementById('sigunguSelect');
+      sigunguSel.innerHTML = '<option value="북구" selected>북구</option>';
+      updateDongOptions("광주광역시", "북구");
     }
 
-    function onSidoChange() {
-      const sido = document.getElementById('sidoSelect').value;
-      const sigunguSelect = document.getElementById('sigunguSelect');
-      sigunguSelect.innerHTML = '';
-
-      const sigungus = Object.keys(REGION_DATA[sido] || {});
-      sigungus.forEach((sg, idx) => {
-        const opt = document.createElement('option');
-        opt.value = sg;
-        opt.textContent = sg;
-        if (sido === '광주광역시' && sg === '북구') opt.selected = true;
-        else if (sido !== '광주광역시' && idx === 0) opt.selected = true;
-        sigunguSelect.appendChild(opt);
-      });
-
-      onSigunguChange();
-    }
-
-    function onSigunguChange() {
-      const sido = document.getElementById('sidoSelect').value;
-      const sigungu = document.getElementById('sigunguSelect').value;
-      const dongSelect = document.getElementById('dongSelect');
-      dongSelect.innerHTML = '';
-
-      const dongs = (REGION_DATA[sido] && REGION_DATA[sido][sigungu]) || [];
-
-      let defaultDong = dongs[0] || '';
-      if (sido === '광주광역시' && sigungu === '북구') defaultDong = '양산동';
-
-      dongs.forEach((d) => {
+    function updateDongOptions(sido, sigungu) {
+      const dongSel = document.getElementById('dongSelect');
+      dongSel.innerHTML = '';
+      const dongs = (REGION_DATA[sido] && REGION_DATA[sido][sigungu]) || ["본촌동", "양산동"];
+      dongs.forEach(d => {
         const opt = document.createElement('option');
         opt.value = d;
         opt.textContent = d;
-        if (d === defaultDong) opt.selected = true;
-        dongSelect.appendChild(opt);
+        if (d === "본촌동") opt.selected = true;
+        dongSel.appendChild(opt);
       });
-
-      onDongChange();
     }
 
     function onDongChange() {
-      const sido = document.getElementById('sidoSelect').value;
-      const sigungu = document.getElementById('sigunguSelect').value;
       const dong = document.getElementById('dongSelect').value;
-
-      const fullDongAddr = sido + ' ' + sigungu + ' ' + dong + ' 일원';
-      document.getElementById('currentAddressLabel').textContent = fullDongAddr;
-
-      renderQuickChips(sido, sigungu, dong);
-      loadApartmentsForDong(dong, sido, sigungu);
+      loadDongData(dong);
     }
 
-    function renderQuickChips(sido, sigungu, currentDong) {
-      const container = document.getElementById('quickDongChips');
-      container.innerHTML = '';
-
-      const allDongs = (REGION_DATA[sido] && REGION_DATA[sido][sigungu]) || [];
-      const neighbors = allDongs.filter(d => d !== currentDong).slice(0, 5);
-
-      neighbors.forEach(d => {
-        const btn = document.createElement('button');
-        btn.className = "shrink-0 px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 text-[11px] font-bold border border-slate-200 transition";
-        btn.textContent = d + " ➔";
-        btn.onclick = function() {
-          document.getElementById('dongSelect').value = d;
-          onDongChange();
-        };
-        container.appendChild(btn);
-      });
+    function quickSelectDong(dong) {
+      document.getElementById('dongSelect').value = dong;
+      loadDongData(dong);
     }
 
-    function loadApartmentsForDong(dong, sido, sigungu) {
-      closeAllBubbles();
-      clearMarkers();
-
-      const fullQuery = (sido ? sido + ' ' : '') + (sigungu ? sigungu + ' ' : '') + dong;
-      const badge = document.getElementById('aptCountBadge');
-      if (badge) badge.textContent = '단지 검색 중...';
-
-      let baseList = [];
-      if (APT_DATABASE[dong]) {
-        baseList = JSON.parse(JSON.stringify(APT_DATABASE[dong]));
+    function loadDongData(dongName) {
+      document.getElementById('currentAddressLabel').textContent = "광주 북구 " + dongName;
+      let apts = APT_DATABASE[dongName];
+      if (!apts || apts.length === 0) {
+        apts = APT_DATABASE["본촌동"];
       }
+      currentDongAptList = apts;
+      document.getElementById('dongComplexCountBadge').textContent = apts.length + "개 단지 연동";
 
-      if (mapMode === "kakao" && kakaoMapInstance && window.kakao && window.kakao.maps && window.kakao.maps.services) {
-        const geocoder = new kakao.maps.services.Geocoder();
-        const places = new kakao.maps.services.Places();
-
-        geocoder.addressSearch(fullQuery, function(geoResult, geoStatus) {
-          let centerLat = 35.2072;
-          let centerLng = 126.8835;
-
-          if (geoStatus === kakao.maps.services.Status.OK && geoResult[0]) {
-            centerLat = parseFloat(geoResult[0].y);
-            centerLng = parseFloat(geoResult[0].x);
-            kakaoMapInstance.setCenter(new kakao.maps.LatLng(centerLat, centerLng));
-          } else if (baseList.length > 0 && baseList[0].lat) {
-            centerLat = baseList[0].lat;
-            centerLng = baseList[0].lng;
-            kakaoMapInstance.setCenter(new kakao.maps.LatLng(centerLat, centerLng));
-          }
-
-          currentDongCenterLat = centerLat;
-          currentDongCenterLng = centerLng;
-
-          let collectedApts = [...baseList];
-          const baseMan = getRegionalBasePrice(dong, sigungu, sido);
-
-          let geocodePromises = collectedApts.map(apt => {
-            return new Promise(resolve => {
-              if (!apt.addr || (apt.lat && apt.lng)) { resolve(); return; }
-              const searchAddr = apt.addr.replace(/\(.*?\)/g, '').replace(/일원/g, '').trim();
-              geocoder.addressSearch(searchAddr, function(results, status) {
-                if (status === kakao.maps.services.Status.OK && results && results[0]) {
-                  apt.lat = parseFloat(results[0].y);
-                  apt.lng = parseFloat(results[0].x);
-                }
-                resolve();
-              });
-            });
-          });
-
-          Promise.all(geocodePromises).then(() => {
-            const searchKeyword = (sido ? sido + ' ' : '') + (sigungu ? sigungu + ' ' : '') + dong + ' 아파트';
-
-            function searchKakaoPlaces(page) {
-              places.keywordSearch(searchKeyword, function(items, status, pagination) {
-                if (status === kakao.maps.services.Status.OK && items && items.length > 0) {
-                  items.forEach(item => {
-                    let rawName = item.place_name.replace(/아파트$/g, '').trim();
-                    if (!rawName) rawName = item.place_name;
-
-                    if (rawName.includes('상가') || rawName.includes('관리소') || rawName.includes('어린이집') || 
-                        rawName.includes('경로당') || rawName.includes('노인정') || rawName.includes('주차장')) {
-                      return;
-                    }
-
-                    const itemLat = parseFloat(item.y);
-                    const itemLng = parseFloat(item.x);
-                    const jibunAddress = item.address_name || (fullQuery + ' 일원');
-
-                    const existingIdx = collectedApts.findIndex(a => {
-                      const normA = a.name.replace(/\s+|아파트|맨션|타운|단지/g, '');
-                      const normB = rawName.replace(/\s+|아파트|맨션|타운|단지/g, '');
-                      if (normA === normB) return true;
-                      if (normA.length >= 2 && normB.length >= 2) {
-                        return normA.includes(normB) || normB.includes(normA);
-                      }
-                      return false;
-                    });
-
-                    if (existingIdx >= 0) {
-                      collectedApts[existingIdx].lat = itemLat;
-                      collectedApts[existingIdx].lng = itemLng;
-                      if (jibunAddress) collectedApts[existingIdx].addr = jibunAddress;
-                    } else {
-                      const dynamicTypes = generateAptPyeongTypes(rawName, baseMan);
-                      collectedApts.push({
-                        name: rawName,
-                        addr: jibunAddress,
-                        types: dynamicTypes,
-                        lat: itemLat,
-                        lng: itemLng
-                      });
-                    }
-                  });
-
-                  if (pagination && pagination.hasNextPage && page < 2) {
-                    pagination.nextPage();
-                  } else {
-                    finishRendering(collectedApts, centerLat, centerLng);
-                  }
-                } else {
-                  finishRendering(collectedApts, centerLat, centerLng);
-                }
-              }, { page: page });
-            }
-
-            searchKakaoPlaces(1);
-          });
-
-          function finishRendering(finalApts, cLat, cLng) {
-            const uniqueMap = new Map();
-            finalApts.forEach(apt => {
-              const key = apt.name.replace(/\s+|아파트/g, '');
-              if (!uniqueMap.has(key)) {
-                uniqueMap.set(key, apt);
-              }
-            });
-            const deduplicated = Array.from(uniqueMap.values());
-
-            currentDongAptList = deduplicated;
-            if (badge) badge.textContent = '단지 ' + deduplicated.length + '개 실거래';
-
-            drawKakaoMarkers(deduplicated, cLat, cLng);
-          }
-        });
-      } else {
-        currentDongCenterLat = 35.2072;
-        currentDongCenterLng = 126.8835;
-        currentDongAptList = baseList;
-        if (badge) badge.textContent = '단지 ' + baseList.length + '개 실거래';
-        if (leafletMapInstance) {
-          leafletMapInstance.setView([currentDongCenterLat, currentDongCenterLng], 15);
+      if (apts.length > 0) {
+        currentDongCenterLat = apts[0].lat;
+        currentDongCenterLng = apts[0].lng;
+        if (mapMode === "kakao" && kakaoMapInstance) {
+          kakaoMapInstance.setCenter(new kakao.maps.LatLng(currentDongCenterLat, currentDongCenterLng));
+        } else if (leafletMapInstance) {
+          leafletMapInstance.setView([currentDongCenterLat, currentDongCenterLng], 16);
         }
-        drawLeafletMarkers(baseList, currentDongCenterLat, currentDongCenterLng);
       }
+
+      drawMarkers(apts);
     }
 
-    function drawKakaoMarkers(aptList, centerLat, centerLng) {
-      aptList.forEach((apt) => {
-        const lat = apt.lat || centerLat;
-        const lng = apt.lng || centerLng;
-        const types = apt.types || [];
-        const count = types.length;
-        const primary = types[0] || { sale: "시세조회" };
-        const priceTag = count > 1 ? count + '개 평형 (' + primary.sale + '~)' : primary.sale;
-
-        const content = document.createElement('div');
-        content.className = "apt-pin" + (activeApt && activeApt.name === apt.name ? " active" : "");
-        content.innerHTML = 
-          '<span class="dot"></span>' +
-          '<span>' + apt.name + '</span>' +
-          '<span class="price-tag">' + priceTag + '</span>';
-
-        content.onclick = function(e) {
-          if (e && e.stopPropagation) e.stopPropagation();
-          onComplexTouch(apt, lat, lng, content);
-        };
-
-        const overlay = new kakao.maps.CustomOverlay({
-          position: new kakao.maps.LatLng(lat, lng),
-          content: content,
-          xAnchor: 0.5,
-          yAnchor: 1.20
-        });
-
-        overlay.setMap(kakaoMapInstance);
-        currentMarkers.push(overlay);
-      });
-    }
-
-    function drawLeafletMarkers(aptList, centerLat, centerLng) {
-      aptList.forEach((apt) => {
-        const lat = apt.lat || centerLat;
-        const lng = apt.lng || centerLng;
-        const types = apt.types || [];
-        const count = types.length;
-        const primary = types[0] || { sale: "시세조회" };
-        const priceTag = count > 1 ? count + '개 평형 (' + primary.sale + '~)' : primary.sale;
-
-        const customIcon = L.divIcon({
-          className: 'apt-leaflet-wrapper',
-          html: '<div class="apt-pin' + (activeApt && activeApt.name === apt.name ? ' active' : '') + '">' +
-                '<span class="dot"></span>' +
-                '<span>' + apt.name + '</span>' +
-                '<span class="price-tag">' + priceTag + '</span>' +
-                '</div>',
-          iconSize: [160, 36],
-          iconAnchor: [80, 36]
-        });
-
-        const marker = L.marker([lat, lng], { icon: customIcon }).addTo(leafletMapInstance);
-        marker.on('click', function(e) {
-          if (e && e.originalEvent) e.originalEvent.stopPropagation();
-          const pinEl = marker.getElement() ? marker.getElement().querySelector('.apt-pin') : null;
-          onComplexTouch(apt, lat, lng, pinEl);
-        });
-
-        currentMarkers.push(marker);
-      });
+    function drawMarkers(apts) {
+      clearMarkers();
+      if (mapMode === "kakao" && kakaoMapInstance) {
+        drawKakaoMarkers(apts);
+      } else if (leafletMapInstance) {
+        drawLeafletMarkers(apts);
+      }
     }
 
     function clearMarkers() {
+      closeAllBubbles();
       if (mapMode === "kakao") {
         currentMarkers.forEach(m => m.setMap(null));
       } else if (leafletMapInstance) {
@@ -863,77 +520,124 @@
       currentMarkers = [];
     }
 
-    function onComplexTouch(apt, lat, lng, pinEl) {
+    function drawKakaoMarkers(apts) {
+      apts.forEach(apt => {
+        const pos = new kakao.maps.LatLng(apt.lat, apt.lng);
+        const types = apt.types || [];
+        const mainType = types[0] || { pyeong: "34평형", sale: "3억 1,000만" };
+        const countTxt = types.length > 1 ? '<span style="font-size:9px;color:#047857;margin-left:2px;">(' + types.length + '개평형)</span>' : '';
+
+        const content = document.createElement('div');
+        content.className = 'apt-pin';
+        content.innerHTML = '<span class="dot"></span><span>' + apt.name + '</span><span class="price-tag">' + mainType.sale + '</span>' + countTxt;
+
+        content.onclick = function(e) {
+          e.stopPropagation();
+          onComplexTouch(apt, pos, content);
+        };
+
+        const overlay = new kakao.maps.CustomOverlay({
+          position: pos,
+          content: content,
+          yAnchor: 1.15,
+          zIndex: 10
+        });
+        overlay.setMap(kakaoMapInstance);
+        currentMarkers.push(overlay);
+      });
+    }
+
+    function drawLeafletMarkers(apts) {
+      apts.forEach(apt => {
+        const types = apt.types || [];
+        const mainType = types[0] || { pyeong: "34평형", sale: "3억 1,000만" };
+        const countTxt = types.length > 1 ? '<span style="font-size:9px;color:#047857;margin-left:2px;">(' + types.length + '개평형)</span>' : '';
+
+        const icon = L.divIcon({
+          className: 'apt-pin-leaflet',
+          html: '<div class="apt-pin"><span class="dot"></span><span>' + apt.name + '</span><span class="price-tag">' + mainType.sale + '</span>' + countTxt + '</div>',
+          iconSize: [140, 32],
+          iconAnchor: [70, 36]
+        });
+
+        const marker = L.marker([apt.lat, apt.lng], { icon: icon }).addTo(leafletMapInstance);
+        marker.on('click', function(e) {
+          L.DomEvent.stopPropagation(e);
+          onComplexTouch(apt, [apt.lat, apt.lng], null);
+        });
+        currentMarkers.push(marker);
+      });
+    }
+
+    function onComplexTouch(apt, pos, element) {
       activeApt = apt;
-
-      document.querySelectorAll('.apt-pin').forEach(p => p.classList.remove('active'));
-      if (pinEl) pinEl.classList.add('active');
-
-      const types = (apt.types && apt.types.length > 0) ? apt.types : [
-        { pyeong: "34평형", spec: "전용 84㎡", sale: "시세확인", jeonse: "시세확인", monthly: "시세확인" }
-      ];
-
       closeAllBubbles();
 
-      const bubbleEl = document.createElement('div');
-      bubbleEl.className = "touch-speech-bubble";
-      
-      let pyeongRowsHtml = '';
+      if (element) {
+        document.querySelectorAll('.apt-pin').forEach(p => p.classList.remove('active'));
+        element.classList.add('active');
+      }
+
+      const types = apt.types || [];
+      let rowsHtml = '';
       types.forEach((t, idx) => {
-        pyeongRowsHtml += 
-          '<div class="bubble-pyeong-item ' + (idx === 0 ? 'selected' : '') + '" onclick="selectPyeongInBubble('' + apt.name + '', ' + idx + ')">' +
+        rowsHtml += 
+          '<div class="bubble-pyeong-item ' + (idx === 0 ? 'selected' : '') + '" onclick="window.selectPyeongInBubble(' + idx + ', event)">' +
             '<div>' +
-              '<span class="font-extrabold text-xs text-slate-800">' + t.pyeong + '</span> ' +
-              '<span class="text-[10px] text-slate-400">(' + (t.spec.split('/')[1] || t.spec).trim() + ')</span>' +
+              '<span class="bubble-pyeong-name"><span>🏢</span> ' + t.pyeong + '</span>' +
+              '<span class="bubble-pyeong-sub">' + (t.spec || '') + '</span>' +
             '</div>' +
-            '<div class="text-right">' +
-              '<div class="text-xs font-black text-emerald-700">매매 ' + t.sale + '</div>' +
-              '<div class="text-[10px] font-bold text-slate-500">전세 ' + t.jeonse + '</div>' +
+            '<div class="bubble-pyeong-price">' +
+              '<div>매매 ' + t.sale + '</div>' +
+              '<div class="bubble-pyeong-sub">전세 ' + t.jeonse + '</div>' +
             '</div>' +
           '</div>';
       });
 
+      const bubbleEl = document.createElement('div');
+      bubbleEl.className = 'touch-speech-bubble';
       bubbleEl.innerHTML = 
-        '<div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-2">' +
-          '<div>' +
-            '<span class="inline-block bg-emerald-100 text-emerald-800 text-[10px] font-black px-1.5 py-0.5 rounded">국토부 팩트</span> ' +
-            '<strong class="text-sm font-black text-slate-900 ml-1">' + apt.name + '</strong>' +
-            '<div class="text-[11px] text-slate-500 mt-0.5">📍 ' + apt.addr + '</div>' +
+        '<div class="bubble-header">' +
+          '<div class="bubble-title">' +
+            '<span>📍</span> <span>' + apt.name + '</span>' +
+            '<span class="bubble-count-badge">총 ' + types.length + '개 평형</span>' +
           '</div>' +
-          '<button onclick="closeAllBubbles()" class="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-xs">✕</button>' +
+          '<button class="bubble-close-btn" onclick="window.closeAllBubbles()">✕</button>' +
         '</div>' +
-
-        '<div class="text-[11px] font-bold text-slate-600 mb-1 flex items-center justify-between">' +
-          '<span>보유 평형 전체 (' + types.length + '개):</span>' +
-          '<span class="text-[10px] text-emerald-700">원터치 시세 전환</span>' +
-        '</div>' +
-
-        '<div class="max-h-44 overflow-y-auto no-scrollbar">' +
-          pyeongRowsHtml +
-        '</div>' +
-
-        '<div class="grid grid-cols-2 gap-1.5 mt-2.5 pt-2 border-t border-slate-100">' +
-          '<button onclick="goToMain()" class="py-2 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 font-black text-xs rounded-xl shadow-sm text-center">🤝 살래요</button>' +
-          '<button onclick="goToMain()" class="py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-xs rounded-xl shadow-sm text-center">🏠 팔래요</button>' +
-        '</div>';
+        '<div class="bubble-pyeong-list">' + rowsHtml + '</div>';
 
       if (mapMode === "kakao" && kakaoMapInstance) {
         activeBubbleOverlay = new kakao.maps.CustomOverlay({
-          position: new kakao.maps.LatLng(lat, lng),
+          position: pos,
           content: bubbleEl,
-          xAnchor: 0.5,
           yAnchor: 1.25,
-          zIndex: 99999
+          zIndex: 999
         });
         activeBubbleOverlay.setMap(kakaoMapInstance);
-        kakaoMapInstance.panTo(new kakao.maps.LatLng(lat, lng));
+        kakaoMapInstance.panTo(pos);
+      } else if (leafletMapInstance) {
+        const popup = L.popup({ closeButton: false, offset: [0, -32], className: 'custom-bubble-popup' })
+          .setLatLng(pos)
+          .setContent(bubbleEl)
+          .openOn(leafletMapInstance);
+        activeBubbleOverlay = popup;
       }
 
       updateBottomSheet(apt, types[0]);
     }
 
-    window.selectPyeongInBubble = function(aptName, typeIdx) {
-      if (!activeApt || activeApt.name !== aptName) return;
+    window.closeAllBubbles = function() {
+      if (activeBubbleOverlay) {
+        if (mapMode === "kakao") activeBubbleOverlay.setMap(null);
+        else if (leafletMapInstance) leafletMapInstance.closePopup();
+        activeBubbleOverlay = null;
+      }
+      closeSheet();
+    };
+
+    window.selectPyeongInBubble = function(typeIdx, e) {
+      if (e) e.stopPropagation();
+      if (!activeApt) return;
       const t = activeApt.types[typeIdx];
       if (t) {
         updateBottomSheet(activeApt, t);
@@ -966,21 +670,11 @@
         chipsContainer.appendChild(chipBtn);
       });
 
-      document.getElementById('sheetPyeongBadge').textContent = selectedType.pyeong;
-      document.getElementById('sheetPyeongSpecDesc').textContent = selectedType.spec || selectedType.pyeong;
       document.getElementById('sheetPriceSale').textContent = selectedType.sale;
       document.getElementById('sheetPriceJeonse').textContent = selectedType.jeonse;
       document.getElementById('sheetPriceMonthly').textContent = selectedType.monthly;
 
       document.getElementById('bottomSheet').classList.remove('hidden-sheet');
-    }
-
-    function closeAllBubbles() {
-      if (activeBubbleOverlay) {
-        activeBubbleOverlay.setMap(null);
-        activeBubbleOverlay = null;
-      }
-      closeSheet();
     }
 
     function closeSheet() {
@@ -1004,13 +698,15 @@
             leafletMapInstance.setView([lat, lng], 16);
           }
         }, function(err) {
-          alert("현재 위치 정보를 가져올 수 없습니다. 위치 권한을 확인해주세요.");
+          alert("위치 권한을 확인해주세요.");
         });
-      } else {
-        alert("이 기기에서는 GPS 위치 조회가 지원되지 않습니다.");
       }
     }
-  </script>
 
+    window.addEventListener('load', () => {
+      initRegionSelectors();
+      initMap();
+    });
+  </script>
 </body>
 </html>
