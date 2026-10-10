@@ -164,10 +164,6 @@
     {
       "path": "/api/sitemap",
       "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/auto-seo",
-      "schedule": "0 1 * * *"
     }
   ],
   "cleanUrls": true
