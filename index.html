@@ -1977,8 +1977,8 @@ body.menu-open{
     </div>
 
     <p class="return-access-help">
-      거래 당사자에게 발급된
-      4자리 거래방 코드를 입력하세요.
+      매수자가 <b>[거래 결정]</b> 시 선택된 담당 중개사와 거래 당사자에게만
+      문자로 전송된 <b>전용 4자리 거래방 코드</b>를 입력하세요.
       <br>
       전자계약, 등록서류, 서명 및 계약완료 내용은
       거래방에서 확인할 수 있습니다.
@@ -3369,7 +3369,7 @@ transactionCode.addEventListener(
 
 transactionBtn.addEventListener(
   "click",
-  function(){
+  async function(){
 
     const code =
       normalizeAccessValue(
@@ -3418,6 +3418,22 @@ transactionBtn.addEventListener(
         .map(String);
       }
     }catch(e){}
+
+    if(!issuedCodes.includes(code)){
+      try{
+        const res = await fetch(
+          "/api/trade-decision?code=" + encodeURIComponent(code)
+        );
+        const data = await res.json().catch(function(){ return null; });
+        if(res.ok && data && data.ok && data.trade){
+          localStorage.setItem(
+            "wooriapt_trade",
+            JSON.stringify(data.trade)
+          );
+          issuedCodes.push(String(data.trade.tradeRoomCode || code));
+        }
+      }catch(err){}
+    }
 
     if(!issuedCodes.includes(code)){
       alert(
