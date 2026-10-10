@@ -10,8 +10,8 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   process.env.MART_SUPABASE_ANON_KEY;
 
-const BASE_URL =
-  "https://www.wooriapt.app";
+let BASE_URL =
+  "https://wooriapt.app";
 
 
 /* =========================================
@@ -1521,6 +1521,8 @@ async function handler(
   req,
   res
 ) {
+  const reqHost = (req && req.headers && req.headers.host && req.headers.host.includes("wooriapt.app")) ? req.headers.host : "wooriapt.app";
+  BASE_URL = "https://" + reqHost;
 
   const mode =
     String(
