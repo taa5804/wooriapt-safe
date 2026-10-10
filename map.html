@@ -567,58 +567,19 @@
 
     function onComplexTouch(apt, pos, element) {
       activeApt = apt;
-      closeAllBubbles();
 
       if (element) {
         document.querySelectorAll('.apt-pin').forEach(p => p.classList.remove('active'));
         element.classList.add('active');
       }
 
-      const types = apt.types || [];
-      let rowsHtml = '';
-      types.forEach((t, idx) => {
-        rowsHtml += 
-          '<div class="bubble-pyeong-item ' + (idx === 0 ? 'selected' : '') + '" onclick="window.selectPyeongInBubble(' + idx + ', event)">' +
-            '<div>' +
-              '<span class="bubble-pyeong-name"><span>🏢</span> ' + t.pyeong + '</span>' +
-              '<span class="bubble-pyeong-sub">' + (t.spec || '') + '</span>' +
-            '</div>' +
-            '<div class="bubble-pyeong-price">' +
-              '<div>매매 ' + t.sale + '</div>' +
-              '<div class="bubble-pyeong-sub">전세 ' + t.jeonse + '</div>' +
-            '</div>' +
-          '</div>';
-      });
-
-      const bubbleEl = document.createElement('div');
-      bubbleEl.className = 'touch-speech-bubble';
-      bubbleEl.innerHTML = 
-        '<div class="bubble-header">' +
-          '<div class="bubble-title">' +
-            '<span>📍</span> <span>' + apt.name + '</span>' +
-            '<span class="bubble-count-badge">총 ' + types.length + '개 평형</span>' +
-          '</div>' +
-          '<button class="bubble-close-btn" onclick="window.closeAllBubbles()">✕</button>' +
-        '</div>' +
-        '<div class="bubble-pyeong-list">' + rowsHtml + '</div>';
-
       if (mapMode === "kakao" && kakaoMapInstance) {
-        activeBubbleOverlay = new kakao.maps.CustomOverlay({
-          position: pos,
-          content: bubbleEl,
-          yAnchor: 1.25,
-          zIndex: 999
-        });
-        activeBubbleOverlay.setMap(kakaoMapInstance);
         kakaoMapInstance.panTo(pos);
       } else if (leafletMapInstance) {
-        const popup = L.popup({ closeButton: false, offset: [0, -32], className: 'custom-bubble-popup' })
-          .setLatLng(pos)
-          .setContent(bubbleEl)
-          .openOn(leafletMapInstance);
-        activeBubbleOverlay = popup;
+        leafletMapInstance.panTo(pos);
       }
 
+      const types = apt.types || [];
       updateBottomSheet(apt, types[0]);
     }
 
