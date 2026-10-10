@@ -107,6 +107,10 @@
     {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
+    },
+    {
+      "source": "/pages-sitemap.xml",
+      "destination": "/api/sitemap?mode=pages"
     }
   ],
   "headers": [
@@ -160,6 +164,10 @@
     {
       "path": "/api/sitemap",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/auto-seo",
+      "schedule": "0 1 * * *"
     }
   ],
   "cleanUrls": true
