@@ -4,8 +4,8 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   process.env.SUPABASE_SECRET_KEY;
 
-const SITE_ORIGIN =
-  "https://www.wooriapt.app";
+let SITE_ORIGIN =
+  "https://wooriapt.app";
 
 const SITEMAP_PAGE_SIZE = 5000;
 
@@ -3529,6 +3529,8 @@ async function handler(
   req,
   res
 ) {
+  const reqHost = (req && req.headers && req.headers.host && req.headers.host.includes("wooriapt.app")) ? req.headers.host : "wooriapt.app";
+  SITE_ORIGIN = "https://" + reqHost;
 
   const mode =
     String(
