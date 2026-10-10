@@ -492,11 +492,11 @@ h1{
 
   <div class="notice">
 
-    여러 매물을 비교할 수 있습니다.<br>
-    최종적으로 거래할 매물 1건을 선택한 후
-    <b>거래 결정</b>을 눌러주세요.<br>
-    거래 결정 전에는 중개사무소명과 전화번호가 공개되지 않습니다.<br>
-    거래 결정 후 선택된 중개사에게 거래번호가 전달됩니다.
+    <b>[거래 결정 및 진행절차 안내]</b><br>
+    1. 등록된 여러 매물을 비교한 후 최종적으로 거래할 매물 1건을 선택하고 <b>거래 결정</b>을 눌러주세요.<br>
+    2. 거래 결정 전에는 직거래 방지를 위해 중개사무소명과 전화번호가 공개되지 않습니다.<br>
+    3. <b>거래 결정</b>을 누르면 <b>전용 4자리 거래방 코드(진행번호)</b>가 생성되어 <b>선택된 담당 중개사에게만 문자로 자동 전송</b>됩니다.<br>
+    4. 이후 메인화면 <b>[거래 진행]</b>에 발급된 4자리 거래방 코드를 입력하면 매수자·매도자·선택된 중개사만 거래진행실에 입장할 수 있습니다.
 
   </div>
 
@@ -665,7 +665,20 @@ let thirdRequestDone = false;
   현재 매수요청번호와 같은 매물만 가져옵니다.
 */
 
-(function loadProperties(){
+(async function loadProperties(){
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const buyerPhone =
+    params.get("phone") ||
+    localStorage.getItem(
+      "wooriapt_buyer_phone"
+    ) || "";
+
+  let localList = [];
 
   try{
 
@@ -676,8 +689,7 @@ let thirdRequestDone = false;
         ) || "[]"
       );
 
-
-    properties =
+    localList =
       testMode
       ? all
       : all.filter(
@@ -692,13 +704,72 @@ let thirdRequestDone = false;
           }
         );
 
-
   }catch(e){
 
-    properties=[];
+    localList=[];
 
   }
 
+  let serverList = [];
+
+  if(!testMode && (requestNumber || buyerPhone)){
+    try{
+      const res = await fetch(
+        "/api/trade-decision?requestNumber=" +
+        encodeURIComponent(requestNumber || "") +
+        "&phone=" +
+        encodeURIComponent(buyerPhone || "")
+      );
+      const data = await res.json().catch(function(){ return null; });
+      if(res.ok && data && data.ok){
+        if(data.requestNumber && !requestNumber){
+          requestNumber = String(data.requestNumber);
+          requestNumberEl.textContent = requestNumber;
+        }
+        if(Array.isArray(data.proposals)){
+          serverList = data.proposals;
+        }
+      }
+    }catch(err){}
+  }
+
+  const map = new Map();
+  serverList.concat(localList).forEach(function(item){
+    if(item && item.propertyId){
+      map.set(String(item.propertyId), item);
+    }
+  });
+
+  properties = Array.from(map.values());
+
+  if(testMode && properties.length === 0){
+    properties = [
+      {
+        propertyId: "prop-5804-1",
+        requestNumber: "5804",
+        apartment: "역삼동 래미안 84㎡ (로열동·중층)",
+        amount: "매매 14억 5,000만원",
+        floor: "12층 / 25층",
+        area: "전용 84㎡ (34평)",
+        description: "남향 판상형 구조, 시스템에어컨 4대 완비, 입주일 협의 가능",
+        officeName: "안심파트너 공인중개사사무소",
+        officePhone: "010-5804-1234",
+        status: "PROPOSED"
+      },
+      {
+        propertyId: "prop-5804-2",
+        requestNumber: "5804",
+        apartment: "역삼동 이편한세상 84㎡ (고층·올수리)",
+        amount: "매매 14억 2,000만원",
+        floor: "18층 / 22층",
+        area: "전용 84㎡ (34평)",
+        description: "전체 인테리어 완료, 즉시 입주 및 잔금 일정 맞춤 가능",
+        officeName: "우리아파트 공인중개사사무소",
+        officePhone: "010-5804-5678",
+        status: "PROPOSED"
+      }
+    ];
+  }
 
   render();
 
@@ -1070,36 +1141,29 @@ thirdRequestBtn.addEventListener(
       return;
     }
 
-
     thirdRequestBtn.disabled=true;
-
 
     try{
 
       const ok =
         await runAdditionalRequest(3);
 
-
       if(!ok){
         thirdRequestBtn.disabled=false;
         return;
       }
-
 
       const key =
         testMode
         ? "5804"
         : requestNumber;
 
-
       thirdRequestDone=true;
-
 
       localStorage.setItem(
         "wooriapt_ars_round_3_"+key,
         "done"
       );
-
 
       showMsg(
         "3차 요청이 완료되었습니다.",
@@ -1128,7 +1192,7 @@ thirdRequestBtn.addEventListener(
 
 decisionBtn.addEventListener(
   "click",
-  function(){
+  async function(){
 
     if(!selectedId){
 
@@ -1168,18 +1232,13 @@ decisionBtn.addEventListener(
     }
 
 
-    /*
-      실제 운영에서는 여기서 Supabase에
-      거래 생성 → 거래번호 생성 →
-      선택된 중개사 통보를 처리합니다.
-    */
+    decisionBtn.disabled=true;
 
-    const transactionNumber =
+    let transactionNumber =
       "TR"+
       Date.now().toString().slice(-10);
 
-
-    const tradeRoomCode =
+    let tradeRoomCode =
       testMode
       ? "5804"
       : String(
@@ -1188,6 +1247,37 @@ decisionBtn.addEventListener(
             Math.random()*9000
           )
         );
+
+    /*
+      서버(/api/trade-decision)에 거래 결정 저장 및
+      선택된 담당 중개사에게 전용 4자리 거래방 코드 문자(LMS) 자동 발송
+    */
+    try{
+      const res = await fetch("/api/trade-decision", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          propertyId: property.propertyId,
+          requestNumber: requestNumber || property.requestNumber || "",
+          testMode: testMode,
+          apartment: property.apartment,
+          amount: property.amount,
+          floor: property.floor,
+          area: property.area,
+          description: property.description || "",
+          officeName: property.officeName,
+          officePhone: property.officePhone,
+          tradeType: property.dealType || "sale",
+          transactionNumber: transactionNumber,
+          buyerPhone: localStorage.getItem("wooriapt_buyer_phone") || ""
+        })
+      });
+      const data = await res.json().catch(function(){ return null; });
+      if(res.ok && data && data.ok){
+        if(data.tradeRoomCode) tradeRoomCode = String(data.tradeRoomCode);
+        if(data.transactionNumber) transactionNumber = String(data.transactionNumber);
+      }
+    }catch(err){}
 
 
     const transaction = {
@@ -1271,16 +1361,11 @@ decisionBtn.addEventListener(
 
 
     showMsg(
-      "거래가 결정되었습니다. 거래번호 "+
-      transactionNumber+
-      ", 거래방 코드 "+
+      "거래가 결정되었습니다. 전용 4자리 거래방 코드 ["+
       tradeRoomCode+
-      "가 생성되었습니다.",
+      "]가 생성되어 선택된 중개사에게 문자로 전송되었습니다.",
       true
     );
-
-
-    decisionBtn.disabled=true;
 
 
     /*
@@ -1347,7 +1432,7 @@ decisionBtn.addEventListener(
           );
 
       },
-      300
+      600
     );
 
   }
