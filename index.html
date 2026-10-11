@@ -3637,7 +3637,7 @@ async function lookupRequest(){
 
   if(requestNumber === "5804"){
     localStorage.setItem("wooriapt_test_key", "5804");
-    location.href = "/broker-property-register.html?request=" + encodeURIComponent(requestNumber);
+    location.href = "/broker-property-register.html?code=" + encodeURIComponent(requestNumber);
     return;
   }
 
@@ -3670,7 +3670,7 @@ async function lookupRequest(){
       );
     }
 
-    location.href = "/broker-property-register.html?request=" + encodeURIComponent(requestNumber);
+    location.href = "/broker-property-register.html?code=" + encodeURIComponent(requestNumber);
 
   }catch(error){
     requestResult.classList.remove("open");
