@@ -494,9 +494,10 @@ h1{
 
     <b>[거래 결정 및 진행절차 안내]</b><br>
     1. 등록된 여러 매물을 비교한 후 최종적으로 거래할 매물 1건을 선택하고 <b>거래 결정</b>을 눌러주세요.<br>
-    2. 거래 결정 전에는 직거래 방지를 위해 중개사무소명과 전화번호가 공개되지 않습니다.<br>
+    2. 매도인·임대인·중개사 연락처는 등록 시 노출되지 않으며, <b>매수자(임차인)가 매물을 최종 선택(거래 결정)하였을 때만 매수자(임차인)에게만 공개</b>됩니다.<br>
     3. <b>거래 결정</b>을 누르면 <b>전용 4자리 거래방 코드(진행번호)</b>가 생성되어 <b>선택된 담당 중개사에게만 문자로 자동 전송</b>됩니다.<br>
-    4. 이후 메인화면 <b>[거래 진행]</b>에 발급된 4자리 거래방 코드를 입력하면 매수자·매도자·선택된 중개사만 거래진행실에 입장할 수 있습니다.
+    4. 이후 메인화면 <b>[거래 진행]</b>에 발급된 4자리 거래방 코드를 입력하면 매수자·매도자·선택된 중개사만 거래진행실에 입장할 수 있습니다.<br>
+    5. <b>매수자(임차인)의 연락처는 거래 결정 후에도 중개사·매도인(임대인)에게 공개되지 않으며, 매수자(임차인)가 직접 알려주기 전까지는 절대 공개되지 않습니다.</b>
 
   </div>
 
@@ -689,10 +690,35 @@ let thirdRequestDone = false;
         ) || "[]"
       );
 
+    const byCode =
+      JSON.parse(
+        localStorage.getItem(
+          "proposals_" + (testMode ? "5804" : requestNumber)
+        ) || "[]"
+      );
+
+    const combined = all.concat(byCode).map(function(item){
+      return {
+        propertyId: item.propertyId || item.proposalNo || item.id,
+        requestNumber: item.requestNumber || item.requestCode || "",
+        dealType: item.dealType || item.transactionType || "sale",
+        apartment: item.apartment || item.propertyAddress || (item.address ? [item.address.sido, item.address.sigungu, item.address.dong, item.address.apartment].filter(Boolean).join(" ") : ""),
+        amount: item.amount || item.proposedPrice || "",
+        floor: item.floor || "-",
+        area: item.area || "-",
+        description: item.description || item.note || "",
+        officeName: item.officeName || item.ownerName || "",
+        officePhone: item.officePhone || item.ownerPhone || "",
+        ownerName: item.ownerName || item.officeName || "",
+        ownerPhone: item.ownerPhone || item.officePhone || "",
+        status: item.status || "PROPOSED"
+      };
+    });
+
     localList =
       testMode
-      ? all
-      : all.filter(
+      ? combined
+      : combined.filter(
           function(item){
 
             return String(
@@ -891,8 +917,7 @@ function render(){
 
 
             <div class="broker-hidden">
-              🔒 거래 결정 전에는
-              중개사무소명과 전화번호가 공개되지 않습니다.
+              🔒 등록 시 매도인·임대인·중개사 연락처는 노출되지 않습니다. (매수·임차인이 매물을 최종 선택하였을 때만 매수·임차인에게만 공개됩니다)
             </div>
 
           </div>
@@ -1400,13 +1425,14 @@ decisionBtn.addEventListener(
           "broker-visible";
 
         old.innerHTML =
-          "중개사무소명: "+
+          "✓ 매수·임차인 선택 완료 (선택하신 분께만 공개)<br>"+
+          "매도인·임대인·중개사 성명(상호): "+
           escapeHtml(
-            property.officeName
+            property.officeName || property.ownerName || "-"
           )+
-          "<br>전화번호: "+
+          "<br>연락처: "+
           escapeHtml(
-            property.officePhone
+            property.officePhone || property.ownerPhone || "-"
           )+
           "<br>거래번호: "+
           escapeHtml(
