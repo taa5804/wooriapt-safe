@@ -3637,20 +3637,7 @@ async function lookupRequest(){
 
   if(requestNumber === "5804"){
     localStorage.setItem("wooriapt_test_key", "5804");
-    renderRequest({
-      request_number: "5804",
-      request_type: "sale",
-      sido: "서울특별시",
-      sigungu: "송파구",
-      dong: "잠실동",
-      apartment: "잠실엘스 / 리센츠",
-      size: "84㎡",
-      sale_min: 2000000000,
-      sale_max: 2400000000,
-      move_date: "2026-11-15",
-      move_flexible: true,
-      memo: "로얄동·중층 이상 선호, 입주일 협의 가능"
-    });
+    location.href = "/broker-agreement.html?code=" + encodeURIComponent(requestNumber);
     return;
   }
 
@@ -3683,7 +3670,7 @@ async function lookupRequest(){
       );
     }
 
-    renderRequest(data.request);
+    location.href = "/broker-agreement.html?code=" + encodeURIComponent(requestNumber);
 
   }catch(error){
     requestResult.classList.remove("open");
