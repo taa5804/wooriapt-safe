@@ -618,6 +618,9 @@ textarea:focus{
         매도인·임대인의 중개보수는 법정 상한 범위 내에서
         공인중개사가 직접 수령합니다.
 
+        <br>
+        <strong>🔒 매수인·임차인의 연락처는 공개되지 않으며, 매수인·임차인이 직접 알려주기 전까지는 절대 공개되지 않습니다.</strong>
+
       </div>
 
 
@@ -1096,7 +1099,10 @@ new URLSearchParams(
 
 const code =
 String(
-  params.get("code") || ""
+  params.get("code") ||
+  params.get("request") ||
+  params.get("test") ||
+  ""
 ).trim();
 
 const requestCode =
@@ -1683,6 +1689,12 @@ document
       propertyAddress: fullAddress,
       proposedPrice: priceDisplay,
 
+      propertyId: proposalNo,
+      requestNumber: code,
+      dealType: transactionType,
+      apartment: [sido, sigungu, dong, apartment].filter(Boolean).join(" "),
+      amount: priceDisplay,
+
       price:
       price,
 
@@ -1695,13 +1707,15 @@ document
       area:
       document
       .getElementById("area")
-      .value,
+      .value
+      ? document.getElementById("area").value + "㎡"
+      : "-",
 
       floor:
-      document
-      .getElementById("floor")
-      .value
-      .trim(),
+      [
+        document.getElementById("floor").value.trim(),
+        document.getElementById("totalFloor").value.trim()
+      ].filter(Boolean).join(" / ") || "-",
 
       totalFloor:
       document
@@ -1738,6 +1752,8 @@ document
       .getElementById("ownerPhone")
       .value
       .trim(),
+
+      contactHiddenUntilSelected: true,
 
       description:
       document
@@ -1806,13 +1822,19 @@ document
       localStorage.setItem("wooriapt_proposals", JSON.stringify(allProposals));
     }catch(e){}
 
+    try{
+      const brokerProps = JSON.parse(localStorage.getItem("wooriapt_broker_properties") || "[]");
+      brokerProps.unshift(proposalData);
+      localStorage.setItem("wooriapt_broker_properties", JSON.stringify(brokerProps));
+    }catch(e){}
+
 
 
     message.className =
     "message ok";
 
     message.textContent =
-    "매물 제안이 정상적으로 등록되었습니다.";
+    "매물 제안이 정상적으로 등록되었습니다. (매도인·임대인·중개사 연락처는 비공개로 보호되며, 매수·임차인이 매물을 최종 선택했을 때 매수·임차인에게만 공개됩니다.)";
 
 
 
