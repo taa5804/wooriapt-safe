@@ -18,6 +18,11 @@
 
 <link rel="stylesheet" href="/assets/style.css">
 <link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="안심거래">
 
 <style>
 
@@ -3101,54 +3106,68 @@ let deferredPrompt = null;
 
 /* 앱 설치 */
 
+function isAndroidNonChrome(){
+  const ua = navigator.userAgent || "";
+  if(!/android/i.test(ua)) return false;
+  const isSamsungOrInApp = /(samsungbrowser|kakaotalk|naver|daum|line\/|instagram|fbav|fban|;\s*wv\)|\bGSA\/)/i.test(ua);
+  const isRealChrome = /chrome\//i.test(ua) && !isSamsungOrInApp && !/edga|edg\/|opr\/|opera|whale/i.test(ua);
+  return !isRealChrome;
+}
+
 window.addEventListener(
   "beforeinstallprompt",
   e => {
-
     e.preventDefault();
-    deferredPrompt = e;
-
+    if(!isAndroidNonChrome()){
+      deferredPrompt = e;
+    }
   }
 );
 
+async function handleAppInstallClick(){
+  if(isAndroidNonChrome()){
+    const targetUrl = location.origin + "/app-install?from=chrome";
+    location.href =
+      "intent://" +
+      location.host +
+      "/app-install?from=chrome#Intent;scheme=" +
+      location.protocol.replace(":","") +
+      ";package=com.android.chrome;S.browser_fallback_url=" +
+      encodeURIComponent(location.origin + "/app-install") +
+      ";end";
+    return;
+  }
 
-document
-.getElementById("installBtn")
-.addEventListener(
-  "click",
-  async () => {
-
-    if(deferredPrompt){
-
+  if(deferredPrompt){
+    try{
       deferredPrompt.prompt();
-
-      await deferredPrompt.userChoice;
-
-      deferredPrompt = null;
-
-      return;
+      const choice = await deferredPrompt.userChoice;
+      if(choice && choice.outcome === "accepted"){
+        deferredPrompt = null;
+        return;
+      }
+    }catch(err){
+      console.warn("Install prompt error:", err);
     }
-
-    if(
-      /iphone|ipad|ipod/i.test(
-        navigator.userAgent
-      )
-    ){
-
-      alert(
-        "Safari의 공유 버튼을 누른 뒤 ‘홈 화면에 추가’를 선택해 주세요."
-      );
-
-    }else{
-
-      alert(
-        "브라우저 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택해 주세요."
-      );
-
-    }
-
   }
-);
+
+  location.href = "/app-install";
+}
+
+const installBtn = document.getElementById("installBtn");
+if(installBtn){
+  installBtn.addEventListener("click", handleAppInstallClick);
+}
+
+const installWrap = document.querySelector(".install-wrap");
+if(installWrap){
+  installWrap.style.cursor = "pointer";
+  installWrap.addEventListener("click", e => {
+    if(e.target !== installBtn && (!installBtn || !installBtn.contains(e.target))){
+      handleAppInstallClick();
+    }
+  });
+}
 
 
 /* 햄버거 메뉴 */
