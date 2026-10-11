@@ -19,15 +19,16 @@ export default async function handler(req, res) {
   const clean = (v) => String(v || "").trim();
   const normalizePhone = (v) => String(v || "").replace(/\D/g, "");
 
-  // Helper to parse [TRADE_ROOM_CODE:1234|TX:TR12345678|TYPE:monthly] tag from description
+  // Helper to parse [TRADE_ROOM_CODE:1234|TX:TR12345678|TYPE:monthly|PAID:Y] tag from description
   function parseTradeMeta(desc) {
     const text = String(desc || "");
-    const match = text.match(/\[TRADE_ROOM_CODE:(\d{4})\|TX:([A-Z0-9_-]+)(?:\|TYPE:([a-z]+))?\]/);
+    const match = text.match(/\[TRADE_ROOM_CODE:(\d{4})\|TX:([A-Z0-9_-]+)(?:\|TYPE:([a-z]+))?(?:\|PAID:([YN]))?\]/);
     if (!match) return null;
     return {
       tradeRoomCode: match[1],
       transactionNumber: match[2],
       tradeType: match[3] || "sale",
+      feePaid: match[4] === "Y",
       cleanDescription: text.replace(/\n?\[TRADE_ROOM_CODE:[^\]]+\]/g, "").trim()
     };
   }
@@ -95,6 +96,19 @@ export default async function handler(req, res) {
           cleanDescription: row.description || ""
         };
 
+        let isMemberBroker = false;
+        const cleanBrokerPhone = normalizePhone(row.office_phone);
+        if (cleanBrokerPhone) {
+          const bmUrl = `${SUPABASE_URL}/rest/v1/broker_members?phone=eq.${encodeURIComponent(cleanBrokerPhone)}&select=id,office_name,registration_status&limit=1`;
+          const bmRes = await fetch(bmUrl, { method: "GET", headers }).catch(() => null);
+          if (bmRes && bmRes.ok) {
+            const bmRows = await bmRes.json().catch(() => []);
+            if (Array.isArray(bmRows) && bmRows.length > 0) {
+              isMemberBroker = true;
+            }
+          }
+        }
+
         return res.status(200).json({
           ok: true,
           trade: {
@@ -102,6 +116,8 @@ export default async function handler(req, res) {
             transactionNumber: meta.transactionNumber,
             tradeRoomCode: code,
             tradeType: meta.tradeType || "sale",
+            feePaid: !!meta.feePaid,
+            isMemberBroker,
             requestNumber: row.request_number,
             propertyId: row.id,
             propertyName: row.apartment,
@@ -203,6 +219,37 @@ export default async function handler(req, res) {
     ========================================================= */
     if (req.method === "POST") {
       const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
+
+      if (body.action === "confirm_payment") {
+        const payCode = clean(body.code || body.tradeNo).replace(/\D/g, "").slice(0, 4);
+        const rawTradeNo = clean(body.tradeNo || body.code);
+        let searchFilter = "";
+        if (payCode && payCode.length === 4) {
+          searchFilter = `description=ilike.*${encodeURIComponent(`[TRADE_ROOM_CODE:${payCode}|`)}*`;
+        } else if (rawTradeNo) {
+          searchFilter = `description=ilike.*${encodeURIComponent(`|TX:${rawTradeNo}`)}*`;
+        }
+        if (searchFilter) {
+          const findUrl = `${SUPABASE_URL}/rest/v1/property_proposals?${searchFilter}&select=id,description&order=id.desc&limit=1`;
+          const findRes = await fetch(findUrl, { method: "GET", headers }).catch(() => null);
+          if (findRes && findRes.ok) {
+            const rows = await findRes.json().catch(() => []);
+            if (Array.isArray(rows) && rows.length > 0) {
+              const r = rows[0];
+              const meta = parseTradeMeta(r.description);
+              if (meta) {
+                const updatedDesc = `${meta.cleanDescription}\n[TRADE_ROOM_CODE:${meta.tradeRoomCode}|TX:${meta.transactionNumber}|TYPE:${meta.tradeType}|PAID:Y]`.trim();
+                await fetch(`${SUPABASE_URL}/rest/v1/property_proposals?id=eq.${encodeURIComponent(r.id)}`, {
+                  method: "PATCH",
+                  headers: { ...headers, Prefer: "return=representation" },
+                  body: JSON.stringify({ description: updatedDesc })
+                }).catch(() => null);
+              }
+            }
+          }
+        }
+        return res.status(200).json({ ok: true, feePaid: true });
+      }
       const propertyId = clean(body.propertyId);
       const requestNumber = clean(body.requestNumber).replace(/\D/g, "").slice(0, 4);
       const isTest = body.testMode === true || requestNumber === "5804";
