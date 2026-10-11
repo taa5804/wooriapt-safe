@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/utility",
+      "destination": "/tools-center.html"
+    },
+    {
+      "source": "/tools",
+      "destination": "/tools-center.html"
+    },
+    {
       "source": "/mart-sales",
       "destination": "/mart-sales.html"
     },
