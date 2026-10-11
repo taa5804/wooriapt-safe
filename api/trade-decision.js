@@ -40,6 +40,55 @@ export default async function handler(req, res) {
        2) ?requestNumber=4자리요청번호 또는 ?phone=휴대폰번호 -> 제안 목록 조회
     ========================================================= */
     if (req.method === "GET") {
+      if (clean(req.query.admin) === "dashboard") {
+        const [bmRes, reqRes, propRes] = await Promise.all([
+          fetch(`${SUPABASE_URL}/rest/v1/agent_members?select=id,phone,email,representative_name,office_name,office_registration_no,registration_status,membership_status,created_at&order=id.desc&limit=200`, { method: "GET", headers }).catch(() => null),
+          fetch(`${SUPABASE_URL}/rest/v1/property_requests?select=*&order=id.desc&limit=200`, { method: "GET", headers }).catch(() => null),
+          fetch(`${SUPABASE_URL}/rest/v1/property_proposals?select=id,request_number,apartment,amount,floor,area,description,office_name,office_phone,status,created_at&order=id.desc&limit=200`, { method: "GET", headers }).catch(() => null)
+        ]);
+        const brokersRaw = (bmRes && bmRes.ok) ? await bmRes.json().catch(() => []) : [];
+        const requestsRaw = (reqRes && reqRes.ok) ? await reqRes.json().catch(() => []) : [];
+        const proposalsRaw = (propRes && propRes.ok) ? await propRes.json().catch(() => []) : [];
+
+        const brokers = Array.isArray(brokersRaw) ? brokersRaw : [];
+        const requests = Array.isArray(requestsRaw) ? requestsRaw : [];
+        const proposals = [];
+        const transactions = [];
+
+        (Array.isArray(proposalsRaw) ? proposalsRaw : []).forEach((r) => {
+          const meta = parseTradeMeta(r.description);
+          const item = {
+            id: r.id,
+            requestNumber: r.request_number,
+            apartment: r.apartment,
+            amount: r.amount,
+            floor: r.floor,
+            area: r.area,
+            description: meta ? meta.cleanDescription : (r.description || ""),
+            officeName: r.office_name,
+            officePhone: r.office_phone,
+            status: r.status || "OPEN",
+            tradeRoomCode: meta ? meta.tradeRoomCode : null,
+            transactionNumber: meta ? meta.transactionNumber : null,
+            tradeType: meta ? meta.tradeType : "sale",
+            feePaid: meta ? !!meta.feePaid : false,
+            createdAt: r.created_at
+          };
+          proposals.push(item);
+          if (meta && meta.tradeRoomCode) {
+            transactions.push(item);
+          }
+        });
+
+        return res.status(200).json({
+          ok: true,
+          brokers,
+          requests,
+          proposals,
+          transactions
+        });
+      }
+
       const code = clean(req.query.code).replace(/\D/g, "").slice(0, 4);
       const requestNumber = clean(req.query.requestNumber).replace(/\D/g, "").slice(0, 4);
       const phone = normalizePhone(req.query.phone);
@@ -99,11 +148,11 @@ export default async function handler(req, res) {
         let isMemberBroker = false;
         const cleanBrokerPhone = normalizePhone(row.office_phone);
         if (cleanBrokerPhone) {
-          const bmUrl = `${SUPABASE_URL}/rest/v1/broker_members?phone=eq.${encodeURIComponent(cleanBrokerPhone)}&select=id,office_name,registration_status&limit=1`;
-          const bmRes = await fetch(bmUrl, { method: "GET", headers }).catch(() => null);
-          if (bmRes && bmRes.ok) {
-            const bmRows = await bmRes.json().catch(() => []);
-            if (Array.isArray(bmRows) && bmRows.length > 0) {
+          const amUrl = `${SUPABASE_URL}/rest/v1/agent_members?phone=eq.${encodeURIComponent(cleanBrokerPhone)}&select=id,office_name,registration_status&limit=1`;
+          const amRes = await fetch(amUrl, { method: "GET", headers }).catch(() => null);
+          if (amRes && amRes.ok) {
+            const amRows = await amRes.json().catch(() => []);
+            if (Array.isArray(amRows) && amRows.length > 0) {
               isMemberBroker = true;
             }
           }
@@ -220,9 +269,41 @@ export default async function handler(req, res) {
     if (req.method === "POST") {
       const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
 
+      if (body.action === "admin_update_broker") {
+        const brokerId = clean(body.id);
+        if (!brokerId) {
+          return res.status(400).json({ ok: false, message: "중개사 ID가 필요합니다." });
+        }
+        const patchData = {};
+        if (body.registration_status) patchData.registration_status = clean(body.registration_status);
+        if (body.membership_status) patchData.membership_status = clean(body.membership_status);
+
+        const patchRes = await fetch(`${SUPABASE_URL}/rest/v1/agent_members?id=eq.${encodeURIComponent(brokerId)}`, {
+          method: "PATCH",
+          headers: { ...headers, Prefer: "return=representation" },
+          body: JSON.stringify(patchData)
+        }).catch(() => null);
+
+        return res.status(200).json({ ok: !!(patchRes && patchRes.ok) });
+      }
+
+      if (body.action === "admin_update_trade_status") {
+        const propId = clean(body.id);
+        const nextStatus = clean(body.status) || "COMPLETED";
+        if (propId && /^\d+$/.test(propId)) {
+          await fetch(`${SUPABASE_URL}/rest/v1/property_proposals?id=eq.${encodeURIComponent(propId)}`, {
+            method: "PATCH",
+            headers: { ...headers, Prefer: "return=representation" },
+            body: JSON.stringify({ status: nextStatus })
+          }).catch(() => null);
+        }
+        return res.status(200).json({ ok: true, status: nextStatus });
+      }
+
       if (body.action === "confirm_payment") {
         const payCode = clean(body.code || body.tradeNo).replace(/\D/g, "").slice(0, 4);
         const rawTradeNo = clean(body.tradeNo || body.code);
+        const paidFlag = body.paid === false ? "N" : "Y";
         let searchFilter = "";
         if (payCode && payCode.length === 4) {
           searchFilter = `description=ilike.*${encodeURIComponent(`[TRADE_ROOM_CODE:${payCode}|`)}*`;
@@ -238,7 +319,7 @@ export default async function handler(req, res) {
               const r = rows[0];
               const meta = parseTradeMeta(r.description);
               if (meta) {
-                const updatedDesc = `${meta.cleanDescription}\n[TRADE_ROOM_CODE:${meta.tradeRoomCode}|TX:${meta.transactionNumber}|TYPE:${meta.tradeType}|PAID:Y]`.trim();
+                const updatedDesc = `${meta.cleanDescription}\n[TRADE_ROOM_CODE:${meta.tradeRoomCode}|TX:${meta.transactionNumber}|TYPE:${meta.tradeType}|PAID:${paidFlag}]`.trim();
                 await fetch(`${SUPABASE_URL}/rest/v1/property_proposals?id=eq.${encodeURIComponent(r.id)}`, {
                   method: "PATCH",
                   headers: { ...headers, Prefer: "return=representation" },
@@ -248,7 +329,7 @@ export default async function handler(req, res) {
             }
           }
         }
-        return res.status(200).json({ ok: true, feePaid: true });
+        return res.status(200).json({ ok: true, feePaid: paidFlag === "Y" });
       }
       const propertyId = clean(body.propertyId);
       const requestNumber = clean(body.requestNumber).replace(/\D/g, "").slice(0, 4);
