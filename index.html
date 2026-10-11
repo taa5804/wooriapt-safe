@@ -3392,10 +3392,13 @@ transactionBtn.addEventListener(
         "wooriapt_test_key",
         "5804"
       );
+      localStorage.setItem(
+        "wooriapt_trade_room_code",
+        "5804"
+      );
 
       location.href =
-        "/broker-agreement.html?code=" +
-        encodeURIComponent(code);
+        "/transaction-room.html?code=5804&test=5804";
 
       return;
     }
@@ -3535,14 +3538,17 @@ function addRequestItem(label,value){
 function renderRequest(data){
   requestResultGrid.innerHTML = "";
 
+  const reqNum = data.request_number || data.requestNumber || "";
+  const reqType = data.request_type || data.requestType || "";
+
   addRequestItem(
     "매수요청번호",
-    data.request_number
+    reqNum
   );
 
   addRequestItem(
     "거래유형",
-    requestTypeLabel(data.request_type)
+    requestTypeLabel(reqType)
   );
 
   addRequestItem(
@@ -3562,46 +3568,46 @@ function renderRequest(data){
     data.size || "-"
   );
 
-  if(data.request_type === "sale"){
+  if(reqType === "sale"){
     addRequestItem(
       "희망가격",
-      moneyLabel(data.sale_min) +
+      moneyLabel(data.sale_min ?? data.saleMin) +
       " ~ " +
-      moneyLabel(data.sale_max)
+      moneyLabel(data.sale_max ?? data.saleMax)
     );
   }
 
-  if(data.request_type === "jeonse"){
+  if(reqType === "jeonse"){
     addRequestItem(
       "희망가격",
-      moneyLabel(data.jeonse_min) +
+      moneyLabel(data.jeonse_min ?? data.jeonseMin) +
       " ~ " +
-      moneyLabel(data.jeonse_max)
+      moneyLabel(data.jeonse_max ?? data.jeonseMax)
     );
   }
 
-  if(data.request_type === "monthly"){
+  if(reqType === "monthly"){
     addRequestItem(
       "희망보증금",
-      moneyLabel(data.monthly_deposit_min) +
+      moneyLabel(data.monthly_deposit_min ?? data.monthlyDepositMin) +
       " ~ " +
-      moneyLabel(data.monthly_deposit_max)
+      moneyLabel(data.monthly_deposit_max ?? data.monthlyDepositMax)
     );
 
     addRequestItem(
       "희망월세",
-      moneyLabel(data.monthly_rent)
+      moneyLabel(data.monthly_rent ?? data.monthlyRent)
     );
   }
 
   addRequestItem(
     "입주희망일",
-    data.move_date || "-"
+    data.move_date || data.moveDate || "-"
   );
 
   addRequestItem(
     "입주일 조정",
-    data.move_flexible ? "협의 가능" : "지정일"
+    (data.move_flexible ?? data.moveFlexible) ? "협의 가능" : "지정일"
   );
 
   addRequestItem(
@@ -3610,7 +3616,7 @@ function renderRequest(data){
   );
 
   currentRequestNumber =
-    String(data.request_number || "");
+    String(reqNum || "");
 
   requestResult.classList.add("open");
 }
@@ -3626,6 +3632,25 @@ async function lookupRequest(){
       "4자리 매수요청번호를 입력해 주세요."
     );
     requestNumberInput.focus();
+    return;
+  }
+
+  if(requestNumber === "5804"){
+    localStorage.setItem("wooriapt_test_key", "5804");
+    renderRequest({
+      request_number: "5804",
+      request_type: "sale",
+      sido: "서울특별시",
+      sigungu: "송파구",
+      dong: "잠실동",
+      apartment: "잠실엘스 / 리센츠",
+      size: "84㎡",
+      sale_min: 2000000000,
+      sale_max: 2400000000,
+      move_date: "2026-11-15",
+      move_flexible: true,
+      memo: "로얄동·중층 이상 선호, 입주일 협의 가능"
+    });
     return;
   }
 
@@ -3694,7 +3719,7 @@ requestRegisterBtn.addEventListener(
     if(!currentRequestNumber) return;
 
     location.href =
-      "/broker-property-register.html?request=" +
+      "/broker-agreement.html?code=" +
       encodeURIComponent(currentRequestNumber);
   }
 );
