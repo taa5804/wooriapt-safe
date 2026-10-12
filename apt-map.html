@@ -7,7 +7,51 @@
 <meta name="description" content="우리아파트 안심거래 단지 터치식 말풍선 지도. 단지 내 모든 평형의 실거래가를 1초 만에 확인합니다.">
 
 <!-- Tailwind CSS -->
-<script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+<link rel="canonical" href="https://www.wooriapt.app/apt-map.html">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="우리아파트 안심거래">
+<meta property="og:title" content="우리아파트 안심거래 지도 | 전국 단지 터치식 전평형 실거래가">
+<meta property="og:description" content="전국 아파트 단지 터치식 말풍선 실거래 지도. 매매·전세·월세 전평형 실거래가와 수수료 50% 절감 혜택을 확인하세요.">
+<meta property="og:url" content="https://www.wooriapt.app/apt-map.html">
+<meta property="og:image" content="https://www.wooriapt.app/apt-hero.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "우리아파트 전국 단지 터치식 실거래 지도",
+  "url": "https://www.wooriapt.app/apt-map.html",
+  "applicationCategory": "RealEstateApplication",
+  "operatingSystem": "All",
+  "description": "전국 아파트 단지별 매매·전세·월세 실거래가를 지도 위 말풍선에서 1초 만에 비교하는 인터랙티브 부동산 지도"
+}
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style id="seo-tailwind-fallback">
+  *, ::before, ::after { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.5; }
+  .hidden { display: none !important; }
+  .flex { display: flex; }
+  .inline-flex { display: inline-flex; }
+  .grid { display: grid; }
+  .block { display: block; }
+  .items-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
+  .justify-center { justify-content: center; }
+  .flex-col { flex-direction: column; }
+  .max-w-2xl { max-width: 42rem; }
+  .max-w-md { max-width: 28rem; }
+  .mx-auto { margin-left: auto; margin-right: auto; }
+  .w-full { width: 100%; }
+  .bg-white { background-color: #ffffff; }
+  .rounded-2xl { border-radius: 1rem; }
+  .rounded-3xl { border-radius: 1.5rem; }
+  .p-4 { padding: 1rem; }
+  .p-5 { padding: 1.25rem; }
+  .text-white { color: #ffffff; }
+  .font-bold { font-weight: 700; }
+  .font-black, .font-extrabold { font-weight: 800; }
+</style>
 
 <!-- Leaflet CSS & JS (100% Fail-safe Hybrid Fallback) -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -195,6 +239,7 @@
 </style>
 </head>
 <body>
+  <h1 style="position:fixed;top:0;left:0;z-index:2;margin:0;padding:4px 10px;font-size:12px;font-weight:800;color:#0f172a;background:rgba(255,255,255,0.85);pointer-events:none;">우리아파트 전국 단지 터치식 전평형 실거래 지도</h1>
 
   <!-- 전체 화면 지도 캔버스 -->
   <div id="mapContainer"></div>
