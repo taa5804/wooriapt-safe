@@ -17,14 +17,23 @@
 
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:#eef5fb;font-family:Arial,"Noto Sans KR",sans-serif}
-.page{position:relative;width:min(100%,1024px);margin:0 auto;line-height:0;background:#fff;box-shadow:0 0 30px rgba(0,0,0,.10)}
-.page img{display:block;width:100%;height:auto}
+html,body{margin:0;padding:0;background:#eef5fb;font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",Arial,sans-serif}
+.page{position:relative;width:min(100%,1024px);margin:0 auto;background:#fff;box-shadow:0 0 30px rgba(0,0,0,.10)}
+.img-wrap{position:relative;line-height:0}
+.img-wrap img{display:block;width:100%;height:auto}
 .top-home{position:absolute;z-index:5;right:4.5%;width:16%;top:0.5%;height:3.3%;border-radius:999px;text-indent:-9999px;overflow:hidden;cursor:pointer}
 .cta{position:absolute;z-index:5;left:22.5%;width:55%;top:61.1%;height:4.7%;border-radius:999px;text-indent:-9999px;overflow:hidden;cursor:pointer}
 .cta:focus,.top-home:focus{outline:4px solid #fff;outline-offset:3px}
+.bottom-switch{padding:16px 20px 24px;background:#f8fafc;border-top:1px solid #e2e8f0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.switch-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:15px 12px;border-radius:14px;font-size:15px;font-weight:900;color:#fff;text-decoration:none;text-align:center;line-height:1.2}
+.btn-woori{background:#17387d;box-shadow:0 4px 12px rgba(23,56,125,0.22)}
+.btn-ansim{background:#0f766e;box-shadow:0 4px 12px rgba(15,118,110,0.22)}
 .seo{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:normal;border:0}
-@media(max-width:640px){.page{width:100%}}
+@media(max-width:640px){
+  .page{width:100%}
+  .bottom-switch{padding:14px 14px 20px;gap:8px}
+  .switch-btn{font-size:13.5px;padding:13px 8px}
+}
 </style>
 </head>
 
@@ -32,26 +41,37 @@ html,body{margin:0;padding:0;background:#eef5fb;font-family:Arial,"Noto Sans KR"
 
 <main class="page">
 
-  <img
-    src="/broker-landing.png"
-    alt="우리아파트 안심거래 공인중개사 플랫폼. 전국 매수자와 임차인의 희망조건을 확인하고 맞춤 매물을 제안하세요."
-  >
+  <div class="img-wrap">
+    <img
+      src="/broker-landing.png"
+      alt="우리아파트 안심거래 공인중개사 플랫폼. 전국 매수자와 임차인의 희망조건을 확인하고 맞춤 매물을 제안하세요."
+    >
 
-  <a
-    class="top-home"
-    href="https://www.wooriapt.app/"
-    aria-label="메인으로 가기"
-  >
-    메인으로 가기
-  </a>
+    <a
+      class="top-home"
+      href="https://www.wooriapt.app/"
+      aria-label="메인으로 가기"
+    >
+      메인으로 가기
+    </a>
 
-  <a
-    class="cta"
-    href="https://www.wooriapt.app/"
-    aria-label="지금 바로 중개사 제안등록하기"
-  >
-    지금 바로 중개사 제안등록하기
-  </a>
+    <a
+      class="cta"
+      href="https://www.wooriapt.app/"
+      aria-label="지금 바로 중개사 제안등록하기"
+    >
+      지금 바로 중개사 제안등록하기
+    </a>
+  </div>
+
+  <div class="bottom-switch">
+    <a href="https://www.wooriapt.app/" class="switch-btn btn-woori">
+      <span>🏠</span> <span>우리아파트 안심거래 ›</span>
+    </a>
+    <a href="https://www.ansimdeal.com/" class="switch-btn btn-ansim">
+      <span>🏪</span> <span>점포·상가 안심딜 ›</span>
+    </a>
+  </div>
 
   <section class="seo">
 
