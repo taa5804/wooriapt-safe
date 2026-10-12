@@ -41,6 +41,10 @@
       "destination": "/presale-search.html"
     },
     {
+      "source": "/presale-proposal",
+      "destination": "/presale-proposal.html"
+    },
+    {
       "source": "/presale-landing",
       "destination": "/presale-landing.html"
     },
