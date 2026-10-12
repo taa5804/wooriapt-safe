@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>당근비즈 '오늘의 시세' 분양 매칭 시스템 안내 - 우리아파트 분양 홍보본부</title>
+  <title>당근비즈 '오늘의 시세' 분양 매칭 시스템 안내</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,18 +13,43 @@
     html, body {
       margin: 0;
       padding: 0;
-      background: #f1f5f9;
+      background: #e2e8f0;
       font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
       color: #0f172a;
       -webkit-text-size-adjust: 100%;
     }
+    .print-bar {
+      max-width: 780px;
+      margin: 14px auto 10px;
+      padding: 0 12px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .btn-print {
+      background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 16px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-print:hover {
+      transform: translateY(-1px);
+    }
     .page-wrap {
       width: 100%;
       max-width: 780px;
-      margin: 0 auto;
+      margin: 0 auto 30px;
       background: #ffffff;
       padding: 20px 18px 26px;
-      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.12);
+      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.14);
+      border-radius: 8px;
     }
     .header-box {
       background: linear-gradient(135deg, #0b2136 0%, #17387d 100%);
@@ -341,7 +366,7 @@
       }
     }
 
-    /* A4 1장 프린터 출력 시 정확히 1장 맞춤 */
+    /* A4 1장 프린터 출력 시 정확히 1장 맞춤 (인쇄 버튼은 자동 숨김) */
     @page {
       size: A4 portrait;
       margin: 6mm;
@@ -349,6 +374,9 @@
     @media print {
       html, body {
         background: #ffffff !important;
+      }
+      .no-print {
+        display: none !important;
       }
       .page-wrap {
         max-width: 100% !important;
@@ -434,6 +462,30 @@
   </style>
 </head>
 <body>
+
+  <!-- 화면에서만 보이고 종이 인쇄 시에는 자동으로 사라지는 프린터 버튼 -->
+  <div class="print-bar no-print">
+    <button type="button" class="btn-print" onclick="handlePrint()">🖨️ A4 1장 프린터 인쇄하기</button>
+  </div>
+  <script>
+    function handlePrint() {
+      try {
+        if (window.self !== window.top) {
+          window.open("https://www.wooriapt.app/presale-proposal?print=1", "_blank");
+          return;
+        }
+      } catch (e) {
+        window.open("https://www.wooriapt.app/presale-proposal?print=1", "_blank");
+        return;
+      }
+      window.print();
+    }
+    window.addEventListener("load", function() {
+      if (window.location.search.indexOf("print=1") !== -1) {
+        setTimeout(function() { window.print(); }, 400);
+      }
+    });
+  </script>
 
   <main class="page-wrap">
     <!-- 상단 헤더 -->
