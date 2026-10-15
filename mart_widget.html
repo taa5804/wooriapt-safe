@@ -1,0 +1,953 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;"><div id="eventMainApp">
+<style>
+/* 1. 상단 영어 도메인(wooriapt.ai.kr) 및 메뉴 5개 완전 삭제 숨김 */
+.new_org_header, #inline_header_normal, header, ._new_org_header, .first_scroll_fixed {
+  display: none !important;
+}
+
+#eventMainApp {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  max-width: 960px !important;
+  margin: 0 auto;
+  background: #fff !important;
+  padding: 10px 18px 70px !important;
+  color: #111827 !important;
+}
+
+/* 상단 헤더: 깔끔한 배달앱 스타일 (홈 / 마트명 / 예쁜 프로필) */
+#eventMainApp .confirmed-header {
+  height: 70px;
+  display: grid;
+  grid-template-columns: 70px 1fr 50px;
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 12px;
+}
+#eventMainApp .btn-go-home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid #bbf7d0;
+  border-radius: 19px;
+  background: #f0fdf4;
+  color: #16a34a;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+}
+#eventMainApp .confirmed-store-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#eventMainApp .header-icon {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  position: relative;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#eventMainApp .profile-icon {
+  background: #f0fdf4;
+  border-radius: 50%;
+  border: 1.5px solid #bbf7d0;
+}
+#eventMainApp .profile-icon .profile-head {
+  position: absolute;
+  top: 9px;
+  width: 10px;
+  height: 10px;
+  background: #16a34a;
+  border-radius: 50%;
+}
+#eventMainApp .profile-icon .profile-body {
+  position: absolute;
+  bottom: 8px;
+  width: 20px;
+  height: 11px;
+  background: #16a34a;
+  border-radius: 10px 10px 0 0;
+}
+
+/* 5개 카테고리 탭 (배달앱 스타일 이모지 로고 적용) */
+#eventMainApp .confirmed-tabs {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  padding: 4px 0 16px !important;
+  border: 0 !important;
+  background: #fff !important;
+}
+#eventMainApp .confirmed-tabs .tab-btn {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  height: 60px !important;
+  padding: 6px 2px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  background: #f8fafc !important;
+  color: #334155 !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  cursor: pointer;
+  transition: all .15s;
+}
+#eventMainApp .confirmed-tabs .tab-btn.active {
+  background: #16a34a !important;
+  color: #fff !important;
+  border-color: #16a34a !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, .25) !important;
+}
+#eventMainApp .confirmed-tabs .tab-icon {
+  font-size: 18px !important;
+  line-height: 1 !important;
+}
+#eventMainApp .confirmed-tabs em {
+  position: absolute;
+  right: 3px;
+  top: -6px;
+  padding: 2px 5px;
+  border-radius: 6px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* 상품 섹션 및 2열 그리드 */
+#eventMainApp .section { display: none; padding: 0 2px 14px !important; }
+#eventMainApp .section.active { display: block; }
+#eventMainApp .product-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+/* 상품 카드 */
+#eventMainApp .card {
+  display: flex !important;
+  flex-direction: column !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 10px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04) !important;
+}
+#eventMainApp .product-photo-wrap {
+  position: relative !important;
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  aspect-ratio: 1/1 !important;
+  overflow: hidden !important;
+  border-radius: 10px !important;
+  background: #f8fafc !important;
+}
+#eventMainApp .product-photo-wrap > img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  background: #f8fafc !important;
+}
+#eventMainApp .discount-badge {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  min-height: 54px;
+  padding: 4px 6px;
+  border-radius: 10px 0 10px 0;
+  background: #ef4444;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, .3);
+}
+#eventMainApp .discount-badge b { font-size: 18px; line-height: 1.05; font-weight: 900; }
+#eventMainApp .discount-badge small { margin-top: 2px; font-size: 12px; line-height: 1; font-weight: 800; }
+
+#eventMainApp .card-body {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-height: 0 !important;
+  padding: 10px 0 0 !important;
+}
+#eventMainApp .name {
+  display: block !important;
+  margin: 0 !important;
+  color: #0f172a !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  line-height: 1.3 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+#eventMainApp .price {
+  margin-top: 4px !important;
+  color: #dc2626 !important;
+  font-size: 19px !important;
+  font-weight: 900 !important;
+  line-height: 1.15 !important;
+}
+
+/* 장바구니/수량 버튼 비율 꽉 채움 (38:62) */
+#eventMainApp .product-action-row {
+  display: grid !important;
+  grid-template-columns: 38% 62% !important;
+  gap: 6px !important;
+  align-items: center !important;
+  margin-top: 10px !important;
+  width: 100% !important;
+}
+#eventMainApp .qty-control {
+  display: grid !important;
+  grid-template-columns: 1fr 1.2fr 1fr !important;
+  height: 38px !important;
+  overflow: hidden !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  background: #f8fafc !important;
+}
+#eventMainApp .qty-control .qty-action {
+  width: 100% !important;
+  height: 100% !important;
+  border: 0 !important;
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  font-size: 17px !important;
+  font-weight: 900 !important;
+  cursor: pointer;
+}
+#eventMainApp .qty-control .qty-value {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #fff !important;
+  color: #0f172a !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+#eventMainApp .cart-action {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  width: 100% !important;
+  height: 38px !important;
+  padding: 0 8px !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  background: #16a34a !important;
+  color: #fff !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  white-space: nowrap !important;
+  cursor: pointer;
+}
+
+/* 오늘의 특가 하단 분양사 2개 배너 스타일 (100% 유지) */
+.main-banner-area { margin: 16px auto 0; width: 100%; box-sizing: border-box; }
+.main-banner-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.main-banner-grid.one { grid-template-columns: minmax(0, 1fr); max-width: 240px; margin: 0 auto; }
+.main-banner-item {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 138px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, .25);
+  border-radius: 13px;
+  color: #fff;
+  text-decoration: none;
+  box-sizing: border-box;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, .18);
+}
+.main-banner-item.banner-one { background: linear-gradient(145deg, #0f274d, #215a96); }
+.main-banner-item.banner-two { background: linear-gradient(145deg, #4b3415, #a06b20); }
+.main-banner-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image: var(--banner-image);
+  background-position: center;
+  background-size: cover;
+  opacity: .58;
+}
+.main-banner-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(5, 15, 35, .12) 12%, rgba(5, 15, 35, .88) 100%);
+}
+.main-banner-text { min-width: 0; width: 100%; text-shadow: 0 1px 3px rgba(0, 0, 0, .45); }
+.main-banner-label {
+  display: inline-block;
+  margin-bottom: 7px;
+  padding: 3px 7px;
+  border: 1px solid rgba(255, 255, 255, .55);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .14);
+  color: #fff4c7;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+.main-banner-title {
+  display: block;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+.main-banner-content {
+  display: -webkit-box;
+  margin-top: 5px;
+  overflow: hidden;
+  color: rgba(255, 255, 255, .9);
+  font-size: 11px;
+  line-height: 1.4;
+  word-break: keep-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* 일반상품 리스트 */
+.general-list { display: flex; flex-direction: column; gap: 8px; }
+.general-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 10px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+}
+.general-name { font-size: 15px; font-weight: 800; color: #0f172a; }
+.general-price { margin-top: 2px; color: #dc2626; font-size: 16px; font-weight: 900; }
+.general-qty { display: flex; align-items: center; gap: 6px; }
+.general-qty button {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.general-cart {
+  width: 42px;
+  height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: #16a34a;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* 공동구매 카드 */
+#eventMainApp #group .card { min-height: 0 !important; height: auto !important; overflow: visible !important; }
+#eventMainApp #group .group-info { margin-top: 4px; font-size: 13px; line-height: 1.4; color: #475569; }
+#eventMainApp #group .normal { text-decoration: line-through; color: #94a3b8; }
+#eventMainApp #group .group-price { color: #dc2626; font-size: 16px; font-weight: 900; }
+#eventMainApp #group .goal {
+  margin-top: 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #16a34a;
+}
+#eventMainApp #group .join-btn {
+  width: 100% !important;
+  margin-top: 8px;
+  padding: 9px;
+  border: 0;
+  border-radius: 8px;
+  background: #ea580c;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.join-form { display: none; margin-top: 10px; border-top: 1px solid #e2e8f0; padding-top: 10px; }
+.join-form input, .join-form select, .join-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 6px;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.delivery-address { display: none; }
+.submit-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  border: 0;
+  border-radius: 8px;
+  background: #ea580c;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* 배송비 안내 */
+.shipping-box { margin-bottom: 12px; padding: 12px; border: 1px solid #bbf7d0; border-radius: 10px; background: #f0fdf4; }
+.shipping-title { font-weight: 800; color: #166534; font-size: 14px; }
+.shipping-progress { height: 8px; margin-top: 8px; border-radius: 99px; background: #e2e8f0; overflow: hidden; }
+.shipping-progress span { display: block; height: 100%; border-radius: 99px; background: #16a34a; }
+.shipping-meta { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; font-size: 11px; color: #64748b; }
+
+@media(max-width: 600px) {
+  #eventMainApp { padding: 0 8px 60px !important; }
+  #eventMainApp .confirmed-header { height: 60px; grid-template-columns: 60px 1fr 40px; }
+  #eventMainApp .btn-go-home { height: 32px; font-size: 12px; padding: 0 8px; }
+  #eventMainApp .confirmed-store-title { font-size: 20px; }
+  #eventMainApp .header-icon { width: 34px; height: 34px; }
+  #eventMainApp .confirmed-tabs { gap: 4px !important; padding: 3px 0 10px !important; }
+  #eventMainApp .confirmed-tabs .tab-btn { height: 50px !important; font-size: 12px !important; border-radius: 9px !important; }
+  #eventMainApp .confirmed-tabs .tab-icon { font-size: 15px !important; }
+  #eventMainApp .confirmed-tabs em { font-size: 8px; padding: 1px 4px; right: 2px; top: -5px; }
+  #eventMainApp .product-grid { gap: 8px !important; }
+  #eventMainApp .card { padding: 7px !important; }
+  #eventMainApp .name { font-size: 14px !important; }
+  #eventMainApp .price { font-size: 17px !important; }
+  #eventMainApp .product-action-row { grid-template-columns: 38% 62% !important; gap: 4px !important; margin-top: 8px !important; }
+  #eventMainApp .qty-control { height: 32px !important; border-radius: 6px !important; }
+  #eventMainApp .qty-control .qty-action { font-size: 15px !important; }
+  #eventMainApp .qty-control .qty-value { font-size: 12px !important; }
+  #eventMainApp .cart-action { height: 32px !important; font-size: 11px !important; padding: 0 4px !important; }
+}
+
+.empty-box { grid-column: 1/-1; background: #fff; border-radius: 10px; padding: 30px 15px; text-align: center; color: #64748b; border: 1px solid #e2e8f0; }
+.info-box { background: #fff; border-radius: 10px; padding: 14px; border: 1px solid #e2e8f0; }
+</style>
+
+<div class="confirmed-header">
+  <a href="https://wooriapt.app" class="btn-go-home">🏠 홈</a>
+  <div id="storeTitle" class="confirmed-store-title">에너젠마트</div>
+  <button class="header-icon profile-icon" type="button" aria-label="내 정보"><span class="profile-head"></span><span class="profile-body"></span></button>
+</div>
+
+<div class="menu-tabs confirmed-tabs">
+  <button class="tab-btn active" onclick="showSection('today',this)"><span class="tab-icon">🔥</span><span>오늘특가</span><em>SALE</em></button>
+  <button class="tab-btn" onclick="showSection('sale',this)"><span class="tab-icon">🎉</span><span>행사상품</span><em>SALE</em></button>
+  <button class="tab-btn" onclick="showSection('group',this)"><span class="tab-icon">👥</span><span>공동구매</span></button>
+  <button class="tab-btn" onclick="showSection('general',this)"><span class="tab-icon">📦</span><span>일반상품</span></button>
+  <button class="tab-btn" onclick="showSection('order',this);renderCart()"><span class="tab-icon">📋</span><span>주문하기</span></button>
+</div>
+
+<div id="today" class="section active">
+  <div class="product-grid" id="todayList"><div class="empty-box">상품을 불러오는 중입니다.</div></div>
+  <div id="mainBannerArea" class="main-banner-area" style="display:none;"></div>
+</div>
+<div id="sale" class="section"><div class="product-grid" id="saleList"><div class="empty-box">상품을 불러오는 중입니다.</div></div></div>
+<div id="group" class="section"><div class="product-grid" id="groupList"><div class="empty-box">상품을 불러오는 중입니다.</div></div></div>
+<div id="general" class="section"><div class="general-list" id="generalList"><div class="empty-box">일반상품을 불러오는 중입니다.</div></div></div>
+
+<div id="order" class="section">
+  <div class="info-box">
+    <div id="orderStoreInfo" style="margin-bottom:12px;padding:11px 12px;border:1px solid #d5e9da;border-radius:10px;background:#f7fbf8;line-height:1.65;">
+      <div id="orderStoreName" style="font-size:15px;font-weight:800;color:#166534;"></div>
+      <div id="orderStorePhone" style="font-size:12px;color:#4b5563;"></div>
+      <div id="orderStoreAddress" style="font-size:12px;color:#4b5563;"></div>
+    </div>
+    <b>주문하기</b><br><br>
+    <div id="shippingBox" class="shipping-box" style="display:none"></div>
+    <div id="cartList"></div>
+
+    <div id="fullOrderArea" style="display:none;margin-top:16px;">
+      <button
+        id="fullOrderButton"
+        type="button"
+        onclick="openFullOrderForm()"
+        style="width:100%;border:0;border-radius:8px;padding:15px;background:#16a34a;color:#fff;font-size:17px;font-weight:bold;cursor:pointer;"
+      >
+        전체 주문하기
+      </button>
+    </div>
+
+    <div id="fullOrderForm" style="display:none;margin-top:16px;padding-top:16px;border-top:2px solid #16a34a;">
+      <div style="font-size:17px;font-weight:bold;margin-bottom:12px;">주문 방법 선택</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <button
+          id="visitOrderButton"
+          type="button"
+          onclick="selectOrderType('방문')"
+          style="border:1px solid #16a34a;border-radius:8px;padding:13px;background:#fff;color:#16a34a;font-size:16px;font-weight:bold;cursor:pointer;"
+        >
+          방문
+        </button>
+        <button
+          id="deliveryOrderButton"
+          type="button"
+          onclick="selectOrderType('배달')"
+          style="border:1px solid #16a34a;border-radius:8px;padding:13px;background:#fff;color:#16a34a;font-size:16px;font-weight:bold;cursor:pointer;"
+        >
+          배달
+        </button>
+      </div>
+
+      <input id="orderType" type="hidden" value="">
+
+      <div id="customerInfoArea" style="display:none;">
+        <label style="display:block;font-weight:bold;margin-top:10px;">이름</label>
+        <input id="orderName" type="text" placeholder="이름을 입력하세요" style="width:100%;box-sizing:border-box;margin-top:6px;padding:12px;border:1px solid #ccc;border-radius:7px;font-size:15px;">
+
+        <label style="display:block;font-weight:bold;margin-top:12px;">휴대전화</label>
+        <input id="orderPhone" type="tel" inputmode="numeric" placeholder="휴대전화번호를 입력하세요" style="width:100%;box-sizing:border-box;margin-top:6px;padding:12px;border:1px solid #ccc;border-radius:7px;font-size:15px;">
+
+        <div id="visitTimeArea" style="display:none;">
+          <label style="display:block;font-weight:bold;margin-top:12px;">방문 예정 시간 <span style="font-weight:normal;color:#777;">(선택)</span></label>
+          <input id="visitTime" type="time" style="width:100%;box-sizing:border-box;margin-top:6px;padding:12px;border:1px solid #ccc;border-radius:7px;font-size:15px;">
+        </div>
+
+        <div id="orderAddressArea" style="display:none;">
+          <label style="display:block;font-weight:bold;margin-top:12px;">배달 주소</label>
+          <textarea id="orderAddress" rows="3" placeholder="배달 받을 주소를 입력하세요" style="width:100%;box-sizing:border-box;margin-top:6px;padding:12px;border:1px solid #ccc;border-radius:7px;font-size:15px;resize:vertical;"></textarea>
+          <label style="display:block;font-weight:bold;margin-top:12px;">공동현관 비밀번호 <span style="font-weight:normal;color:#777;">(선택)</span></label>
+          <input id="entrancePassword" type="text" placeholder="예: 종 모양 1234" style="width:100%;box-sizing:border-box;margin-top:6px;padding:12px;border:1px solid #ccc;border-radius:7px;font-size:15px;">
+        </div>
+
+        <label style="display:block;font-weight:bold;margin-top:12px;">요청사항 <span style="font-weight:normal;color:#777;">(선택)</span></label>
+        <textarea id="orderRequest" rows="3" placeholder="매장에 전달할 요청사항을 입력하세요" style="width:100%;box-sizing:border-box;margin-top:6px;padding:12px;border:1px solid #ccc;border-radius:7px;font-size:15px;resize:vertical;"></textarea>
+
+        <div id="finalOrderSummary" style="margin-top:14px;padding:13px;background:#f5f5f5;border-radius:8px;line-height:1.7;"></div>
+      </div>
+
+      <button type="button" onclick="completeFullOrder()" style="width:100%;border:0;border-radius:8px;padding:15px;margin-top:14px;background:#dc2626;color:#fff;font-size:17px;font-weight:bold;cursor:pointer;">주문 완료</button>
+      <button type="button" onclick="closeFullOrderForm()" style="width:100%;border:1px solid #999;border-radius:8px;padding:12px;margin-top:8px;background:#fff;color:#555;font-size:15px;font-weight:bold;cursor:pointer;">이전으로</button>
+    </div>
+
+    <div id="orderCompleteMessage" style="display:none;margin-top:16px;padding:20px;background:#f0fdf4;border:1px solid #16a34a;border-radius:9px;text-align:center;font-size:17px;font-weight:bold;line-height:1.8;">
+      주문이 완료되었습니다.<br>
+      매장에서 주문 내용을 확인합니다.
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://dcysjuxyjqtvkihdsjvv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2';
+
+const params = new URLSearchParams(location.search);
+const CURRENT_STORE_ID = params.get('store_id') || params.get('store') || 'store01';
+
+let cartItems = [];
+let todayProducts = [];
+let saleProducts = [];
+let groupProducts = [];
+let generalProducts = [];
+let freeDeliveryAmount = 0;
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function showSection(id, btn) {
+  document.querySelectorAll('#eventMainApp .section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('#eventMainApp .tab-btn').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function showSectionById(id) {
+  document.querySelectorAll('#eventMainApp .section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('#eventMainApp .tab-btn').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function getProduct(type, id) {
+  if (type === 'today') return todayProducts.find(p => p.id === id);
+  if (type === 'sale') return saleProducts.find(p => p.id === id);
+  if (type === 'group') return groupProducts.find(p => p.id === id);
+  if (type === 'general') return generalProducts.find(p => p.id === id);
+  return null;
+}
+
+function changeQty(type, id, delta) {
+  const p = getProduct(type, id);
+  if (!p) return;
+  p.qty += delta;
+  if (p.qty < 1) p.qty = 1;
+  const el = document.getElementById('qty-' + type + '-' + id);
+  if (el) el.innerText = p.qty;
+}
+
+function productCard(p) {
+  const badge = p.discount > 0
+    ? '<span class="discount-badge"><b>' + p.discount + '%</b><small>할인</small></span>'
+    : '';
+  return '<div class="card">'
+    + '<div class="product-photo-wrap">'
+    + '<img src="' + escapeHtml(p.img) + '" alt="' + escapeHtml(p.name) + '">'
+    + badge
+    + '</div>'
+    + '<div class="card-body">'
+    + '<div class="name">' + escapeHtml(p.name) + '</div>'
+    + '<div class="price">' + escapeHtml(p.price) + '</div>'
+    + '<div class="product-action-row">'
+    + '<div class="qty-control">'
+    + '<button class="qty-action" onclick="changeQty(\'' + p.type + '\',' + p.id + ',-1)" aria-label="수량 줄이기">−</button>'
+    + '<span class="qty-value" id="qty-' + p.type + '-' + p.id + '">1</span>'
+    + '<button class="qty-action" onclick="changeQty(\'' + p.type + '\',' + p.id + ',1)" aria-label="수량 늘리기">＋</button>'
+    + '</div>'
+    + '<button class="cart-action" onclick="addCart(\'' + p.type + '\',' + p.id + ')" aria-label="장바구니 담기">🛒 <span>장바구니</span></button>'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+}
+
+function generalRow(p) {
+  return '<div class="general-row">'
+    + '<div class="general-info"><div class="general-name">' + escapeHtml(p.name) + '</div><div class="general-price">' + escapeHtml(p.price) + '</div></div>'
+    + '<div class="general-qty"><button onclick="changeQty(\'general\',' + p.id + ',-1)">−</button><b id="qty-general-' + p.id + '">1</b><button onclick="changeQty(\'general\',' + p.id + ',1)">＋</button></div>'
+    + '<button class="general-cart" onclick="addCart(\'general\',' + p.id + ')" aria-label="장바구니 담기">🛒</button>'
+    + '</div>';
+}
+
+function groupCard(p) {
+  const badge = p.discount > 0 ? '<span class="discount-badge"><b>' + p.discount + '%</b><small>할인</small></span>' : '';
+  return '<div class="card group-card">'
+    + '<div class="product-photo-wrap">'
+    + '<img src="' + escapeHtml(p.img) + '" alt="' + escapeHtml(p.name) + '">'
+    + badge
+    + '</div>'
+    + '<div class="card-body">'
+    + '<div class="name">' + escapeHtml(p.name) + '</div>'
+    + '<div class="group-info">'
+    + '정상가: <span class="normal">' + escapeHtml(p.normal) + '</span><br>'
+    + '공동구매가: <span class="group-price">' + escapeHtml(p.group) + '</span>'
+    + '</div>'
+    + '<div class="goal"><span id="joinCount' + p.id + '">' + p.join + '</span>명 / 목표 ' + p.goal + '명</div>'
+    + '<div class="product-action-row">'
+    + '<div class="qty-control">'
+    + '<button class="qty-action" onclick="changeQty(\'' + p.type + '\',' + p.id + ',-1)" aria-label="수량 줄이기">−</button>'
+    + '<span class="qty-value" id="qty-' + p.type + '-' + p.id + '">1</span>'
+    + '<button class="qty-action" onclick="changeQty(\'' + p.type + '\',' + p.id + ',1)" aria-label="수량 늘리기">＋</button>'
+    + '</div>'
+    + '<button class="cart-action" onclick="addCart(\'' + p.type + '\',' + p.id + ')" aria-label="장바구니 담기">🛒 <span>장바구니</span></button>'
+    + '</div>'
+    + '<button class="join-btn" onclick="openJoinForm(' + p.id + ')">참여하기</button>'
+    + '<div id="joinForm' + p.id + '" class="join-form">'
+    + '<input id="joinName' + p.id + '" type="text" placeholder="이름 입력">'
+    + '<input id="joinPhone' + p.id + '" type="tel" placeholder="전화번호 입력">'
+    + '<select id="receiveType' + p.id + '" onchange="toggleDeliveryAddress(' + p.id + ')"><option value="">방문/배달 선택</option><option value="방문">방문</option><option value="배달">배달</option></select>'
+    + '<textarea id="deliveryAddress' + p.id + '" class="delivery-address" placeholder="배달주소 입력"></textarea>'
+    + '<button class="submit-btn" onclick="completeJoin(' + p.id + ')">참여완료</button>'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+}
+
+function renderProducts() {
+  const todayList = document.getElementById('todayList');
+  const saleList = document.getElementById('saleList');
+  const groupList = document.getElementById('groupList');
+  const generalList = document.getElementById('generalList');
+
+  if (todayList) todayList.innerHTML = todayProducts.length ? todayProducts.map(productCard).join('') : '<div class="empty-box">등록된 오늘의 특가 상품이 없습니다.</div>';
+  if (saleList) saleList.innerHTML = saleProducts.length ? saleProducts.map(productCard).join('') : '<div class="empty-box">등록된 행사상품이 없습니다.</div>';
+  if (groupList) groupList.innerHTML = groupProducts.length ? groupProducts.map(groupCard).join('') : '<div class="empty-box">등록된 공동구매 상품이 없습니다.</div>';
+  if (generalList) generalList.innerHTML = generalProducts.length ? generalProducts.map(generalRow).join('') : '<div class="empty-box">등록된 일반상품이 없습니다.</div>';
+}
+
+async function loadStoreInfo() {
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/store_info?store_id=eq.' + encodeURIComponent(CURRENT_STORE_ID) + '&select=store_name,phone,address,free_delivery_amount', {
+      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
+    });
+    if (!res.ok) throw new Error();
+    const rows = await res.json();
+    const name = rows.length && rows[0].store_name ? rows[0].store_name : '에너젠마트';
+    document.getElementById('storeTitle').textContent = name;
+
+    const s = rows.length ? rows[0] : {};
+    if (document.getElementById('orderStoreName')) document.getElementById('orderStoreName').textContent = s.store_name || CURRENT_STORE_ID;
+    if (document.getElementById('orderStorePhone')) document.getElementById('orderStorePhone').textContent = s.phone ? '☎ ' + s.phone : '';
+    if (document.getElementById('orderStoreAddress')) document.getElementById('orderStoreAddress').textContent = s.address ? '📍 ' + s.address : '';
+    freeDeliveryAmount = rows.length ? Number(rows[0].free_delivery_amount || 0) : 0;
+  } catch (e) {
+    document.getElementById('storeTitle').textContent = '에너젠마트';
+  }
+}
+
+function getDiscountRate(row, saleValue, normalValue) {
+  const direct = Number(row.discount_rate ?? row.discount_percent ?? row.discount ?? 0);
+  if (Number.isFinite(direct) && direct > 0) return Math.round(direct);
+  const sale = priceToNumber(saleValue);
+  const normal = priceToNumber(normalValue);
+  if (normal > 0 && sale > 0 && normal > sale) return Math.round(((normal - sale) / normal) * 100);
+  return 0;
+}
+
+async function loadLiveProducts() {
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/store_products_live?store_id=eq.' + encodeURIComponent(CURRENT_STORE_ID) + '&select=*&order=category.asc,product_no.asc', {
+      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
+    });
+    if (!res.ok) throw new Error();
+    const rows = await res.json();
+
+    todayProducts = rows.filter(r => r.category === 'today' && (r.image_url || r.product_name || r.price || r.description)).map(r => ({
+      type: 'today', id: Number(r.product_no), name: r.product_name || '상품명 없음', price: r.price || '', desc: r.description || '', img: r.image_url || '',
+      discount: getDiscountRate(r, r.price, r.normal_price || r.original_price || r.regular_price || r.base_price), qty: 1
+    }));
+
+    saleProducts = rows.filter(r => r.category === 'sale' && (r.image_url || r.product_name || r.price || r.description)).map(r => ({
+      type: 'sale', id: Number(r.product_no), name: r.product_name || '상품명 없음', price: r.price || '', desc: r.description || '', img: r.image_url || '',
+      discount: getDiscountRate(r, r.price, r.normal_price || r.original_price || r.regular_price || r.base_price), qty: 1
+    }));
+
+    groupProducts = rows.filter(r => r.category === 'group' && (r.image_url || r.product_name || r.group_price || r.normal_price)).map(r => ({
+      type: 'group', id: Number(r.product_no), name: r.product_name || '상품명 없음', normal: r.normal_price || '', group: r.group_price || '',
+      join: Number(r.join_count) || 0, goal: Number(r.target_count) || 0, img: r.image_url || '', discount: getDiscountRate(r, r.group_price, r.normal_price), qty: 1
+    }));
+
+    generalProducts = rows.filter(r => r.category === 'general' && (r.product_name || r.price)).map(r => ({
+      type: 'general', id: Number(r.product_no), name: r.product_name || '상품명 없음', price: r.price || '', desc: r.description || '', qty: 1
+    }));
+
+    renderProducts();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+/* 오늘의 특가 하단 분양사 2개 배너 불러오기 (복구 완료) */
+async function loadMainBanners() {
+  const area = document.getElementById('mainBannerArea');
+  if (!area) return;
+
+  try {
+    const response = await fetch(
+      SUPABASE_URL + '/rest/v1/main_banners?store_id=eq.' + encodeURIComponent(CURRENT_STORE_ID) + '&select=slot,title,content,image_url,enabled&order=slot.asc',
+      { method: 'GET', headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY } }
+    );
+    if (!response.ok) throw new Error('배너 불러오기 실패');
+
+    const rows = (await response.json()).filter(row => row.enabled === true && row.title && row.content).slice(0, 2);
+    if (rows.length === 0) {
+      area.innerHTML = '';
+      area.style.display = 'none';
+      return;
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'main-banner-grid' + (rows.length === 1 ? ' one' : '');
+
+    rows.forEach(row => {
+      const banner = document.createElement('a');
+      banner.className = 'main-banner-item ' + (Number(row.slot) === 1 ? 'banner-one' : 'banner-two');
+      banner.href = 'https://www.wooriaptcd.com';
+      banner.target = '_self';
+      banner.setAttribute('aria-label', row.title + ' 분양 플랫폼으로 이동');
+
+      if (row.image_url) {
+        banner.style.setProperty('--banner-image', 'url("' + String(row.image_url).replace(/"/g, '%22') + '")');
+      } else {
+        banner.style.setProperty('--banner-image', 'none');
+      }
+
+      const textBox = document.createElement('div');
+      textBox.className = 'main-banner-text';
+
+      const label = document.createElement('span');
+      label.className = 'main-banner-label';
+      label.textContent = '아파트 분양정보';
+
+      const title = document.createElement('span');
+      title.className = 'main-banner-title';
+      title.textContent = row.title;
+
+      const content = document.createElement('span');
+      content.className = 'main-banner-content';
+      content.textContent = row.content;
+
+      textBox.appendChild(label);
+      textBox.appendChild(title);
+      textBox.appendChild(content);
+      banner.appendChild(textBox);
+      grid.appendChild(banner);
+    });
+
+    area.innerHTML = '';
+    area.appendChild(grid);
+    area.style.display = 'block';
+  } catch (error) {
+    console.error('메인 배너 오류:', error);
+    area.innerHTML = '';
+    area.style.display = 'none';
+  }
+}
+
+function priceToNumber(v) {
+  const n = Number(String(v || '').replace(/[^0-9]/g, ''));
+  return Number.isFinite(n) ? n : 0;
+}
+function formatWon(v) {
+  return Number(v || 0).toLocaleString('ko-KR') + '원';
+}
+
+function addCart(type, id) {
+  const p = getProduct(type, id);
+  if (!p) return;
+  const unitPriceText = type === 'group' ? p.group : p.price;
+  const unitPrice = priceToNumber(unitPriceText);
+  const existing = cartItems.find(item => item.type === type && item.id === id);
+  if (existing) {
+    existing.qty += p.qty;
+  } else {
+    cartItems.push({ type: type, id: id, name: p.name, qty: p.qty, unitPrice: unitPrice, unitPriceText: unitPriceText || '', img: p.img || '', category: type });
+  }
+  renderCart();
+  alert(p.name + ' ' + p.qty + '개를 장바구니에 담았습니다.');
+}
+
+function decreaseCartItem(i) {
+  if (!cartItems[i]) return;
+  if (cartItems[i].qty > 1) cartItems[i].qty--; else cartItems.splice(i, 1);
+  renderCart();
+}
+function increaseCartItem(i) {
+  if (!cartItems[i]) return;
+  cartItems[i].qty++;
+  renderCart();
+}
+function removeCartItem(i) {
+  if (!cartItems[i]) return;
+  cartItems.splice(i, 1);
+  renderCart();
+}
+function getCartTotal() {
+  return cartItems.reduce((sum, item) => sum + (item.unitPrice * item.qty), 0);
+}
+
+function renderShipping(total) {
+  const box = document.getElementById('shippingBox');
+  if (!box) return;
+  if (freeDeliveryAmount <= 0) { box.style.display = 'none'; return; }
+  const rem = Math.max(0, freeDeliveryAmount - total);
+  const pct = Math.min(100, Math.round((total / freeDeliveryAmount) * 100));
+  box.innerHTML = '<div class="shipping-title">🚚 ' + (rem > 0 ? '무료배송까지 <b>' + formatWon(rem) + '</b> 남았습니다.' : '<b>무료배송이 적용되었습니다.</b>') + '</div><div class="shipping-progress"><span style="width:' + pct + '%\"></span></div>';
+  box.style.display = 'block';
+}
+
+function renderCart() {
+  const list = document.getElementById('cartList');
+  const area = document.getElementById('fullOrderArea');
+  if (!list) return;
+  if (cartItems.length === 0) {
+    renderShipping(0);
+    list.innerHTML = '<div style="padding:18px 8px;text-align:center;color:#6b7280;">장바구니가 비어 있습니다.</div>';
+    if (area) area.style.display = 'none';
+    return;
+  }
+  let total = 0;
+  list.innerHTML = '<div style="font-size:15px;font-weight:800;margin-bottom:8px;">장바구니 목록</div>'
+    + cartItems.map((item, i) => {
+      const lineTotal = item.unitPrice * item.qty;
+      total += lineTotal;
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid #f1f5f9;">'
+        + '<div><b>' + escapeHtml(item.name) + '</b><br><small style="color:#dc2626;">' + formatWon(item.unitPrice) + ' × ' + item.qty + '개</small></div>'
+        + '<div style="display:flex;gap:4px;">'
+        + '<button onclick="decreaseCartItem(' + i + ')" style="width:26px;height:26px;border:1px solid #ccc;border-radius:4px;background:#fff;">−</button>'
+        + '<button onclick="increaseCartItem(' + i + ')" style="width:26px;height:26px;border:1px solid #ccc;border-radius:4px;background:#fff;">＋</button>'
+        + '<button onclick="removeCartItem(' + i + ')" style="width:26px;height:26px;border:1px solid #fca5a5;border-radius:4px;background:#fff;color:#dc2626;">×</button>'
+        + '</div>'
+        + '</div>';
+    }).join('')
+    + '<div style="margin-top:12px;padding:12px;background:#f8fafc;border-radius:8px;text-align:right;font-size:16px;font-weight:900;">총 결제금액: <b style="color:#dc2626;">' + formatWon(total) + '</b></div>';
+  if (area) area.style.display = 'block';
+  renderShipping(total);
+}
+
+function openFullOrderForm() {
+  document.getElementById('fullOrderArea').style.display = 'none';
+  document.getElementById('fullOrderForm').style.display = 'block';
+}
+function closeFullOrderForm() {
+  document.getElementById('fullOrderForm').style.display = 'none';
+  document.getElementById('fullOrderArea').style.display = 'block';
+}
+function selectOrderType(type) {
+  document.getElementById('orderType').value = type;
+  document.getElementById('customerInfoArea').style.display = 'block';
+  document.getElementById('orderAddressArea').style.display = type === '배달' ? 'block' : 'none';
+  document.getElementById('visitTimeArea').style.display = type === '방문' ? 'block' : 'none';
+}
+function completeFullOrder() {
+  const type = document.getElementById('orderType').value;
+  const name = document.getElementById('orderName').value.trim();
+  const phone = document.getElementById('orderPhone').value.trim();
+  if (!type || !name || !phone) { alert('필수 주문 정보를 모두 입력해주세요.'); return; }
+  alert('주문이 접수되었습니다! 매장에서 확인 후 준비합니다.');
+  cartItems = [];
+  renderCart();
+  closeFullOrderForm();
+}
+function openJoinForm(id) { document.getElementById('joinForm' + id).style.display = 'block'; }
+function toggleDeliveryAddress(id) {
+  const v = document.getElementById('receiveType' + id).value;
+  document.getElementById('deliveryAddress' + id).style.display = v === '배달' ? 'block' : 'none';
+}
+function completeJoin(id) {
+  alert('공동구매 신청이 완료되었습니다.');
+  document.getElementById('joinForm' + id).style.display = 'none';
+}
+
+renderCart();
+loadStoreInfo();
+loadLiveProducts();
+loadMainBanners();
+</script>
+</div>
+</body></html>
