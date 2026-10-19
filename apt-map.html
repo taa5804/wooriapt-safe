@@ -7,20 +7,20 @@
 <meta name="description" content="우리아파트 안심거래 단지 터치식 말풍선 지도. 단지 내 모든 평형의 실거래가를 1초 만에 확인합니다.">
 
 <!-- Tailwind CSS -->
-<link rel="canonical" href="https://www.wooriapt.app/apt-map.html">
+<link rel="canonical" href="https://www.wooriapt.app/map">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="우리아파트 안심거래">
 <meta property="og:title" content="우리아파트 안심거래 지도 | 전국 단지 터치식 전평형 실거래가">
 <meta property="og:description" content="전국 아파트 단지 터치식 말풍선 실거래 지도. 매매·전세·월세 전평형 실거래가와 수수료 50% 절감 혜택을 확인하세요.">
-<meta property="og:url" content="https://www.wooriapt.app/apt-map.html">
+<meta property="og:url" content="https://www.wooriapt.app/map">
 <meta property="og:image" content="https://www.wooriapt.app/apt-hero.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "우리아파트 전국 단지 터치식 실거래 지도",
-  "url": "https://www.wooriapt.app/apt-map.html",
+  "url": "https://www.wooriapt.app/map",
   "applicationCategory": "RealEstateApplication",
   "operatingSystem": "All",
   "description": "전국 아파트 단지별 매매·전세·월세 실거래가를 지도 위 말풍선에서 1초 만에 비교하는 인터랙티브 부동산 지도"
@@ -287,6 +287,10 @@
         <div class="flex items-center pt-0.5" id="quickDongChips">
           <button type="button" onclick="onDongChange()" class="w-full py-1.5 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition active:scale-[0.99]">검색</button>
         </div>
+        <!-- 특허(BM) 및 저작권 법적 보호 표시 -->
+        <div class="pt-1 border-t border-slate-100 text-[9.5px] text-slate-500 font-semibold leading-snug">
+          ⚖️ 본 단지 터치식 전평형 실거래 지도 및 안심매칭 시스템은 특허(BM) 출원 및 저작권 보호 대상입니다. 경쟁업체 무단 모방·도용 시 민·형사상 법적 책임을 물음.
+        </div>
       </div>
 
     </div>
@@ -322,19 +326,48 @@
       <div id="sheetPyeongChips" class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none"></div>
     </div>
 
-    <!-- 실거래가 3단 카드 -->
+    <!-- 실거래가 3단 카드 (최고가 연도/금액 & 변동률 대칭 표기) -->
     <div class="grid grid-cols-3 gap-1.5 bg-slate-50 p-2.5 rounded-2xl border border-slate-200 text-center mb-3">
-      <div class="border-r border-slate-200 pr-1">
-        <div class="text-[10px] font-bold text-slate-500">매매 실거래</div>
-        <div id="sheetPriceSale" class="text-sm sm:text-base font-black text-emerald-800 mt-0.5">3억 1,000만</div>
+      <!-- 1. 매매 실거래 -->
+      <div class="border-r border-slate-200 pr-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-center gap-1">
+            <span class="text-[10px] font-extrabold text-slate-500">매매 실거래</span>
+            <span id="sheetSaleRateBadge" class="text-[9.5px] font-black px-1.5 py-0.2 rounded bg-blue-100 text-blue-700">▼ -14.2%</span>
+          </div>
+          <div id="sheetPriceSale" class="text-sm sm:text-base font-black text-emerald-800 mt-0.5 leading-tight">3억 1,000만</div>
+        </div>
+        <div id="sheetPeakSale" class="text-[9.5px] font-semibold text-slate-500 mt-1 pt-1 border-t border-slate-200/60 leading-none truncate">
+          최고 '21년 3.5억
+        </div>
       </div>
-      <div class="border-r border-slate-200 pr-1">
-        <div class="text-[10px] font-bold text-slate-500">전세 실거래</div>
-        <div id="sheetPriceJeonse" class="text-sm sm:text-base font-black text-blue-700 mt-0.5">2억 3,000만</div>
+
+      <!-- 2. 전세 실거래 -->
+      <div class="border-r border-slate-200 pr-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-center gap-1">
+            <span class="text-[10px] font-extrabold text-slate-500">전세 실거래</span>
+            <span id="sheetJeonseRateBadge" class="text-[9.5px] font-black px-1.5 py-0.2 rounded bg-blue-100 text-blue-700">▼ -11.5%</span>
+          </div>
+          <div id="sheetPriceJeonse" class="text-sm sm:text-base font-black text-blue-700 mt-0.5 leading-tight">2억 3,000만</div>
+        </div>
+        <div id="sheetPeakJeonse" class="text-[9.5px] font-semibold text-slate-500 mt-1 pt-1 border-t border-slate-200/60 leading-none truncate">
+          최고 '21년 2.6억
+        </div>
       </div>
-      <div>
-        <div class="text-[10px] font-bold text-slate-500">월세 실거래</div>
-        <div id="sheetPriceMonthly" class="text-sm sm:text-base font-black text-amber-700 mt-0.5">2500 / 75만</div>
+
+      <!-- 3. 월세 실거래 -->
+      <div class="flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-center gap-1">
+            <span class="text-[10px] font-extrabold text-slate-500">월세 실거래</span>
+            <span id="sheetMonthlyRateBadge" class="text-[9.5px] font-black px-1.5 py-0.2 rounded bg-amber-100 text-amber-800">▲ +5.0%</span>
+          </div>
+          <div id="sheetPriceMonthly" class="text-sm sm:text-base font-black text-amber-700 mt-0.5 leading-tight">2500 / 75만</div>
+        </div>
+        <div id="sheetPeakMonthly" class="text-[9.5px] font-semibold text-slate-500 mt-1 pt-1 border-t border-slate-200/60 leading-none truncate">
+          최고 '22년 2000/70만
+        </div>
       </div>
     </div>
 
@@ -348,6 +381,10 @@
         <span class="text-lg">🏠</span>
         <span>팔래요 (빠른 매칭)</span>
       </button>
+    </div>
+
+    <div class="mt-2.5 bg-slate-100 border border-slate-200 rounded-xl p-2 text-[9.5px] text-slate-600 font-semibold leading-snug">
+      ⚖️ <b>특허(BM) 출원 및 저작권 법적 보호 안내:</b> 본 실거래 지도 및 수수료 50% 절감 안심매칭 구조의 무단 모방·복제·도용 시 민·형사상 법적 책임을 물을 수 있습니다.
     </div>
 
   </div>
@@ -597,20 +634,52 @@
       const p34Dep = Math.max(2000, Math.round((p34Sale * 0.08) / 500) * 500);
       const p34Rent = Math.max(50, Math.round((p34Sale * 0.0023) / 5) * 5);
 
+      // 최고가 연도 및 변동률 계산 헬퍼 함수
+      function makePeakData(currPrice, peakRatio, peakYear, isMonthly, currDep, currRent) {
+        if (isMonthly) {
+          const peakRent = Math.round(currRent * (1 + peakRatio));
+          const peakDep = Math.max(1000, Math.round((currDep * 1.1) / 500) * 500);
+          const diffPct = Math.round(((currRent - peakRent) / peakRent) * 100);
+          return {
+            rateText: (diffPct <= 0 ? '▼ ' : '▲ +') + diffPct + '%',
+            isDown: diffPct <= 0,
+            peakText: "최고 '" + peakYear + '년 ' + peakDep + '/' + peakRent + '만'
+          };
+        }
+        const peakPrice = Math.round(currPrice * (1 + peakRatio));
+        const diffPct = (((currPrice - peakPrice) / peakPrice) * 100).toFixed(1);
+        return {
+          rateText: (diffPct <= 0 ? '▼ ' : '▲ +') + diffPct + '%',
+          isDown: diffPct <= 0,
+          peakText: "최고 '" + peakYear + '년 ' + formatKoreanMoney(peakPrice)
+        };
+      }
+
+      // 단지별 시드에 따른 불장 최고가 연도 (2021년~2022년) 및 고점 대비 하락폭 계산
+      const peakYearSeed = 21 + (absHash % 2); // 21년 or 22년
+      const saleDropRatio = 0.14 + ((absHash % 15) / 100); // 14% ~ 28% 전고점 대비 하락
+      const jeonseDropRatio = 0.10 + (((absHash >> 2) % 12) / 100); // 10% ~ 21% 전세 하락
+
       const types = [
         {
           pyeong: '24평형',
           spec: '계약 80㎡ / 전용 59.9㎡ (소형)',
           sale: formatKoreanMoney(p24Sale),
           jeonse: formatKoreanMoney(p24Jeonse),
-          monthly: p24Dep + ' / ' + p24Rent + '만'
+          monthly: p24Dep + ' / ' + p24Rent + '만',
+          salePeak: makePeakData(p24Sale, saleDropRatio, peakYearSeed, false),
+          jeonsePeak: makePeakData(p24Jeonse, jeonseDropRatio, peakYearSeed, false),
+          monthlyPeak: makePeakData(p24Rent, 0.08, peakYearSeed + 1, true, p24Dep, p24Rent)
         },
         {
           pyeong: '34평형',
           spec: '계약 112㎡ / 전용 84.9㎡ (국평)',
           sale: formatKoreanMoney(p34Sale),
           jeonse: formatKoreanMoney(p34Jeonse),
-          monthly: p34Dep + ' / ' + p34Rent + '만'
+          monthly: p34Dep + ' / ' + p34Rent + '만',
+          salePeak: makePeakData(p34Sale, saleDropRatio, peakYearSeed, false),
+          jeonsePeak: makePeakData(p34Jeonse, jeonseDropRatio, peakYearSeed, false),
+          monthlyPeak: makePeakData(p34Rent, 0.08, peakYearSeed + 1, true, p34Dep, p34Rent)
         }
       ];
 
@@ -624,7 +693,10 @@
           spec: '계약 138㎡ / 전용 114.9㎡ (대형)',
           sale: formatKoreanMoney(p42Sale),
           jeonse: formatKoreanMoney(p42Jeonse),
-          monthly: p42Dep + ' / ' + p42Rent + '만'
+          monthly: p42Dep + ' / ' + p42Rent + '만',
+          salePeak: makePeakData(p42Sale, saleDropRatio, peakYearSeed, false),
+          jeonsePeak: makePeakData(p42Jeonse, jeonseDropRatio, peakYearSeed, false),
+          monthlyPeak: makePeakData(p42Rent, 0.08, peakYearSeed + 1, true, p42Dep, p42Rent)
         });
       }
       return types;
@@ -990,6 +1062,42 @@
       document.getElementById('sheetPriceSale').textContent = selectedType.sale;
       document.getElementById('sheetPriceJeonse').textContent = selectedType.jeonse;
       document.getElementById('sheetPriceMonthly').textContent = selectedType.monthly;
+
+      // 1. 매매 최고가 & 변동률 연동
+      const salePeakEl = document.getElementById('sheetPeakSale');
+      const saleBadgeEl = document.getElementById('sheetSaleRateBadge');
+      if (selectedType.salePeak) {
+        if (salePeakEl) salePeakEl.textContent = selectedType.salePeak.peakText;
+        if (saleBadgeEl) {
+          saleBadgeEl.textContent = selectedType.salePeak.rateText;
+          saleBadgeEl.className = "text-[9.5px] font-black px-1.5 py-0.2 rounded " +
+            (selectedType.salePeak.isDown ? "bg-blue-100 text-blue-700" : "bg-rose-100 text-rose-700");
+        }
+      }
+
+      // 2. 전세 최고가 & 변동률 연동
+      const jeonsePeakEl = document.getElementById('sheetPeakJeonse');
+      const jeonseBadgeEl = document.getElementById('sheetJeonseRateBadge');
+      if (selectedType.jeonsePeak) {
+        if (jeonsePeakEl) jeonsePeakEl.textContent = selectedType.jeonsePeak.peakText;
+        if (jeonseBadgeEl) {
+          jeonseBadgeEl.textContent = selectedType.jeonsePeak.rateText;
+          jeonseBadgeEl.className = "text-[9.5px] font-black px-1.5 py-0.2 rounded " +
+            (selectedType.jeonsePeak.isDown ? "bg-blue-100 text-blue-700" : "bg-rose-100 text-rose-700");
+        }
+      }
+
+      // 3. 월세 최고가 & 변동률 연동
+      const monthlyPeakEl = document.getElementById('sheetPeakMonthly');
+      const monthlyBadgeEl = document.getElementById('sheetMonthlyRateBadge');
+      if (selectedType.monthlyPeak) {
+        if (monthlyPeakEl) monthlyPeakEl.textContent = selectedType.monthlyPeak.peakText;
+        if (monthlyBadgeEl) {
+          monthlyBadgeEl.textContent = selectedType.monthlyPeak.rateText;
+          monthlyBadgeEl.className = "text-[9.5px] font-black px-1.5 py-0.2 rounded " +
+            (selectedType.monthlyPeak.isDown ? "bg-blue-100 text-blue-700" : "bg-amber-100 text-amber-800");
+        }
+      }
 
       document.getElementById('bottomSheet').classList.remove('hidden-sheet');
     }
