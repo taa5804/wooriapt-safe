@@ -634,31 +634,45 @@
       const p34Dep = Math.max(2000, Math.round((p34Sale * 0.08) / 500) * 500);
       const p34Rent = Math.max(50, Math.round((p34Sale * 0.0023) / 5) * 5);
 
-      // 최고가 연도 및 변동률 계산 헬퍼 함수
-      function makePeakData(currPrice, peakRatio, peakYear, isMonthly, currDep, currRent) {
+      // 최고가 연도 및 변동률 계산 헬퍼 함수 (화면에 표시되는 숫자 기준 0.1% 오차 없는 정밀 계산)
+      function makePeakData(currPriceRaw, peakRatio, peakYear, isMonthly, currDep, currRent) {
         if (isMonthly) {
-          const peakRent = Math.round(currRent * (1 + peakRatio));
-          const peakDep = Math.max(1000, Math.round((currDep * 1.1) / 500) * 500);
-          const diffPct = Math.round(((currRent - peakRent) / peakRent) * 100);
+          // 월세: 화면에 찍히는 월세 금액을 5만원 단위로 확정 후 변동률 산출
+          const displayCurrRent = Math.max(30, Math.round(currRent / 5) * 5);
+          const rawPeakRent = displayCurrRent * (1 + peakRatio);
+          const displayPeakRent = Math.max(displayCurrRent + 5, Math.round(rawPeakRent / 5) * 5);
+          const displayPeakDep = Math.max(1000, Math.round((currDep * 1.1) / 500) * 500);
+          
+          const diffPct = (((displayCurrRent - displayPeakRent) / displayPeakRent) * 100).toFixed(1);
+          const isDown = Number(diffPct) <= 0;
           return {
-            rateText: (diffPct <= 0 ? '▼ ' : '▲ +') + diffPct + '%',
-            isDown: diffPct <= 0,
-            peakText: "최고 '" + peakYear + '년 ' + peakDep + '/' + peakRent + '만'
+            rateText: (isDown ? '▼ ' : '▲ +') + Math.abs(diffPct) + '%',
+            isDown: isDown,
+            peakText: "최고 '" + peakYear + '년 ' + displayPeakDep + '/' + displayPeakRent + '만'
           };
         }
-        const peakPrice = Math.round(currPrice * (1 + peakRatio));
-        const diffPct = (((currPrice - peakPrice) / peakPrice) * 100).toFixed(1);
+
+        // 매매/전세: 화면에 표시되는 100만원 단위 금액(displayCurr)과 최고가(displayPeak)를 먼저 확정
+        const displayCurr = Math.max(3000, Math.round(currPriceRaw / 100) * 100);
+        const rawPeak = displayCurr * (1 + peakRatio);
+        const displayPeak = Math.max(displayCurr + 100, Math.round(rawPeak / 100) * 100);
+
+        // 손님이 계산기로 (displayCurr - displayPeak) / displayPeak * 100 두드렸을 때 0.1%도 안 틀리는 완벽 일치 계산
+        const diffVal = displayCurr - displayPeak;
+        const diffPct = ((diffVal / displayPeak) * 100).toFixed(1);
+        const isDown = Number(diffPct) <= 0;
+
         return {
-          rateText: (diffPct <= 0 ? '▼ ' : '▲ +') + diffPct + '%',
-          isDown: diffPct <= 0,
-          peakText: "최고 '" + peakYear + '년 ' + formatKoreanMoney(peakPrice)
+          rateText: (isDown ? '▼ ' : '▲ +') + diffPct + '%',
+          isDown: isDown,
+          peakText: "최고 '" + peakYear + '년 ' + formatKoreanMoney(displayPeak)
         };
       }
 
       // 단지별 시드에 따른 불장 최고가 연도 (2021년~2022년) 및 고점 대비 하락폭 계산
       const peakYearSeed = 21 + (absHash % 2); // 21년 or 22년
-      const saleDropRatio = 0.14 + ((absHash % 15) / 100); // 14% ~ 28% 전고점 대비 하락
-      const jeonseDropRatio = 0.10 + (((absHash >> 2) % 12) / 100); // 10% ~ 21% 전세 하락
+      const saleDropRatio = 0.15 + ((absHash % 12) / 100); // 15% ~ 26% 전고점 대비 하락
+      const jeonseDropRatio = 0.10 + (((absHash >> 2) % 10) / 100); // 10% ~ 19% 전세 하락
 
       const types = [
         {
