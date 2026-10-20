@@ -1697,22 +1697,29 @@ body.menu-open{
   </a>
 </section>
 
-<!-- [컴팩트 Q&A 아코디언] 우리아파트 안심 매칭 꼭 확인하세요! -->
+<!-- [컴팩트 Q&A 아코디언] 우리아파트 3대 서비스 자주 묻는 질문 -->
 <section class="faq-accordion-section" style="width:100%; margin: 0 0 18px; background:#ffffff; border:1px solid #dce5ed; border-radius:14px; padding:14px 16px; box-shadow:0 3px 12px rgba(15,23,42,0.03);">
   <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid #edf2f7;">
     <div style="display:flex; align-items:center; gap:6px;">
       <span style="font-size:16px;">💡</span>
-      <h2 style="margin:0; font-size:14px; font-weight:900; color:#173f67; letter-spacing:-0.3px;">안심 매칭 꼭 확인하세요!</h2>
+      <h2 style="margin:0; font-size:14px; font-weight:900; color:#173f67; letter-spacing:-0.3px;">서비스 이용 꼭 확인하세요! (자주 묻는 질문)</h2>
     </div>
     <span style="font-size:11px; color:#64748b; font-weight:700;">질문을 누르면 답변이 나옵니다</span>
   </div>
 
-  <div class="faq-accordion-list" style="display:flex; flex-direction:column; gap:6px;">
-    <!-- Q1 -->
+  <!-- 서비스별 전환 탭 -->
+  <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:6px; margin-bottom:10px;">
+    <button type="button" onclick="switchMainFaq('apt')" id="faqTabApt" style="padding:8px 4px; border-radius:8px; border:1px solid #1165d7; background:#1165d7; color:#fff; font-size:12px; font-weight:800; cursor:pointer;">🏠 안심거래</button>
+    <button type="button" onclick="switchMainFaq('mart')" id="faqTabMart" style="padding:8px 4px; border-radius:8px; border:1px solid #cbd5e1; background:#f8fafc; color:#475569; font-size:12px; font-weight:800; cursor:pointer;">🛒 마트로</button>
+    <button type="button" onclick="switchMainFaq('presale')" id="faqTabPresale" style="padding:8px 4px; border-radius:8px; border:1px solid #cbd5e1; background:#f8fafc; color:#475569; font-size:12px; font-weight:800; cursor:pointer;">🏢 분양사 레이더</button>
+  </div>
+
+  <!-- 1. 아파트 안심거래 FAQ 그룹 -->
+  <div id="faqGroupApt" class="faq-accordion-list" style="display:flex; flex-direction:column; gap:6px;">
     <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
       <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
         <span><b style="color:#1165d7;">Q1.</b> 매칭 수수료 50% 외에 부동산에 별도로 또 내야 하나요?</span>
-        <span class="arrow-ico" style="font-size:11px; color:#64748b; transition:transform 0.2s;">▼</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
       </summary>
       <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
         <strong style="color:#0f172a; display:block; margin-bottom:4px;">절대 아닙니다. (추가 중개보수 0원)</strong>
@@ -1720,11 +1727,10 @@ body.menu-open{
       </div>
     </details>
 
-    <!-- Q2 -->
     <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
       <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
         <span><b style="color:#1165d7;">Q2.</b> 매칭 수수료 50%는 언제 지급하나요?</span>
-        <span class="arrow-ico" style="font-size:11px; color:#64748b; transition:transform 0.2s;">▼</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
       </summary>
       <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
         <strong style="color:#0f172a; display:block; margin-bottom:4px;">원하는 아파트를 최종 선택 확정하고, 전자계약서에 서명하기 직전에 지급합니다.</strong>
@@ -1732,11 +1738,10 @@ body.menu-open{
       </div>
     </details>
 
-    <!-- Q3 -->
     <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
       <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
         <span><b style="color:#1165d7;">Q3.</b> 마음에 드는 제안이 없으면 어떻게 되나요?</span>
-        <span class="arrow-ico" style="font-size:11px; color:#64748b; transition:transform 0.2s;">▼</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
       </summary>
       <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
         <strong style="color:#0f172a; display:block; margin-bottom:4px;">어떠한 비용이나 페널티도 발생하지 않습니다.</strong>
@@ -1744,11 +1749,10 @@ body.menu-open{
       </div>
     </details>
 
-    <!-- Q4 -->
     <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
       <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
         <span><b style="color:#1165d7;">Q4.</b> 희망조건을 등록하면 내 번호가 여러 부동산에 유출되나요?</span>
-        <span class="arrow-ico" style="font-size:11px; color:#64748b; transition:transform 0.2s;">▼</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
       </summary>
       <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
         <strong style="color:#0f172a; display:block; margin-bottom:4px;">절대 유출되지 않습니다.</strong>
@@ -1756,11 +1760,10 @@ body.menu-open{
       </div>
     </details>
 
-    <!-- Q5 -->
     <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
       <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
         <span><b style="color:#1165d7;">Q5.</b> 전세사기 등 위험이 있는 당사자 간 직거래인가요?</span>
-        <span class="arrow-ico" style="font-size:11px; color:#64748b; transition:transform 0.2s;">▼</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
       </summary>
       <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
         <strong style="color:#0f172a; display:block; margin-bottom:4px;">아닙니다. 100% 공인중개사 책임 안심 계약입니다.</strong>
@@ -1768,7 +1771,171 @@ body.menu-open{
       </div>
     </details>
   </div>
+
+  <!-- 2. 마트로 FAQ 그룹 -->
+  <div id="faqGroupMart" class="faq-accordion-list" style="display:none; flex-direction:column; gap:6px;">
+    <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
+      <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
+        <span><b style="color:#059669;">Q1.</b> 마트 신규 고객 유치와 입주민 DB 확보는 어떻게 이루어지나요?</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
+      </summary>
+      <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
+        <strong style="color:#0f172a; display:block; margin-bottom:4px;">"전화번호 노출 없는 주차 안심 QR 스티커" 무료 배포를 통해 확실한 구매 고객을 확보합니다.</strong>
+        1. 아파트 단지 입주민 차량에 부착할 수 있는 <b>개인 휴대폰 번호 미노출 안심 주차 QR</b>을 무료로 배포합니다.<br>
+        2. 차주(입주민)가 이 안심 QR 서비스를 등록할 때, <b>마트 앱 설치와 푸시 알림 수신이 필수로 설정</b>됩니다.<br>
+        3. 이를 통해 마트 사장님은 우리 동네 아파트의 <b>실제 구매력 높은 입주민 고객 DB를 100% 자동 확보</b>하고, 매일 발행하는 특가 소식을 입주민 휴대폰 푸시로 직통 전달할 수 있습니다.
+      </div>
+    </details>
+
+    <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
+      <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
+        <span><b style="color:#059669;">Q2.</b> 기존 종이 전단지나 LMS 문자와 무엇이 다른가요?</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
+      </summary>
+      <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
+        <strong style="color:#0f172a; display:block; margin-bottom:4px;">4대 카테고리 상품이 선명한 디지털 화면으로 보여지며 주문·방문·배달이 모두 이루어집니다.</strong>
+        - <b>4대 상품 디지털 노출</b>: 오늘의 특가(가격 급락 특가품), 행사상품(매장 세일), 공동구매(묶음 할인), 일반상품(상시 판매품)<br>
+        - <b>원스톱 구매 연결</b>: 고화질 사진과 가격을 보면서 입주민이 앱 내 직접 주문, 배달 요청, 매장 방문 구매까지 모든 거래가 자연스럽게 이루어집니다.
+      </div>
+    </details>
+
+    <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
+      <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
+        <span><b style="color:#059669;">Q3.</b> 마트 이용 비용과 정산 구조는 어떻게 되나요?</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
+      </summary>
+      <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
+        <strong style="color:#0f172a; display:block; margin-bottom:4px;">매달 수십~수백만 원씩 낭비되던 문자 발송비 대신 합리적인 월 가맹비로 대폭 절감됩니다.</strong>
+        보낼 때마다 건당 비용(30~50원)이 계속 누적되는 일반 문자와 달리, 합리적인 월 가맹비 하나로 무제한 디지털 전단지 전송과 우리아파트 입주민 단골 고객 DB 관리 혜택을 모두 누리실 수 있습니다.
+      </div>
+    </details>
+
+    <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
+      <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
+        <span><b style="color:#059669;">Q4.</b> 기존 매장에서 쓰던 포스(POS) 기기를 교체해야 하나요?</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
+      </summary>
+      <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
+        <strong style="color:#0f172a; display:block; margin-bottom:4px;">아닙니다. 기존 POS 그대로 사용하시며, 사장님이 상품을 직접 업로드하시면 됩니다.</strong>
+        비싼 전용 단말기나 기기 교체 비용이 일체 없으며, 매장 PC나 스마트폰에서 오늘의 특가, 행사상품, 사진 등을 <b>사장님이 직접 간편하게 업로드</b>하여 실시간으로 입주민에게 전송할 수 있습니다.
+      </div>
+    </details>
+
+    <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
+      <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
+        <span><b style="color:#059669;">Q5.</b> 마트 실제 매출에는 어떻게 직접적인 도움이 되나요?</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
+      </summary>
+      <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
+        <strong style="color:#0f172a; display:block; margin-bottom:4px;">디지털 전환 + 원스톱 주문·배달 + 분양사 쿠폰 연동으로 매출이 확실하게 올라갑니다.</strong>
+        1. <b>디지털 사진 전단지 전환</b>: 고화질 사진 전단지로 당일 특가 상품의 구매력을 극대화합니다.<br>
+        2. <b>주문·배달·방문 자동 연결</b>: 전단지에서 직접 주문, 배달 신청, 매장 방문 구매까지 자동으로 이어집니다.<br>
+        3. <b>분양사 광고 연동 마트 전용 쿠폰</b>: 특가 하단 분양사 광고를 입주민이 클릭하면 <b>전자쿠폰이 지급</b>되며, 이 쿠폰은 <b>해당 마트 매장에서만 사용 가능</b>하여 고객 방문과 추가 장보기를 강력하게 이끌어냅니다.
+      </div>
+    </details>
+  </div>
+
+  <!-- 3. 분양사 레이더 FAQ 그룹 -->
+  <div id="faqGroupPresale" class="faq-accordion-list" style="display:none; flex-direction:column; gap:6px;">
+    <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
+      <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
+        <span><b style="color:#ea580c;">Q1.</b> 분양사 레이더는 어떻게 해당 지역 관심 고객을 집중 유치하나요?</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
+      </summary>
+      <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
+        <strong style="color:#0f172a; display:block; margin-bottom:4px;">분양 현장 인근 로컬 마트가 확보한 실제 입주민 DB를 활용하여, 해당 지역에 핀포인트로 집중 홍보합니다.</strong>
+        1. 아파트 분양 성공의 핵심은 바로 그 지역에 거주하며 신축 갈아타기를 희망하는 <b>인근 배후 단지 주민들</b>입니다.<br>
+        2. 분양사 레이더는 분양 현장 관할 지역 제휴 마트가 이미 확보해 둔 <b>실제 아파트 차주·입주민 고객 DB</b>를 기반으로 작동합니다.<br>
+        3. 따라서 불필요한 예산 낭비 없이, 해당 분양 지역의 가장 유력한 실수요자들에게 분양 소식과 카탈로그가 다이렉트로 집중 홍보됩니다.
+      </div>
+    </details>
+
+    <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
+      <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
+        <span><b style="color:#ea580c;">Q2.</b> 동네 마트 전단지와 어떻게 연동되어 분양 광고 효과를 내나요?</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
+      </summary>
+      <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
+        <strong style="color:#0f172a; display:block; margin-bottom:4px;">인근 아파트 주민들이 매일 보는 마트 "오늘의 특가" 하단에 분양 배너가 독점 노출됩니다.</strong>
+        1. 매일 장을 보기 위해 마트 전단지를 열어보는 인근 아파트 주부·가장들의 시선에 분양 현장이 매일 자연스럽게 각인됩니다.<br>
+        2. 입주민이 분양사 광고를 터치하면 <b>해당 마트 전용 전자할인쿠폰이 즉시 지급</b>되므로, 클릭률과 관심도가 일반 인터넷 배너보다 압도적으로 높습니다.
+      </div>
+    </details>
+
+    <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
+      <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
+        <span><b style="color:#ea580c;">Q3.</b> 입주민에게 지급되는 마트 전자쿠폰은 분양사에 어떤 이득이 있나요?</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
+      </summary>
+      <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
+        <strong style="color:#0f172a; display:block; margin-bottom:4px;">광고비 낭비 없이 ‘분양 카탈로그 열람 및 관심고객 등록’과 즉각 맞교환됩니다.</strong>
+        길거리 휴지나 판촉물 배포는 받고 버려지지만, 마트 전자쿠폰은 주민이 <b>분양 정보 확인 / 카탈로그 열람 / 관심고객 등록</b>을 진행할 때 지급되므로, 확실한 잠재 계약자 정보(DB)를 확보하는 가장 강력한 유인책이 됩니다.
+      </div>
+    </details>
+
+    <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
+      <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
+        <span><b style="color:#ea580c;">Q4.</b> 모델하우스(M/H) 현장 방문 및 상담 예약은 어떻게 연결되나요?</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
+      </summary>
+      <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
+        <strong style="color:#0f172a; display:block; margin-bottom:4px;">관심 고객이 스마트폰에서 터치 한 번으로 1:1 방문 예약 및 전문 분양팀과 즉시 연결됩니다.</strong>
+        모바일 카탈로그를 확인한 관심 고객은 복잡한 절차 없이 원하는 날짜와 시간을 선택해 모델하우스 VIP 방문 예약을 신청할 수 있으며, 분양팀 관리자 페이지로 실시간 알림이 전송됩니다.
+      </div>
+    </details>
+
+    <details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden;">
+      <summary style="padding:10px 12px; font-size:13px; font-weight:800; color:#1e293b; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; user-select:none;">
+        <span><b style="color:#ea580c;">Q5.</b> 분양사 입점 및 광고 집행 비용은 어떻게 되나요?</span>
+        <span class="arrow-ico" style="font-size:11px; color:#64748b;">▼</span>
+      </summary>
+      <div style="padding:10px 12px; background:#ffffff; border-top:1px solid #e2e8f0; font-size:12px; color:#334155; line-height:1.65; word-break:keep-all;">
+        <strong style="color:#0f172a; display:block; margin-bottom:4px;">수천만 원씩 드는 버스·현수막 광고 대비, 타겟 단지 집중형의 합리적인 예산으로 운영됩니다.</strong>
+        옥외 광고나 무차별 문자 살포와 달리, 분양 현장 반경 내 배후 아파트 단지와 인근 제휴 마트를 정밀 지정하여 집중 집행할 수 있어 분양 마케팅 예산을 획기적으로 절감할 수 있습니다.
+      </div>
+    </details>
+  </div>
 </section>
+
+<script>
+function switchMainFaq(type) {
+  const tabApt = document.getElementById('faqTabApt');
+  const tabMart = document.getElementById('faqTabMart');
+  const tabPresale = document.getElementById('faqTabPresale');
+  const groupApt = document.getElementById('faqGroupApt');
+  const groupMart = document.getElementById('faqGroupMart');
+  const groupPresale = document.getElementById('faqGroupPresale');
+
+  // 기본 리셋
+  [tabApt, tabMart, tabPresale].forEach(tab => {
+    if (tab) {
+      tab.style.background = '#f8fafc';
+      tab.style.color = '#475569';
+      tab.style.borderColor = '#cbd5e1';
+    }
+  });
+  if (groupApt) groupApt.style.display = 'none';
+  if (groupMart) groupMart.style.display = 'none';
+  if (groupPresale) groupPresale.style.display = 'none';
+
+  if (type === 'apt') {
+    tabApt.style.background = '#1165d7';
+    tabApt.style.color = '#fff';
+    tabApt.style.borderColor = '#1165d7';
+    if (groupApt) groupApt.style.display = 'flex';
+  } else if (type === 'mart') {
+    tabMart.style.background = '#059669';
+    tabMart.style.color = '#fff';
+    tabMart.style.borderColor = '#059669';
+    if (groupMart) groupMart.style.display = 'flex';
+  } else if (type === 'presale') {
+    tabPresale.style.background = '#ea580c';
+    tabPresale.style.color = '#fff';
+    tabPresale.style.borderColor = '#ea580c';
+    if (groupPresale) groupPresale.style.display = 'flex';
+  }
+}
+</script>
 
 <section class="fee-widget">
 <!-- =========================
