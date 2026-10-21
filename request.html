@@ -1854,9 +1854,7 @@ function verifyStatus(
 }
 
 
-$("#phone")
-.addEventListener(
-  "input",
+if($("#phone")) $("#phone").addEventListener("input",
   function(){
 
     this.value =
@@ -1882,9 +1880,7 @@ $("#phone")
 );
 
 
-$("#verifyCode")
-.addEventListener(
-  "input",
+if($("#verifyCode")) $("#verifyCode").addEventListener("input",
   function(){
 
     this.value =
@@ -1896,9 +1892,7 @@ $("#verifyCode")
 );
 
 
-$("#sendCodeBtn")
-.addEventListener(
-  "click",
+if($("#sendCodeBtn")) $("#sendCodeBtn").addEventListener("click",
   async function(){
 
     const phone =
@@ -2018,9 +2012,7 @@ $("#sendCodeBtn")
 );
 
 
-$("#verifyBtn")
-.addEventListener(
-  "click",
+if($("#verifyBtn")) $("#verifyBtn").addEventListener("click",
   async function(){
 
     const phone =
@@ -2261,7 +2253,6 @@ function setOptions(
    시도 불러오기
 ========================================= */
 
-async function 
 /* =========================================
    URL 파라미터 기반 아파트명 자동 채움
 ========================================= */
@@ -2273,7 +2264,7 @@ if (initialApt) {
   }
 }
 
-loadSido(){
+async function loadSido(){
 
   const data =
   await api(
