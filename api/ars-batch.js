@@ -288,7 +288,7 @@ export default async function handler(req, res) {
       }
     }
 
-    const requests = await supabaseGet(
+    let requests = await supabaseGet(
       `property_requests?request_number=eq.${encodeURIComponent(requestNumber)}&select=*&limit=1`
     ).catch(() => []);
 
