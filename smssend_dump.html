@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--<meta http-equiv="refresh" content="1800">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <title>제이문자</title>
+    <link rel="stylesheet" href="//icnu.kr/jmunja/css/jquery-ui.css" />
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="//icnu.kr/jmunja/css/dashboard.css" rel="stylesheet">
+	<link href="//icnu.kr/jmunja/css/chat.css" rel="stylesheet">
+	<link href="//icnu.kr/jmunja/css/jmunja.css" rel="stylesheet">
+	<link href="//icnu.kr/jmunja/css/notosanskr.css" rel="stylesheet">
+	<!--<link href="./css/AdminLTE.css" rel="stylesheet">-->
+	<link href="./vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="canonical" href="https://www.wooriapt.app/smssend_dump">
+  <meta name="robots" content="noindex,nofollow">
+</head>
+  <body onContextmenu="return true" ondragstart="return true" onSelectstart="return true">
+
+	<nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#" style="color:#fff;font-size:18pt;"><i class="fas fa-comments"></i> 제이문자</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">메뉴<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+				<li><a href="dashboard.php"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> 대시보드</a></li>
+                <li><a href="board.php?bid=1"><span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span> 공지사항</a></li>
+				<li><a href="board.php?bid=2"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> 자료실</a></li>
+        
+				                <li><a href="book.php"><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> 전화번호부</a></li>
+				
+				                <li><a href="smssend.php"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> 문자발송</a></li>
+				
+
+				                <li><a href="smshistory.php"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 발송이력</a></li>
+												<li><a href="smshistory2.php"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 상세이력</a></li>
+				        
+                <li><a href="recvhistory.php"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 수신이력</a></li>
+        
+                  <li><a href="recvmohistory.php"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 수신이력(MO)</a></li>
+				        
+
+
+				                <li><a href="smsstore.php"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> 문자보관함</a></li>
+				<li><a href="deny.php"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> 수신거부관리</a></li>
+				
+								<li><a href="chat.php"><i class="fas fa-comments"></i> 문자채팅</a></li>
+				
+                				<li><a href="leaflet.php"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> 전단지</a></li>
+				
+				
+				
+                
+				                <li><a href="phone.php"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> 단말기</a></li>
+				
+								<li><a href="pay.php"><i class="fas fa-won-sign"></i> 충전</a></li>
+                <li><a href="point.php"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> 포인트</a></li>
+				
+                				                <li><a href="app.php"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> 앱 다운로드</a></li>
+				<li><a href="myinfo.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 마이페이지</a></li>
+				              </ul>
+            </li>
+
+			<li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">포인트<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">잔여포인트: <span class="blue">0.0</span></a></li>
+              </ul>
+            </li>
+
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><b>장수용(프리미엄회원)</b>님, 반갑습니다<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="myinfo.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 개인정보 확인/변경</a></li>
+                <li><a href="logout.php"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> 로그아웃</a></li>
+				              </ul>
+            </li>
+          </ul>
+
+<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="helpModalLabel">도움말</h4>
+      </div>
+      <div class="modal-body">
+준비 중입니다.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+
+
+<div class="col-sm-3 col-md-1 sidebar" style="min-width: 160px;max-width: 200px;">
+<ul class="nav nav-sidebar">
+<li><a href="dashboard.php"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> 대시보드</a></li>
+
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span> 게시판 <span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="board.php?bid=1"><span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span> 공지사항 </a> </li>
+<li><a href="board.php?bid=2"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> 자료실 </a> </li>
+
+</ul>
+</li>
+
+<li><a href="book.php"><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> 전화번호부</a></li>
+
+<li class="active"><a href="smssend.php"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> 문자발송</a></li>
+
+
+<li><a href="smshistory.php"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 발송이력</a></li>
+<li><a href="smshistory2.php"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 상세이력</a></li>
+
+<li><a href="recvhistory.php"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 수신이력</a></li>
+
+<li><a href="recvmohistory.php"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 수신이력(MO)</a></li>
+    
+
+
+
+<li><a href="smsstore.php"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> 문자보관함</a></li>
+<li><a href="deny.php"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> 수신거부관리</a></li>
+
+<li><a href="chat.php"><i class="fas fa-comments"></i> 문자채팅 <span id="unview_cnt_badge" class="badge">0</span> </a> </li>
+
+<li><a href="leaflet.php"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> 전단지</a></li>
+
+
+
+<li><a href="phone.php"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> 단말기</a></li>
+
+<li><a href="pay.php"><i class="fas fa-won-sign"></i> 충전</a></li>
+<li><a href="point.php"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> 포인트</a></li>
+
+
+<li><a href="app.php"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> 앱다운로드</a></li>
+<!--<li><a href="help.php"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> 원격지원</a></li>-->
+<li><a href="myinfo.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 마이페이지</a></li>
+
+</ul>
+</div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-11 col-md-offset-1 main">
+          <h2 class="page-header"><a href="dashboard.php"><i class="bi bi-chevron-compact-left"></i></a> 문자발송 </h2>
+
+		  <div>&nbsp;</div>
+          <form name="form1" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="mode" value="send">
+		  <input type="hidden" id="image1" name="image1" value="">
+		  <input type="hidden" id="image2" name="image2" value="">
+		  <input type="hidden" id="image3" name="image3" value="">
+          <div class="row">
+			<div class="col-xs-12">
+			  <div class="row">
+						<div class="col-xs-12 col-sm-12 col-lg-4" style="min-width: 400px;max-width: 500px;">
+							<div class="widget-box" style="min-width: 230px">
+								<div class="bg-primary" style="background-color: #fff; background-image: url(images/phone_topbg.gif);background-position: top right; color: #333">
+									<img src="images/phone_topleft.gif">
+									제목 <input type="text" id="sms-title" class="text-primary" name="title" style="width:50%; height:38px;" value="" maxlength="50" onkeydown="javascript:if(event.keyCode == 13) { return false;} " onkeyup="cut_subject()"/>
+									<span id="bytes2">0</span>/50
+								</div>
+
+								<div class="widget-body" style="border-left: 3px solid #d5d5d5; border-right: 3px solid #d5d5d5; padding: 0 8px">
+									<div class="widget-main">
+										<input type="hidden" id="store-title" value="" />
+										<input type="hidden" id="store-message" value="" />
+										<textarea id="sms-message" name="message" class="form-control" placeholder="내용 입력" rows="15" onkeyup="cut_message()" style="background-color:#cceffb"></textarea><br>
+										<div class="text-right"><span id="bytes">0</span>/8000 bytes</div>
+
+										<hr>
+										<div class="text-left">
+											<input type="button" id="btn-sms-save" class="btn btn-sm btn-default" value="문자저장" onclick="sms_store()">&nbsp;
+											<input type="button" id="btn-sms-store" class="btn btn-sm btn-default" value="문자보관함" onclick="win_sms_store()">&nbsp;
+											<input type="button" id="btn-spe-char" class="btn btn-sm btn-default" value="특수문자" onclick="win_special_character()">&nbsp;
+
+																						<input type="button" id="btn-sms-imagetext" class="btn btn-sm btn-default" value="080수신거부" onclick="addDeny080()">&nbsp;
+											<input type="button" id="btn-sms-imagetext" class="btn btn-sm btn-default" value="내용 이미지변환" onclick="imagetext_create()">&nbsp;
+											<input type="button" id="btn-add-leaflet" class="btn btn-sm btn-default" value="전단지추가" onclick="win_sms_link()">&nbsp;
+																						<input type="button" id="btn-sms-clear" class="btn btn-sm btn-default" value="내용삭제" onclick="$('#sms-message').val('')">&nbsp;
+											<input type="button" id="btn-sms-phone" class="btn btn-sm btn-default" value="단말기" onclick="win_phone_list()">&nbsp;
+
+																						<br>
+											이미지변환 배경색 <input type="radio" id="imagetext_bgcolor1" name="imagetext_bgcolor" value="ffffff" checked> <span style="background-color:#ffffff;"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+											<input type="radio" id="imagetext_bgcolor2" name="imagetext_bgcolor" value="b5edff"> <span style="background-color:#b5edff;"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+											<input type="radio" id="imagetext_bgcolor3" name="imagetext_bgcolor" value="ffe3b9"> <span style="background-color:#ffe3b9;"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+											<input type="radio" id="imagetext_bgcolor4" name="imagetext_bgcolor" value="bbfdca"> <span style="background-color:#bbfdca;"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+											
+
+										</div>
+										<div>&nbsp;</div>
+
+
+										<div><input type="checkbox" name="today_onetime" value="Y"> <span style="cursor:pointer;" title="이 옵션을 체크하면 하루에 1회만 발송할 수 있습니다. 이미 발송한 건이 있으면 해당 번호는 이번 발송 요청을 생략합니다.">하루 1회만 보내기</span><br>
+										<span style="color:red">(동일한 내용을 보내는 경우에만 사용하세요.)</span><br><br>
+										<input type="radio" name="reserv_fg" value="N" checked onclick="$('#reserv_info').hide();"> 즉시 발송 &nbsp;&nbsp;
+										<input type="radio" name="reserv_fg" value="Y" onclick="$('#reserv_info').show();"> 예약 발송
+										</div>
+										<div id="reserv_info" style="display: none;">예약날짜 <input type="text" id="reserv_date" name="reserv_date" size="10" value=""> <br>
+										예약시간 <select id='reserv_hour' name='reserv_hour' onChange='check_btn_send()'>
+<option value=''>선택</option>
+<option value='00'  selected>00</option>
+<option value='01' >01</option>
+<option value='02' >02</option>
+<option value='03' >03</option>
+<option value='04' >04</option>
+<option value='05' >05</option>
+<option value='06' >06</option>
+<option value='07' >07</option>
+<option value='08' >08</option>
+<option value='09' >09</option>
+<option value='10' >10</option>
+<option value='11' >11</option>
+<option value='12' >12</option>
+<option value='13' >13</option>
+<option value='14' >14</option>
+<option value='15' >15</option>
+<option value='16' >16</option>
+<option value='17' >17</option>
+<option value='18' >18</option>
+<option value='19' >19</option>
+<option value='20' >20</option>
+<option value='21' >21</option>
+<option value='22' >22</option>
+<option value='23' >23</option>
+</select>시 <select id='reserv_min' name='reserv_min' onChange='check_btn_send()'>
+<option value=''>선택</option>
+<option value='00'  selected>00</option>
+<option value='05' >05</option>
+<option value='10' >10</option>
+<option value='15' >15</option>
+<option value='20' >20</option>
+<option value='25' >25</option>
+<option value='30' >30</option>
+<option value='35' >35</option>
+<option value='40' >40</option>
+<option value='45' >45</option>
+<option value='50' >50</option>
+<option value='55' >55</option>
+</select>분</div>
+										<br>
+										&nbsp;<br>
+									</div>
+
+																			<div>
+											<p>발송번호 <select id='callback' name='callback'>
+<option value=''>미선택</option>
+<option value='01022864150' sendable_count='490' >010-2286-4150 - 490건 가능</option>
+</select> <small>(선택사항)</small></p>
+											<p>선택할 경우 선택한 휴대폰에서만 발송됩니다.<br>
+											선택하지 않을 경우 사용 가능한 모든 휴대폰에서 발송됩니다.</p>
+										</div>
+									
+									<div>
+										<h5 class="text-center text-info">발송가능 건수: 490</h5>
+									</div>
+
+									<div style="text-align: center;">
+										<span id="div-btn-sms-send">
+																				<input type="button" id="btn-sms-send" value="발송" onclick="sms_send()" class="btn btn-block btn-primary">
+																				</span>
+										<span id="running2" style="display: none;color: blue;"><img src="images/indicator.gif"> 발송 중입니다. 기다려주세요!</span>
+									</div>
+
+								</div>
+
+								<div style="margin-bottom: 20px; height: 55px;background-color: #fff; background-image: url(images/phone_bottombg.gif);background-position: top right; color: #333">
+								<img src="images/phone_bottomleft.gif">
+								</div>
+							</div>
+
+						</div>
+
+
+						<div class="col-xs-12 col-sm-6 col-lg-5" >
+                            <div class="clearfix">
+                                <div class="pull-right tableTools-container"></div>
+                            </div>
+
+                            <input type="hidden" id="contactSelectType" name="contactSelectType" value="book">
+                            <span id="contact1chk" class="btn btn-primary btn-xs" style="cursor: pointer;" onclick="$('#contact1').show();$('#contact2').hide();$('#contact3').hide();$('#contact1chk').attr('class','btn btn-primary btn-xs');$('#contact2chk').attr('class','');$('#contact3chk').attr('class','');$('#contactSelectType').val('book');">전화번호부</span> &nbsp;&nbsp;
+                            <span id="contact2chk" style="cursor: pointer;" onclick="$('#contact1').hide();$('#contact2').show();$('#contact3').hide();$('#contact1chk').attr('class','');$('#contact2chk').attr('class','btn btn-primary btn-xs');$('#contact3chk').attr('class','');$('#contactSelectType').val('direct');">수기입력</span> &nbsp;&nbsp;
+                            <span id="contact3chk" style="cursor: pointer;" onclick="$('#contact1').hide();$('#contact2').hide();$('#contact3').show();$('#contact1chk').attr('class','');$('#contact2chk').attr('class','');$('#contact3chk').attr('class','btn btn-primary btn-xs');$('#contactSelectType').val('xls');">엑셀파일 </span>
+                            <div>&nbsp;</div>
+                            <div id="contact1">
+                            <select id='book' name='book' onChange='update_receiver()'>
+<option value=''>그룹을 선택하세요</option>
+</select> <input type="button" class="btn btn-primary btn-sm" onclick="update_receiver()" value="조회"> <span id="running" style="display: none;"><img src="images/indicator.gif"></span><p>
+                                <div id="ajax_data" style="height:500px;overflow:auto;">
+                                    <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" nowrap><input type="checkbox" name="chkall"></th>
+                                                <th class="text-center" nowrap>연번</th>
+                                                <th class="text-center" nowrap>이름</th>
+                                                <th class="text-center" nowrap>전화번호</th>
+												<th class="text-center" nowrap>비고</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="contact2" style="display: none;">
+                                <font color="red"><small>수기입력 모드에서는 {고객명} 치환 기능이 작동하지 않습니다.</small></font><br>
+                                <textarea id="contact_direct" name="contact_direct" class="form-control" style="width: 100%;height: 250px;" placeholder="쉼표(,) 또는 줄바꿈으로 전화번호를 구분해주세요"></textarea>
+                            </div>
+                            <div id="contact3" style="display: none;">
+                                <font color="red">엑셀 파일을 선택해주세요.</font><br>
+                                <font color="red">A열(휴대폰번호), B열(이름), C열(사용자 필드1)~L열(사용자 필드10) 순서는 고정이며, 2행부터 자료를 넣으면 됩니다.</font><br>
+                                <font color="red">문자 내용에 {{C}} 라고 입력하면 엑셀 파일의 C열 자료가 자동으로 들어갑니다.</font><br>
+                                <font color="red">@ 문자를 열 구분자로 사용하고 있어서 @ 문자는 사용할 수 없습니다.</font><br><br>
+                                <input type="file" id="xlsfile" name="xlsfile" class="form-control" accept=".xls,.xlsx"><br>
+						        <p>엑셀파일 양식을 다운받아서 사용하세요. <input type="button" class="btn btn-default btn-sm" value="엑셀양식 다운로드" onclick="location.href='smssend_sample.xlsx'"></p>
+                            </div>
+
+					   </div>
+
+                        <!-- 사진 첨부 시작 -->
+						<div class="col-xs-12 col-sm-6 col-lg-3">
+							  <caption class="primary">
+						  						  <!-- <p>※ 한글이나 엑셀등에서 작성한 문구를 복사하여 사용하는 경우, 일부 특수문자로 인해 정상적인 발송이 되지 않을 수 있습니다. 특수문자 사용시에는 프로그램에서 지원하는 것으로 사용하시길 바랍니다.</p> -->
+						  <!--<p>※ 내용에 {고객명}을 입력하시면 이름으로 치환되어 발송됩니다. ex) {고객명}님, 안녕하세요. -> 홍길동님, 안녕하세요.</p>-->
+						  </caption>
+							                            <div>&nbsp;</div>
+							<div id="file1">
+								<div id="file1_view" style="width:100%;">
+																	</div>
+								<div style="text-align: center;padding-top:10px;padding-bottom:20px;"> 사진1 &nbsp;
+									<input id="btn_image_upload" type="button" class="btn btn-default btn-sm" value="업로드" data-toggle="modal" data-target="#imageUpload1Modal"> &nbsp;
+									<input id="btn_image_select" type="button" class="btn btn-default btn-sm" value="보관이미지 선택" data-toggle="modal" data-target="#imageSelect1Modal"> &nbsp;
+									<input id="btn_image_cancel" type="button" style="display:none;" class="btn btn-default btn-sm" value="취소" onclick="image_cancel()">
+								</div>
+							</div>
+							<div id="file2">
+								<div id="file2_view" style="width:100%;">
+																	</div>
+								<div style="text-align: center;padding-top:10px;padding-bottom:20px;"> 사진2 &nbsp;
+									<input id="btn_image2_upload" type="button" class="btn btn-default btn-sm" value="업로드" data-toggle="modal" data-target="#imageUpload2Modal"> &nbsp;
+									<input id="btn_image2_select" type="button" class="btn btn-default btn-sm" value="보관이미지 선택" data-toggle="modal" data-target="#imageSelect2Modal"> &nbsp;
+									<input id="btn_image2_cancel" type="button" style="display:none;" class="btn btn-default btn-sm" value="취소" onclick="image2_cancel()">
+								</div>
+							</div>
+							<div id="file3">
+								<div id="file3_view" style="width:100%;">
+																	</div>
+								</div>
+								<div style="text-align: center;padding-top:10px;padding-bottom:20px;"> 사진3 &nbsp;
+									<input id="btn_image3_upload" type="button" class="btn btn-default btn-sm" value="업로드" data-toggle="modal" data-target="#imageUpload3Modal"> &nbsp;
+									<input id="btn_image3_select" type="button" class="btn btn-default btn-sm" value="보관이미지 선택" data-toggle="modal" data-target="#imageSelect3Modal"> &nbsp;
+									<input id="btn_image3_cancel" type="button" style="display:none;" class="btn btn-default btn-sm" value="취소" onclick="image3_cancel()">
+								</div>
+							</div>
+													</div>
+						<!-- 사진 첨부 끝 -->
+				</div>
+			</div><!-- /.col -->
+		  </div><!-- /.row -->
+
+        </div>
+        </form>
+
+		<div class="modal fade" id="imageUpload1Modal" tabindex="-1" role="dialog" aria-labelledby="imageUpload1ModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="imageUpload1ModalLabel">사진업로드(JPEG만 업로드 가능) <span id="upload_running" style="display: none;"><img src="images/indicator.gif"></span></h4>
+			  </div>
+			  <div class="modal-body">
+				  <form id="imgup1" name="imgup1" method="post" action="ajax_imageupload.php" enctype="multipart/form-data">
+				  <input type="hidden" name="mode" value="upload">
+				  <input type="hidden" id="seq" name="seq" value="1">
+				  <font color="red">전에 업로드한 사진일 경우, 창을 닫고 [선택] 버튼을 눌러서 선택해주세요.</font><p>
+				  <div class="form-group">
+					<label for="InputFile">파일선택</label>
+					<input type="file" name="formfile" class="form-control" accept=".jpg, .jpeg">
+				  </div>
+
+				  <div id="status1"></div>
+			  </div>
+			  <div class="modal-footer">
+				<button type="submit" class="btn btn-primary">업로드</button> &nbsp;&nbsp;&nbsp;
+				<button type="button" class="btn btn-default" data-dismiss="modal">완료</button>
+			  </div>
+			  </form>
+			</div>
+		  </div>
+		</div>
+
+		<div class="modal fade" id="imageUpload2Modal" tabindex="-1" role="dialog" aria-labelledby="imageUpload2ModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="imageUpload2ModalLabel">사진업로드(JPEG만 업로드 가능)</h4>
+			  </div>
+			  <div class="modal-body">
+				  <form id="imgup2" name="imgup2" method="post" action="ajax_imageupload.php" enctype="multipart/form-data">
+				  <input type="hidden" name="mode" value="upload">
+				  <input type="hidden" id="seq" name="seq" value="2">
+				  <font color="red">전에 업로드한 사진일 경우, 창을 닫고 [선택] 버튼을 눌러서 선택해주세요.</font><br>
+				  <div class="form-group">
+					<label for="InputFile">파일선택</label>
+					<input type="file" name="formfile" class="form-control" accept=".jpg, .jpeg">
+				  </div>
+
+				  <div id="status2"></div>
+			  </div>
+			  <div class="modal-footer">
+				<button type="submit" class="btn btn-primary">업로드</button> &nbsp;&nbsp;&nbsp;
+				<button type="button" class="btn btn-default" data-dismiss="modal">완료</button>
+			  </div>
+			  </form>
+			</div>
+		  </div>
+		</div>
+
+		<div class="modal fade" id="imageUpload3Modal" tabindex="-1" role="dialog" aria-labelledby="imageUpload3ModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="imageUpload3ModalLabel">사진업로드(JPEG만 업로드 가능)</h4>
+			  </div>
+			  <div class="modal-body">
+				  <form id="imgup3" name="imgup3" method="post" action="ajax_imageupload.php" enctype="multipart/form-data">
+				  <input type="hidden" name="mode" value="upload">
+				  <input type="hidden" id="seq" name="seq" value="3">
+				  <font color="red">전에 업로드한 사진일 경우, 창을 닫고 [선택] 버튼을 눌러서 선택해주세요.</font><br>
+				  <div class="form-group">
+					<label for="InputFile">파일선택</label>
+					<input type="file" name="formfile" class="form-control" accept=".jpg, .jpeg">
+				  </div>
+
+				  <div id="status3"></div>
+			  </div>
+			  <div class="modal-footer">
+				<button type="submit" class="btn btn-primary">업로드</button> &nbsp;&nbsp;&nbsp;
+				<button type="button" class="btn btn-default" data-dismiss="modal">완료</button>
+			  </div>
+			  </form>
+			</div>
+		  </div>
+		</div>
+
+		<div class="modal fade" id="imageUpload3Modal" tabindex="-1" role="dialog" aria-labelledby="imageUpload3ModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="imageUpload3ModalLabel">사진업로드(JPEG만 업로드 가능)</h4>
+			  </div>
+			  <div class="modal-body">
+				  <form id="imgup3" name="imgup3" method="post" action="ajax_imageupload.php" enctype="multipart/form-data">
+				  <input type="hidden" name="mode" value="upload">
+				  <input type="hidden" id="seq" name="seq" value="3">
+				  <font color="red">전에 업로드한 사진일 경우, 창을 닫고 [선택] 버튼을 눌러서 선택해주세요.</font><br>
+				  <div class="form-group">
+					<label for="InputFile">파일선택</label>
+					<input type="file" name="formfile" class="form-control" accept=".jpg, .jpeg">
+				  </div>
+
+				  <div id="status3"></div>
+			  </div>
+			  <div class="modal-footer">
+				<button type="submit" class="btn btn-primary">업로드</button> &nbsp;&nbsp;&nbsp;
+				<button type="button" class="btn btn-default" data-dismiss="modal">완료</button>
+			  </div>
+			  </form>
+			</div>
+		  </div>
+		</div>
+
+		<div class="modal fade" id="imageSelect1Modal" tabindex="-1" role="dialog" aria-labelledby="imageSelect1ModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="imageSelect1ModalLabel">사진선택</h4>
+			  </div>
+			  <div class="modal-body">
+			    			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">완료</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+
+		<div class="modal fade" id="imageSelect2Modal" tabindex="-1" role="dialog" aria-labelledby="imageSelect2ModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="imageSelect2ModalLabel">사진선택</h4>
+			  </div>
+			  <div class="modal-body">
+			    			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">완료</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+
+		<div class="modal fade" id="imageSelect3Modal" tabindex="-1" role="dialog" aria-labelledby="imageSelect3ModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="imageSelect3ModalLabel">사진선택</h4>
+			  </div>
+			  <div class="modal-body">
+			    			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">완료</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+
+<script>
+
+function check_btn_send() {
+	var _resdt = $("#reserv_date").val();
+	if(form1.reserv_fg[1].checked == true && _resdt != "2026-10-13" && _resdt > "2026-10-13") {
+		$("#div-btn-sms-send").html("<input type='button' id='btn-sms-send' value='보내기' onclick='sms_send()' class='btn btn-block btn-primary'>");
+	}
+}
+
+function showRequest(formData, jqForm, options) {
+	var queryString = $.param(formData);
+	//alert('About to submit: \n\n' + queryString);
+	$('#upload_running').show();
+	return true;
+}
+
+function showResponse(responseText, statusText, xhr, $form)  {
+	//alert('status: ' + statusText + '\n\nresponseText: \n' + responseText +
+	//	'\n\nThe output div should have already been updated with the responseText.');
+	var arr = responseText.split("|");
+	if(arr[0] == "1") {
+		if(arr[1] == "1") {
+			//$('#status1').html("<img src='/sms/upload/"+arr[2]+"' width='280'>");
+			$('#file1_view').html("<img src='/sms/upload/"+arr[2]+"' width='100%'>");
+			$('#btn_image_cancel').show();
+			$('#image1').val(arr[2]);
+			$('#imageUpload1Modal').modal('toggle');
+		}
+	} else if(arr[0] == "2") {
+		if(arr[1] == "1") {
+			//$('#status2').html("<img src='/sms/upload/"+arr[2]+"' width='280'>");
+			$('#file2_view').html("<img src='/sms/upload/"+arr[2]+"' width='100%'>");
+			$('#btn_image2_cancel').show();
+			$('#image2').val(arr[2]);
+			$('#imageUpload2Modal').modal('toggle');
+		}
+	} else if(arr[0] == "3") {
+		if(arr[1] == "1") {
+			//$('#status3').html("<img src='/sms/upload/"+arr[2]+"' width='280'>");
+			$('#file3_view').html("<img src='/sms/upload/"+arr[2]+"' width='100%'>");
+			$('#btn_image3_cancel').show();
+			$('#image3').val(arr[2]);
+			$('#imageUpload3Modal').modal('toggle');
+		}
+	} else {}
+	$('#upload_running').hide();
+	return true;
+}
+
+function image_cancel() {
+	$('#image1').val('');
+	$('#file1_view').html("");
+	$('#btn_image_cancel').hide();
+}
+
+function image2_cancel() {
+	$('#image2').val('');
+	$('#file2_view').html("");
+	$('#btn_image2_cancel').hide();
+}
+
+function image3_cancel() {
+	$('#image3').val('');
+	$('#file3_view').html("");
+	$('#btn_image3_cancel').hide();
+}
+
+function image_select(image_name) {
+	$('#file1_view').html("<img src='/sms/upload/"+image_name+"' width='100%'>");
+	$('#btn_image_cancel').show();
+	$('#image1').val(image_name);
+	$("#imageSelect1Modal").modal('toggle');
+}
+
+function image_select2(image_name) {
+	$('#file2_view').html("<img src='/sms/upload/"+image_name+"' width='100%'>");
+	$('#btn_image2_cancel').show();
+	$('#image2').val(image_name);
+	$("#imageSelect2Modal").modal('toggle');
+}
+
+function image_select3(image_name) {
+	$('#file3_view').html("<img src='/sms/upload/"+image_name+"' width='100%'>");
+	$('#btn_image3_cancel').show();
+	$('#image3').val(image_name);
+	$("#imageSelect3Modal").modal('toggle');
+}
+
+function image_delete(image_name, div_name) {
+	var url = "ajax_imageupload.php";
+	$("#running").show();
+	$.get(url, {mode:"del", image_name:image_name}, function(args) {
+		$("#running").hide();
+	});
+	$("#"+div_name).hide();
+}
+
+</script>
+
+
+      </div>
+    </div>
+    </div>
+
+
+	<div class="modal fade" id="Notice0Modal" tabindex="-1" role="dialog" aria-labelledby="Notice0ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="Notice0ModalLabel">사용기간 안내</h4>
+      </div>
+      <div class="modal-body">
+		<p style="padding-bottom:10px;">사용기간 종료 예정인 단말기가 있습니다. <br>
+		계속 사용을 원하시면 사용료를 결제해주시기 바랍니다. <span style="color:red;cursor:pointer;" onclick="location.href='/sms/pay.php'">[결제하기]</span><br><br>
+
+
+		</p>
+		<hr>
+		<div>
+			<input type="checkbox" id="" value="1" onclick="chk_popop('0')" style="cursor: pointer;"> 24시간 동안 열지 않습니다.
+		</div>
+
+      </div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+	
+	
+
+	<span id="keep_session" name="keep_session" ></span>
+
+	<iframe name="hiddenFrame" width="0" height="0" style="display: none;"></iframe>
+    <script src="//icnu.kr/jmunja/js/jquery.min.js"></script>
+	<script src="//icnu.kr/jmunja/js/jquery-ui.js"></script>
+    <script src="//icnu.kr/jmunja/js/jquery.form.js"></script>
+    <script src="//icnu.kr/jmunja/js/bootstrap.min.js"></script>
+    <script src="//icnu.kr/jmunja/js/Chart.min.js"></script>
+  </body>
+</html>
+
+<script>
+function bankinfo_send() {
+	var url = "ajax_sms.php";
+	$.get(url, {mode:"bankinfo"}, function(args) {
+		if(args == "SUCCESS") alert('발송 성공');
+		else alert('발송 실패');
+	});
+}
+
+function appurl_send(_no) {
+
+	var _hp = "";
+	if(_no == "1") _hp = $("#hpno1").val();
+	else if(_no == "2") _hp = $("#hpno2").val();
+
+	if(_hp == "") {
+		alert('휴대폰번호를 입력해주세요');
+		$("#hpno"+_no).focus();
+		return;
+	}
+
+	if(!confirm('앱 설치 URL을 '+_hp+' 번호로 보내드릴까요?')) return;
+
+	var url = "ajax_sms.php";
+	$.get(url, {mode:"appurl", hp:_hp}, function(args) {
+		if(args == "SUCCESS") alert('문자를 발송하였습니다. 확인 후 앱을 설치해 주세요.');
+		else alert('발송 실패');
+	});
+}
+
+function change_id(id, name) {
+	if(!confirm(name+' 님으로 자동로그인 하시겠습니까?')) return;
+	location.href='user.php?mode=changeid&cid='+id;
+}
+
+</script>
+
+<script>
+$(document).ready(function() {
+
+	var url = "ajax_chat_unview_cnt.php";
+	$.get(url, {mode:"ajax_data"}, function(args) {
+		$("#unview_cnt_badge").html(args);
+	});
+
+	// var interval = setInterval( function() {
+	// 	var timeInMs = Date.now();
+	// 	var sess_url = "session.php?dummy="+timeInMs;
+	// 	$.get(sess_url, {}, function(args) {
+	// 		$("#keep_session").html("");
+	// 	});
+	// }, 60000);
+
+
+
+
+});
+
+function chk_popop(_no) {
+	var url = "ajax_popup.php";
+	$.get(url, {no:_no}, function(args) {
+		$('#Notice'+_no+"Modal").modal('hide');
+	});
+}
+
+
+</script>
+
+<script>
+function getTextLength(string) {
+	var utf8length = 0;
+	for (var n = 0; n < string.length; n++) {
+		var c = string.charCodeAt(n);
+
+		if (c < 128) {
+			utf8length++;
+		}
+		else {
+			utf8length = utf8length+2;
+		}
+	}
+	return utf8length;
+}
+
+function cut_subject(){
+	var text = $("#sms-title").val();
+	var leng = text.length;
+	var total_count = text.length;
+	while(text.length > 50){
+		leng--;
+		text = text.substring(0, leng);
+	}
+	if(total_count > 50) {
+		$("#sms-title").val(text);
+	}
+	$('#bytes2').text(leng);
+}
+
+function cut_message(){
+	var text = $("#sms-message").val();
+	var leng = text.length;
+	var total_count = getTextLength(text);
+	while(getTextLength(text) > 8000){
+		leng--;
+		text = text.substring(0, leng);
+	}
+	if(total_count > 8000) {
+		$("#sms-message").val(text);
+	}
+	$('#bytes').text(getTextLength(text));
+}
+
+function addDeny080() {
+	var sms_message = $('#sms-message').val();
+
+	var msg080 = "\n\n무료거부 ";
+	msg080 += "080-156-4359\n";
+	$('#sms-message').val(sms_message + msg080);
+	cut_message($('#sms-message'));
+}
+
+function update_receiver() {
+	var _book = $("#book").val();
+	var url = "ajax_bookdata2.php";
+	$("#running").show();
+	$.get(url, {mode:"show", book:_book}, function(args) {
+		$("#ajax_data").html(args);
+	});
+	$("#running").hide();
+}
+
+function sms_store() {
+	var _title = $("#sms-title").val();
+	var _message = $("#sms-message").val();
+
+	if(_title == '') {
+		alert('제목을 입력해주세요.');
+		$("#sms-title").focus();
+		return;
+	}
+	if(_message == '') {
+		alert('내용을 입력해주세요.');
+		$("#sms-message").focus();
+		return;
+	}
+
+	var url = "ajax_sms.php";
+	$.post(url, {mode:"store", title:_title, message:_message}, function(args) {
+		if(args == "SUCCESS") alert('저장 성공');
+		else alert('저장 실패');
+	});
+}
+
+function sms_send() {
+	var _title = $('#sms-title').val();
+	var _message = $('#sms-message').val();
+	var _resdt = $('#reserv_date').val();
+	var _reshr = $('#reserv_hour').val();
+	var _resmn = $('#reserv_min').val();
+	var _contactSelectType = $('#contactSelectType').val();
+	if(_title == '') {
+		//alert('제목을 입력해주세요.');
+		//$("#sms-title").focus();
+		//return;
+	}
+	if(_message == '') {
+		if($('#image1').val() == "" && $('#image2').val() == "") {
+			alert('내용을 입력하거나 사진을 첨부해주세요.');
+			return;
+		}
+		//alert('내용을 입력해주세요.');
+		//$("#sms-message").focus();
+		//return;
+	}
+
+	if(form1.reserv_fg[1].checked == true) {
+		if(_resdt == '') {
+			alert('예약날짜를 입력해주세요.');
+			$("#reserv_date").focus();
+			return;
+		}
+		if(_reshr == '') {
+			alert('예약시간(시)을 입력해주세요.');
+			$("#reserv_hour").focus();
+			return;
+		}
+		if(_resmn == '') {
+			alert('예약시간(분)을 입력해주세요.');
+			$("#reserv_min").focus();
+			return;
+		}
+
+		//예약시간 체크
+		const date1 = new Date(_resdt);
+		date1.setHours(_reshr);
+		date1.setMinutes(_resmn);
+		date1.setSeconds(0);
+		date1.setMilliseconds(0);
+
+		const date2 = new Date('2026-10-13');
+		date2.setHours(09);
+		date2.setMinutes(06);
+		date2.setSeconds(0);
+		date2.setMilliseconds(0);
+
+		if (date1.getTime() < date2.getTime()) {
+			alert('예약은 현재시간 이후로 설정해야 합니다.');
+			console.log('예약은 현재시간 이후로 설정해야 합니다.');
+			return;
+		}
+
+		//예약시간 체크
+		//예약날짜 체크(현재 시간 이후로 예약을 할 수 있음)
+		var nowTimestamp = Date.now(); //현재시간 타임스탬프 
+		var nowDate = new Date(nowTimestamp); //타임스탬프를 인자로 받아 Date 객체 생성
+		var _hour = ("0" + nowDate.getHours()).slice(-2); //시 2자리 (00, 01 ... 23)
+		var _minute = ("0" + nowDate.getMinutes()).slice(-2); //분 2자리 (00, 01 ... 59)
+
+		var resTime = _reshr + ":" + _resmn;
+		var nowTime = _hour + ":" + _minute;
+
+		console.log("Now Time: "+nowTime);
+		console.log("Reservation Time: "+resTime);
+
+		if(resTime <= nowTime) {
+			//alert('예약은 현재시간 이후로 설정해야 합니다.');
+			//return;
+		}
+	}
+
+	var total_count = getTextLength(_message);
+	if(total_count > 8000) {
+		$('#bytes').text(getTextLength(_message));
+		alert('내용의 최대 길이는 8000 바이트 입니다. 내용을 수정해주세요');
+		return;
+	}
+
+	// callback 번호 체크
+	const form = document.form1; 
+    const callback = form.callback.value.trim();
+
+    // callback 값이 있으면 confirm 창 표시
+    if (callback !== "") {
+        const message = `${callback} 핸드폰을 사용해서 문자를 발송하겠습니다.\n계속 하시겠습니까?`;
+        if (!confirm(message)) {
+            return false; // 취소 누르면 전송 중단
+        }
+    }
+
+	if(_contactSelectType == "book") {
+		var chk = document.getElementsByName("chk[]");
+		var sms_cnt = chk.length;
+		var chk_yes = 0;
+		for(i=0;i<sms_cnt;i++) {
+			if(chk[i].checked == true) chk_yes++;
+		}
+	} else if(_contactSelectType == "direct") {
+		var data = $('#contact_direct').val();
+		var list = data.replace(/\n/g, ",").split(",");
+		var chk_yes = list.length;
+		if(data == "") chk_yes = 0;
+	} else if(_contactSelectType == "xls") {
+        var xlsfile = $("#xlsfile").val();
+        console.log(xlsfile);
+        if(xlsfile == "") {
+            alert('엑셀파일을 선택해주세요');
+            return;
+        }
+        chk_yes = 1;
+    }
+
+	if(chk_yes <1) {
+		alert('수신번호를 선택/입력해주세요');
+		return;
+	}
+
+	
+	if(!confirm('[중요] 제이문자 앱을 실행하지 않으면 문자가 발송되지 않습니다.\n발송 전에 앱을 실행해주세요!\n푸시알림 오류로 자동 발송되지 않으면 앱에 있는 [문자발송] 버튼을 눌러주세요.')) return;
+	if(_contactSelectType == "xls") {
+        if(!confirm('문자를 발송하시겠습니까?')) return;
+    }
+    else {
+        if(!confirm(chk_yes+'건의 문자를 발송하시겠습니까?')) return;
+    }
+	$("#btn-sms-send").hide();
+	$("#running2").show();
+	form1.submit();
+}
+
+function win_open(url, name, option) {
+	var popup = window.open(url, name, option);
+	popup.focus();
+}
+
+function win_special_character() {
+	url = "_special_character.php";
+	win_open(url, "special_character", "left=620,top=180,width=700,height=430,scrollbars=1");
+}
+
+function win_phone_list() {
+	url = "_phone.php";
+	win_open(url, "phone", "left=620,top=180,width=700,height=430,scrollbars=1");
+}
+
+function win_sms_store() {
+	url = "_sms_store.php";
+	win_open(url, "sms_store", "left=620,top=180,width=800,height=600,scrollbars=1");
+}
+
+$(document).ready(function() {
+	var options1 = {
+		target:        '#status1',   // target element(s) to be updated with server response
+		beforeSubmit:  showRequest,  // pre-submit callback
+		success:       showResponse  // post-submit callback
+	};
+
+	var options2 = {
+		target:        '#status2',   // target element(s) to be updated with server response
+		beforeSubmit:  showRequest,  // pre-submit callback
+		success:       showResponse  // post-submit callback
+	};
+
+	var options3 = {
+		target:        '#status3',   // target element(s) to be updated with server response
+		beforeSubmit:  showRequest,  // pre-submit callback
+		success:       showResponse  // post-submit callback
+	};
+
+
+	$('#imgup1').submit(function() {
+		$(this).ajaxSubmit(options1);
+		return false;
+	});
+
+	$('#imgup2').submit(function() {
+		$(this).ajaxSubmit(options2);
+		return false;
+	});
+
+	$('#imgup3').submit(function() {
+		$(this).ajaxSubmit(options3);
+		return false;
+	});
+
+	$("#reserv_date").datepicker({
+		showOn: "both",
+		buttonImage: "images/cal.gif",
+		buttonImageOnly: true,
+		dateFormat: 'yy-mm-dd',
+		prevText: '이전 달',
+		nextText: '다음 달',
+		monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+		monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+		dayNames: ['일','월','화','수','목','금','토'],
+		dayNamesShort: ['일','월','화','수','목','금','토'],
+		dayNamesMin: ['일','월','화','수','목','금','토'],
+		showMonthAfterYear: true,
+		changeMonth: false,
+		changeYear: false,
+		yearRange: "c-0:c+1",
+		yearSuffix: '년',
+		minDate: "2026-10-13",
+		onSelect: function (dateText, inst) {
+			check_btn_send();
+		}
+	});
+	$("#reserv_date").datepicker( "setDate", "");
+
+	});
+
+function imagetext_create() {
+	//alert('문자내용이 이미지파일로 변환되어 첨부됩니다.\n변환 후 문자내용을 간략하게 변경하시기 바랍니다.\n기타 궁금한 사항은 운영자에게 문의하시기 바랍니다. \n\n[주의] {고객명} 치환 기능을 해제하시기 바랍니다. (이미지파일 변환시 {고객명} 치환 사용 불가)\n\n문의 연락처: 010-8210-6178');
+	var _color = "";
+	if(form1.imagetext_bgcolor[0].checked == true) _color = $("#imagetext_bgcolor1").val();
+	else if(form1.imagetext_bgcolor[1].checked == true) _color = $("#imagetext_bgcolor2").val();
+	else if(form1.imagetext_bgcolor[2].checked == true) _color = $("#imagetext_bgcolor3").val();
+	else if(form1.imagetext_bgcolor[3].checked == true) _color = $("#imagetext_bgcolor4").val();
+	else _color = $("#imagetext_bgcolor1").val();
+
+	var _message = $("#sms-message").val();
+	var url = "ajax_imagetext.php";
+	$("#running").show();
+	$.post(url, {mode:"show", message:_message, color:_color}, function(args) {
+		var arr = args.split("|");
+		$('#file1_view').html("<img src='/sms/upload/"+arr[2]+"' width='100%'>");
+		$('#btn_image_cancel').show();
+		$('#image1').val(arr[2]);
+	});
+	$("#running").hide();
+}
+
+function add_leaflet() {
+	var long_url = "http://jmunja.com/sms/ad.php?no=";
+	var short_url = '';
+	var leaflet_url = "";
+	if(short_url != "") leaflet_url = short_url;
+	else leaflet_url = long_url;
+	var preMsg = $('#sms-message').val();
+	$('#sms-message').val(preMsg + "\n☞ "+ leaflet_url);
+	cut_message($('#sms-message'));
+}
+
+function win_sms_link() {
+	url = "_sms_link.php";
+	win_open(url, "sms_link", "left=620,top=180,width=800,height=600,scrollbars=1");
+}
+
+</script>

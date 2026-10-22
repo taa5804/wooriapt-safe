@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--<meta http-equiv="refresh" content="1800">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <title>제이문자</title>
+    <link rel="stylesheet" href="//icnu.kr/jmunja/css/jquery-ui.css" />
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="//icnu.kr/jmunja/css/dashboard.css" rel="stylesheet">
+	<link href="//icnu.kr/jmunja/css/chat.css" rel="stylesheet">
+	<link href="//icnu.kr/jmunja/css/jmunja.css" rel="stylesheet">
+	<link href="//icnu.kr/jmunja/css/notosanskr.css" rel="stylesheet">
+	<!--<link href="./css/AdminLTE.css" rel="stylesheet">-->
+	<link href="./vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="canonical" href="https://www.wooriapt.app/book_dump">
+  <meta name="robots" content="noindex,nofollow">
+</head>
+  <body onContextmenu="return true" ondragstart="return true" onSelectstart="return true">
+
+	<nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#" style="color:#fff;font-size:18pt;"><i class="fas fa-comments"></i> 제이문자</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">메뉴<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+				<li><a href="dashboard.php"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> 대시보드</a></li>
+                <li><a href="board.php?bid=1"><span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span> 공지사항</a></li>
+				<li><a href="board.php?bid=2"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> 자료실</a></li>
+        
+				                <li><a href="book.php"><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> 전화번호부</a></li>
+				
+				                <li><a href="smssend.php"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> 문자발송</a></li>
+				
+
+				                <li><a href="smshistory.php"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 발송이력</a></li>
+												<li><a href="smshistory2.php"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 상세이력</a></li>
+				        
+                <li><a href="recvhistory.php"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 수신이력</a></li>
+        
+                  <li><a href="recvmohistory.php"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 수신이력(MO)</a></li>
+				        
+
+
+				                <li><a href="smsstore.php"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> 문자보관함</a></li>
+				<li><a href="deny.php"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> 수신거부관리</a></li>
+				
+								<li><a href="chat.php"><i class="fas fa-comments"></i> 문자채팅</a></li>
+				
+                				<li><a href="leaflet.php"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> 전단지</a></li>
+				
+				
+				
+                
+				                <li><a href="phone.php"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> 단말기</a></li>
+				
+								<li><a href="pay.php"><i class="fas fa-won-sign"></i> 충전</a></li>
+                <li><a href="point.php"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> 포인트</a></li>
+				
+                				                <li><a href="app.php"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> 앱 다운로드</a></li>
+				<li><a href="myinfo.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 마이페이지</a></li>
+				              </ul>
+            </li>
+
+			<li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">포인트<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">잔여포인트: <span class="blue">0.0</span></a></li>
+              </ul>
+            </li>
+
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><b>장수용(프리미엄회원)</b>님, 반갑습니다<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="myinfo.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 개인정보 확인/변경</a></li>
+                <li><a href="logout.php"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> 로그아웃</a></li>
+				              </ul>
+            </li>
+          </ul>
+
+<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="helpModalLabel">도움말</h4>
+      </div>
+      <div class="modal-body">
+성명 변경을 원할 경우 성명과 휴대폰번호를 입력하시면 됩니다.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+
+
+<div class="col-sm-3 col-md-1 sidebar" style="min-width: 160px;max-width: 200px;">
+<ul class="nav nav-sidebar">
+<li><a href="dashboard.php"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> 대시보드</a></li>
+
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span> 게시판 <span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="board.php?bid=1"><span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span> 공지사항 </a> </li>
+<li><a href="board.php?bid=2"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> 자료실 </a> </li>
+
+</ul>
+</li>
+
+<li class="active"><a href="book.php"><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> 전화번호부</a></li>
+
+<li><a href="smssend.php"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> 문자발송</a></li>
+
+
+<li><a href="smshistory.php"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 발송이력</a></li>
+<li><a href="smshistory2.php"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 상세이력</a></li>
+
+<li><a href="recvhistory.php"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 수신이력</a></li>
+
+<li><a href="recvmohistory.php"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 수신이력(MO)</a></li>
+    
+
+
+
+<li><a href="smsstore.php"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> 문자보관함</a></li>
+<li><a href="deny.php"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> 수신거부관리</a></li>
+
+<li><a href="chat.php"><i class="fas fa-comments"></i> 문자채팅 <span id="unview_cnt_badge" class="badge">0</span> </a> </li>
+
+<li><a href="leaflet.php"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> 전단지</a></li>
+
+
+
+<li><a href="phone.php"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> 단말기</a></li>
+
+<li><a href="pay.php"><i class="fas fa-won-sign"></i> 충전</a></li>
+<li><a href="point.php"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> 포인트</a></li>
+
+
+<li><a href="app.php"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> 앱다운로드</a></li>
+<!--<li><a href="help.php"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> 원격지원</a></li>-->
+<li><a href="myinfo.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 마이페이지</a></li>
+
+</ul>
+</div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-11 col-md-offset-1 main">
+          <h2 class="page-header"><a href="dashboard.php"><i class="bi bi-chevron-compact-left"></i></a> 전화번호부 </h2>
+
+		  <div class="row">
+
+		  <form name="condform">
+		  <input type="hidden" id="cnd" name="cnd" value="name">
+		  <input type="hidden" id="ord" name="ord" value="">
+		 
+		  <div class="col-sm-12">
+		  <select id='book' name='book' onChange='submit()'>
+<option value=''>그룹을 선택하세요</option>
+</select>		  </div>
+
+		  <div class="col-sm-12">
+          <input type="text" id="inputHp" name="search" placeholder="휴대폰번호/성명" style="width:120px;" value=""> &nbsp;
+		  <select name='ipp' onChange='submit()'>
+<option value=''>보기개수</option>
+<option value='10' >10개</option>
+<option value='15'  selected>15개</option>
+<option value='20' >20개</option>
+<option value='30' >30개</option>
+<option value='50' >50개</option>
+<option value='100' >100개</option>
+<option value='300' >300개</option>
+<option value='500' >500개</option>
+<option value='1000' >1000개</option>
+</select>          <input type="submit" class="btn btn-default btn-sm" value="조회"> &nbsp;
+		  </div>
+
+		  <div class="col-sm-12">
+		  		  <input type="button" class="btn btn-info btn-sm" value="엑셀다운로드(전체)" onclick="xlsdown2()"> &nbsp;
+		  
+		  <input type="button" data-toggle="modal" data-target="#phonebookregModal" class="btn btn-warning btn-sm" value="그룹 등록" > &nbsp;
+		  <input type="button" id="btn_seldel" class="btn btn-danger btn-sm" value="선택 삭제" onclick="seldel.submit();" style="display: none;"> &nbsp;
+		  &nbsp;&nbsp;
+		  <span id="book_move" style="display:none;">
+		  <br>선택한 전화번호를 <select id='dstbook' name='dstbook'>
+<option value=''>그룹을 선택하세요</option>
+</select> 으로 <input type="button" class="btn btn-primary btn-sm" value="변경(이동)" onclick="change_grp()"> &nbsp;
+		  </span>
+          <span id="running" style="display: none;"><img src="images/indicator.gif"> 처리중...</span><p>
+          </form>
+		  </div>
+
+		  </div>
+
+		  <form id="seldel_form" name="seldel" method="post">
+		  <input type="hidden" id="mode" name="mode" value="delsel">
+		  <input type="hidden" id="nos" name="nos" value="">
+		  <input type="hidden" id="book2" name="book2" value="">
+		  <input type="hidden" name="search" value="">
+		  <input type="hidden" name="page" value="1">
+		  <input type="hidden" name="ipp" value="15">
+		  </form>
+
+          <div id="send_data" style="overflow:auto;">
+            <table class="table table-striped table-bordered table-hover ">
+              <thead>
+                <tr>
+				  <th class="text-center" nowrap><input type="checkbox" id="chkall" name="chkall" value="1" onclick='check_all()'></th>
+                  <th class="text-center" nowrap>연번</th>
+				  <th class="text-center" nowrap>그룹</th>
+                  <th class="text-center" nowrap><span style="cursor: pointer;" onclick="change_search('name','desc')">성명</span> <small><span class="glyphicon glyphicon-sort" aria-hidden="true"></span></small></th>
+				  <th class="text-center" nowrap>휴대폰번호</th>
+				  <th class="text-center" nowrap><span style="cursor: pointer;" onclick="change_search('insdt','desc')">입력일시</span> </th>
+				  <th class="text-center" nowrap>비고</th>
+                  <th class="text-center" nowrap>기능</th>
+                </tr>
+              </thead>
+              <tbody>
+                            </tbody>
+            </table>
+          </div>
+
+
+			<!-- Modal -->
+			<div class="modal fade" id="phonebookregModal" tabindex="-1" role="dialog" aria-labelledby="phonebookregModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="phonebookregModalLabel">전화번호 그룹 입력</h4>
+			      </div>
+			      <div class="modal-body">
+				      <form name="point" method="post">
+				      <input type="hidden" name="mode" value="insgrp">
+					  <input type="hidden" name="ipp" value="15">
+					  	  <div class="form-group">
+					    	<label for="InputHp">그룹명</label>
+					    	<input type="text" class="form-control" id="InputHp" name="name" value="" placeholder="" required>
+					  	  </div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="submit" class="btn btn-primary">저장</button>
+			        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+			      </div>
+			      </form>
+			    </div>
+			  </div>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="phonebookrenameModal" tabindex="-1" role="dialog" aria-labelledby="phonebookrenameModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="phonebookrenameModalLabel"그룹명 변경</h4>
+			      </div>
+			      <div class="modal-body">
+				      <form name="point" method="post">
+				      <input type="hidden" name="mode" value="renamegrp">
+					  <input type="hidden" name="book" value="">
+					  <input type="hidden" name="ipp" value="15">
+					  	  <div class="form-group">
+					    	<label for="InputHp">변경 그룹명</label>
+					    	<input type="text" class="form-control" id="InputHp" name="name" value="" placeholder="" required>
+					  	  </div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="submit" class="btn btn-primary">저장</button>
+			        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+			      </div>
+			      </form>
+			    </div>
+			  </div>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="phonebookdelModal" tabindex="-1" role="dialog" aria-labelledby="phonebookdelModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="phonebookdelModalLabel">전화번호 그룹 삭제</h4>
+			      </div>
+			      <div class="modal-body">
+				      <form name="point" method="post">
+				      <input type="hidden" name="mode" value="delgrp">
+					  <input type="hidden" name="ipp" value="15">
+					  	  <div class="form-group">
+					    	<label for="InputTitle">그룹</label><br>
+					    	<select id='book' name='book'>
+<option value=''>그룹을 선택하세요</option>
+</select>					  	  </div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="submit" class="btn btn-primary">삭제</button>
+			        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+			      </div>
+			      </form>
+			    </div>
+			  </div>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="phonenoregModal" tabindex="-1" role="dialog" aria-labelledby="phonenoregModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="phonenoregModalLabel">전화번호 입력</h4>
+			      </div>
+			      <div class="modal-body">
+				      <form name="point" method="post">
+				      <input type="hidden" name="mode" value="ins">
+					  <input type="hidden" name="ipp" value="15">
+						  <div class="form-group">
+					    	<label for="InputTitle">그룹</label><br>
+					    	<select id='book' name='book'>
+<option value=''>그룹을 선택하세요</option>
+</select>					  	  </div>
+					  	  <div class="form-group">
+					    	<label for="InputHp">휴대폰번호</label>
+					    	<input type="tel" class="form-control" id="InputHp" name="hp" value="" placeholder="">
+					  	  </div>
+					  	  <div class="form-group">
+					    	<label for="InputHp">성명</label>
+					    	<input type="text" class="form-control" id="InputHp" name="name" value="" placeholder="">
+					  	  </div>
+						  <div class="form-group">
+					    	<label for="InputHp">비고</label>
+					    	<input type="text" class="form-control" id="InputMemo" name="memo" value="" placeholder="">
+					  	  </div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="submit" class="btn btn-primary">저장</button>
+			        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+			      </div>
+			      </form>
+			    </div>
+			  </div>
+			</div>
+
+			<!-- Modal start -->
+			<div class="modal fade" id="phonenoregxlsModal" tabindex="-1" role="dialog" aria-labelledby="phonenoregxlsModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="phonenoregxlsModalLabel">전화번호 엑셀등록</h4>
+				  </div>
+				  <div class="modal-body">
+						<form name="regform" method="post" enctype="multipart/form-data">
+				      <input type="hidden" name="mode" value="insxls">
+					  <input type="hidden" name="ipp" value="15">
+
+						<div class="form-group">
+					    	<label for="InputTitle">그룹</label><br>
+					    	<select id='book' name='book'>
+<option value=''>그룹을 선택하세요</option>
+</select>					  	  </div>
+					  <div class="form-group">
+
+						<label for="InputNickname">파일선택</label>
+						<input type="file" name="formfile" class="form-control" accept=".xls,.xlsx"><br>
+						<p>엑셀파일 양식을 다운받아서 사용하세요. <input type="button" class="btn btn-default btn-sm" value="엑셀양식 다운로드" onclick="location.href='book_sample.xlsx'"></p>
+					  </div>
+
+				  </div>
+				  <div class="modal-footer">
+					<button type="submit" class="btn btn-primary">업로드</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+				  </div>
+				  </form>
+				</div>
+			  </div>
+			</div>
+			<!-- Modal end -->
+
+			<!-- Modal start -->
+			<div class="modal fade" id="phonenoregsimpleModal" tabindex="-1" role="dialog" aria-labelledby="phonenoregsimpleModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="phonenoregsimpleModalLabel">전화번호 간편등록</h4>
+				  </div>
+				  <div class="modal-body">
+						<form name="regform" method="post">
+				      <input type="hidden" name="mode" value="inssimple">
+					  <input type="hidden" name="ipp" value="15">
+					  <div class="form-group">
+						<label>
+						휴대폰번호를 줄바꿈 또는 , 으로 구분해서 일괄로 등록할 수 있습니다.
+						</label>
+					  </div>
+					  <div class="form-group">
+					    	<label for="InputTitle">그룹</label><br>
+					    	<select id='book' name='book'>
+<option value=''>그룹을 선택하세요</option>
+</select>					  	  </div>
+					  <div class="form-group">
+
+						<label for="InputNickname">휴대폰번호</label>
+						<textarea class="form-control" id="InputNumber" name="numberdata" style="height:200px;"></textarea>
+					  </div>
+				  </div>
+				  <div class="modal-footer">
+					<button type="submit" class="btn btn-primary">등록하기</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+				  </div>
+				  </form>
+				</div>
+			  </div>
+			</div>
+			<!-- Modal end -->
+
+			<!-- Modal start -->
+			<div class="modal fade" id="phonenodelsimpleModal" tabindex="-1" role="dialog" aria-labelledby="phonenodelsimpleModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="phonenodelsimpleModalLabel">전화번호 간편삭제</h4>
+				  </div>
+				  <div class="modal-body">
+						<form name="regform" method="post">
+				      <input type="hidden" name="mode" value="delsimple">
+					  <input type="hidden" name="ipp" value="15">
+					  <div class="form-group">
+						<label>
+						휴대폰번호를 줄바꿈 또는 , 으로 구분해서 일괄로 삭제할 수 있습니다.
+						</label>
+					  </div>
+					  <div class="form-group">
+					    	<label for="InputTitle">그룹</label><br>
+					    	<select id='book' name='book'>
+<option value=''>그룹을 선택하세요</option>
+</select>					  	  </div>
+					  <div class="form-group">
+
+						<label for="InputNickname">휴대폰번호</label>
+						<textarea class="form-control" id="InputNumber" name="numberdata" style="height:200px;"></textarea>
+					  </div>
+				  </div>
+				  <div class="modal-footer">
+					<button type="submit" class="btn btn-primary">삭제하기</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+				  </div>
+				  </form>
+				</div>
+			  </div>
+			</div>
+			<!-- Modal end -->
+
+<div style="text-align: center;">
+<nav><ul class="pagination"><li><a href="?mode=sch&search=&ipp=15&book=&page=1" aria-label="Start"><span aria-hidden="true">시작</span></a></li><li class="active"><span>1 <span class="sr-only">(current)</span></span></li><li><a href="?mode=sch&search=&ipp=15&book=&page=1" aria-label="End"><span aria-hidden="true">끝</span></a></li></ul></nav></div>
+
+
+<script>
+
+function change_grp() {
+	var dstbook = $("#dstbook").val();
+	var dstbook_name = $("#dstbook option:checked").text();
+	console.log(dstbook_name);
+	$("#mode").val('grp_move');
+	$("#book2").val(dstbook);
+	if(!confirm('선택한 전화번호를 ['+dstbook_name+'] 그룹으로 변경하시겠습니까?')) return;
+	$("#running").show();
+	$("#seldel_form").submit();
+	//seldel.mode.value='grp_move';seldel.submit();
+}
+
+function change_search(c, o) {
+	$("#cnd").val(c);
+	$("#ord").val(o);
+	condform.submit();
+}
+
+function check_all() {
+	var chk = document.getElementsByName("chk[]");
+	var chkall = $("#chkall");
+	for (i=0; i<chk.length; i++) {
+		chk[i].checked = $(":checkbox[id='chkall']").prop("checked");
+	}
+	update_check_no();
+}
+
+function delete_data(no) {
+	location.href='?mode=del&no='+no+'&book=&page=1&search=';
+}
+
+function xlsdown() {
+	//location.href='?mode=xlsdn&book=&page=1&search=';
+	location.href='bookxls.php?mode=xlsdown&book=';
+}
+
+function xlsdown2() {
+	//location.href='?mode=xlsdn&book=&page=1&search=';
+	location.href='bookxls2.php?mode=xlsdown';
+}
+
+function update_check_no() {
+	if( $(":checkbox[name='chk[]']:checked").length<1 ){
+		//return;
+	}
+
+	var chked_val = "";
+	var loop=0;
+	$(":checkbox[name='chk[]']:checked").each(function(pi,po){
+		chked_val += po.value+",";
+		loop++;
+	});
+	if(chked_val != "") {
+		var len = chked_val.length;
+		chked_val = chked_val.substring(0,len-1);
+	}
+
+	$("#nos").val(chked_val);
+	if(loop>0) {
+		$("#btn_seldel").show();
+		$("#book_move").show();
+	} else {
+		$("#btn_seldel").hide();
+		$("#book_move").hide();
+	}
+}
+</script>
+
+
+      </div>
+    </div>
+    </div>
+
+
+	<div class="modal fade" id="Notice0Modal" tabindex="-1" role="dialog" aria-labelledby="Notice0ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="Notice0ModalLabel">사용기간 안내</h4>
+      </div>
+      <div class="modal-body">
+		<p style="padding-bottom:10px;">사용기간 종료 예정인 단말기가 있습니다. <br>
+		계속 사용을 원하시면 사용료를 결제해주시기 바랍니다. <span style="color:red;cursor:pointer;" onclick="location.href='/sms/pay.php'">[결제하기]</span><br><br>
+
+
+		</p>
+		<hr>
+		<div>
+			<input type="checkbox" id="" value="1" onclick="chk_popop('0')" style="cursor: pointer;"> 24시간 동안 열지 않습니다.
+		</div>
+
+      </div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+	
+	
+
+	<span id="keep_session" name="keep_session" ></span>
+
+	<iframe name="hiddenFrame" width="0" height="0" style="display: none;"></iframe>
+    <script src="//icnu.kr/jmunja/js/jquery.min.js"></script>
+	<script src="//icnu.kr/jmunja/js/jquery-ui.js"></script>
+    <script src="//icnu.kr/jmunja/js/jquery.form.js"></script>
+    <script src="//icnu.kr/jmunja/js/bootstrap.min.js"></script>
+    <script src="//icnu.kr/jmunja/js/Chart.min.js"></script>
+  </body>
+</html>
+
+<script>
+function bankinfo_send() {
+	var url = "ajax_sms.php";
+	$.get(url, {mode:"bankinfo"}, function(args) {
+		if(args == "SUCCESS") alert('발송 성공');
+		else alert('발송 실패');
+	});
+}
+
+function appurl_send(_no) {
+
+	var _hp = "";
+	if(_no == "1") _hp = $("#hpno1").val();
+	else if(_no == "2") _hp = $("#hpno2").val();
+
+	if(_hp == "") {
+		alert('휴대폰번호를 입력해주세요');
+		$("#hpno"+_no).focus();
+		return;
+	}
+
+	if(!confirm('앱 설치 URL을 '+_hp+' 번호로 보내드릴까요?')) return;
+
+	var url = "ajax_sms.php";
+	$.get(url, {mode:"appurl", hp:_hp}, function(args) {
+		if(args == "SUCCESS") alert('문자를 발송하였습니다. 확인 후 앱을 설치해 주세요.');
+		else alert('발송 실패');
+	});
+}
+
+function change_id(id, name) {
+	if(!confirm(name+' 님으로 자동로그인 하시겠습니까?')) return;
+	location.href='user.php?mode=changeid&cid='+id;
+}
+
+</script>
+
+<script>
+$(document).ready(function() {
+
+	var url = "ajax_chat_unview_cnt.php";
+	$.get(url, {mode:"ajax_data"}, function(args) {
+		$("#unview_cnt_badge").html(args);
+	});
+
+	// var interval = setInterval( function() {
+	// 	var timeInMs = Date.now();
+	// 	var sess_url = "session.php?dummy="+timeInMs;
+	// 	$.get(sess_url, {}, function(args) {
+	// 		$("#keep_session").html("");
+	// 	});
+	// }, 60000);
+
+
+
+
+});
+
+function chk_popop(_no) {
+	var url = "ajax_popup.php";
+	$.get(url, {no:_no}, function(args) {
+		$('#Notice'+_no+"Modal").modal('hide');
+	});
+}
+
+
+</script>
+
+
