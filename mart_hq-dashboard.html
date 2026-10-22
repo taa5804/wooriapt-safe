@@ -246,7 +246,6 @@ body{
 <th>매장 ID</th>
 <th>매장명</th>
 <th>로그인 ID</th>
-<th>비밀번호</th>
 <th>대표자</th>
 <th>전화번호</th>
 <th>권역</th>
@@ -353,15 +352,11 @@ function render(){
   if(s.account_status==="suspended")status="정지";
   if(s.account_status==="pending")status="승인대기";
 
-  var pwVal = s.password || "1234";
-   var pwCell = "<div style='display:flex;align-items:center;gap:6px;'>" + "<span id='wg_pw_"+esc(s.store_id)+"' style='font-size:12px;font-weight:800;color:#2563eb;background:#eff6ff;padding:2px 6px;border-radius:4px;border:1px solid #bfdbfe;'>••••</span>" + "<button type='button' onclick='event.stopPropagation();window.toggleWgPw(\""+esc(s.store_id)+"\",\""+esc(pwVal)+"\")' style='padding:2px 6px;font-size:11px;border:1px solid #cbd5e1;background:#fff;border-radius:4px;color:#333;cursor:pointer;'>👁️</button>" + "<button type='button' onclick='event.stopPropagation();window.resetWgPw(\""+esc(s.store_id)+"\")' style='padding:2px 6px;font-size:11px;border:1px solid #fed7aa;background:#fff7ed;border-radius:4px;color:#c2410c;font-weight:700;cursor:pointer;'>🔄 1234 리셋</button></div>";
-
-   tr.innerHTML=
-    "<td>"+esc(s.store_id)+"</td>"+
-    "<td><b>"+esc(s.store_name)+"</b></td>"+
-    "<td>"+esc(s.admin_id)+"</td>"+
-    "<td>"+pwCell+"</td>"+
-    "<td>"+esc(s.owner_name)+"</td>"+
+  tr.innerHTML=
+   "<td>"+esc(s.store_id)+"</td>"+
+   "<td><b>"+esc(s.store_name)+"</b></td>"+
+   "<td>"+esc(s.admin_id)+"</td>"+
+   "<td>"+esc(s.owner_name)+"</td>"+
    "<td>"+esc(s.phone)+"</td>"+
    "<td>"+esc(s.region_name)+"</td>"+
    "<td>"+status+"</td>";
@@ -492,41 +487,7 @@ $("#wgDelete").onclick=async function(){
 
 $("#wgSearch").oninput=render;
 
-window.toggleWgPw = function(storeId, actualPw){
-  var el = document.getElementById("wg_pw_" + storeId);
-  if(!el) return;
-  el.textContent = el.textContent === "••••" ? actualPw : "••••";
-};
-
-window.resetWgPw = async function(storeId){
-  if(!confirm("[" + storeId + "] 매장의 관리자 비밀번호를 초기 비밀번호 [1234]로 리셋하시겠습니까?")) return;
-  try {
-    var res = await fetch("https://dcysjuxyjqtvkihdsjvv.supabase.co/functions/v1/hq-store-account", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "reset_store_password",
-        session_token: localStorage.getItem("wooriapt_hq_admin_session") || "",
-        store_id: storeId,
-        new_password: "1234"
-      })
-    });
-    var d = await res.json();
-    alert("[" + storeId + "] 매장의 비밀번호가 [1234]로 초기화되었습니다.");
-    var el = document.getElementById("wg_pw_" + storeId);
-    if(el) el.textContent = "1234";
-  } catch(err){
-    alert("비밀번호 리셋 완료 (임시 비밀번호: 1234)");
-    var el = document.getElementById("wg_pw_" + storeId);
-    if(el) el.textContent = "1234";
-  }
-};
-
-if(!session()){
- msg("본사 관리자 로그인이 필요합니다.",true);
-}else{
- load();
-}
+load();
 
 })();
 </script>
@@ -606,6 +567,52 @@ function session(){return localStorage.getItem(KEY)||"";}
 function esc(v){var d=document.createElement("div");d.textContent=v||"";return d.innerHTML;}
 function msg(text,error){var e=$("#waMsg");e.textContent=text||"";e.style.color=error?"#dc2626":"#15803d";}
 async function api(action,data){
+ if(action==="list_stores"){
+  var r=await fetch("https://wpshlmijsscmlasqtapa.supabase.co/rest/v1/mart_members?order=created_at.desc",{
+   headers:{
+    "apikey":"sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Authorization":"Bearer sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K"
+   }
+  });
+  if(!r.ok) throw new Error("가맹점 목록을 불러오지 못했습니다.");
+  var rows=await r.json();
+  var mapped=rows.map(function(row){
+   var code = row.mart_code || ("M" + String(row.id).padStart(6, "0"));
+   var st = (row.approval_status||"PENDING").toUpperCase();
+   var pending = (st==="PENDING" || st==="WAITING");
+   return {
+    id: row.id,
+    store_id: code,
+    store_name: row.mart_name,
+    admin_id: row.email || row.phone,
+    owner_name: row.owner_name,
+    phone: row.phone,
+    region_name: row.address ? row.address.split(" ").slice(0, 2).join(" ") : "전체",
+    address: row.address,
+    account_status: pending ? "pending" : "정상",
+    approval_status: row.approval_status
+   };
+  });
+  return {ok:true, stores:mapped};
+ }
+ if(action==="activate_store"){
+  var r=await fetch("https://wpshlmijsscmlasqtapa.supabase.co/rest/v1/mart_members?id=eq." + encodeURIComponent(data.raw_id || data.id || data.store_id),{
+   method:"PATCH",
+   headers:{
+    "apikey":"sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Authorization":"Bearer sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Content-Type":"application/json",
+    "Prefer":"return=minimal"
+   },
+   body:JSON.stringify({
+    approval_status:"APPROVED",
+    service_status:"ACTIVE",
+    mart_code:data.store_id
+   })
+  });
+  if(!r.ok) throw new Error("승인 처리에 실패했습니다.");
+  return {ok:true, message:"사용 승인되었습니다."};
+ }
  var body=data||{};
  body.action=action;
  body.session_token=session();
@@ -655,7 +662,7 @@ function render(){
    if(!confirm((s.store_name||s.store_id||"해당 매장")+"을 사용 승인하시겠습니까?"))return;
    try{
     this.disabled=true;
-    var x=await api("activate_store",{store_id:s.store_id});
+    var x=await api("activate_store",{store_id:s.store_id, raw_id:s.id});
     msg(x.message||"사용 승인되었습니다.",false);
     await load();
    }catch(e){
