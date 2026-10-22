@@ -301,23 +301,76 @@ function esc(v){
 }
 
 async function api(action,data){
- var body=data||{};
- body.action=action;
- body.session_token=session();
-
- var r=await fetch(URL,{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify(body)
- });
-
- var x=await r.json();
-
- if(!r.ok||!x.ok){
-  throw new Error(x.message||"처리에 실패했습니다.");
+ if(action==="list_stores"){
+  var r=await fetch("https://wpshlmijsscmlasqtapa.supabase.co/rest/v1/mart_members?order=created_at.desc",{
+   headers:{
+    "apikey":"sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Authorization":"Bearer sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K"
+   }
+  });
+  if(!r.ok) throw new Error("가맹점 목록을 불러오지 못했습니다.");
+  var rows=await r.json();
+  var mapped=rows.map(function(row){
+   var code = row.mart_code || ("M" + String(row.id).padStart(6, "0"));
+   var st = (row.approval_status||"PENDING").toUpperCase();
+   var pending = (st==="PENDING" || st==="WAITING");
+   return {
+    id: row.id,
+    store_id: code,
+    store_name: row.mart_name,
+    admin_id: row.email || row.phone,
+    owner_name: row.owner_name,
+    phone: row.phone,
+    region_name: row.address ? row.address.split(" ").slice(0, 2).join(" ") : "전체",
+    address: row.address,
+    account_status: pending ? "pending" : "정상",
+    approval_status: row.approval_status
+   };
+  });
+  return {ok:true, stores:mapped};
  }
-
- return x;
+ if(action==="create_store"){
+  var r=await fetch("https://wpshlmijsscmlasqtapa.supabase.co/rest/v1/mart_members",{
+   method:"POST",
+   headers:{
+    "apikey":"sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Authorization":"Bearer sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Content-Type":"application/json",
+    "Prefer":"return=minimal"
+   },
+   body:JSON.stringify({
+    mart_code:data.store_id,
+    mart_name:data.store_name,
+    owner_name:data.owner_name,
+    phone:data.phone,
+    address:data.address,
+    approval_status:"APPROVED",
+    service_status:"ACTIVE"
+   })
+  });
+  if(!r.ok) throw new Error("매장 등록에 실패했습니다.");
+  return {ok:true, message:"매장이 등록되었습니다."};
+ }
+ if(action==="update_store"){
+  var r=await fetch("https://wpshlmijsscmlasqtapa.supabase.co/rest/v1/mart_members?mart_code=eq."+encodeURIComponent(data.store_id),{
+   method:"PATCH",
+   headers:{
+    "apikey":"sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Authorization":"Bearer sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Content-Type":"application/json",
+    "Prefer":"return=minimal"
+   },
+   body:JSON.stringify({
+    mart_name:data.store_name,
+    owner_name:data.owner_name,
+    phone:data.phone,
+    address:data.address
+   })
+  });
+  if(!r.ok) throw new Error("매장 정보 수정에 실패했습니다.");
+  return {ok:true, message:"매장 정보가 수정되었습니다."};
+ }
+ throw new Error("알 수 없는 작업입니다.");
 }
 
 async function load(){
@@ -1094,23 +1147,69 @@ function money(v){
 }
 
 async function api(action,data){
- var body=data||{};
- body.action=action;
- body.session_token=session();
-
- var r=await fetch(URL,{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify(body)
- });
-
- var x=await r.json();
-
- if(!r.ok||!x.ok){
-  throw new Error(x.message||"처리에 실패했습니다.");
+ if(action==="list"){
+  var r=await fetch("https://wpshlmijsscmlasqtapa.supabase.co/rest/v1/mart_members?order=created_at.desc",{
+   headers:{
+    "apikey":"sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Authorization":"Bearer sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K"
+   }
+  });
+  if(!r.ok) throw new Error("결제 목록을 불러오지 못했습니다.");
+  var rows=await r.json();
+  var mapped=rows.map(function(row){
+   var code = row.mart_code || ("M" + String(row.id).padStart(6, "0"));
+   return {
+    id: row.id,
+    store_id: code,
+    store_name: row.mart_name,
+    owner_name: row.owner_name,
+    phone: row.phone,
+    monthly_fee: row.monthly_fee || 50000,
+    payment_status: (row.payment_status||"WAITING").toLowerCase(),
+    last_payment_date: row.paid_at ? row.paid_at.slice(0, 10) : "",
+    next_payment_date: row.next_payment_date || "",
+    payment_method: "무통장입금",
+    settlement_status: "active"
+   };
+  });
+  return {ok:true, rows:mapped};
  }
-
- return x;
+ if(action==="set_paid" || action==="save_payment"){
+  var r=await fetch("https://wpshlmijsscmlasqtapa.supabase.co/rest/v1/mart_members?id=eq."+encodeURIComponent(data.raw_id || data.id),{
+   method:"PATCH",
+   headers:{
+    "apikey":"sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Authorization":"Bearer sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Content-Type":"application/json",
+    "Prefer":"return=minimal"
+   },
+   body:JSON.stringify({
+    payment_status:"paid",
+    paid_at:new Date().toISOString(),
+    service_status:"ACTIVE"
+   })
+  });
+  if(!r.ok) throw new Error("결제 처리에 실패했습니다.");
+  return {ok:true, message:"결제완료 처리되었습니다."};
+ }
+ if(action==="set_exempt"){
+  var r=await fetch("https://wpshlmijsscmlasqtapa.supabase.co/rest/v1/mart_members?id=eq."+encodeURIComponent(data.raw_id || data.id),{
+   method:"PATCH",
+   headers:{
+    "apikey":"sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Authorization":"Bearer sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Content-Type":"application/json",
+    "Prefer":"return=minimal"
+   },
+   body:JSON.stringify({
+    payment_status:"exempt",
+    service_status:"ACTIVE"
+   })
+  });
+  if(!r.ok) throw new Error("결제 면제 처리에 실패했습니다.");
+  return {ok:true, message:"결제면제 처리되었습니다."};
+ }
+ throw new Error("알 수 없는 결제 작업입니다.");
 }
 
 async function load(){
