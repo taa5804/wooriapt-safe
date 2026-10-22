@@ -1817,6 +1817,26 @@ document
       )
     );
 
+    // [중앙 서버 DB 저장] 중개사가 등록한 매물을 Supabase DB(property_proposals)로 전송
+    fetch("/api/property-proposal", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        requestNumber: code,
+        apartment: fullAddress || apartment,
+        amount: priceDisplay,
+        floor: [document.getElementById("floor").value.trim(), document.getElementById("totalFloor").value.trim()].filter(Boolean).join(" / ") || "-",
+        area: document.getElementById("area").value ? document.getElementById("area").value + "㎡" : "-",
+        description: document.getElementById("description").value.trim(),
+        officeName: document.getElementById("ownerName").value.trim() || "담당 공인중개사",
+        officePhone: document.getElementById("ownerPhone").value.trim() || ""
+      })
+    }).then(function(r){ return r.json(); }).then(function(resData){
+      console.log("Central DB proposal save result:", resData);
+    }).catch(function(err){
+      console.warn("Central DB proposal save warning:", err);
+    });
+
     try{
       const allProposals = JSON.parse(localStorage.getItem("wooriapt_proposals") || "[]");
       allProposals.unshift(proposalData);
