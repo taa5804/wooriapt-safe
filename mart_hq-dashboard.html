@@ -323,6 +323,9 @@ async function api(action,data){
     phone: row.phone,
     region_name: row.address ? row.address.split(" ").slice(0, 2).join(" ") : "전체",
     address: row.address,
+    business_file: row.business_file,
+    db_file: row.db_file,
+    sales_file: row.sales_file,
     account_status: pending ? "pending" : "정상",
     approval_status: row.approval_status
    };
@@ -350,6 +353,45 @@ async function api(action,data){
   });
   if(!r.ok) throw new Error("매장 등록에 실패했습니다.");
   return {ok:true, message:"매장이 등록되었습니다."};
+ }
+ if(action==="activate_store"){
+  var storeId = data.store_id || ("M" + String(data.raw_id || data.id).padStart(6, "0"));
+  var targetId = data.raw_id || data.id;
+  var patchUrl = targetId ? "https://wpshlmijsscmlasqtapa.supabase.co/rest/v1/mart_members?id=eq." + encodeURIComponent(targetId) : "https://wpshlmijsscmlasqtapa.supabase.co/rest/v1/mart_members?mart_code=eq." + encodeURIComponent(storeId);
+  var r=await fetch(patchUrl,{
+   method:"PATCH",
+   headers:{
+    "apikey":"sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Authorization":"Bearer sb_publishable_3QLYewR-TXBd1mNfte6OJg_kre42L7K",
+    "Content-Type":"application/json",
+    "Prefer":"return=minimal"
+   },
+   body:JSON.stringify({
+    approval_status:"APPROVED",
+    service_status:"ACTIVE",
+    mart_code:storeId
+   })
+  });
+  if(!r.ok) throw new Error("사용 승인 처리에 실패했습니다.");
+
+  // Call /api/mart-notify for LMS + ClawOps call
+  try {
+    await fetch("/api/mart-notify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "APPROVED",
+        mart_name: data.mart_name,
+        owner_name: data.owner_name,
+        phone: data.phone,
+        mart_code: storeId
+      })
+    });
+  } catch(notifyErr) {
+    console.warn("Notify error:", notifyErr);
+  }
+
+  return {ok:true, message:"사용 승인 완료! 개통 문자와 클로옵스 음성 알림이 전송되었습니다."};
  }
  if(action==="update_store"){
   var r=await fetch("https://wpshlmijsscmlasqtapa.supabase.co/rest/v1/mart_members?mart_code=eq."+encodeURIComponent(data.store_id),{
@@ -432,7 +474,11 @@ function selectStore(s){
  $("#wgAddress").value=s.address||"";
 
  $("#wgStoreId").readOnly=true;
- $("#wgSelected").textContent=(s.store_name||"")+" ("+(s.store_id||"")+")";
+ var docLinks = "";
+ if(s.business_file) docLinks += ' <a href="https://wpshlmijsscmlasqtapa.supabase.co/storage/v1/object/public/mart-signup-documents/' + s.business_file + '" target="_blank" style="color:#1d4ed8;margin-left:8px;font-size:13px;font-weight:700;">[📄 사업자등록증]</a>';
+ if(s.db_file) docLinks += ' <a href="https://wpshlmijsscmlasqtapa.supabase.co/storage/v1/object/public/mart-signup-documents/' + s.db_file + '" target="_blank" style="color:#1d4ed8;margin-left:8px;font-size:13px;font-weight:700;">[📄 고객DB]</a>';
+ if(s.sales_file) docLinks += ' <a href="https://wpshlmijsscmlasqtapa.supabase.co/storage/v1/object/public/mart-signup-documents/' + s.sales_file + '" target="_blank" style="color:#1d4ed8;margin-left:8px;font-size:13px;font-weight:700;">[📄 매출자료]</a>';
+ $("#wgSelected").innerHTML = (esc(s.store_name)||"") + " (" + esc(s.store_id) + ")" + docLinks;
 }
 
 function clearForm(){
@@ -490,11 +536,19 @@ $("#wgClear").onclick=clearForm;
 
 $("#wgActivate").onclick=async function(){
  if(!selected){alert("매장을 먼저 선택하세요.");return;}
+ if(!confirm((selected.store_name||"선택 매장")+"을 최종 사용 승인하시겠습니까?\n승인 즉시 마트 사장님에게 개통 LMS 문자와 클로옵스 음성 전화가 자동 발송됩니다.")) return;
 
  try{
-  var x=await api("activate_store",{store_id:selected.store_id});
+  msg("사용 승인 및 알림 발송 중...", false);
+  var x=await api("activate_store",{
+    store_id:selected.store_id,
+    raw_id:selected.id,
+    phone:selected.phone,
+    mart_name:selected.store_name,
+    owner_name:selected.owner_name
+  });
   clearForm();
-  msg(x.message,false);
+  msg(x.message || "사용 승인 완료! 개통 문자와 클로옵스 음성 알림이 전송되었습니다.", false);
   await load();
  }catch(e){msg(e.message,true);}
 };
