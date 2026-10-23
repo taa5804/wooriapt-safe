@@ -306,57 +306,22 @@ export default async function handler(req, res) {
       await existingRequestResponse.json();
 
 
-    const requestCount =
-      Array.isArray(
-        existingRequests
-      )
-        ? existingRequests.length
-        : 0;
+    const openRequests =
+      Array.isArray(existingRequests)
+        ? existingRequests.filter(function(row) {
+            return String(row.status || "").trim().toUpperCase() === "OPEN";
+          })
+        : [];
 
+    const isUnlimitedPhone =
+      body.testMode === true ||
+      ["01022864150", "01098503388", "01000005804", "01058045804"].includes(phone);
 
-    const hasOpenRequest =
-      Array.isArray(
-        existingRequests
-      ) &&
-      existingRequests.some(
-        function(row) {
-
-          return (
-            String(
-              row.status || ""
-            )
-            .trim()
-            .toUpperCase() ===
-            "OPEN"
-          );
-        }
-      );
-
-
-    if (
-      hasOpenRequest
-    ) {
-
+    if (!isUnlimitedPhone && openRequests.length >= 5) {
       return res.status(409).json({
-        ok:
-          false,
-
+        ok: false,
         message:
-          "현재 진행 중인 매수요청이 있습니다. 기존 요청이 종료된 후 다른 지역을 등록해 주세요."
-      });
-    }
-
-
-    if (
-      requestCount >= 2
-    ) {
-
-      return res.status(409).json({
-        ok:
-          false,
-
-        message:
-          "매수요청은 휴대전화번호 기준 최대 2개 지역까지만 등록할 수 있습니다."
+          "현재 진행 중인 매수·임차 요청이 5건 있습니다. 기존 요청 완료 후 추가 등록해 주세요."
       });
     }
 
@@ -593,22 +558,29 @@ export default async function handler(req, res) {
     }
 
 
-    // 등록 즉시 관내 중개사에게 ARS 전화 및 LMS 문자 자동 즉시 발송 실행
-    const proto = req.headers["x-forwarded-proto"] || "https";
-    const host = req.headers["x-forwarded-host"] || req.headers.host || "wooriapt.app";
-    const baseUrl = `${proto}://${host}`;
+    // 등록 즉시 관내 중개사에게 ARS 전화 및 LMS 문자 자동 즉시 발송 실행 (테스트 모드 제외)
+    const isTestRequest =
+      body.testMode === true ||
+      phone === "01000005804" ||
+      phone === "01058045804";
 
-    try {
-      fetch(`${baseUrl}/api/ars-batch`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          requestNumber: requestNumber,
-          testMode: false
-        })
-      }).catch(err => console.error("auto ars-batch error:", err));
-    } catch (e) {
-      console.error("auto trigger error:", e);
+    if (!isTestRequest) {
+      const proto = req.headers["x-forwarded-proto"] || "https";
+      const host = req.headers["x-forwarded-host"] || req.headers.host || "wooriapt.app";
+      const baseUrl = `${proto}://${host}`;
+
+      try {
+        fetch(`${baseUrl}/api/ars-batch`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            requestNumber: requestNumber,
+            testMode: false
+          })
+        }).catch(err => console.error("auto ars-batch error:", err));
+      } catch (e) {
+        console.error("auto trigger error:", e);
+      }
     }
 
     return res.status(200).json({

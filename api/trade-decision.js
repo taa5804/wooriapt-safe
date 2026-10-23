@@ -1,10 +1,39 @@
 export default async function handler(req, res) {
   const SUPABASE_URL = process.env.SUPABASE_URL || "https://dcysjuxyjqtvkihdsjvv.supabase.co";
-  const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
+  const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const hostStr = String(req.headers["x-forwarded-host"] || req.headers.host || "");
+
+  // SUPABASE_SERVICE_ROLE_KEY가 없는 도메인(ansimdeal.com 등)은 wooriapt.app 본 서버로 프록시
+  if (!SUPABASE_SERVICE_ROLE_KEY && !hostStr.includes("wooriapt.app")) {
+    try {
+      const qs = req.url && req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+      const targetUrl = `https://www.wooriapt.app/api/trade-decision${qs}`;
+      const fetchOpts = {
+        method: req.method,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        }
+      };
+      if (req.method !== "GET" && req.method !== "HEAD") {
+        fetchOpts.body = typeof req.body === "string" ? req.body : JSON.stringify(req.body || {});
+      }
+      const upstreamRes = await fetch(targetUrl, fetchOpts);
+      const upstreamData = await upstreamRes.json().catch(() => ({}));
+      return res.status(upstreamRes.status).json(upstreamData);
+    } catch (err) {
+      return res.status(500).json({
+        ok: false,
+        message: "서버 연동 오류가 발생했습니다."
+      });
+    }
+  }
+
+  const effectiveKey = SUPABASE_SERVICE_ROLE_KEY || "sb_publishable_RZBX7u1v8MLBCfEJT0-eRg_jPcIulG2";
 
   const headers = {
-    apikey: SUPABASE_SERVICE_ROLE_KEY,
-    Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+    apikey: effectiveKey,
+    Authorization: `Bearer ${effectiveKey}`,
     "Content-Type": "application/json",
     Accept: "application/json"
   };
@@ -29,13 +58,14 @@ export default async function handler(req, res) {
   try {
     /* =========================================================
        GET:
-       1) ?code=4자리거래방코드 -> 거래 확정된 매물 및 거래방 정보 조회
-       2) ?requestNumber=4자리요청번호 또는 ?phone=휴대폰번호 -> 제안 목록 조회
+       1) ?admin=dashboard -> 본사 관리자 대시보드 통합 조회
+       2) ?code=4자리거래방코드 -> 거래 확정된 매물 및 거래방 정보 조회
+       3) ?requestNumber=4자리요청번호 또는 ?phone=휴대폰번호 -> 제안 목록 조회
     ========================================================= */
     if (req.method === "GET") {
       if (clean(req.query.admin) === "dashboard") {
         const [bmRes, reqRes, propRes] = await Promise.all([
-          fetch(`${SUPABASE_URL}/rest/v1/agent_members?select=id,phone,email,representative_name,office_name,office_registration_no,registration_status,membership_status,created_at&order=id.desc&limit=200`, { method: "GET", headers }).catch(() => null),
+          fetch(`${SUPABASE_URL}/rest/v1/safe_brokers?select=id,mobile_phone,office_phone,representative_name,office_name,license_number,sido,sigungu,dong,address,membership_status,is_active,created_at&order=id.desc&limit=200`, { method: "GET", headers }).catch(() => null),
           fetch(`${SUPABASE_URL}/rest/v1/property_requests?select=*&order=id.desc&limit=200`, { method: "GET", headers }).catch(() => null),
           fetch(`${SUPABASE_URL}/rest/v1/property_proposals?select=id,request_number,apartment,amount,floor,area,description,office_name,office_phone,status,created_at&order=id.desc&limit=200`, { method: "GET", headers }).catch(() => null)
         ]);
@@ -43,7 +73,23 @@ export default async function handler(req, res) {
         const requestsRaw = (reqRes && reqRes.ok) ? await reqRes.json().catch(() => []) : [];
         const proposalsRaw = (propRes && propRes.ok) ? await propRes.json().catch(() => []) : [];
 
-        const brokers = Array.isArray(brokersRaw) ? brokersRaw : [];
+        const brokers = (Array.isArray(brokersRaw) ? brokersRaw : []).map((b) => ({
+          id: b.id,
+          phone: b.mobile_phone || b.office_phone || "",
+          mobile_phone: b.mobile_phone || "",
+          office_phone: b.office_phone || "",
+          email: "",
+          representative_name: b.representative_name || "",
+          office_name: b.office_name || "",
+          office_registration_no: b.license_number || "",
+          registration_status: b.is_active === false ? "PENDING" : "APPROVED",
+          membership_status: b.membership_status || "FREE",
+          sido: b.sido || "",
+          sigungu: b.sigungu || "",
+          dong: b.dong || "",
+          address: b.address || "",
+          created_at: b.created_at
+        }));
         const requests = Array.isArray(requestsRaw) ? requestsRaw : [];
         const proposals = [];
         const transactions = [];
@@ -141,7 +187,7 @@ export default async function handler(req, res) {
         let isMemberBroker = false;
         const cleanBrokerPhone = normalizePhone(row.office_phone);
         if (cleanBrokerPhone) {
-          const amUrl = `${SUPABASE_URL}/rest/v1/agent_members?phone=eq.${encodeURIComponent(cleanBrokerPhone)}&select=id,office_name,registration_status&limit=1`;
+          const amUrl = `${SUPABASE_URL}/rest/v1/safe_brokers?mobile_phone=eq.${encodeURIComponent(cleanBrokerPhone)}&select=id,office_name,is_active&limit=1`;
           const amRes = await fetch(amUrl, { method: "GET", headers }).catch(() => null);
           if (amRes && amRes.ok) {
             const amRows = await amRes.json().catch(() => []);
@@ -253,11 +299,7 @@ export default async function handler(req, res) {
 
     /* =========================================================
        POST:
-       매수자(임차인)가 매물 1건을 [거래 결정(확정)] 눌렀을 때:
-       1) 전용 4자리 거래방 코드(tradeRoomCode) 생성
-       2) DB(property_proposals)에 확정 상태 및 거래방 코드 저장
-       3) 선택된 담당 공인중개사 휴대폰(officePhone)으로 4자리 거래방 코드 문자(LMS) 자동 발송
-       4) 매수자(임차인) 휴대폰으로도 4자리 거래방 코드 문자(LMS) 발송
+       매수자(임차인)가 매물 1건을 [거래 결정(확정)] 눌렀을 때
     ========================================================= */
     if (req.method === "POST") {
       const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
@@ -268,10 +310,14 @@ export default async function handler(req, res) {
           return res.status(400).json({ ok: false, message: "중개사 ID가 필요합니다." });
         }
         const patchData = {};
-        if (body.registration_status) patchData.registration_status = clean(body.registration_status);
-        if (body.membership_status) patchData.membership_status = clean(body.membership_status);
+        if (body.registration_status) {
+          patchData.is_active = clean(body.registration_status) === "APPROVED";
+        }
+        if (body.membership_status) {
+          patchData.membership_status = clean(body.membership_status);
+        }
 
-        const patchRes = await fetch(`${SUPABASE_URL}/rest/v1/agent_members?id=eq.${encodeURIComponent(brokerId)}`, {
+        const patchRes = await fetch(`${SUPABASE_URL}/rest/v1/safe_brokers?id=eq.${encodeURIComponent(brokerId)}`, {
           method: "PATCH",
           headers: { ...headers, Prefer: "return=representation" },
           body: JSON.stringify(patchData)
@@ -324,9 +370,14 @@ export default async function handler(req, res) {
         }
         return res.status(200).json({ ok: true, feePaid: paidFlag === "Y" });
       }
+
       const propertyId = clean(body.propertyId);
       const requestNumber = clean(body.requestNumber).replace(/\D/g, "").slice(0, 4);
-      const isTest = body.testMode === true || requestNumber === "5804";
+      const isTest =
+        body.testMode === true ||
+        requestNumber === "5804" ||
+        normalizePhone(body.officePhone) === "01000005804" ||
+        normalizePhone(body.buyerPhone) === "01000005804";
 
       const apartment = clean(body.apartment) || "선택 매물";
       const amount = clean(body.amount) || "-";
@@ -337,7 +388,7 @@ export default async function handler(req, res) {
       const tradeType = clean(body.tradeType) || "sale";
 
       const transactionNumber = clean(body.transactionNumber) || ("TR" + Date.now().toString().slice(-8));
-      const tradeRoomCode = isTest
+      const tradeRoomCode = requestNumber === "5804"
         ? "5804"
         : String(Math.floor(1000 + Math.random() * 9000));
 
@@ -393,7 +444,7 @@ export default async function handler(req, res) {
       // 2) 선택된 중개사에게 전용 4자리 거래방 코드 문자(LMS) 발송
       const protocol = req.headers["x-forwarded-proto"] || "https";
       const host = req.headers.host;
-      const baseUrl = host ? `${protocol}://${host}` : "https://wooriapt.app";
+      const baseUrl = host ? `${protocol}://${host}` : "https://www.wooriapt.app";
 
       let brokerSmsSent = false;
       let buyerSmsSent = false;
