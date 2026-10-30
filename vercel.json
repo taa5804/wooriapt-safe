@@ -1,4 +1,12 @@
 {
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "wooriapt.app" }],
+      "destination": "https://www.wooriapt.app/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/sale-admin",
