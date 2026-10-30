@@ -558,7 +558,7 @@ export default async function handler(req, res) {
     }
 
 
-    // 등록 즉시 관내 중개사에게 ARS 전화 및 LMS 문자 자동 즉시 발송 실행 (테스트 모드 제외)
+    // 등록 즉시 관내 중개사에게 ARS 전화 및 LMS 문자 자동 즉시 발송 실행 + 대표님(010-2286-4150) 실시간 알림 발송
     const isTestRequest =
       body.testMode === true ||
       phone === "01000005804" ||
@@ -569,15 +569,59 @@ export default async function handler(req, res) {
       const host = req.headers["x-forwarded-host"] || req.headers.host || "wooriapt.app";
       const baseUrl = `${proto}://${host}`;
 
+      const typeLabel =
+        requestType === "sale"
+          ? "매매"
+          : requestType === "jeonse"
+          ? "전세"
+          : "월세";
+
+      const priceLabel =
+        requestType === "sale"
+          ? `${saleMin}~${saleMax}만원`
+          : requestType === "jeonse"
+          ? `보증금 ${jeonseMin}~${jeonseMax}만원`
+          : `보증금 ${monthlyDepositMin}~${monthlyDepositMax}만원 / 월세 ${monthlyRent}만원`;
+
+      const formattedPhone =
+        phone.length === 11
+          ? `${phone.slice(0, 3)}-${phone.slice(3, 7)}-${phone.slice(7)}`
+          : phone;
+
+      const adminMsg = [
+        `[우리아파트/안심딜 신규 신청 알림]`,
+        `새로운 매수·임차 신청이 접수되었습니다!`,
+        ``,
+        `• 요청번호: #${requestNumber}`,
+        `• 거래유형: ${typeLabel} (${priceLabel})`,
+        `• 희망지역: ${sido} ${sigungu} ${dong}`,
+        `• 단지/상가: ${apartment || "지역 전체"} (${size})`,
+        `• 고객연락처: ${formattedPhone}`,
+        `• 입주희망일: ${moveDate}${moveFlexible ? " (조율가능)" : ""}`,
+        memo ? `• 요청메모: ${memo}` : ``
+      ].filter(Boolean).join("\n");
+
       try {
-        fetch(`${baseUrl}/api/ars-batch`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            requestNumber: requestNumber,
-            testMode: false
+        await Promise.allSettled([
+          fetch("https://www.wooriapt.app/api/send-sms", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              phone: "01022864150",
+              type: "LMS",
+              subject: `[신규 매수·임차 신청 #${requestNumber}]`,
+              content: adminMsg
+            })
+          }),
+          fetch(`${baseUrl}/api/ars-batch`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              requestNumber: requestNumber,
+              testMode: false
+            })
           })
-        }).catch(err => console.error("auto ars-batch error:", err));
+        ]);
       } catch (e) {
         console.error("auto trigger error:", e);
       }
