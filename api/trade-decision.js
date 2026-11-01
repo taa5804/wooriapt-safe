@@ -304,6 +304,28 @@ export default async function handler(req, res) {
     if (req.method === "POST") {
       const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
 
+      if (body.action === "admin_delete_request") {
+        const reqId = clean(body.id);
+        const reqNumber = clean(body.requestNumber);
+        if (reqNumber) {
+          await fetch(`${SUPABASE_URL}/rest/v1/property_proposals?request_number=eq.${encodeURIComponent(reqNumber)}`, {
+            method: "DELETE",
+            headers
+          }).catch(() => null);
+          await fetch(`${SUPABASE_URL}/rest/v1/ars_dispatch_logs?request_number=eq.${encodeURIComponent(reqNumber)}`, {
+            method: "DELETE",
+            headers
+          }).catch(() => null);
+        }
+        if (reqId) {
+          await fetch(`${SUPABASE_URL}/rest/v1/property_requests?id=eq.${encodeURIComponent(reqId)}`, {
+            method: "DELETE",
+            headers
+          }).catch(() => null);
+        }
+        return res.status(200).json({ ok: true, deletedId: reqId, deletedRequestNumber: reqNumber });
+      }
+
       if (body.action === "admin_update_broker") {
         const brokerId = clean(body.id);
         if (!brokerId) {
