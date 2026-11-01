@@ -1704,8 +1704,17 @@ window.updateBrokerStatus = async function(id, nextStatus){
    2. 매수·임차 요청 관리 렌더링
 ========================================= */
 
+window.isCommercialRequest = function(r){
+  const text = String((r.apartment || "") + " " + (r.memo || "")).toLowerCase();
+  return text.includes("[") || text.includes("상가") || text.includes("점포") || text.includes("프라자") || text.includes("안심딜") || text.includes("음식") || text.includes("카페");
+};
+
 window.renderRequests = function(){
-  const list = state.requests;
+  const isAnsimdeal = (window.location.hostname || "").includes("ansimdeal") || document.title.includes("점포·상가");
+  const list = (state.requests || []).filter(function(r){
+    const comm = window.isCommercialRequest(r);
+    return isAnsimdeal ? comm : !comm;
+  });
   document.getElementById("reqTotal").textContent = list.length;
   document.getElementById("reqSale").textContent = list.filter(r => r.request_type === "sale").length;
   document.getElementById("reqJeonse").textContent = list.filter(r => r.request_type === "jeonse").length;
@@ -1746,10 +1755,32 @@ window.renderRequests = function(){
         </div>
         <div class="action-row">
           <button type="button" class="action-btn" onclick="filterProposalsByReq('${esc(r.request_number)}')">접수 제안 보기</button>
+          <button type="button" class="action-btn" style="background:#ef4444;color:#fff;border-color:#dc2626;margin-left:6px;" onclick="adminDeleteRequest(${r.id}, '${esc(r.request_number)}')">🗑️ 삭제</button>
         </div>
       </div>
     `;
   }).join("");
+};
+
+
+window.adminDeleteRequest = async function(id, reqNo){
+  if(!confirm(`[요청번호 #${reqNo}] 물건을 정말 삭제하시겠습니까?\n관련된 제안 및 발송 내역도 함께 삭제됩니다.`)) return;
+  try{
+    const res = await fetch("/api/trade-decision", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "admin_delete_request", id: id, requestNumber: reqNo })
+    });
+    const data = await res.json().catch(() => ({}));
+    if(res.ok && data.ok){
+      alert("삭제되었습니다.");
+      loadDashboardData();
+    }else{
+      alert("삭제 실패: " + (data.message || "오류가 발생했습니다."));
+    }
+  }catch(e){
+    alert("오류: " + e.message);
+  }
 };
 
 window.filterProposalsByReq = function(reqNo){
