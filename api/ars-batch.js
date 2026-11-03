@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   // ClawOps Voice Config
   const CLAWOPS_ACCOUNT_ID = process.env.CLAWOPS_ACCOUNT_ID || "ACUfJGlcU6IkNZxuxn";
   const CLAWOPS_API_KEY = process.env.CLAWOPS_API_KEY || "sk_vuT1vZJtqWMHdjROjqAi1x7XpGGpjSY2";
-  const CLAWOPS_FROM_NUMBER = String(process.env.CLAWOPS_FROM_NUMBER || "07052767712").replace(/\D/g, "");
+  const CLAWOPS_FROM_NUMBER = String(process.env.CLAWOPS_FROM_NUMBER || "0629524150").replace(/\D/g, "");
   
   const rawBody = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
   const hostStr = String(req.headers["x-forwarded-host"] || req.headers.host || "");
@@ -187,7 +187,7 @@ export default async function handler(req, res) {
     if (IS_ANSIMDEAL) {
       // 안심딜 상가·점포 임차 전용 문구
       const lines = [
-        "[안심딜] 상가·점포 임차 희망조건 전달",
+        "[안심딜] 상가·점포 임차 희망조건 안내",
         "",
         `사장님, [${d.dong}]에 ${d.apartment_name ? d.apartment_name + " " : ""}${d.trade_type} 희망 고객이 등록되었습니다!`
       ];
@@ -195,18 +195,19 @@ export default async function handler(req, res) {
       if (d.desired_price) lines.push(`희망예산: ${d.desired_price}`);
       if (d.move_in_date) lines.push(`입점희망: ${d.move_in_date}`);
       lines.push(
+        `임차요청번호: ${reqNum}`,
         "",
         "조건에 맞는 점포·상가 매물이 있으면 지금 바로 제안해 주세요.",
-        `임차요청번호: ${reqNum}`,
-        `바로 제안하기: https://www.ansimdeal.com/broker-property-register.html?code=${reqNum}`,
         "",
-        "발송자: 점포·상가 안심딜"
+        "▶ 바로 제안하기: www.ansimdeal.com",
+        "",
+        "무료수신거부: 080-156-4359"
       );
       return lines.join("\n");
     } else {
       // 우리아파트 아파트 매매·전월세 전용 문구
       const lines = [
-        "[우리아파트] 아파트 매수 희망조건 전달",
+        "[우리아파트] 아파트 매수 희망조건 안내",
         "",
         `사장님, [${d.dong}] ${d.apartment_name ? d.apartment_name + " " : ""}아파트 ${d.trade_type} 희망 고객이 있습니다.`
       ];
@@ -214,12 +215,13 @@ export default async function handler(req, res) {
       if (d.desired_price) lines.push(`희망가격: ${d.desired_price}`);
       if (d.move_in_date) lines.push(`입주시점: ${d.move_in_date}`);
       lines.push(
-        "",
-        "조건에 맞는 매물이 있으면 바로 제안해 주세요. (수수료 50% 절약 안심매칭)",
         `매수요청번호: ${reqNum}`,
-        `바로 제안하기: https://www.wooriapt.app/broker-property-register.html?code=${reqNum}`,
         "",
-        "발송자: 우리아파트 안심거래"
+        "조건에 맞는 매물이 있으면 바로 제안해 주세요.",
+        "",
+        "▶ 바로 제안하기: www.wooriapt.app",
+        "",
+        "무료수신거부: 080-156-4359"
       );
       return lines.join("\n");
     }
