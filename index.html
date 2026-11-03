@@ -2078,7 +2078,7 @@ body.menu-open{
     </h2>
 
     <p class="return-access-desc">
-      제안받은 매물을 확인하세요.
+      신청 시 문자로 전송된 4자리 매수요청번호로 제안받은 추천 매물을 확인하세요.
     </p>
 
     <div class="return-access-row">
@@ -2088,8 +2088,9 @@ body.menu-open{
         type="text"
         inputmode="numeric"
         autocomplete="off"
-        placeholder="매수·임차인 휴대전화번호"
-        aria-label="매수·임차인 휴대전화번호"
+        maxlength="4"
+        placeholder="4자리 매수요청번호"
+        aria-label="4자리 매수요청번호"
       >
 
       <button
@@ -2102,7 +2103,7 @@ body.menu-open{
     </div>
 
     <p class="return-access-help">
-      등록한 휴대전화번호를 입력하고 확인을 눌러주세요.
+      신청 시 문자로 전송된 4자리 매수요청번호를 입력하고 확인을 눌러주세요.
     </p>
 
   </div>
@@ -3556,46 +3557,31 @@ accessBtn.addEventListener(
       );
 
     if(!value){
-
-      alert(
-        "휴대전화번호를 입력해 주세요."
-      );
-
+      alert("4자리 매수요청번호를 입력해 주세요.");
       accessInput.focus();
-
       return;
     }
 
     if(value === "5804"){
-      localStorage.setItem(
-        "wooriapt_test_key",
-        "5804"
-      );
-
-      location.href =
-        "/my-proposals.html?test=5804";
-
+      localStorage.setItem("wooriapt_test_key", "5804");
+      location.href = "/my-proposals.html?test=5804";
       return;
     }
 
-    if(!/^01[016789][0-9]{7,8}$/.test(value)){
-      alert(
-        "휴대전화번호를 정확히 입력해 주세요."
-      );
-
-      accessInput.focus();
-
+    if(value.length === 4 && /^\d{4}$/.test(value)){
+      localStorage.setItem("wooriapt_request_number", value);
+      location.href = "/my-proposals.html?request=" + encodeURIComponent(value);
       return;
     }
 
-    localStorage.setItem(
-      "wooriapt_buyer_phone",
-      value
-    );
+    if(/^01[016789][0-9]{7,8}$/.test(value)){
+      localStorage.setItem("wooriapt_buyer_phone", value);
+      location.href = "/my-proposals.html?phone=" + encodeURIComponent(value);
+      return;
+    }
 
-    location.href =
-      "/my-proposals.html?phone=" +
-      encodeURIComponent(value);
+    alert("4자리 매수요청번호를 정확히 입력해 주세요.");
+    accessInput.focus();
 
   }
 );
