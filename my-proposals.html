@@ -1359,6 +1359,22 @@ tradeRequestBtn.addEventListener(
       }catch(e){}
     }
 
+    try {
+      const selectedProps = checked.map(function(chk){
+        const id = String(chk.dataset.id || "");
+        return properties.find(function(item){ return String(item.propertyId) === id; });
+      }).filter(Boolean);
+      fetch("/api/trade-decision", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "trade_request",
+          requestNumber: key,
+          items: selectedProps
+        })
+      }).catch(function(){});
+    } catch(e) {}
+
     showMsg(
       "선택하신 " + checked.length + "건 매물의 거래 요청이 완료되어 중개사 부동산명과 연락처가 모두 공개되었습니다: " +
       revealedList.join(" / ") +
