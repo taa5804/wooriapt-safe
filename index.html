@@ -1488,19 +1488,19 @@ body.menu-open{
 <script defer src="/_vercel/insights/script.js"></script>
 
 
-
-
-
-
 <style id="master-safe-balanced-css">
 /* =========================================
-   [오와 열 통일] 전 구간 100% 동일 폭 & 균형 정렬
+   [폭 통일 & 오와 열 칼정렬] wrap 100% 완벽 바운더리
 ========================================= */
+* {
+  box-sizing: border-box;
+}
+
 .wrap {
   width: 100% !important;
-  max-width: 1180px !important;
+  max-width: 1140px !important;
   margin: 0 auto !important;
-  padding: 0 20px 30px !important;
+  padding: 0 16px 24px !important;
   box-sizing: border-box !important;
 }
 
@@ -1614,7 +1614,7 @@ body.menu-open{
   text-align: left !important;
 }
 
-/* 2. 매칭 수수료 계산기 (100% 정렬) */
+/* 2. 매칭 수수료 계산기 (100% 폭 일치) */
 .fee-widget {
   width: 100% !important;
   max-width: 100% !important;
@@ -1661,7 +1661,7 @@ body.menu-open{
   gap: 14px !important;
 }
 
-/* 3. 3대 안심 보증 카드 (100% 정렬) */
+/* 3. 3대 안심 보증 카드 (100% 폭 일치) */
 .safe-guarantees-section {
   width: 100% !important;
   max-width: 100% !important;
@@ -1742,7 +1742,7 @@ body.menu-open{
   word-break: keep-all !important;
 }
 
-/* 4. 1:1 안심 거래 진행방 입장 (100% 정렬) */
+/* 4. 1:1 안심 거래 진행방 입장 (100% 폭 일치) */
 .single-transaction-section {
   width: 100% !important;
   max-width: 100% !important;
@@ -1751,6 +1751,7 @@ body.menu-open{
   box-sizing: border-box !important;
 }
 .single-transaction-card {
+  width: 100% !important;
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
   border: 2px solid #2563eb !important;
   border-radius: 18px !important;
@@ -1813,7 +1814,7 @@ body.menu-open{
   white-space: nowrap !important;
 }
 
-/* 5. 공인중개사 우선배정 파트너 간편등록 배너 (100% 정렬) */
+/* 5. 공인중개사 우선배정 파트너 간편등록 배너 (100% 폭 일치) */
 .broker-partner-banner-section {
   width: 100% !important;
   max-width: 100% !important;
@@ -1878,7 +1879,96 @@ body.menu-open{
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
 }
 
-/* 6. 4단계 안심 진행 절차 (100% 정렬 & 밑에도 좁히기) */
+/* 파트너 팝업 모달 (절대 화면에 인라인으로 보이지 않고 클릭 시에만 팝업) */
+.partner-modal-backdrop {
+  display: none !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(4px) !important;
+  z-index: 999999 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+}
+.partner-modal-backdrop.show-modal {
+  display: flex !important;
+}
+.partner-modal-box {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  max-width: 440px !important;
+  width: 100% !important;
+  padding: 28px 24px !important;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.3) !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
+}
+.partner-modal-close {
+  position: absolute !important;
+  top: 16px !important;
+  right: 18px !important;
+  background: transparent !important;
+  border: none !important;
+  font-size: 24px !important;
+  color: #64748b !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
+}
+.partner-modal-title {
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  color: #0f172a !important;
+  margin: 0 0 6px !important;
+}
+.partner-modal-subtitle {
+  font-size: 13px !important;
+  color: #64748b !important;
+  margin: 0 0 18px !important;
+  line-height: 1.5 !important;
+}
+.partner-input-group {
+  margin-bottom: 12px !important;
+}
+.partner-input-group label {
+  display: block !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  color: #334155 !important;
+  margin-bottom: 5px !important;
+}
+.partner-input-group input {
+  width: 100% !important;
+  height: 46px !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  padding: 0 14px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  box-sizing: border-box !important;
+  outline: none !important;
+}
+.partner-submit-btn {
+  width: 100% !important;
+  height: 48px !important;
+  background: #2563eb !important;
+  color: #ffffff !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  border: none !important;
+  border-radius: 11px !important;
+  cursor: pointer !important;
+  margin-top: 8px !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25) !important;
+}
+
+/* 6. 4단계 안심 진행 절차 (100% 폭 일치 & 밑에도 좁히기) */
 .new-process-section {
   width: 100% !important;
   max-width: 100% !important;
@@ -1919,6 +2009,7 @@ body.menu-open{
   flex-direction: column !important;
   align-items: center !important;
   box-sizing: border-box !important;
+  height: 100% !important;
 }
 .step-icon-wrap {
   font-size: 28px !important;
@@ -1954,7 +2045,13 @@ body.menu-open{
   word-break: keep-all !important;
 }
 
-/* 7. FAQ 아코디언 및 푸터 (밑에도 좁히기) */
+/* 7. 약속 & FAQ & 푸터 (100% 폭 일치 & 밑에도 좁히기) */
+.promise {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 14px 0 !important;
+  box-sizing: border-box !important;
+}
 .faq-accordion-section {
   width: 100% !important;
   max-width: 100% !important;
@@ -1963,14 +2060,17 @@ body.menu-open{
   box-sizing: border-box !important;
 }
 .footer, footer {
-  padding-top: 20px !important;
-  padding-bottom: 24px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-top: 18px !important;
+  padding-bottom: 22px !important;
+  box-sizing: border-box !important;
 }
 
 /* 모바일 반응형 */
 @media (max-width: 768px) {
   .wrap {
-    padding: 0 12px 24px !important;
+    padding: 0 12px 20px !important;
   }
   .lock-grid-2 {
     grid-template-columns: 1fr !important;
@@ -2005,7 +2105,6 @@ body.menu-open{
   }
 }
 </style>
-
 
 </head>
 
@@ -2112,9 +2211,15 @@ body.menu-open{
       <span>›</span>
     </a>
 
-    
+    <a href="/broker-signup">
+      <span>공인중개사 회원가입</span>
+      <span>›</span>
+    </a>
 
-    
+    <a href="/broker-login.html">
+      <span>공인중개사 로그인</span>
+      <span>›</span>
+    </a>
 
   </div>
 
@@ -2125,7 +2230,7 @@ body.menu-open{
 
   <div class="hero-text">
 
-    <h1>우리아파트 안심거래<br><em>공인중개사와 매수인이 모두 안심하는 투명한 부동산 거래</em></h1>
+    <h1>아파트 안심딜<br><em>매매·전세·월세 매수·임차 매칭수수료 50% 반값!</em></h1>
 
     <p>전세사기·깡통전세·중개사고 걱정 없는 특허 아파트 안심딜!<br>아파트 매수 및 전월세 임차 희망조건 등록 시 검증된 동네 공인중개사가 안심 매물을 1:1 제안하며 수수료 및 매칭수수료 50%를 절감해 드립니다.</p>
 
@@ -2133,9 +2238,6 @@ body.menu-open{
 
 </section>
 
-<!-- =========================================
-     [메인 최상단] 0% & 5배 배상 특허 3중 잠금 플래그십 배너
-========================================= -->
 <!-- =========================================
      [메인 최상단] 0% & 5배 배상 특허 3중 잠금 플래그십 배너
 ========================================= -->
@@ -2254,340 +2356,6 @@ body.menu-open{
 </section>
 
 <!-- [컴팩트 Q&A 아코디언] 우리아파트 안심 매칭 꼭 확인하세요! -->
-<div id="requestResultGrid"></div>
-  <button id="requestRegisterBtn" type="button"></button>
-  <button id="requestExitBtn" type="button"></button>
-</div>
-
-
-<!-- =========================================
-     [복원 & 업그레이드] 매칭 수수료 50% 계산기
-========================================= -->
-<section class="fee-widget">
-  <div style="margin-bottom:12px; padding:16px 20px; border-radius:16px; background:linear-gradient(135deg, #1165d7 0%, #1d4ed8 100%); color:#fff; text-align:center; box-shadow:0 6px 20px rgba(17,101,215,0.22);">
-    <div style="font-size:17px; font-weight:900; letter-spacing:-0.5px; line-height:1.4;">💡 우리아파트에서 매수·임차 매칭 수수료 50%에 계약하세요!</div>
-    <div style="font-size:12px; opacity:0.92; margin-top:5px; font-weight:600;">아래 계산기에서 내가 아낄 수 있는 비용을 직접 확인해 보세요 (추가 중개보수 0원)</div>
-  </div>
-
-  <section class="fee-head">
-    <h2>매칭 수수료 50% 계산기</h2>
-    <p>
-      거래 유형과 금액을 입력하면 법정 상한 기준 예상금액과 우리아파트 50% 매칭 수수료를 한눈에 비교 확인할 수 있습니다.
-    </p>
-  </section>
-
-  <!-- 거래유형 -->
-  <div class="type-tabs">
-    <button type="button" class="type-btn active" data-type="sale">매매</button>
-    <button type="button" class="type-btn" data-type="jeonse">전세</button>
-    <button type="button" class="type-btn" data-type="monthly">월세</button>
-  </div>
-
-  <!-- 계산기 -->
-  <section class="calculator">
-    <!-- 매매 -->
-    <div id="saleFields" class="field-area">
-      <div class="input-group">
-        <label for="salePrice">매매금액</label>
-        <div class="money-box">
-          <input id="salePrice" type="text" inputmode="numeric" placeholder="예: 300,000,000">
-          <span class="unit">원</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 전세 -->
-    <div id="jeonseFields" class="field-area hidden">
-      <div class="input-group">
-        <label for="jeonsePrice">전세보증금</label>
-        <div class="money-box">
-          <input id="jeonsePrice" type="text" inputmode="numeric" placeholder="예: 200,000,000">
-          <span class="unit">원</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 월세 -->
-    <div id="monthlyFields" class="field-area hidden">
-      <div class="input-group">
-        <label for="monthlyDeposit">보증금</label>
-        <div class="money-box">
-          <input id="monthlyDeposit" type="text" inputmode="numeric" placeholder="예: 10,000,000">
-          <span class="unit">원</span>
-        </div>
-      </div>
-      <div class="input-group">
-        <label for="monthlyRent">월세</label>
-        <div class="money-box">
-          <input id="monthlyRent" type="text" inputmode="numeric" placeholder="예: 500,000">
-          <span class="unit">원</span>
-        </div>
-      </div>
-    </div>
-
-    <button id="calcBtn" class="calc-btn" type="button">이용료 확인</button>
-    <button id="paymentBtn" class="payment-btn" type="button" style="display:none;"></button>
-  </section>
-
-  <!-- 결과 -->
-  <section id="result" class="result">
-    <h2 class="result-title">예상 비용 비교 (법정 상한 vs 안심거래)</h2>
-    <div class="compare">
-      <div class="compare-card">
-        <div class="compare-label"><span id="normalParty">매도자</span><br>공인중개사 중개수수료</div>
-        <div id="normalPrice" class="price">0원</div>
-        <div class="vat">부가세 포함</div>
-      </div>
-      <div class="compare-card platform">
-        <div class="compare-label"><span id="platformParty">매수자</span><br>우리아파트 매칭 수수료 (50%)</div>
-        <div id="platformPrice" class="price">0원</div>
-        <div class="vat">부가세 포함</div>
-      </div>
-    </div>
-
-    <div id="detail" class="detail">
-      <strong id="feeOnlyNotice">매수자는 별도의 중개보수를 일체 지급하지 않습니다.<br>표시된 50% 매칭 수수료만 지급합니다.</strong>
-      <div style="margin-top:7px; color:#059669; font-weight:800; font-size:12px;">
-        ※ 중개사의 직거래 유도 제보 시 고객 이용료 100% 전액 0원(0%)으로 면제됩니다.
-      </div>
-    </div>
-  </section>
-</section>
-
-
-<!-- =========================================
-     우리아파트 3대 안심 보증 (0% & 5배 배상 전면 노출)
-========================================= -->
-<section class="safe-guarantees-section">
-  <div class="guarantee-header">
-    <span class="guarantee-badge">국토교통부 실거래가 연동 공식 안심거래 플랫폼</span>
-    <h2 class="guarantee-main-title">우리아파트 안심거래 3대 보증</h2>
-    <p class="guarantee-sub-title">공인중개사와 매수인이 모두 안심하는 투명하고 안전한 부동산 거래</p>
-  </div>
-  <div class="guarantee-cards-grid">
-    <div class="guarantee-card">
-      <div class="guarantee-icon">🛡️</div>
-      <span class="guarantee-step-tag">보증 01</span>
-      <h3 class="guarantee-card-title">공인중개사 법정 중개보수<br><span class="highlight-blue">100% 전액 보장</span></h3>
-      <p class="guarantee-card-desc">수수료 할인 강요 없는 정당한 법정 중개보수 전액을 플랫폼이 확실하게 보장합니다.</p>
-    </div>
-    <div class="guarantee-card">
-      <div class="guarantee-icon">🏛️</div>
-      <span class="guarantee-step-tag">보증 02</span>
-      <h3 class="guarantee-card-title">국토교통부 실거래가<br><span class="highlight-blue">자동 대조 전산 연동</span></h3>
-      <p class="guarantee-card-desc">체결된 모든 거래는 국토교통부 실거래가 공개 전산망과 자동 연동되어 투명하게 검증됩니다.</p>
-    </div>
-    <div class="guarantee-card">
-      <div class="guarantee-icon">🎁</div>
-      <span class="guarantee-step-tag">보증 03</span>
-      <h3 class="guarantee-card-title">우회 직거래 방지 안심 보상제<br><span class="highlight-green">수수료 0% & 5배 배상</span></h3>
-      <p class="guarantee-card-desc">중개사의 직거래 유도 제보 시 고객 수수료 100% 전액 0원 면제 (적발 중개사 법정 보수 5배 위약벌 청구 및 영구제명)</p>
-    </div>
-  </div>
-</section>
-
-
-<!-- =========================================
-     1:1 안심 거래 진행방 입장 (단일 메인 창구)
-========================================= -->
-<section class="single-transaction-section">
-  <div class="single-transaction-card">
-    <div class="trans-card-badge">1:1 비공개 안심 거래방</div>
-    <h2 class="trans-card-title">안심 거래 진행방 입장</h2>
-    <p class="trans-card-desc">문자로 발송된 부동산별 <b>전용 4자리 거래방 코드</b>를 입력하세요.</p>
-    
-    <div class="trans-input-row">
-      <input
-        id="transactionCode"
-        type="text"
-        inputmode="numeric"
-        autocomplete="off"
-        maxlength="4"
-        placeholder="4자리 거래방 코드 (예: 5804)"
-        aria-label="4자리 거래방 코드"
-      >
-      <button id="transactionBtn" type="button">
-        거래방 입장
-      </button>
-    </div>
-    
-    <p class="trans-help-text">
-      담당 공인중개사와 매수(임차) 고객 간 1:1 안심 거래 진행방으로 즉시 연결됩니다.<br>
-      (합의된 조건 확인 및 국토부 실거래가 대조 안심 계약이 진행됩니다)
-    </p>
-  </div>
-</section>
-
-<!-- 레거시 호환용 히든 더미 엘리먼트 (스크립트 오류 방지) -->
-<div style="display:none !important;" aria-hidden="true">
-  <input id="accessInput" type="hidden">
-  <button id="accessBtn" type="button"></button>
-  <input id="requestNumberInput" type="hidden">
-  <button id="requestNumberBtn" type="button"></button>
-  <div id="requestResult"></div>
-  <div id="requestResultGrid"></div>
-  <button id="requestRegisterBtn" type="button"></button>
-  <button id="requestExitBtn" type="button"></button>
-</div>
-
-
-<!-- =========================================
-     [공인중개사 전용] 담당 단지 매수고객 우선배정 간편등록 (10초 등록)
-========================================= -->
-<section class="broker-partner-banner-section">
-  <div class="broker-partner-card">
-    <div class="broker-partner-left">
-      <span class="partner-tag">공인중개사 소장님 전용 혜택</span>
-      <h3 class="partner-title">담당 아파트 단지 <span class="highlight">매수·임차 고객 1순위 우선 배정</span></h3>
-      <p class="partner-desc">
-        아이디/비밀번호 가입 없이 10초 등록! 고객 희망조건 접수 시 관할 전문 소장님께 가장 먼저 문자를 발송해 드립니다.
-      </p>
-    </div>
-    <div class="broker-partner-right">
-      <button type="button" class="partner-open-btn" onclick="openPartnerModal()">
-        우선배정 파트너 등록 (10초) ›
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- 파트너 모달 -->
-<div id="partnerModal" class="partner-modal-backdrop" onclick="if(event.target === this) closePartnerModal()">
-  <div class="partner-modal-box">
-    <button type="button" class="partner-modal-close" onclick="closePartnerModal()" aria-label="닫기">×</button>
-    <div class="partner-tag" style="margin-bottom:8px;">10초 간편등록</div>
-    <h3 class="partner-modal-title">공인중개사 우선배정 신청</h3>
-    <p class="partner-modal-subtitle">
-      담당 단지명과 연락처를 남겨주시면, 고객 접수 시 <b>소장님께 1순위로 즉시 문자가 발송</b>됩니다.
-    </p>
-
-    <div class="partner-input-group">
-      <label for="partnerComplexInput">담당 아파트 단지명</label>
-      <input id="partnerComplexInput" type="text" placeholder="예: 첨단 힐스테이트 / 반포자이">
-    </div>
-
-    <div class="partner-input-group">
-      <label for="partnerOfficeInput">부동산 중개사무소 상호</label>
-      <input id="partnerOfficeInput" type="text" placeholder="예: 황금공인중개사사무소">
-    </div>
-
-    <div class="partner-input-group">
-      <label for="partnerPhoneInput">소장님 직통 휴대폰 번호 (010)</label>
-      <input id="partnerPhoneInput" type="tel" inputmode="numeric" maxlength="13" placeholder="010-XXXX-XXXX">
-    </div>
-
-    <button type="button" class="partner-submit-btn" onclick="submitPartnerRegistration()">
-      우선배정 파트너 신청 완료
-    </button>
-  </div>
-</div>
-
-
-<!-- =========================================
-     실전 4단계 안심 진행 절차
-========================================= -->
-<section class="process new-process-section">
-  <div class="process-header">
-    <h2 class="title">희망조건 등록부터 안전한 계약까지, 이렇게 진행됩니다</h2>
-    <p class="subtitle">복잡한 절차 없이 검증된 공인중개사와 다이렉트로 안전하게 체결됩니다.</p>
-  </div>
-
-  <div class="steps-grid-4">
-    <div class="step-card">
-      <div class="step-icon-wrap">📝</div>
-      <div class="step-num-badge">1</div>
-      <b class="step-title">희망조건 간편 등록</b>
-      <p class="step-desc">
-        고객이 원하는 지역, 단지, 예산 조건을 간편하게 등록합니다.
-      </p>
-    </div>
-
-    <div class="step-card">
-      <div class="step-icon-wrap">📞</div>
-      <div class="step-num-badge">2</div>
-      <b class="step-title">검증 중개사 직통 매칭</b>
-      <p class="step-desc">
-        네이버 매물 검증 및 1초 동의를 마친 담당 소장님이 010 직통 전화로 매물을 브리핑합니다.
-      </p>
-    </div>
-
-    <div class="step-card">
-      <div class="step-icon-wrap">🔐</div>
-      <div class="step-num-badge">3</div>
-      <b class="step-title">1:1 안심 거래 진행</b>
-      <p class="step-desc">
-        전화로 조건이 합의되면 전용 4자리 코드로 거래방에 입장하여 합의 내용을 상호 확인합니다.
-      </p>
-    </div>
-
-    <div class="step-card">
-      <div class="step-icon-wrap">🤝</div>
-      <div class="step-num-badge">4</div>
-      <b class="step-title">안전한 계약 & 실거래 대조</b>
-      <p class="step-desc">
-        공인중개사 사무실에서 계약을 체결하며, 국토부 실거래가 자동 대조로 안전하게 완료됩니다.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section class="promise">
-
-  <h2 class="title">
-    우리아파트 안심거래의 약속
-  </h2>
-
-  <div class="promise-grid">
-
-    <a class="card" href="/detail?topic=broker">
-      <div class="ci">🛡️</div>
-      <h3>검증된<br>공인중개사</h3>
-      <p>
-        가입 심사 및 교육을<br>
-        통과한 공인중개사만<br>
-        활동합니다.
-      </p>
-      <span class="more">자세히 보기 ›</span>
-    </a>
-
-    <a class="card" href="/detail?topic=contract">
-      <div class="ci">🏛️</div>
-      <h3>국토부 표준<br>전자계약 혜택</h3>
-      <p>
-        대출 우대금리 감면!<br>
-        확정일자 자동 발급,<br>
-        책상에서 1초 만에<br>
-        비대면 모바일 서명.
-      </p>
-      <span class="more">혜택 자세히 보기 ›</span>
-    </a>
-
-    <a class="card" href="/detail?topic=escrow">
-      <div class="ci">🔒</div>
-      <h3>선택형<br>에스크로</h3>
-      <p>
-        에스크로 이용 선택 시<br>
-        우리은행 부동산에스크로이체<br>
-        이용방법을 안내합니다.
-      </p>
-      <span class="more">자세히 보기 ›</span>
-    </a>
-
-    <a class="card" href="/detail?topic=registry">
-      <div class="ci">📋</div>
-      <h3>매매 셀프등기<br>무료 가이드</h3>
-      <p>
-        법무사비 절약 노하우!<br>
-        서류·절차 100% 무료 안내<br>
-        (세금·공과금은 직접 납부)
-      </p>
-      <span class="more">안내 보기 ›</span>
-    </a>
-
-  </div>
-
-
-  </section>
 <section class="faq-accordion-section" style="width:100%; margin: 0 0 18px; background:#ffffff; border:1px solid #dce5ed; border-radius:14px; padding:14px 16px; box-shadow:0 3px 12px rgba(15,23,42,0.03);">
   <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid #edf2f7;">
     <div style="display:flex; align-items:center; gap:6px;">
@@ -2660,6 +2428,481 @@ body.menu-open{
   </div>
 </section>
 
+<section class="fee-widget">
+<!-- =========================
+     제목
+========================= -->
+
+<!-- 매칭 수수료 50% 계약 안내 배너 -->
+<div style="margin-bottom:12px; padding:16px 20px; border-radius:16px; background:linear-gradient(135deg, #1165d7 0%, #1d4ed8 100%); color:#fff; text-align:center; box-shadow:0 6px 20px rgba(17,101,215,0.22);">
+  <div style="font-size:17px; font-weight:900; letter-spacing:-0.5px; line-height:1.4;">💡 우리아파트에서 매수·임차 매칭 수수료 50%에 계약하세요!</div>
+  <div style="font-size:12px; opacity:0.92; margin-top:5px; font-weight:600;">아래 계산기에서 내가 아낄 수 있는 비용을 직접 확인해 보세요 (추가 중개보수 0원)</div>
+</div>
+
+<section class="fee-head">
+
+  <h2>
+    매칭 수수료 50% 계산기
+  </h2>
+
+  <p>
+    거래 유형과 금액을 입력하면
+    법정 상한 기준 예상금액과
+    우리아파트 50% 매칭 수수료를
+    한눈에 비교 확인할 수 있습니다.
+  </p>
+
+</section>
+
+
+<!-- =========================
+     거래유형
+========================= -->
+
+<div class="type-tabs">
+
+  <button
+    type="button"
+    class="type-btn active"
+    data-type="sale"
+  >
+    매매
+  </button>
+
+  <button
+    type="button"
+    class="type-btn"
+    data-type="jeonse"
+  >
+    전세
+  </button>
+
+  <button
+    type="button"
+    class="type-btn"
+    data-type="monthly"
+  >
+    월세
+  </button>
+
+</div>
+
+
+<!-- =========================
+     계산기
+========================= -->
+
+<section class="calculator">
+
+
+  <!-- 매매 -->
+
+  <div
+    id="saleFields"
+    class="field-area"
+  >
+
+    <div class="input-group">
+
+      <label for="salePrice">
+        매매금액
+      </label>
+
+      <div class="money-box">
+
+        <input
+          id="salePrice"
+          type="text"
+          inputmode="numeric"
+          placeholder="예: 300000000"
+        >
+
+        <span class="unit">
+          원
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- 전세 -->
+
+  <div
+    id="jeonseFields"
+    class="field-area hidden"
+  >
+
+    <div class="input-group">
+
+      <label for="jeonsePrice">
+        전세보증금
+      </label>
+
+      <div class="money-box">
+
+        <input
+          id="jeonsePrice"
+          type="text"
+          inputmode="numeric"
+          placeholder="예: 200000000"
+        >
+
+        <span class="unit">
+          원
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- 월세 -->
+
+  <div
+    id="monthlyFields"
+    class="field-area hidden"
+  >
+
+    <div class="input-group">
+
+      <label for="monthlyDeposit">
+        보증금
+      </label>
+
+      <div class="money-box">
+
+        <input
+          id="monthlyDeposit"
+          type="text"
+          inputmode="numeric"
+          placeholder="예: 10000000"
+        >
+
+        <span class="unit">
+          원
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="input-group">
+
+      <label for="monthlyRent">
+        월세
+      </label>
+
+      <div class="money-box">
+
+        <input
+          id="monthlyRent"
+          type="text"
+          inputmode="numeric"
+          placeholder="예: 500000"
+        >
+
+        <span class="unit">
+          원
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <button
+    id="calcBtn"
+    class="calc-btn"
+    type="button"
+  >
+    이용료 확인
+  </button>
+
+
+
+</section>
+
+
+<!-- =========================
+     결과
+========================= -->
+
+<section
+  id="result"
+  class="result"
+>
+
+  <h2 class="result-title">
+    거래당사자 예상 비용 비교
+  </h2>
+
+
+  <div class="compare">
+
+
+    <div class="compare-card">
+
+      <div class="compare-label">
+        <span id="normalParty">매도자</span><br>
+        공인중개사 중개수수료
+      </div>
+
+      <div
+        id="normalPrice"
+        class="price"
+      >
+        0원
+      </div>
+
+      <div class="vat">
+        부가세 포함
+      </div>
+
+    </div>
+
+
+    <div class="compare-card platform">
+
+      <div class="compare-label">
+        <span id="platformParty">매수자</span><br>
+        매칭 수수료 (50%)
+      </div>
+
+      <div
+        id="platformPrice"
+        class="price"
+      >
+        0원
+      </div>
+
+      <div class="vat">
+        부가세 포함
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+  <div
+    id="detail"
+    class="detail"
+  >
+    <strong id="feeOnlyNotice">매수자는 별도의 중개보수를 일체 지급하지 않습니다.<br>표시된 50% 매칭 수수료만 지급합니다.</strong>
+  </div>
+
+</section>
+
+
+<!-- =========================
+     안내
+========================= -->
+
+
+
+</section>
+
+
+
+
+<!-- =========================================
+     우리아파트 3대 안심 보증 (0% & 5배 배상 전면 노출)
+========================================= -->
+<section class="safe-guarantees-section">
+  <div class="guarantee-header">
+    <span class="guarantee-badge">국토교통부 실거래가 연동 공식 안심거래 플랫폼</span>
+    <h2 class="guarantee-main-title">우리아파트 안심거래 3대 보증</h2>
+    <p class="guarantee-sub-title">공인중개사와 매수인이 모두 안심하는 투명하고 안전한 부동산 거래</p>
+  </div>
+  <div class="guarantee-cards-grid">
+    <div class="guarantee-card">
+      <div class="guarantee-icon">🛡️</div>
+      <span class="guarantee-step-tag">보증 01</span>
+      <h3 class="guarantee-card-title">공인중개사 법정 중개보수<br><span class="highlight-blue">100% 전액 보장</span></h3>
+      <p class="guarantee-card-desc">수수료 할인 강요 없는 정당한 법정 중개보수 전액을 플랫폼이 확실하게 보장합니다.</p>
+    </div>
+    <div class="guarantee-card">
+      <div class="guarantee-icon">🏛️</div>
+      <span class="guarantee-step-tag">보증 02</span>
+      <h3 class="guarantee-card-title">국토교통부 실거래가<br><span class="highlight-blue">자동 대조 전산 연동</span></h3>
+      <p class="guarantee-card-desc">체결된 모든 거래는 국토교통부 실거래가 공개 전산망과 자동 연동되어 투명하게 검증됩니다.</p>
+    </div>
+    <div class="guarantee-card">
+      <div class="guarantee-icon">🎁</div>
+      <span class="guarantee-step-tag">보증 03</span>
+      <h3 class="guarantee-card-title">우회 직거래 방지 안심 보상제<br><span class="highlight-green">수수료 0% & 5배 배상</span></h3>
+      <p class="guarantee-card-desc">중개사의 직거래 유도 제보 시 고객 수수료 100% 전액 0원 면제 (적발 중개사 법정 보수 5배 위약벌 청구 및 영구제명)</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================================
+     1:1 안심 거래 진행방 입장 (단일 메인 창구)
+========================================= -->
+<section class="single-transaction-section">
+  <div class="single-transaction-card">
+    <div class="trans-card-badge">1:1 비공개 안심 거래방</div>
+    <h2 class="trans-card-title">안심 거래 진행방 입장</h2>
+    <p class="trans-card-desc">문자로 발송된 부동산별 <b>전용 4자리 거래방 코드</b>를 입력하세요.</p>
+    
+    <div class="trans-input-row">
+      <input
+        id="transactionCode"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        maxlength="4"
+        placeholder="4자리 거래방 코드 (예: 5804)"
+        aria-label="4자리 거래방 코드"
+      >
+      <button id="transactionBtn" type="button">
+        거래방 입장
+      </button>
+    </div>
+    
+    <p class="trans-help-text">
+      담당 공인중개사와 매수(임차) 고객 간 1:1 안심 거래 진행방으로 즉시 연결됩니다.<br>
+      (합의된 조건 확인 및 국토부 실거래가 대조 안심 계약이 진행됩니다)
+    </p>
+  </div>
+</section>
+
+
+<!-- =========================================
+     [공인중개사 전용] 담당 단지 매수고객 우선배정 간편등록 (10초 등록)
+========================================= -->
+<section class="broker-partner-banner-section">
+  <div class="broker-partner-card">
+    <div class="broker-partner-left">
+      <span class="partner-tag">공인중개사 소장님 전용 혜택</span>
+      <h3 class="partner-title">담당 아파트 단지 <span class="highlight">매수·임차 고객 1순위 우선 배정</span></h3>
+      <p class="partner-desc">
+        아이디/비밀번호 가입 없이 10초 등록! 고객 희망조건 접수 시 관할 전문 소장님께 가장 먼저 문자를 발송해 드립니다.
+      </p>
+    </div>
+    <div class="broker-partner-right">
+      <button type="button" class="partner-open-btn" onclick="openPartnerModal()">
+        우선배정 파트너 등록 (10초) ›
+      </button>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================================
+     실전 4단계 안심 진행 절차
+========================================= -->
+<section class="process new-process-section">
+  <div class="process-header">
+    <h2 class="title">희망조건 등록부터 안전한 계약까지, 이렇게 진행됩니다</h2>
+    <p class="subtitle">복잡한 절차 없이 검증된 공인중개사와 다이렉트로 안전하게 체결됩니다.</p>
+  </div>
+
+  <div class="steps-grid-4">
+    <div class="step-card">
+      <div class="step-icon-wrap">📝</div>
+      <div class="step-num-badge">1</div>
+      <b class="step-title">희망조건 간편 등록</b>
+      <p class="step-desc">
+        고객이 원하는 지역, 단지, 예산 조건을 간편하게 등록합니다.
+      </p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-icon-wrap">📞</div>
+      <div class="step-num-badge">2</div>
+      <b class="step-title">검증 중개사 직통 매칭</b>
+      <p class="step-desc">
+        네이버 매물 검증 및 1초 동의를 마친 담당 소장님이 010 직통 전화로 매물을 브리핑합니다.
+      </p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-icon-wrap">🔐</div>
+      <div class="step-num-badge">3</div>
+      <b class="step-title">1:1 안심 거래 진행</b>
+      <p class="step-desc">
+        전화로 조건이 합의되면 전용 4자리 코드로 거래방에 입장하여 합의 내용을 상호 확인합니다.
+      </p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-icon-wrap">🤝</div>
+      <div class="step-num-badge">4</div>
+      <b class="step-title">안전한 계약 & 실거래 대조</b>
+      <p class="step-desc">
+        공인중개사 사무실에서 계약을 체결하며, 국토부 실거래가 자동 대조로 안전하게 완료됩니다.
+      </p>
+    </div>
+  </div>
+</section>
+<section class="promise">
+
+  <h2 class="title">
+    우리아파트 안심거래의 약속
+  </h2>
+
+  <div class="promise-grid">
+
+    <a class="card" href="/detail?topic=broker">
+      <div class="ci">🛡️</div>
+      <h3>검증된<br>공인중개사</h3>
+      <p>
+        가입 심사 및 교육을<br>
+        통과한 공인중개사만<br>
+        활동합니다.
+      </p>
+      <span class="more">자세히 보기 ›</span>
+    </a>
+
+    <a class="card" href="/detail?topic=contract">
+      <div class="ci">🏛️</div>
+      <h3>국토부 표준<br>전자계약 혜택</h3>
+      <p>
+        대출 우대금리 감면!<br>
+        확정일자 자동 발급,<br>
+        책상에서 1초 만에<br>
+        비대면 모바일 서명.
+      </p>
+      <span class="more">혜택 자세히 보기 ›</span>
+    </a>
+
+    <a class="card" href="/detail?topic=escrow">
+      <div class="ci">🔒</div>
+      <h3>선택형<br>에스크로</h3>
+      <p>
+        에스크로 이용 선택 시<br>
+        우리은행 부동산에스크로이체<br>
+        이용방법을 안내합니다.
+      </p>
+      <span class="more">자세히 보기 ›</span>
+    </a>
+
+    <a class="card" href="/detail?topic=registry">
+      <div class="ci">📋</div>
+      <h3>매매 셀프등기<br>무료 가이드</h3>
+      <p>
+        법무사비 절약 노하우!<br>
+        서류·절차 100% 무료 안내<br>
+        (세금·공과금은 직접 납부)
+      </p>
+      <span class="more">안내 보기 ›</span>
+    </a>
+
+  </div>
+
+
+  </section>
 
 
 
@@ -4225,6 +4468,93 @@ if(
   }
 })();
 
+</script>
+
+
+<!-- 공인중개사 우선배정 파트너 팝업 모달 (기본 hidden, 팝업시에만 표시) -->
+<div id="partnerModal" class="partner-modal-backdrop" onclick="if(event.target === this) closePartnerModal()">
+  <div class="partner-modal-box">
+    <button type="button" class="partner-modal-close" onclick="closePartnerModal()" aria-label="닫기">×</button>
+    <div class="partner-tag" style="margin-bottom:8px;">10초 간편등록</div>
+    <h3 class="partner-modal-title">공인중개사 우선배정 신청</h3>
+    <p class="partner-modal-subtitle">
+      담당 단지명(상권명)과 연락처를 남겨주시면, 고객 접수 시 <b>소장님께 1순위로 즉시 문자가 발송</b>됩니다.
+    </p>
+
+    <div class="partner-input-group">
+      <label for="partnerComplexInput">담당 아파트 단지명 (또는 상권명)</label>
+      <input id="partnerComplexInput" type="text" placeholder="예: 첨단 힐스테이트 / 반포자이">
+    </div>
+
+    <div class="partner-input-group">
+      <label for="partnerOfficeInput">부동산 중개사무소 상호</label>
+      <input id="partnerOfficeInput" type="text" placeholder="예: 황금공인중개사사무소">
+    </div>
+
+    <div class="partner-input-group">
+      <label for="partnerPhoneInput">소장님 직통 휴대폰 번호 (010)</label>
+      <input id="partnerPhoneInput" type="tel" inputmode="numeric" maxlength="13" placeholder="010-XXXX-XXXX">
+    </div>
+
+    <button type="button" class="partner-submit-btn" onclick="submitPartnerRegistration()">
+      우선배정 파트너 신청 완료
+    </button>
+  </div>
+</div>
+
+<!-- 레거시 호환용 히든 더미 엘리먼트 (스크립트 오류 방지) -->
+<div id="legacyDummies" style="display:none !important;" aria-hidden="true">
+  <input id="accessInput" type="hidden">
+  <button id="accessBtn" type="button"></button>
+  <input id="requestNumberInput" type="hidden">
+  <button id="requestNumberBtn" type="button"></button>
+  <div id="requestResult"></div>
+  <div id="requestResultGrid"></div>
+  <button id="requestRegisterBtn" type="button"></button>
+  <button id="requestExitBtn" type="button"></button>
+</div>
+
+
+<script>
+function openPartnerModal() {
+  var m = document.getElementById('partnerModal');
+  if (m) m.classList.add('show-modal');
+}
+function closePartnerModal() {
+  var m = document.getElementById('partnerModal');
+  if (m) m.classList.remove('show-modal');
+}
+function submitPartnerRegistration() {
+  var c = document.getElementById('partnerComplexInput').value.trim();
+  var o = document.getElementById('partnerOfficeInput').value.trim();
+  var p = document.getElementById('partnerPhoneInput').value.trim();
+  if (!c) { alert('담당 단지명(상권명)을 입력해 주세요.'); return; }
+  if (!o) { alert('중개사무소 상호를 입력해 주세요.'); return; }
+  if (!p || p.replace(/[^0-9]/g, '').length < 10) { alert('올바른 소장님 휴대폰 번호(010)를 입력해 주세요.'); return; }
+  
+  try {
+    var list = JSON.parse(localStorage.getItem('broker_partners') || '[]');
+    list.push({ complex: c, office: o, phone: p, date: new Date().toISOString() });
+    localStorage.setItem('broker_partners', JSON.stringify(list));
+  } catch(e) {}
+
+  alert('우선배정 파트너 신청이 완료되었습니다!\\n\\n담당 단지(' + c + ')에 고객 접수 시 소장님께 1순위로 즉시 연결 문자를 발송해 드립니다.');
+  closePartnerModal();
+}
+
+var phoneInp = document.getElementById('partnerPhoneInput');
+if (phoneInp) {
+  phoneInp.addEventListener('input', function(e) {
+    var val = e.target.value.replace(/[^0-9]/g, '');
+    if (val.length > 3 && val.length <= 7) {
+      e.target.value = val.slice(0, 3) + '-' + val.slice(3);
+    } else if (val.length > 7) {
+      e.target.value = val.slice(0, 3) + '-' + val.slice(3, 7) + '-' + val.slice(7, 11);
+    } else {
+      e.target.value = val;
+    }
+  });
+}
 </script>
 
 </body>
