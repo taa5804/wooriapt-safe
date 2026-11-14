@@ -5,36 +5,29 @@ Disallow: /head-admin
 Disallow: /sale-admin
 Disallow: /room-manager
 Disallow: /system-settings
-Disallow: /mart_admin
-Disallow: /mart_hq-dashboard
-Disallow: /mart_hq-store-account
+Disallow: /mart
+Disallow: /mart-
+Disallow: /mart_
+Disallow: /sitemaps/marts-
 Disallow: /point-settlement
 Disallow: /charge-history
 Disallow: /charge-management
 Disallow: /inquiry-status
 
-User-agent: Googlebot
-Allow: /apt-search/
-Allow: /store-search/
-Allow: /broker-search/
-Allow: /
-
 User-agent: Yeti
-Allow: /apt-search/
-Allow: /store-search/
-Allow: /broker-search/
 Allow: /
+Disallow: /mart
+Disallow: /mart-
+Disallow: /sitemaps/marts-
 
-User-agent: Daumoa
+User-agent: Googlebot
 Allow: /
-
-User-agent: bingbot
-Allow: /
+Disallow: /mart
+Disallow: /mart-
+Disallow: /sitemaps/marts-
 
 Sitemap: https://www.wooriapt.app/sitemap.xml
-Sitemap: https://www.wooriapt.app/google-hub-sitemap.xml
-Sitemap: https://www.wooriapt.app/apt-hub-sitemap.xml
-Sitemap: https://www.wooriapt.app/store-sitemap.xml
-Sitemap: https://www.wooriapt.app/apt-sitemap.xml
-Sitemap: https://www.wooriapt.app/broker-sitemap.xml
 Sitemap: https://www.wooriapt.app/pages-sitemap.xml
+Sitemap: https://www.wooriapt.app/broker-sitemap.xml
+Sitemap: https://www.wooriapt.app/apt-sitemap.xml
+Sitemap: https://www.wooriapt.app/store-sitemap.xml
