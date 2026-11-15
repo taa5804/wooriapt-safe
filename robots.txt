@@ -5,9 +5,6 @@ Disallow: /head-admin
 Disallow: /sale-admin
 Disallow: /room-manager
 Disallow: /system-settings
-Disallow: /mart_admin
-Disallow: /mart_hq-dashboard
-Disallow: /mart_hq-store-account
 Disallow: /point-settlement
 Disallow: /charge-history
 Disallow: /charge-management
@@ -29,4 +26,3 @@ Sitemap: https://www.wooriapt.app/sitemap.xml
 Sitemap: https://www.wooriapt.app/pages-sitemap.xml
 Sitemap: https://www.wooriapt.app/broker-sitemap.xml
 Sitemap: https://www.wooriapt.app/apt-sitemap.xml
-Sitemap: https://www.wooriapt.app/mart-sitemap.xml
