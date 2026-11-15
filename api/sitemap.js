@@ -39,16 +39,7 @@ const WOORI_PAGES_LIST = [
   { path: "/presale-proposal", priority: "0.95", changefreq: "weekly" },
   { path: "/sale-detail", priority: "0.95", changefreq: "daily" },
 
-  // [4순위] 동네마트 플랫폼 (priority: 0.75)
-  { path: "/mart", priority: "0.2", changefreq: "monthly" },
-  { path: "/mart-price", priority: "0.2", changefreq: "monthly" },
-  { path: "/mart-landing", priority: "0.2", changefreq: "monthly" },
-  { path: "/mart-sales", priority: "0.2", changefreq: "monthly" },
-  { path: "/mart-store", priority: "0.2", changefreq: "monthly" },
-  { path: "/mart-customer", priority: "0.2", changefreq: "monthly" },
-  { path: "/mart-promotion", priority: "0.2", changefreq: "monthly" },
-  { path: "/mart-cost", priority: "0.2", changefreq: "monthly" },
-  { path: "/mart-db", priority: "0.2", changefreq: "monthly" },
+  // [4순위] 동네마트는 wooriapt.ai.kr 로 완전히 분리됨
   { path: "/app-install", priority: "0.70", changefreq: "weekly" }
 ];
 
@@ -154,8 +145,10 @@ module.exports = async function handler(req, res) {
       if (isAnsim) { sitemapUrls.push(SITE_ORIGIN + "/store-sitemap.xml"); }
     }
 
-    for (let m = 1; m <= MART_SITEMAP_COUNT; m += 1) {
-      sitemapUrls.push(SITE_ORIGIN + "/sitemaps/marts-" + m + ".xml");
+    if (isMartDomain) {
+      for (let m = 1; m <= MART_SITEMAP_COUNT; m += 1) {
+        sitemapUrls.push(SITE_ORIGIN + "/sitemaps/marts-" + m + ".xml");
+      }
     }
 
     const sitemapItems = sitemapUrls
