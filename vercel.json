@@ -36,6 +36,56 @@
       "source": "/store-sitemap.xml",
       "destination": "https://www.ansimdeal.com/store-sitemap.xml",
       "permanent": true
+    },
+    {
+      "source": "/mart-search/:path*",
+      "destination": "https://wooriapt.ai.kr/mart-search/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/mart-search",
+      "destination": "https://wooriapt.ai.kr/mart-search",
+      "permanent": true
+    },
+    {
+      "source": "/mart-sitemap.xml",
+      "destination": "https://wooriapt.ai.kr/mart-sitemap.xml",
+      "permanent": true
+    },
+    {
+      "source": "/sitemaps/marts-:page.xml",
+      "destination": "https://wooriapt.ai.kr/sitemaps/marts-:page.xml",
+      "permanent": true
+    },
+    {
+      "source": "/mart",
+      "destination": "https://wooriapt.ai.kr/mart",
+      "permanent": true
+    },
+    {
+      "source": "/mart-store",
+      "destination": "https://wooriapt.ai.kr/mart-store",
+      "permanent": true
+    },
+    {
+      "source": "/mart-landing",
+      "destination": "https://wooriapt.ai.kr/mart-landing",
+      "permanent": true
+    },
+    {
+      "source": "/mart-sales",
+      "destination": "https://wooriapt.ai.kr/mart-sales",
+      "permanent": true
+    },
+    {
+      "source": "/mart-cost",
+      "destination": "https://wooriapt.ai.kr/mart-cost",
+      "permanent": true
+    },
+    {
+      "source": "/74",
+      "destination": "https://wooriapt.ai.kr/74",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -54,10 +104,6 @@
     {
       "source": "/apt-hub-sitemap.xml",
       "destination": "/api/apt-page?mode=broker-sitemap"
-    },
-    {
-      "source": "/mart-hub-sitemap.xml",
-      "destination": "/api/mart-page?mode=mart-sitemap&page=1"
     },
     {
       "source": "/p/:code",
@@ -112,24 +158,12 @@
       "destination": "/broker-landing"
     },
     {
-      "source": "/mart-price",
-      "destination": "/mart-price"
-    },
-    {
       "source": "/api/property-request",
       "destination": "https://www.wooriapt.app/api/property-request"
     },
     {
       "source": "/api/customer-phone-auth",
       "destination": "https://www.wooriapt.app/api/customer-phone-auth"
-    },
-    {
-      "source": "/mart-store",
-      "destination": "/mart-store"
-    },
-    {
-      "source": "/74",
-      "destination": "/mart-store"
     },
     {
       "source": "/map-landing",
@@ -150,10 +184,6 @@
     {
       "source": "/tools",
       "destination": "/tools-center"
-    },
-    {
-      "source": "/mart-sales",
-      "destination": "/mart-sales"
     },
     {
       "source": "/today",
@@ -186,14 +216,6 @@
     {
       "source": "/factcheck",
       "destination": "/check"
-    },
-    {
-      "source": "/mart",
-      "destination": "/mart"
-    },
-    {
-      "source": "/mart-calculator",
-      "destination": "/mart"
     },
     {
       "source": "/apt",
@@ -234,22 +256,6 @@
     {
       "source": "/broker-sitemap.xml",
       "destination": "/api/apt-page?mode=broker-sitemap"
-    },
-    {
-      "source": "/mart-search/:region/:city/:place/:mart",
-      "destination": "/api/mart-page?mode=mart-page&region=:region&city=:city&place=:place&mart=:mart"
-    },
-    {
-      "source": "/mart-search/:region/:city/:place",
-      "destination": "/api/mart-page?mode=mart-page&region=:region&city=:city&place=:place"
-    },
-    {
-      "source": "/sitemaps/marts-:page.xml",
-      "destination": "/api/mart-page?mode=mart-sitemap&page=:page"
-    },
-    {
-      "source": "/mart-sitemap.xml",
-      "destination": "/api/mart-page?mode=mart-sitemap-index"
     },
     {
       "source": "/map",
