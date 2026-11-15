@@ -21,16 +21,27 @@
       ],
       "destination": "https://www.wooriapt.app/:path*",
       "permanent": true
+    },
+    {
+      "source": "/store-search/:path*",
+      "destination": "https://www.ansimdeal.com/store-search/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/store-search",
+      "destination": "https://www.ansimdeal.com/store-search",
+      "permanent": true
+    },
+    {
+      "source": "/store-sitemap.xml",
+      "destination": "https://www.ansimdeal.com/store-sitemap.xml",
+      "permanent": true
     }
   ],
   "rewrites": [
     {
       "source": "/apt-search",
       "destination": "/api/apt-page?mode=apt-page&region=서울특별시&city=강남구&place=역삼동"
-    },
-    {
-      "source": "/store-search",
-      "destination": "/api/apt-page?mode=store-page&region=서울특별시&city=강남구&place=역삼동"
     },
     {
       "source": "/broker-search",
@@ -223,14 +234,6 @@
     {
       "source": "/broker-sitemap.xml",
       "destination": "/api/apt-page?mode=broker-sitemap"
-    },
-    {
-      "source": "/store-search/:region/:city/:place",
-      "destination": "/api/apt-page?mode=store-page&region=:region&city=:city&place=:place"
-    },
-    {
-      "source": "/store-sitemap.xml",
-      "destination": "/api/apt-page?mode=store-sitemap"
     },
     {
       "source": "/mart-search/:region/:city/:place/:mart",
