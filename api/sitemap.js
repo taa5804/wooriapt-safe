@@ -150,7 +150,8 @@ module.exports = async function handler(req, res) {
       for (let page = 1; page <= pages; page += 1) {
         sitemapUrls.push(SITE_ORIGIN + "/sitemaps/apartments-" + page + ".xml");
       }
-      sitemapUrls.push(SITE_ORIGIN + "/store-sitemap.xml");
+      // store-sitemap moved to ansimdeal.com only
+      if (isAnsim) { sitemapUrls.push(SITE_ORIGIN + "/store-sitemap.xml"); }
     }
 
     for (let m = 1; m <= MART_SITEMAP_COUNT; m += 1) {
