@@ -29,5 +29,4 @@ Sitemap: https://www.wooriapt.app/sitemap.xml
 Sitemap: https://www.wooriapt.app/pages-sitemap.xml
 Sitemap: https://www.wooriapt.app/broker-sitemap.xml
 Sitemap: https://www.wooriapt.app/apt-sitemap.xml
-Sitemap: https://www.wooriapt.app/store-sitemap.xml
 Sitemap: https://www.wooriapt.app/mart-sitemap.xml
