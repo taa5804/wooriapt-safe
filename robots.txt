@@ -1,5 +1,10 @@
 User-agent: *
 Allow: /
+
+Disallow: /presale
+Disallow: /presale-*
+Disallow: /sale-*
+Disallow: /matcher
 Disallow: /admin
 Disallow: /head-admin
 Disallow: /sale-admin
