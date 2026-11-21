@@ -130,28 +130,12 @@
       "destination": "/sale-detail"
     },
     {
-      "source": "/presale",
-      "destination": "/presale"
-    },
-    {
       "source": "/api/sale-save",
       "destination": "https://wooriaptcd.com/api/sale-save"
     },
     {
       "source": "/app-install",
       "destination": "/app-install"
-    },
-    {
-      "source": "/presale-list",
-      "destination": "/presale-list"
-    },
-    {
-      "source": "/presale-search",
-      "destination": "/presale-search"
-    },
-    {
-      "source": "/presale-landing",
-      "destination": "/presale-landing"
     },
     {
       "source": "/broker-landing",
@@ -164,18 +148,6 @@
     {
       "source": "/api/customer-phone-auth",
       "destination": "https://www.wooriapt.app/api/customer-phone-auth"
-    },
-    {
-      "source": "/map-landing",
-      "destination": "/presale-matcher?map=1"
-    },
-    {
-      "source": "/presale-matcher",
-      "destination": "/presale-matcher"
-    },
-    {
-      "source": "/matcher",
-      "destination": "/presale-matcher"
     },
     {
       "source": "/utility",
