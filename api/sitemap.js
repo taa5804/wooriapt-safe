@@ -35,14 +35,9 @@ const WOORI_PAGES_LIST = [
   { path: "/sale-detail", priority: "0.95", changefreq: "daily" },
 
   // [4순위] 동네마트 플랫폼 (priority: 0.75)
-  { path: "/mart", priority: "0.2", changefreq: "monthly" },
   { path: "/mart-price", priority: "0.2", changefreq: "monthly" },
-  { path: "/mart-landing", priority: "0.2", changefreq: "monthly" },
-  { path: "/mart-sales", priority: "0.2", changefreq: "monthly" },
-  { path: "/mart-store", priority: "0.2", changefreq: "monthly" },
   { path: "/mart-customer", priority: "0.2", changefreq: "monthly" },
   { path: "/mart-promotion", priority: "0.2", changefreq: "monthly" },
-  { path: "/mart-cost", priority: "0.2", changefreq: "monthly" },
   { path: "/mart-db", priority: "0.2", changefreq: "monthly" },
   { path: "/app-install", priority: "0.70", changefreq: "weekly" }
 ];
@@ -69,7 +64,6 @@ const ANSIM_PAGES_LIST = [
   { path: "/sale-detail", priority: "0.95", changefreq: "daily" },
 
   // [4순위] 동네마트 플랫폼 (priority: 0.75)
-  { path: "/mart", priority: "0.2", changefreq: "monthly" },
   { path: "/mart-price", priority: "0.2", changefreq: "monthly" },
   { path: "/app-install", priority: "0.70", changefreq: "weekly" }
 ];
@@ -141,11 +135,10 @@ module.exports = async function handler(req, res) {
       for (let page = 1; page <= pages; page += 1) {
         sitemapUrls.push(SITE_ORIGIN + "/sitemaps/apartments-" + page + ".xml");
       }
-      sitemapUrls.push(SITE_ORIGIN + "/store-sitemap.xml");
-    }
-
-    for (let m = 1; m <= MART_SITEMAP_COUNT; m += 1) {
-      sitemapUrls.push(SITE_ORIGIN + "/sitemaps/marts-" + m + ".xml");
+    } else {
+      for (let m = 1; m <= MART_SITEMAP_COUNT; m += 1) {
+        sitemapUrls.push(SITE_ORIGIN + "/sitemaps/marts-" + m + ".xml");
+      }
     }
 
     const sitemapItems = sitemapUrls
