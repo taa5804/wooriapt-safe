@@ -12,11 +12,24 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ ok: false, message: "NCP API keys missing" });
   }
 
+  // 기본 조회 범위: 최근 3일 (2026-11-24 00:00 ~ 현재)
+  const now = new Date();
+  const past = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
+  
+  const formatDate = (d) => {
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
+  };
+
+  const start = req.query.start || "2026-11-24 00:00";
+  const end = req.query.end || "2026-11-26 23:59";
+
   const timestamp = Date.now().toString();
   const method = "GET";
-  const uri = requestId 
-    ? `/sms/v2/services/${serviceId}/messages?requestId=${requestId}`
-    : `/sms/v2/services/${serviceId}/messages?pageSize=20`;
+  const qs = requestId 
+    ? `requestId=${requestId}`
+    : `requestStartTime=${encodeURIComponent(start)}&requestEndTime=${encodeURIComponent(end)}&pageSize=50`;
+  const uri = `/sms/v2/services/${serviceId}/messages?${qs}`;
   
   const signatureMessage = method + " " + uri + "\n" + timestamp + "\n" + accessKey;
   const signature = crypto.createHmac("sha256", secretKey).update(signatureMessage).digest("base64");
