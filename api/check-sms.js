@@ -3,7 +3,7 @@ const crypto = require("crypto");
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   
-  const requestId = req.query.requestId || "RSLA-1795398295858-3419-78007522-aRmAsJOK";
+  const requestId = req.query.requestId;
   const accessKey = process.env.NCP_ACCESS_KEY;
   const secretKey = process.env.NCP_SECRET_KEY;
   const serviceId = "ncp:sms:kr:376942048120:ansimtrade-sms";
@@ -14,7 +14,10 @@ module.exports = async function handler(req, res) {
 
   const timestamp = Date.now().toString();
   const method = "GET";
-  const uri = `/sms/v2/services/${serviceId}/messages?requestId=${requestId}`;
+  const uri = requestId 
+    ? `/sms/v2/services/${serviceId}/messages?requestId=${requestId}`
+    : `/sms/v2/services/${serviceId}/messages?pageSize=20`;
+  
   const signatureMessage = method + " " + uri + "\n" + timestamp + "\n" + accessKey;
   const signature = crypto.createHmac("sha256", secretKey).update(signatureMessage).digest("base64");
 
@@ -29,7 +32,7 @@ module.exports = async function handler(req, res) {
       }
     });
     const data = await response.json();
-    return res.status(200).json({ ok: true, status: response.status, data: data });
+    return res.status(200).json({ ok: true, status: response.status, uri, data });
   } catch (err) {
     return res.status(500).json({ ok: false, error: err.message });
   }
