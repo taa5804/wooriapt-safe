@@ -602,28 +602,19 @@ export default async function handler(req, res) {
       ].filter(Boolean).join("\n");
 
       try {
-        await Promise.allSettled([
-          fetch("https://www.wooriapt.app/api/send-sms", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              phone: "01022864150",
-              type: "LMS",
-              subject: `[신규 매수·임차 신청 #${requestNumber}]`,
-              content: adminMsg
-            })
-          }),
-          fetch(`${baseUrl}/api/ars-batch`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              requestNumber: requestNumber,
-              testMode: false
-            })
+        // 대표님(010-2286-4150) 실시간 신규 신청 알림 발송 (중개사 발송은 PC 네이버 자동 크롤러가 010 전용 실시간 수집 후 처리)
+        await fetch("https://www.wooriapt.app/api/send-sms", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            phone: "01022864150",
+            type: "LMS",
+            subject: `[신규 매수·임차 신청 #${requestNumber}]`,
+            content: adminMsg
           })
-        ]);
+        });
       } catch (e) {
-        console.error("auto trigger error:", e);
+        console.error("admin notify error:", e);
       }
     }
 
