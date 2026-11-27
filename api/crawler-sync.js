@@ -25,6 +25,13 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === "GET") {
+      const reqNo = String(req.query.requestNumber || "").replace(/\D/g, "").slice(0, 4);
+      if (reqNo.length === 4) {
+        const u = `${SUPABASE_URL}/rest/v1/property_requests?request_number=eq.${encodeURIComponent(reqNo)}&select=*&order=id.desc&limit=1`;
+        const r = await fetch(u, { method: "GET", headers });
+        const rows = await r.json().catch(() => []);
+        return res.status(200).json({ ok: true, request: Array.isArray(rows) && rows.length ? rows[0] : null });
+      }
       const since = String(req.query.since || "2026-11-27T00:00:00Z").trim();
       const url =
         `${SUPABASE_URL}/rest/v1/property_requests` +
