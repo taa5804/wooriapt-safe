@@ -94,6 +94,7 @@ export default async function handler(req, res) {
           headers: { ...headers, Prefer: "return=minimal" },
           body: JSON.stringify({
             ars_round: roundNo,
+            ...(body.status ? { status: String(body.status).toUpperCase() } : {}),
             updated_at: now
           })
         }
