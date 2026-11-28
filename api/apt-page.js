@@ -1679,7 +1679,7 @@ p {
   color: #1d4ed8;
 }
 </style>
-</head>
+<!-- Vercel Web Analytics --><script defer src="/_vercel/insights/script.js"></script></head>
 
 <body>
 
@@ -2686,7 +2686,7 @@ p { line-height: 1.7; color: #334155; font-size: 14.5px; margin: 8px 0; }
 }
 .cross-link:hover { background: #eff6ff; border-color: #93c5fd; color: #1d4ed8; }
 </style>
-</head>
+<!-- Vercel Web Analytics --><script defer src="/_vercel/insights/script.js"></script></head>
 <body>
 <main class="wrap">
 
@@ -2982,7 +2982,7 @@ ul { padding-left: 20px; margin: 8px 0; }
 }
 .cross-link:hover { background: #f0fdfa; border-color: #5eead4; color: #0f766e; }
 </style>
-</head>
+<!-- Vercel Web Analytics --><script defer src="/_vercel/insights/script.js"></script></head>
 <body>
 <main class="wrap">
 <nav class="breadcrumb" aria-label="현재 위치">
